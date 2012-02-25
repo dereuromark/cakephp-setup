@@ -13,8 +13,8 @@ Currently this plugin contains only the parts I managed to open source yet:
 
 * My custom bake templates
 
-  @see http://www.dereuromark.de/2010/06/22/cake-bake-custom-templates/
+@see http://www.dereuromark.de/2010/06/22/cake-bake-custom-templates/
 	
 * BaseConfig database configuration class
 
-  @see http://www.dereuromark.de/2012/02/25/dynamic-database-switching/
+@see http://www.dereuromark.de/2012/02/25/dynamic-database-switching/
