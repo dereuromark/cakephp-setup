@@ -1,0 +1,14 @@
+# CakePHP Setup Plugin
+
+This plugin provides useful tools for managing a cakephp app.
+
+## Installation
+
+* Clone/Copy the files in this directory into `app/Plugin/Tools`
+
+## Documentation
+
+Currently this plugin contains only the parts I managed to open source yet:
+
+* My custom bake templates
+* BaseConfig database configuration class
