@@ -12,4 +12,7 @@ This plugin provides useful tools for managing a cakephp app.
 Currently this plugin contains only the parts I managed to open source yet:
 
 * My custom bake templates
+	@see http://www.dereuromark.de/2010/06/22/cake-bake-custom-templates/
+	
 * BaseConfig database configuration class
+	@see http://www.dereuromark.de/2010/08/17/development-vs-productive-setup/
