@@ -5,6 +5,7 @@ This plugin provides useful tools for managing a cakephp app.
 ## Installation
 
 * Clone/Copy the files in this directory into `app/Plugin/Tools`
+* Don't forget to include the plugin in your bootstrap's `CakePlugin::load()` statement
 
 ## Documentation
 
