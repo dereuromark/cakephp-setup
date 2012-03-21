@@ -113,15 +113,14 @@ class BaseConfig {
 	}
 	
 	/**
+	 * wrapper to handle symlinks properly, as well
 	 * @return string $path
 	 */
 	protected function _getEnvironmentPath() {
-		/*
-		if (!empty($_SERVER['PWD'])) {
-			return (String) $_SERVER['PWD']; 
+		$path = realpath(APP);
+		if (substr($path, -1, 1) !== DS) {
+			$path .= DS;
 		}
-		*/
-		$path = APP;
 		return $path;
 	}
 
