@@ -26,8 +26,8 @@
 		$relationModel = new $modelClass;
 	}
 	$skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
-	if (isset($relationModel) && property_exists($relationModel, 'skipFields')) {
-		$skipFields = am($skipFields, (array)$relationModel->skipFields);
+	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields')) {
+		$skipFields = am($skipFields, (array)$relationModel->scaffoldSkipFields);
 	}
 ?>
 <?php foreach ($fields as $field):

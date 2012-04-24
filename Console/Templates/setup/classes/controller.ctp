@@ -26,7 +26,7 @@ echo "App::uses('{$plugin}AppController', '{$pluginPath}Controller');\n\n";
  * <?php echo $controllerName; ?> Controller
  *
 <?php
-if (!$isScaffold) {
+if (false && !$isScaffold) {
 	$defaultModel = Inflector::singularize($controllerName);
 	echo " * @property {$defaultModel} \${$defaultModel}\n";
 	if (!empty($components)) {

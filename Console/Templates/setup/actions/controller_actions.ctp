@@ -77,10 +77,10 @@
 				$this->Common->flashMessage(__('formContainsErrors'), 'error');
 <?php endif; ?>
 			}
-<?php if (!empty($modelObj->defaultValues)): ?>
+<?php if (!empty($modelObj->scaffoldDefaultValues)): ?>
 		} else {
 <?php
-	foreach ($modelObj->defaultValues as $field => $value) {
+	foreach ($modelObj->scaffoldDefaultValues as $field => $value) {
 		echo "\t\t\t\$this->request->data['{$currentModelName}']['$field'] = $value;\n";
 	}
 ?>				
@@ -97,7 +97,7 @@
 				$otherPluralName = $this->_pluralName($associationName);
 				if (App::import('Model', $plugin.'.'.$relation['className']) || App::import('Model', $relation['className'])) {
 					$relationModel = new $relation['className'];
-					if (in_array('Tree', $relationModel->actsAs)) {
+					if (!empty($relationModel->actsAs) && in_array('Tree', $relationModel->actsAs)) {
 						if ($otherPluralName == 'parent'.Inflector::pluralize($currentModelName)) {
 							$otherPluralName = 'parents';
 						}
@@ -157,7 +157,7 @@
 				$otherPluralName = $this->_pluralName($associationName);
 				if (App::import('Model', $plugin.'.'.$relation['className']) || App::import('Model', $relation['className'])) {
 					$relationModel = new $relation['className'];
-					if (in_array('Tree', $relationModel->actsAs)) {
+					if (!empty($relationModel->actsAs) && in_array('Tree', $relationModel->actsAs)) {
 						if ($otherPluralName == 'parent'.Inflector::pluralize($currentModelName)) {
 							$otherPluralName = 'parents';
 						}
