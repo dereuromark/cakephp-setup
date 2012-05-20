@@ -70,7 +70,7 @@ foreach ($fields as $field) {
 		/** CORE-MOD END **/
 
 		/** CORE-MOD (date) **/
-		} elseif($schema[$field]['type'] == 'date') {
+		} elseif ($schema[$field]['type'] == 'date') {
 			echo "\t\t<dd>\n\t\t\t<?php echo ";
 			echo "\$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}'], FORMAT_NICE_YMD)";
 			echo "; ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
@@ -93,9 +93,12 @@ foreach ($fields as $field) {
 			echo "\t\t<dd>\n\t\t\t<?php echo ".Inflector::camelize($modelClass)."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
 			
 		/** CORE-MOD (protection against js injection by using h() function) **/
-		} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
-			echo "\t\t<dd>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</dd>\n";
+		} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',2') !== false) {
+				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 	
+		} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
+			echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
+
 		} else {
 			echo "\t\t<dd>\n\t\t\t<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
 		}

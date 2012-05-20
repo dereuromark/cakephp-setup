@@ -98,8 +98,11 @@ foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 			} elseif ($schema[$field]['type'] == 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
 				echo "\t\t<td>\n\t\t\t<?php echo ".$modelClass."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 	
-			} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
+			} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',2') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
+	
+			} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
+				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 	
 			} else {
 				//$schema[$field]['type'] == 'string'
