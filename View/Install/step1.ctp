@@ -45,7 +45,7 @@ echo $this->Form->input('enhanced_database_class', array('type'=>'checkbox', 'la
 	echo $this->Form->input('name');
 	echo $this->Form->input('environment');
 ?>
-</fieldset>	
+</fieldset>
 
 <?php echo $this->Form->submit(__('Continue'));?>
 <?php echo $this->Form->end(); ?>

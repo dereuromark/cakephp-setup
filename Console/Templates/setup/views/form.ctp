@@ -37,7 +37,7 @@
 	}
 	$skipFields = array('slug', 'lft', 'rght', 'created', 'modified', 'approved', 'deleted', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
 	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields')) {
-		$skipFields = am($skipFields, (array)$relationModel->scaffoldSkipFields);
+		$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFields);
 	}
 ?>
 <?php
@@ -55,7 +55,7 @@
 		if (!empty($schema[$field]['null'])) {
 			$emptyValue = "__('noSelection')";
 		}
-			
+
 		if (strpos($action, 'add') !== false && $field == $primaryKey) {
 			continue;
 		/** mod! 2010-10-13 ms **/
@@ -84,7 +84,7 @@
 			echo "\t\techo \$this->Form->input('{$field}');\n";
 		}
 	}
-	//TODO: for relations add: array('empty'=>' -[ '.__('pleaseSelect').' ]- ')
+	//TODO: for relations add: array('empty'=>Configure::read('Select.default_before').__('pleaseSelect').Configure::read('Select.default_after'))
 	if (!empty($associations['hasAndBelongsToMany'])) {
 		foreach ($associations['hasAndBelongsToMany'] as $assocName => $assocData) {
 			echo "\t\techo \$this->Form->input('{$assocName}');\n";

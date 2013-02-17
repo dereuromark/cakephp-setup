@@ -2,16 +2,16 @@
 
 /**
  * Database Base Config
- * 
+ *
  * You should define both `environment` and `path` to be able to switch
  * dynamically in CLI mode and normal frontend mode.
  * Define `name` to manually switch using Configure::write('Environment.name').
- * 
+ *
  * It also automatically sets the test environment based on the default settings:
  * If no `test` config is set it will use the default settings except for prefix.
  * You can also define some custom settings and if `merge` is set to `true` in your test config
  * it will then merge with `default` afterwards.
- * 
+ *
  * @author Mark Scherer
  * @copyright Mark Scherer
  * @cakephp 2
@@ -41,12 +41,12 @@ class BaseConfig {
 				$this->_environments[] = $var;
 			}
 		}
-		$this->default = am($this->_defaults, $this->default);
+		$this->default = array_merge($this->_defaults, $this->default);
 		$environment = $this->getEnvironmentName();
 		if ($environment && isset($this->{$environment})) {
 			$this->default = array_merge($this->default, $this->{$environment});
 		}
-		
+
 		if (!isset($this->test)) {
 			$this->test = $this->default;
 			if (isset($this->test['prefix'])) {
@@ -57,11 +57,11 @@ class BaseConfig {
 			$this->default['name'] = $environment;
 		}
 		$this->test['name'] = 'test';
-		if (empty($this->test['prefix'])) {
+		if (!isset($this->test['prefix'])) {
 			$this->test['prefix'] = 'zzz_';
 		}
 		if (!empty($this->test['merge'])) {
-			$this->test = am($this->default, $this->test);
+			$this->test = array_merge($this->default, $this->test);
 			unset($this->test['merge']);
 		}
 	}
@@ -83,12 +83,12 @@ class BaseConfig {
 		}
 		if (empty($environment) && $serverPath = $this->_getEnvironmentPath()) {
 			foreach ($this->_environments as $e) {
-				
+
 				if (isset($this->{$e}) && isset($this->{$e}['path']) && in_array($serverPath, (array) $this->{$e}['path'])) {
 					$environment = $e;
 					break;
 				}
-			}	
+			}
 		}
 		return $environment;
 	}
@@ -111,7 +111,7 @@ class BaseConfig {
 		}
 		return $this->default;
 	}
-	
+
 	/**
 	 * wrapper to handle symlinks properly, as well
 	 * @return string $path
@@ -125,4 +125,3 @@ class BaseConfig {
 	}
 
 }
-

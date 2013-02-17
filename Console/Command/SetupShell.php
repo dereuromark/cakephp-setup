@@ -26,7 +26,7 @@ class SetupShell extends AppShell {
 
 	/**
 	 * Test the console to work with
-	 * - utf8 input (unix only it seems)
+	 * - utf8 input
 	 * - utf8 output (from db or utf8 encoded files)
 	 * - colorful output (unix only)
 	 * 2012-12-12 ms
@@ -60,8 +60,9 @@ class SetupShell extends AppShell {
 		if ($x) {
 			$this->out('Your input was:');
 			$this->out($x);
+			$this->out('(encoded: ' . (($e = mb_detect_encoding($x, 'auto')) ? $e : 'n/a') . ')');
 		} else {
-			$this->out('You did not input anything');
+			$this->out('You did not input anything!');
 		}
 		$this->out();
 		$this->out('Done!');

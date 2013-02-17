@@ -1,4 +1,5 @@
 <?php
+App::uses('SetupAppController', 'Setup.Controller');
 App::uses('Install', 'Model');
 
 /**
@@ -16,11 +17,11 @@ class InstallController extends SetupAppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		
+
 		if (isset($this->Auth)) {
-			$this->Auth->allow('*');
+			$this->Auth->allow();
 		}
-		
+
 		if (!Configure::read('debug')) {
 			throw new MethodNotAllowedException('Debug Mode needs to be enabled for this');
 		}
@@ -41,7 +42,7 @@ class InstallController extends SetupAppController {
 				$this->Common->flashMessage('database.php created', 'success');
 				$this->Common->postRedirect(array('action'=>'step2'));
 			}
-			
+
 		} else {
 			$this->request->data['Install'] = array(
 				'datasource' => 'Database/Mysql',
@@ -64,5 +65,5 @@ class InstallController extends SetupAppController {
 	public function step2() {
 
 	}
-	
+
 }

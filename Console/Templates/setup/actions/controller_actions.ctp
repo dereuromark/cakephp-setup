@@ -5,12 +5,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Console.Templates.default.actions
  * @since         CakePHP(tm) v 1.3
@@ -43,15 +43,17 @@
 
 	/**
 	 * @return void
+<?php if (!$wannaUseSession): ?>
+	 * @throws NotFoundException
+<?php endif; ?>
 	 */
 	public function <?php echo $admin ?>view($id = null) {
-		$this-><?php echo $currentModelName ?>->recursive = 0;
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.id'=>$id))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 <?php else: ?>
-			$this->flash(__('invalidRecord'), array('action' => 'index'));
+			throw new NotFoundException(__('invalidRecord'));
 <?php endif; ?>
 		}
 		$this->set(compact('<?php echo $singularName; ?>'));
@@ -83,7 +85,7 @@
 	foreach ($modelObj->scaffoldDefaultValues as $field => $value) {
 		echo "\t\t\t\$this->request->data['{$currentModelName}']['$field'] = $value;\n";
 	}
-?>				
+?>
 		}
 <?php else: ?>
 		}
@@ -95,13 +97,15 @@
 			if (!empty($associationName)) {
 				$otherModelName = $this->_modelName($associationName);
 				$otherPluralName = $this->_pluralName($associationName);
-				if (App::import('Model', $plugin.'.'.$relation['className']) || App::import('Model', $relation['className'])) {
+				App::uses($relation['className'], ($plugin ? $plugin . '.' : '') . 'Model');
+
+				if (class_exists($relation['className'])) {
 					$relationModel = new $relation['className'];
 					if (!empty($relationModel->actsAs) && in_array('Tree', $relationModel->actsAs)) {
 						if ($otherPluralName == 'parent'.Inflector::pluralize($currentModelName)) {
 							$otherPluralName = 'parents';
 						}
-						echo "\t\t\${$otherPluralName} = array(0 => __('Root') + \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, null, null, 'Â» ');\n";
+						echo "\t\t\${$otherPluralName} = array(0 => __('Root') + \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, null, null, '» ');\n";
 					} else {
 						echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('list');\n";
 					}
@@ -121,6 +125,9 @@
 <?php $compact = array(); ?>
 	/**
 	 * @return void
+<?php if (!$wannaUseSession): ?>
+	 * @throws NotFoundException
+<?php endif; ?>
 	 */
 	public function <?php echo $admin; ?>edit($id = null) {
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.id'=>$id))))) {
@@ -128,7 +135,7 @@
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 <?php else: ?>
-			$this->flash(__('invalidRecord'), array('action' => 'index'));
+			throw new NotFoundException(__('invalidRecord'));
 <?php endif; ?>
 		}
 		if ($this->Common->isPosted()) {
@@ -145,30 +152,30 @@
 				$this->Common->flashMessage(__('formContainsErrors'), 'error');
 <?php endif; ?>
 			}
-		}
-		if (empty($this->request->data)) {
+		} else {
 			$this->request->data = $<?php echo $singularName; ?>;
 		}
 <?php
 		foreach (array('belongsTo', 'hasAndBelongsToMany') as $assoc):
 			foreach ($modelObj->{$assoc} as $associationName => $relation):
 				if (!empty($associationName)) {
-				$otherModelName = $this->_modelName($associationName);
-				$otherPluralName = $this->_pluralName($associationName);
-				if (App::import('Model', $plugin.'.'.$relation['className']) || App::import('Model', $relation['className'])) {
-					$relationModel = new $relation['className'];
-					if (!empty($relationModel->actsAs) && in_array('Tree', $relationModel->actsAs)) {
-						if ($otherPluralName == 'parent'.Inflector::pluralize($currentModelName)) {
-							$otherPluralName = 'parents';
+					$otherModelName = $this->_modelName($associationName);
+					$otherPluralName = $this->_pluralName($associationName);
+					App::uses($relation['className'], ($plugin ? $plugin . '.' : '') . 'Model');
+					if (class_exists($relation['className'])) {
+						$relationModel = new $relation['className'];
+						if (!empty($relationModel->actsAs) && in_array('Tree', $relationModel->actsAs)) {
+							if ($otherPluralName == 'parent'.Inflector::pluralize($currentModelName)) {
+								$otherPluralName = 'parents';
+							}
+							echo "\t\t\${$otherPluralName} = array(0 => __('Root') + \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, null, null, '» ');\n";
+						} else {
+							echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('list');\n";
 						}
-						echo "\t\t\${$otherPluralName} = array(0 => __('Root') + \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, null, null, 'Â» ');\n";
 					} else {
 						echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('list');\n";
 					}
-				} else {
-					echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('list');\n";
-				}
-				$compact[] = "'{$otherPluralName}'";
+					$compact[] = "'{$otherPluralName}'";
 				}
 			endforeach;
 		endforeach;
@@ -179,22 +186,23 @@
 	}
 
 	/**
+	 * @throws MethodNotAllowedException
 	 * @return void
+	 * @throws NotFoundException
+	 * @throws MethodNotAllowedException
 	 */
 	public function <?php echo $admin; ?>delete($id = null) {
-		if (!$this->Common->isPosted()) {
-			throw new MethodNotAllowedException();
-		}
+		$this->request->onlyAllow('post', 'delete');
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			$this->Common->autoRedirect(array('action'=>'index'));
 <?php else: ?>
-			$this->flash(__('invalidRecord'), array('action' => 'index'));
+			throw new NotFoundException(__('invalidRecord'));
 <?php endif; ?>
 		}
 		$var = $<?php echo $singularName; ?>['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
-		
+
 		if ($this-><?php echo $currentModelName; ?>->delete($id)) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('record del %s done', h($var)), 'success');

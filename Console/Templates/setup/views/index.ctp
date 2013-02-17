@@ -27,7 +27,7 @@
 	}
 	$skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
 	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields')) {
-		$skipFields = am($skipFields, (array)$relationModel->scaffoldSkipFields);
+		$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFields);
 	}
 ?>
 <?php foreach ($fields as $field):
@@ -44,7 +44,7 @@
 <?php
 	echo "<?php
 \$i = 0;
-foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
+foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 	echo "\t<tr>\n";
 	foreach ($fields as $field) {
 		/** CORE-MOD (no id) **/
@@ -52,7 +52,7 @@ foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 			continue;
 		}
 		/** CORE-MOD END **/
-	
+
 		$isKey = false;
 		if (!empty($associations['belongsTo'])) {
 			foreach ($associations['belongsTo'] as $alias => $details) {
@@ -68,17 +68,17 @@ foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 			if ($field == 'created' || $field == 'modified' || $schema[$field]['type'] == 'datetime') {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 			/** CORE-MOD END **/
-	
+
 			/** CORE-MOD (date) **/
 			} elseif ($schema[$field]['type'] == 'date') {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}'], FORMAT_NICE_YMD); ?>\n\t\t</td>\n";
 			/** CORE-MOD END **/
-	
+
 			/** CORE-MOD (yes/no) **/
 			} elseif ($schema[$field]['type'] == 'boolean') {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Format->yesNo(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 			/** CORE-MOD END **/
-	
+
 			/** CORE-MOD (protection against js injection by using h() function) **/
 			/*
 			} elseif (strlen($field) > 3 && substr($field, -3, 3)=='_id') {
@@ -87,23 +87,23 @@ foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 				# no difference to normal output right now...
 				echo "\t\t<td>\n\t\t\t<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 			*/
-			
+
 			/** CORE-MOD (nl2br + h) **/
 			} elseif ($schema[$field]['type'] == 'text') {
 				# "unchanged" output?
 				/* echo "\t\t<td>\n\t\t\t<?php echo \${$singularVar}['{$modelClass}']['{$field}']; ?>\n\t\t</td>\n"; */
 				# no difference to normal output right now...
 				echo "\t\t<td>\n\t\t\t<?php echo nl2br(h(\${$singularVar}['{$modelClass}']['{$field}'])); ?>\n\t\t</td>\n";
-	
+
 			} elseif ($schema[$field]['type'] == 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
 				echo "\t\t<td>\n\t\t\t<?php echo ".$modelClass."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
-	
+
 			} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',2') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
-	
+
 			} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
-	
+
 			} else {
 				//$schema[$field]['type'] == 'string'
 				# escape: h()
@@ -112,9 +112,9 @@ foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 			/** CORE-MOD END **/
 		}
 	}
-	
+
 		echo "\t\t<td class=\"actions\">\n";
-	
+
 	/** CORE-MOD **/
 	if (!empty($upDown)) {
 		echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('up'), array('action'=>'up', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape'=>false)); ?>\n";
@@ -127,14 +127,14 @@ foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 		echo "\t\t</td>\n";
 	echo "\t</tr>\n";
 
-	echo "<?php endforeach; ?>\n";
+	echo "<?php } ?>\n";
 	?>
 	</table>
 
-	<p class="pagination">
-<?php echo '<?php echo $this->element(\'pagination\', array(), array(\'plugin\'=>\'tools\')); ?>'; ?>
+	<div class="pagination-container">
+<?php echo '<?php echo $this->element(\'Tools.pagination\'); ?>'; ?>
 
-	</p>
+	</div>
 
 </div>
 

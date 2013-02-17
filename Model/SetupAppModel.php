@@ -1,4 +1,5 @@
 <?php
+App::uses('AppModel', 'Model');
 class SetupAppModel extends AppModel {
 
 	public function __construct($id = false, $table = null, $ds = null) {
@@ -7,6 +8,5 @@ class SetupAppModel extends AppModel {
 		}
 		parent::__construct($id, $table, $ds);
 	}
-	
-}
 
+}

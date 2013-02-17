@@ -5,7 +5,7 @@
  * - no real emails sent in debug mode (content logged to email_trace log file)
  * - dynamic setting of sensitive information (password, ...)
  * - allow setting of extensive loggin feature
- * 
+ *
  * @author Mark Scherer
  * @license MIT
  * 2012-03-30 ms
@@ -52,4 +52,3 @@ class BaseEmailConfig {
 	}
 
 }
-

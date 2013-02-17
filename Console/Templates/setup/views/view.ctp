@@ -25,7 +25,7 @@ if (App::import('Model', $plugin.'.'.$modelClass) || App::import('Model', $model
 }
 $skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
 if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields')) {
-	$skipFields = am($skipFields, (array)$relationModel->scaffoldSkipFields);
+	$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFields);
 }
 
 foreach ($fields as $field) {
@@ -87,15 +87,15 @@ foreach ($fields as $field) {
 			/* echo "\t\t<dd>\n\t\t\t<?php echo \${$singularVar}['{$modelClass}']['{$field}']; ?>\n\t\t</dd>\n"; */
 			# no difference to normal output right now...
 			echo "\t\t<dd>\n\t\t\t<?php echo nl2br(h(\${$singularVar}['{$modelClass}']['{$field}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
-		
+
 		/** enums **/
 		} elseif ($schema[$field]['type'] == 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
 			echo "\t\t<dd>\n\t\t\t<?php echo ".Inflector::camelize($modelClass)."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
-			
+
 		/** CORE-MOD (protection against js injection by using h() function) **/
 		} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',2') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
-	
+
 		} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
 			echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
@@ -188,7 +188,7 @@ foreach ($relations as $alias => $details) {
 <?php
 echo "\t<?php
 		\$i = 0;
-		foreach (\${$singularVar}['{$alias}'] as \${$otherSingularVar}): ?>\n";
+		foreach (\${$singularVar}['{$alias}'] as \${$otherSingularVar}) { ?>\n";
 			echo "\t\t<tr>\n";
 
 			foreach ($details['fields'] as $field) {
@@ -202,7 +202,7 @@ echo "\t<?php
 			echo "\t\t\t</td>\n";
 			echo "\t\t</tr>\n";
 
-echo "\t<?php endforeach; ?>\n";
+echo "\t<?php } ?>\n";
 ?>
 	</table>
 <?php echo "<?php endif; ?>\n\n";?>
