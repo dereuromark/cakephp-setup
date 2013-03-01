@@ -30,7 +30,7 @@
 
 <?php echo "<?php echo \$this->Form->create('{$modelClass}');?>\n";?>
 	<fieldset>
- 		<legend><?php echo "<?php echo __('" . $displayAction . " %s', __('{$singularHumanName}')); ?>";?></legend>
+		<legend><?php echo "<?php echo __('" . $displayAction . " %s', __('{$singularHumanName}')); ?>";?></legend>
 <?php
 	if (App::import('Model', $plugin.'.'.$modelClass) || App::import('Model', $modelClass)) {
 		$relationModel = new $modelClass;
