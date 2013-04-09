@@ -48,6 +48,7 @@
 <?php endif; ?>
 	 */
 	public function <?php echo $admin ?>view($id = null) {
+		$this-><?php echo $currentModelName ?>->recursive = 0;
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.id'=>$id))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
