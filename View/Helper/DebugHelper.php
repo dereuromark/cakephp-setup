@@ -1,12 +1,20 @@
 <?php
 App::uses('AppHelper', 'View/Helper');
+App::uses('DebugLib', 'Setup.Lib');
+App::uses('CakeNumber', 'Utility');
+App::uses('File', 'Utility');
+
 if (!defined('BR')) {
 	define('BR', '<br />');
 }
 // only used in debug mode! needs to be started manually!!!
 
 /**
- * @cakephp2.0
+ * A helper to display a debug bar at the bottom of each page to quickly tab through all debug output.
+ *
+ * @author Mark Scherer
+ * @license MIT
+ * @cakephp 2.0
  * 2011-11-20 ms
  */
 class DebugHelper extends AppHelper {
@@ -14,10 +22,13 @@ class DebugHelper extends AppHelper {
 	public $helpers = array('Html', 'Session', 'Tools.Datetime'); // this needs to be started manually, as well
 
 	protected $level = 0;
+
 	protected $debugContent = array('1' => array(), '2' => array(), '3' => array());
 
 	protected $Model = '';
+
 	protected $rememberMe = false; //cookie or ajax (= session)
+
 	protected $rememberEngine = 'cookie';
 
 	public $packages = array('Tools.AppJs::debug');
@@ -25,14 +36,11 @@ class DebugHelper extends AppHelper {
 	public function __construct(View $View, $level = null, $options = array()) {
 		parent::__construct($View, $options);
 
-		$this->_ViewProperties = $this->_object_to_array($View);
+		$this->_ViewProperties = $this->_objectToArray($View);
 
 		if (!empty($options['model'])) {
 			$this->_useModel($options['model']);
 		}
-
-		//App::import('Core', 'HtmlHelper');
-		//$this->Html = new HtmlHelper(new View(null));
 
 		$this->level = (int)$level;
 		$this->_debug($options);
@@ -47,14 +55,14 @@ class DebugHelper extends AppHelper {
 		}
 	}
 
-	protected function _object_to_array($obj, $level = 5) {
+	protected function _objectToArray($obj, $level = 5) {
 		$_arr = is_object($obj) ? get_object_vars($obj) : $obj;
 		$arr = array();
 		if ($level < 1) {
 			return $obj;
 		}
 		foreach ($_arr as $key => $val) {
-			$val = (is_array($val) || is_object($val)) ? self::_object_to_array($val, $level--) : $val;
+			$val = (is_array($val) || is_object($val)) ? self::_objectToArray($val, $level--) : $val;
 			$arr[$key] = $val;
 		}
 		return $arr;
@@ -377,17 +385,13 @@ jQuery(function() {
 
 		$res .= 'env(\'HTTPS\'): '.env('HTTPS').' (emulated)<br />';
 
-		$res .= 'env(\'REMOTE_ADDR\'): '.env('REMOTE_ADDR').' (emulated)<br />';
-		$res .= 'gethostbyaddr(env(\'REMOTE_ADDR\')): '.gethostbyaddr(env('REMOTE_ADDR')).'<br />';
+		$res .= 'env(\'REMOTE_ADDR\'): '. ($ip = env('REMOTE_ADDR')).' (emulated)<br />';
+		$res .= 'gethostbyaddr(env(\'REMOTE_ADDR\')): ' . ($ip ? gethostbyaddr($ip) : '' ) . '<br />';
 		$res .= 'env(\'HTTP_USER_AGENT\'): '.env('HTTP_USER_AGENT').'<br />';
 
 		$res .= '</p>';
 
 		$res .= '<h3>System</h3>';
-
-
-		App::uses('DebugLib', 'Setup.Lib');
-		App::uses('CakeNumber', 'Utility');
 
 		//$res .= 'Lazy Loading: '.($this->_lazyLoading() ? 'JA' : 'NEIN').'<br />';
 		$res .= 'Opcode Cache: '.($this->_opCodeCache() ? 'JA' : 'NEIN').'<br />';
@@ -620,7 +624,6 @@ jQuery(function() {
 		return false;
 	}
 
-
 	/**
 	 * returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
@@ -657,7 +660,6 @@ jQuery(function() {
 		return false;
 	}
 
-
 	/**
 	 * returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
@@ -671,7 +673,6 @@ jQuery(function() {
 		}
 
 		# cache retrieval!!!
-		App::uses('File', 'Utility');
 		$handle = new File(CACHE.'persistent'.DS.'version_cake.txt', true);
 		if (!$handle->exists() || !$handle->writable()) {
 			$this->log('cache not writable', 'error');
@@ -830,6 +831,5 @@ jQuery(function() {
 
 		return $version;
 	}
-
 
 }
