@@ -121,8 +121,8 @@ class DebugLib {
 	}
 
 	public $fillString = 'NA';
-	public $useFillString = 1;
 
+	public $useFillString = 1;
 
 	/**
 	 * @deprecated?
@@ -137,10 +137,9 @@ class DebugLib {
 		if ($status !== 0) { # zero => success
 			return array();
 		}
-		$space = $output;
-		die(returns($space));
-
-		return $res;
+		//$space = $output;
+		//die(returns($space));
+		return $output;
 	}
 
 	/**
@@ -202,7 +201,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		}
 		return $res;
 	}
-
 
 	/**
 	 * getKernelVersion
@@ -340,7 +338,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return $results;
 	}
 
-
 	/**
 	 * get current memory usage
 	 *
@@ -366,7 +363,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		}
 		return memory_get_peak_usage($real);
 	}
-
 
 	/**
 	 * @return string MemoryLimit
@@ -395,7 +391,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return true;
 	}
 
-
 	/**
 	 * if available: Searches DNS for MX records corresponding to hostname.
 	 * @static
@@ -413,7 +408,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	public function checkdnsrrAvailable() {
 		return function_exists('checkdnsrr');
 	}
-
 
 	/** test if exec commands are allowed **/
 	public function execAllowed() {
@@ -443,8 +437,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 
-	/** PHP Infos **/
-
+/** PHP Infos **/
 
 	public function phpVersion() {
 		return @phpversion();
@@ -489,7 +482,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return false;
 	}
 
-
 	/**
 	 * returns the value from php.ini directly, while the ini_get returns the runtime config value
 	 * 2010-07-31 ms
@@ -505,7 +497,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	public function runtimeVar($var) {
 		return ini_get($var);
 	}
-
 
 	/**
 	 * @return array with the names of the functions of a module or FALSE if extension is not available
@@ -667,17 +658,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 
-	/** test stuff - or deprecated **/
-
-
-	/** deprecated **/
-	public function xx() {
-		@list($system, $host, $kernel) = preg_split('/[\s, ]+/', @exec('uname -a'), 5);
-		pr($system);
-		pr($host);
-		pr($kernel);
-	}
-
+/** test stuff - or deprecated **/
 
 	public function getOpenBasedir() {
 		$ret = array('ok' => 0, 'value' => implode('<br/>', $tthis->openBasedir()), 'descr' => 'open basedir restrictions');
@@ -712,7 +693,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return mysql_client_encoding($link);
 	}
 
-
 	public function dbUptime() {
 		$uptime = $this->Configuration->query('show status like "Uptime"');
 		$value = $uptime[0]['STATUS']['Value'];
@@ -724,7 +704,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		$time = $this->Configuration->query('select now() as datetime');
 		return $time[0][0]['datetime'];
 	}
-
 
 	/**
 	 * uses DB query, foolprove!
@@ -747,18 +726,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 
 	/** deprecated **/
-
-
-	/**
-	 * Returns the raw directory contents
-	 * @param   string  $dir    Directory
-	 * @return  string          Directory contents
-	 * EXPERIMENTAL
-	 */
-	public function getServerStructure($dir) {
-		return ftp_rawlist($this->conn_id, $dir);
-	}
-
 
 	/**
 	 * //should be in model?
@@ -818,6 +785,8 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * HelperFunction to format 128M into the bytes
+	 * Note: use CakeNumber here instead?
+	 *
 	 * 2010-07-30 ms
 	 */
 	public function returnInBytes($val) {

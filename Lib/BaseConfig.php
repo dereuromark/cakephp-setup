@@ -93,7 +93,6 @@ class BaseConfig {
 		return $environment;
 	}
 
-
 	/**
 	 * return current name (or at least the settings itself...)
 	 * @param bool $nameOnly
