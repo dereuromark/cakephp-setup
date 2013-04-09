@@ -165,7 +165,7 @@ class DebugLibTest extends MyCakeTestCase {
 
 		$res = $this->DebugLib->maxInputTime();
 		$this->debug($res);
-		$this->assertTrue(is_int($res) && $res >= 0, 'Input time is not >= 0 but ' . print_r($res, true));
+		$this->assertTrue(is_int($res) && (!WINDOWS || $res >= 0));
 	}
 
 	public function testIni() {
