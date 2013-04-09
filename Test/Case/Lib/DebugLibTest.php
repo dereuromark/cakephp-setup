@@ -141,12 +141,9 @@ class DebugLibTest extends MyCakeTestCase {
 		$this->debug($res);
 		$this->assertTrue($res > 4 && $res < 7);
 
-
 		$res = $this->DebugLib->serverSoftware();
 		$this->debug($res);
-		$this->assertTrue(!empty($res) && strpos($res, 'Apache') !== false && (!WINDOWS || strpos($res, 'PHP') !== false));
-
-
+		$this->assertTrue(!empty($res) && (!WINDOWS || strpos($res, 'PHP') !== false));
 	}
 
 	public function testTime() {
@@ -168,9 +165,7 @@ class DebugLibTest extends MyCakeTestCase {
 
 		$res = $this->DebugLib->maxInputTime();
 		$this->debug($res);
-		$this->assertTrue(is_int($res) && $res >= 0);
-
-
+		$this->assertTrue(is_int($res) && $res >= 0, 'Input time is not >= 0 but ' . print_r($res, true));
 	}
 
 	public function testIni() {
