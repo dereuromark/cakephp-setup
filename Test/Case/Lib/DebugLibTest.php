@@ -24,11 +24,11 @@ class DebugLibTest extends MyCakeTestCase {
 	public function testMemoryUsage() {
 		$res = $this->DebugLib->memoryUsage();
 		$this->debug($res);
-		$this->assertTrue(is_int($res) && $res > 1000000 && $res < 20000000);
+		$this->assertTrue(is_int($res) && $res > 1000000 && $res < 90000000);
 
 		$res2 = $this->DebugLib->peakMemoryUsage();
 		$this->debug($res2);
-		$this->assertTrue(is_int($res2) && $res2 > 1000000 && $res2 < 20000000 && $res2 > $res);
+		$this->assertTrue(is_int($res2) && $res2 > 1000000 && $res2 < 90000000 && $res2 > $res);
 
 		$res = $this->DebugLib->memoryLimit();
 		$this->debug($res);
