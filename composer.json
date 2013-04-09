@@ -1,0 +1,26 @@
+{
+	"name": "dereuromark/setup-cakephp",
+	"type": "cakephp-plugin",
+	"description": "A CakePHP plugin containing lots of useful management tools",
+	"keywords": ["cakephp", "plugin", "setup", "management", "backup", "bake", "templates"],
+	"homepage": "https://github.com/dereuromark/setup",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Mark Scherer",
+			"homepage": "http://www.dereuromark.de"
+		}
+	],
+	"require": {
+		"php": ">=5.3",
+		"composer/installers": "*"
+	},
+	"support": {
+		"source": "https://github.com/dereuromark/setup"
+	},
+	"extra": {
+		"installer-paths": {
+			"Plugin/Setup/": ["dereuromark/setup-cakephp"]
+		}
+	}
+}
