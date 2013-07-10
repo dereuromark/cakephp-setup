@@ -30,7 +30,7 @@ if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields
 
 foreach ($fields as $field) {
 	/** CORE-MOD: prevents id fields to be displayed (not needed!) **/
-	if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] == 'primary') || ($field == 'sort' && $upDown)) {
+	if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] === 'primary') || ($field === 'sort' && $upDown)) {
 		continue;
 	}
 	/** CORE-MOD END **/
@@ -48,15 +48,15 @@ foreach ($fields as $field) {
 	}
 	if ($isKey !== true) {
 
-		if ($field == 'modified' && !empty($fieldCreated)) {
+		if ($field === 'modified' && !empty($fieldCreated)) {
 			echo "<?php if (\${$singularVar}['{$modelClass}']['created'] != \${$singularVar}['{$modelClass}']['{$field}']) { ?>\n";
 		}
 
 		echo "\t\t<dt><?php echo __('" . Inflector::humanize($field) . "'); ?></dt>\n";
 
 		/** CORE-MOD (datetime) **/
-		if ($field == 'created' || $field == 'modified' || $schema[$field]['type'] == 'datetime') {
-			if ($field == 'created') {
+		if ($field === 'created' || $field === 'modified' || $schema[$field]['type'] === 'datetime') {
+			if ($field === 'created') {
 				$fieldCreated = true;
 			}
 
@@ -64,39 +64,39 @@ foreach ($fields as $field) {
 			echo "\$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}'])";
 			echo "; ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
 
-			if ($field == 'modified' && !empty($fieldCreated)) {
+			if ($field === 'modified' && !empty($fieldCreated)) {
 				echo "<?php } ?>\n";
 			}
 		/** CORE-MOD END **/
 
 		/** CORE-MOD (date) **/
-		} elseif ($schema[$field]['type'] == 'date') {
+		} elseif ($schema[$field]['type'] === 'date') {
 			echo "\t\t<dd>\n\t\t\t<?php echo ";
 			echo "\$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}'], FORMAT_NICE_YMD)";
 			echo "; ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
 		/** CORE-MOD END **/
 
 		/** CORE-MOD (yes/no) **/
-		} elseif ($schema[$field]['type'] == 'boolean') {
+		} elseif ($schema[$field]['type'] === 'boolean') {
 			echo "\t\t<dd>\n\t\t\t<?php echo \$this->Format->yesNo(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n"; //display an icon (green yes / red no)
 		/** CORE-MOD END **/
 
 		/** CORE-MOD (nl2br + h) **/
-		} elseif ($schema[$field]['type'] == 'text') {
+		} elseif ($schema[$field]['type'] === 'text') {
 			# "unchanged" output?
 			/* echo "\t\t<dd>\n\t\t\t<?php echo \${$singularVar}['{$modelClass}']['{$field}']; ?>\n\t\t</dd>\n"; */
 			# no difference to normal output right now...
 			echo "\t\t<dd>\n\t\t\t<?php echo nl2br(h(\${$singularVar}['{$modelClass}']['{$field}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
 
 		/** enums **/
-		} elseif ($schema[$field]['type'] == 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
+		} elseif ($schema[$field]['type'] === 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
 			echo "\t\t<dd>\n\t\t\t<?php echo ".Inflector::camelize($modelClass)."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
 
 		/** CORE-MOD (protection against js injection by using h() function) **/
-		} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',2') !== false) {
+		} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
-		} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
+		} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',') !== false) {
 			echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
 		} else {

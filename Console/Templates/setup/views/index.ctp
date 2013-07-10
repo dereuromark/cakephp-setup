@@ -32,7 +32,7 @@
 ?>
 <?php foreach ($fields as $field):
 	/** CORE-MOD - 2009-04-11 ms - no primaryKeys **/
-	if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] == 'primary') || ($field == 'sort' && $upDown)) {
+	if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] === 'primary') || ($field === 'sort' && $upDown)) {
 		continue;
 	}
 	/** CORE-MOD END **/
@@ -47,7 +47,7 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 	echo "\t<tr>\n";
 	foreach ($fields as $field) {
 		/** CORE-MOD (no id) **/
-		if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] == 'primary') || ($field == 'sort' && $upDown)) {
+		if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] === 'primary') || ($field === 'sort' && $upDown)) {
 			continue;
 		}
 		/** CORE-MOD END **/
@@ -64,17 +64,17 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 		}
 		if ($isKey !== true) {
 			/** CORE-MOD (datetime) **/
-			if ($field == 'created' || $field == 'modified' || $schema[$field]['type'] == 'datetime') {
+			if ($field === 'created' || $field === 'modified' || $schema[$field]['type'] === 'datetime') {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 			/** CORE-MOD END **/
 
 			/** CORE-MOD (date) **/
-			} elseif ($schema[$field]['type'] == 'date') {
+			} elseif ($schema[$field]['type'] === 'date') {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}'], FORMAT_NICE_YMD); ?>\n\t\t</td>\n";
 			/** CORE-MOD END **/
 
 			/** CORE-MOD (yes/no) **/
-			} elseif ($schema[$field]['type'] == 'boolean') {
+			} elseif ($schema[$field]['type'] === 'boolean') {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Format->yesNo(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 			/** CORE-MOD END **/
 
@@ -88,24 +88,22 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 			*/
 
 			/** CORE-MOD (nl2br + h) **/
-			} elseif ($schema[$field]['type'] == 'text') {
+			} elseif ($schema[$field]['type'] === 'text') {
 				# "unchanged" output?
 				/* echo "\t\t<td>\n\t\t\t<?php echo \${$singularVar}['{$modelClass}']['{$field}']; ?>\n\t\t</td>\n"; */
 				# no difference to normal output right now...
 				echo "\t\t<td>\n\t\t\t<?php echo nl2br(h(\${$singularVar}['{$modelClass}']['{$field}'])); ?>\n\t\t</td>\n";
 
-			} elseif ($schema[$field]['type'] == 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
+			} elseif ($schema[$field]['type'] === 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
 				echo "\t\t<td>\n\t\t\t<?php echo ".$modelClass."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
-			} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',2') !== false) {
+			} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
-			} elseif ($schema[$field]['type'] == 'float' && strpos($schema[$field]['length'], ',') !== false) {
+			} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
 			} else {
-				//$schema[$field]['type'] == 'string'
-				# escape: h()
 				echo "\t\t<td>\n\t\t\t<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 			}
 			/** CORE-MOD END **/

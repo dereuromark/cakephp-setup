@@ -103,7 +103,7 @@
 				if (class_exists($relation['className'])) {
 					$relationModel = new $relation['className'];
 					if (!empty($relationModel->actsAs) && in_array('Tree', $relationModel->actsAs)) {
-						if ($otherPluralName == 'parent'.Inflector::pluralize($currentModelName)) {
+						if ($otherPluralName === 'parent'.Inflector::pluralize($currentModelName)) {
 							$otherPluralName = 'parents';
 						}
 						echo "\t\t\${$otherPluralName} = array(0 => __('Root') + \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, null, null, '» ');\n";
@@ -166,7 +166,7 @@
 					if (class_exists($relation['className'])) {
 						$relationModel = new $relation['className'];
 						if (!empty($relationModel->actsAs) && in_array('Tree', $relationModel->actsAs)) {
-							if ($otherPluralName == 'parent'.Inflector::pluralize($currentModelName)) {
+							if ($otherPluralName === 'parent'.Inflector::pluralize($currentModelName)) {
 								$otherPluralName = 'parents';
 							}
 							echo "\t\t\${$otherPluralName} = array(0 => __('Root') + \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, null, null, '» ');\n";
