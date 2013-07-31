@@ -68,7 +68,6 @@ class DebugHelper extends AppHelper {
 		return $arr;
 	}
 
-
 	protected function _useModel($name) {
 		$this->Model = $name;
 	}
@@ -196,13 +195,13 @@ class DebugHelper extends AppHelper {
 jQuery(document).ready(function() {
 	var remember = \''.$rememberedId.'\';
 
-	'.$script.'
+	' . $script . '
 
-	'.(!empty($rememberedId)?'
+	' . (!empty($rememberedId) ? '
 
 	jQuery(\'div.tabs ul.tabNavigation a#'.$rememberedId.'\').click();
 
-	' : '').'
+	' : '') . '
 
 });
 ');
@@ -218,7 +217,6 @@ jQuery(function() {
 		#debug-important_stuff
 		return $output;
 	}
-
 
 	/**
 	 * adds a new tab
@@ -237,7 +235,6 @@ jQuery(function() {
 		$this->debugContent[$level][$title] = $content;
 		return true;
 	}
-
 
 	/**
 	 * sets normal default tabs
@@ -313,28 +310,28 @@ jQuery(function() {
 
 		$res .= '<h3>Params</h3>';
 		$res .= '<b>View parameters</b><br /><br />';
-		$res .= '$this->request->base: '.(!empty($this->_View->base)?$this->_View->base : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->here: '.(!empty($this->_View->here)?$this->_View->here : '<i>n/a</i>').'<br/>';
-		$res .= '$this->name: '.(!empty($this->_View->name)?$this->_View->name : '<i>n/a</i>').'<br/>';
-		$res .= '$this->_ViewPath: '.(!empty($this->_View->viewPath)?$this->_View->viewPath : '<i>n/a</i>').'<br/>';
-		$res .= '$this->themePath: '.(!empty($this->_View->themePath)?$this->_View->themePath : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->action: '.(!empty($this->_View->action)?$this->_View->action : '<i>n/a</i>').'<br/>';
-		$res .= '$this->ext: '.(!empty($this->_View->ext)?$this->_View->ext : '<i>n/a</i>').'<br/>';
-		$res .= '$this->layout: '.(!empty($this->_View->layout)?$this->_View->layout : '<i>n/a</i>').'<br/>';
-		$res .= '$this->uses: '.(!empty($this->_View->uses)?$this->_View->uses : '<i>n/a</i>').'<br/>';
-		$res .= '$this->validationErrors: '.(!empty($this->_View->validationErrors)?'<pre class="">'.h(print_r($this->_View->validationErrors, true)).'</pre>' : '<i>n/a</i>').'<br/>';
-		$res .= '$this->pageTitle: '.(!empty($this->_View->pageTitle)?$this->_View->pageTitle : '<i>n/a</i>').'<br/>';
-		$res .= '$this->parent: '.(!empty($this->_View->parent)?$this->_View->parent : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->base: '.(!empty($this->_View->base) ? $this->_View->base : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->here: '.(!empty($this->_View->here) ? $this->_View->here : '<i>n/a</i>').'<br/>';
+		$res .= '$this->name: '.(!empty($this->_View->name) ? $this->_View->name : '<i>n/a</i>').'<br/>';
+		$res .= '$this->_ViewPath: '.(!empty($this->_View->viewPath) ? $this->_View->viewPath : '<i>n/a</i>').'<br/>';
+		$res .= '$this->themePath: '.(!empty($this->_View->themePath) ? $this->_View->themePath : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->action: '.(!empty($this->_View->action) ? $this->_View->action : '<i>n/a</i>').'<br/>';
+		$res .= '$this->ext: '.(!empty($this->_View->ext) ? $this->_View->ext : '<i>n/a</i>').'<br/>';
+		$res .= '$this->layout: '.(!empty($this->_View->layout) ? $this->_View->layout : '<i>n/a</i>').'<br/>';
+		$res .= '$this->uses: '.(!empty($this->_View->uses) ? $this->_View->uses : '<i>n/a</i>').'<br/>';
+		$res .= '$this->validationErrors: '.(!empty($this->_View->validationErrors) ?'<pre class="">'.h(print_r($this->_View->validationErrors, true)).'</pre>' : '<i>n/a</i>').'<br/>';
+		$res .= '$this->pageTitle: '.(!empty($this->_View->pageTitle) ? $this->_View->pageTitle : '<i>n/a</i>').'<br/>';
+		$res .= '$this->parent: '.(!empty($this->_View->parent) ? $this->_View->parent : '<i>n/a</i>').'<br/>';
 		$res .= '<br /><br />';
 
 		/** URL **/
 		$res .= '<b>Url Resolving</b><br /><br />';
-		$res .= '$this->request->params[\'prefix\']: '.(!empty($this->_View->request->params['prefix'])?h($this->_View->request->params['prefix']) : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->params[\'admin\']: '.(!empty($this->_View->request->params['admin'])?h($this->_View->request->params['admin']) : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->params[\'plugin\']: '.(!empty($this->_View->request->params['plugin'])?h($this->_View->request->params['plugin']) : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->params[\'prefix\']: '.(!empty($this->_View->request->params['prefix']) ?h($this->_View->request->params['prefix']) : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->params[\'admin\']: '.(!empty($this->_View->request->params['admin']) ?h($this->_View->request->params['admin']) : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->params[\'plugin\']: '.(!empty($this->_View->request->params['plugin']) ?h($this->_View->request->params['plugin']) : '<i>n/a</i>').'<br/>';
 
-		$res .= '$this->request->params[\'controller\']: '.(!empty($this->_View->request->params['controller'])?h($this->_View->request->params['controller']) : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->params[\'action\']: '.(!empty($this->_View->request->params['action'])?h($this->_View->request->params['action']) : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->params[\'controller\']: '.(!empty($this->_View->request->params['controller']) ?h($this->_View->request->params['controller']) : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->params[\'action\']: '.(!empty($this->_View->request->params['action']) ?h($this->_View->request->params['action']) : '<i>n/a</i>').'<br/>';
 
 		if (!empty($this->_View->request->params['pass'])) {
 			$res .= '$this->request->params[\'pass\']:'.pre(h($this->_View->request->params['pass']));
@@ -365,7 +362,7 @@ jQuery(function() {
 		$res .= 'session_id(): '.session_id().'<br />';
 		$res .= 'time(): '.time().' ('.$this->Datetime->niceDate(time()).')'.BR;
 
-		$res .= 'Session Expiration: '.(!empty($_SESSION['Config']['time'])?date(FORMAT_NICE_YMDHMS, $_SESSION['Config']['time']):'---').BR;
+		$res .= 'Session Expiration: '.(!empty($_SESSION['Config']['time']) ?date(FORMAT_NICE_YMDHMS, $_SESSION['Config']['time']):'---').BR;
 		$res .= '</p>';
 
 		$res .= '<h3>Environment</h3>';
@@ -373,19 +370,19 @@ jQuery(function() {
 		$res .= 'env(\'HTTP_HOST\'): '.env('HTTP_HOST').' (official referer method)<br />';
 		$res .= 'env(\'HTTP_REFERER\'): '.env('HTTP_REFERER').' (not to trust!)<br />';
 
-
 		$res .= 'env(\'CGI_MODE\'): '.env('CGI_MODE').'<br />';
 		$res .= 'env(\'PHP_SELF\'): '.env('PHP_SELF').'<br />';
 		$res .= 'env(\'HTTP_BASE\'): '.env('HTTP_BASE').'<br />';
 		$res .= 'env(\'DOCUMENT_ROOT\'): '.env('DOCUMENT_ROOT').'<br />';
 
-		$res .= 'env(\'SCRIPT_NAME\'): '.env('SCRIPT_NAME').' (emulated)<br />';
+		$res .= 'env(\'SCRIPT_NAME\'): '.env('SCRIPT_NAME').'<br />';
 		$res .= 'env(\'REDIRECT_QUERY_STRING\'): '.env('REDIRECT_QUERY_STRING').'<br />';
 		$res .= 'env(\'REDIRECT_URL\'): '.env('REDIRECT_URL').'<br />';
+		$res .= 'URL length: '.(mb_strlen(env('REDIRECT_URL')) + mb_strlen(env('REDIRECT_QUERY_STRING'))). ' (of 2,048)<br />';
 
-		$res .= 'env(\'HTTPS\'): '.env('HTTPS').' (emulated)<br />';
+		$res .= 'env(\'HTTPS\'): '.env('HTTPS').'<br />';
 
-		$res .= 'env(\'REMOTE_ADDR\'): '. ($ip = env('REMOTE_ADDR')).' (emulated)<br />';
+		$res .= 'env(\'REMOTE_ADDR\'): '. ($ip = env('REMOTE_ADDR')).'<br />';
 		$res .= 'gethostbyaddr(env(\'REMOTE_ADDR\')): ' . ($ip ? gethostbyaddr($ip) : '' ) . '<br />';
 		$res .= 'env(\'HTTP_USER_AGENT\'): '.env('HTTP_USER_AGENT').'<br />';
 
@@ -421,7 +418,7 @@ jQuery(function() {
 		$settings = Cache::settings();
 		$res .= 'Cache-Engine: '.(!empty($settings['engine']) ? $settings['engine'] : '<b>NONE</b>').'<br />';
 		if (!empty($settings['engine']) && $settings['engine'] === 'File') {
-			$res .= 'Cache-Folder writable: '.(is_writable(TMP)?'YES' : '<b>NO</b>').'<br />';
+			$res .= 'Cache-Folder writable: ' . (is_writable(TMP) ? 'YES' : '<b>NO</b>') . '<br />';
 		}
 		$res .= '</p>';
 
@@ -754,7 +751,7 @@ jQuery(function() {
 
 	public function versionDB() {
 		$configuration = null;
-		$Model = (!empty($this->Model)?$this->Model : 'Setup.Configuration');
+		$Model = (!empty($this->Model) ? $this->Model : 'Setup.Configuration');
 		if (App::import('Model', $Model)) {
 			$configuration = ClassRegistry::init($Model);
 		}

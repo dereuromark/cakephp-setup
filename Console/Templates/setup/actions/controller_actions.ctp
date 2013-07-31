@@ -52,7 +52,7 @@
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.id'=>$id))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			$this->Common->autoRedirect(array('action' => 'index'));
+			return $this->Common->autoRedirect(array('action' => 'index'));
 <?php else: ?>
 			throw new NotFoundException(__('invalidRecord'));
 <?php endif; ?>
@@ -71,7 +71,7 @@
 <?php if ($wannaUseSession): ?>
 				$var = $this->request->data['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
 				$this->Common->flashMessage(__('record add %s saved', h($var)), 'success');
-				$this->Common->postRedirect(array('action' => 'index'));
+				return $this->Common->postRedirect(array('action' => 'index'));
 <?php else: ?>
 				$this->flash(__('record add saved'), array('action' => 'index'));
 <?php endif; ?>
@@ -134,7 +134,7 @@
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.id'=>$id))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			$this->Common->autoRedirect(array('action' => 'index'));
+			return $this->Common->autoRedirect(array('action' => 'index'));
 <?php else: ?>
 			throw new NotFoundException(__('invalidRecord'));
 <?php endif; ?>
@@ -144,7 +144,7 @@
 <?php if ($wannaUseSession): ?>
 				$var = $this->request->data['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
 				$this->Common->flashMessage(__('record edit %s saved', h($var)), 'success');
-				$this->Common->postRedirect(array('action' => 'index'));
+				return $this->Common->postRedirect(array('action' => 'index'));
 <?php else: ?>
 				$this->flash(__('record edit saved'), array('action' => 'index'));
 <?php endif; ?>
@@ -197,7 +197,7 @@
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			return $this->Common->autoRedirect(array('action'=>'index'));
 <?php else: ?>
 			throw new NotFoundException(__('invalidRecord'));
 <?php endif; ?>
@@ -207,7 +207,7 @@
 		if ($this-><?php echo $currentModelName; ?>->delete($id)) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('record del %s done', h($var)), 'success');
-			$this->redirect(array('action' => 'index'));
+			return $this->Common->postRedirect(array('action' => 'index'));
 <?php else: ?>
 			$this->flash(__('record del done'), array('action' => 'index'));
 <?php endif; ?>
@@ -217,7 +217,7 @@
 <?php else: ?>
 		$this->flash(__('record del not done'), array('action' => 'index'));
 <?php endif; ?>
-		$this->Common->autoRedirect(array('action' => 'index'));
+		return $this->Common->autoRedirect(array('action' => 'index'));
 	}
 
 <?php if (!empty($upAndDown)) { ?>
@@ -225,25 +225,25 @@
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			return $this->Common->autoRedirect(array('action'=>'index'));
 <?php else: ?>
 			$this->flash(__('invalidRecord'), array('action' => 'index'));
 <?php endif; ?>
 		}
 		$this-><?php echo $currentModelName; ?>->moveUp($id, 1);
-		$this->redirect(array('action' => 'index'));
+		return $this->redirect(array('action' => 'index'));
 	}
 
 	public function <?php echo $admin; ?>down($id = null) {
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 <?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			return $this->Common->autoRedirect(array('action'=>'index'));
 <?php else: ?>
 			$this->flash(__('invalidRecord'), array('action' => 'index'));
 <?php endif; ?>
 		}
 		$this-><?php echo $currentModelName; ?>->moveDown($id, 1);
-		$this->redirect(array('action' => 'index'));
+		return $this->redirect(array('action' => 'index'));
 	}
 <?php }; ?>

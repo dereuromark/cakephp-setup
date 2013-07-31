@@ -162,12 +162,18 @@ class DbDumpShell extends AppShell {
 	 */
 	public function restore() {
 		$files = $this->_getFiles();
+		$this->out('Path: ' . $this->_path());
+		$this->out('Files need to start with "dbdump_" and have either .sql or .gz extension', 2);
 		$this->out('Available files:');
+		if (empty($files)) {
+			$this->error('No files found...');
+		}
+
 		foreach ($files as $key => $file) {
 			$this->out('['.$key.'] '.$file);
 		}
 		while (true) {
-			$x = $this->in('Select File', null, 0);
+			$x = $this->in('Select File (or q to quit)', null, 0);
 			if ($x === 'q') {
 				exit;
 			}
@@ -189,7 +195,7 @@ class DbDumpShell extends AppShell {
 		}
 
 		$db = ConnectionManager::getDataSource('default');
-		$file = BACKUPS.$file;
+		$file = BACKUPS . $file;
 
 		$options = array(
 			'--user='.$db->config['login'],
