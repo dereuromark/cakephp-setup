@@ -42,6 +42,8 @@ The master branch is the currently active and maintained one and works with the 
 Older versions might be found in their respective branches (1.3, 2.0, 2.3, ...).
 Please provide PRs mainly against master branch then.
 
+### License
+Licensed under [The MIT License](http://www.opensource.org/licenses/mit-license.php)
 
 ## Coming Up
 
