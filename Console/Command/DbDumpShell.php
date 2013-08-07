@@ -166,7 +166,7 @@ class DbDumpShell extends AppShell {
 		$this->out('Files need to start with "dbdump_" and have either .sql or .gz extension', 2);
 		$this->out('Available files:');
 		if (empty($files)) {
-			$this->error('No files found...');
+			return $this->error('No files found...');
 		}
 
 		foreach ($files as $key => $file) {
