@@ -650,11 +650,11 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	public function serverSoftware() {
 		if (isset($_SERVER['SERVER_SOFTWARE'])) {
 			return $_SERVER['SERVER_SOFTWARE'];
-		} elseif (($sf = getenv('SERVER_SOFTWARE'))) {
-			return $sf;
-		} else {
-			return 'n/a';
 		}
+		if (($sf = getenv('SERVER_SOFTWARE'))) {
+			return $sf;
+		}
+		return 'n/a';
 	}
 
 

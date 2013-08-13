@@ -722,19 +722,18 @@ jQuery(function() {
 		if ($file == null || trim((String)$file) === '') {
 			//echo "Service out of order";
 			return false;
-		} else {
-			$i = 0;
-			while (!feof($file)) {
-
-				// Wenn das File entsprechend groß ist, kann es unter Umständen
-				// notwendig sein, die Zahl 2000 entsprechend zu erhöhen. Im Falle
-				// eines Buffer-Overflows gibt PHP eine entsprechende Fehlermeldung aus.
-
-				$row[$i] = fgets($file, 2000);
-				$i++;
-			}
-			fclose($file);
 		}
+		$i = 0;
+		while (!feof($file)) {
+
+			// Wenn das File entsprechend groß ist, kann es unter Umständen
+			// notwendig sein, die Zahl 2000 entsprechend zu erhöhen. Im Falle
+			// eines Buffer-Overflows gibt PHP eine entsprechende Fehlermeldung aus.
+
+			$row[$i] = fgets($file, 2000);
+			$i++;
+		}
+		fclose($file);
 
 		// Nun werden die Daten entsprechend gefiltert.
 		$result = null;
@@ -747,7 +746,6 @@ jQuery(function() {
 		}
 		return trim($result);
 	}
-
 
 	public function versionDB() {
 		$configuration = null;

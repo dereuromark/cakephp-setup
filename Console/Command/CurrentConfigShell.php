@@ -15,24 +15,32 @@ App::uses('ConnectionManager', 'Model');
  */
 class CurrentConfigShell extends AppShell {
 
+	/**
+	 * CurrentConfigShell::main()
+	 *
+	 * @return void
+	 */
 	public function main() {
 		$this->out('DB default:');
-		$db = ConnectionManager::getDataSource('default');
-		$this->out(print_r($db->config, true));
+		try {
+			$db = ConnectionManager::getDataSource('default');
+			$this->out(print_r($db->config, true));
+		} catch (Exception $e) {
+			$this->err($e->getMessage());
+		}
 
 		$this->out('');
 		$this->out('DB test:');
-		$db = ConnectionManager::getDataSource('test');
-		$this->out(print_r($db->config, true));
+		try {
+			$db = ConnectionManager::getDataSource('test');
+			$this->out(print_r($db->config, true));
+		} catch (Exception $e) {
+			$this->err($e->getMessage());
+		}
 
 		$this->out('');
 		$this->out('Cache:');
 		$this->out(print_r(Cache::config('_cake_core_'), true));
-
-
 	}
-
-
-
 
 }

@@ -94,7 +94,8 @@ class BaseConfig {
 	}
 
 	/**
-	 * return current name (or at least the settings itself...)
+	 * Return current name (or at least the settings itself...)
+	 *
 	 * @param bool $nameOnly
 	 * @return mixed nameString/configArray
 	 * 2009-06-02 ms
@@ -103,8 +104,6 @@ class BaseConfig {
 		if ($nameOnly) {
 			if (!empty($this->default['name'])) {
 				return $this->default['name'];
-			} else {
-				# return [$this->default];
 			}
 			return 'n/a (no name given)';
 		}
@@ -112,7 +111,8 @@ class BaseConfig {
 	}
 
 	/**
-	 * wrapper to handle symlinks properly, as well
+	 * Wrapper to handle symlinks properly, as well
+	 *
 	 * @return string $path
 	 */
 	protected function _getEnvironmentPath() {

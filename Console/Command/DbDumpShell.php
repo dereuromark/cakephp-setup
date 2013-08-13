@@ -198,9 +198,10 @@ class DbDumpShell extends AppShell {
 		$file = BACKUPS . $file;
 
 		$options = array(
-			'--user='.$db->config['login'],
-			'--password='.$db->config['password'],
-			'--default-character-set='.$db->config['encoding'],
+			'--user=' . $db->config['login'],
+			'--password=' . $db->config['password'],
+			'--default-character-set=' . $db->config['encoding'],
+			'--host=' . $db->config['host'],
 			$db->config['database'],
 		);
 		if (!empty($this->params['verbose'])) {
