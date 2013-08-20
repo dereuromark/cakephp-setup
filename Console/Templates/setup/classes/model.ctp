@@ -22,6 +22,7 @@
 echo "<?php\n";
 echo "App::uses('{$plugin}AppModel', '{$pluginPath}Model');\n";
 ?>
+
 /**
  * <?php echo $name ?> Model
  *
@@ -38,6 +39,7 @@ foreach (array('hasOne', 'belongsTo', 'hasMany', 'hasAndBelongsToMany') as $asso
 class <?php echo $name ?> extends <?php echo $plugin; ?>AppModel {
 <?php if ($useDbConfig != 'default'): ?>
 	public $useDbConfig = '<?php echo $useDbConfig; ?>';
+
 <?php endif;?>
 <?php if ($useTable && $useTable !== Inflector::tableize($name)):
 	$table = "'$useTable'";
@@ -45,20 +47,24 @@ class <?php echo $name ?> extends <?php echo $plugin; ?>AppModel {
 endif;
 if (!empty($primaryKey) && $primaryKey !== 'id'): ?>
 	public $primaryKey = '<?php echo $primaryKey; ?>';
+
 <?php endif;
 
 /** CORE-MOD 2008-12-01 **/
 if (!empty($displayField) && $displayField != 'name' && $displayField != 'title'): ?>
 	public $displayField = '<?php echo $displayField; ?>';
-<?php endif; ?>
 
+<?php endif; ?>
 <?php if (isset($actsAs)) { ?>
 	public $actsAs = array(<?php if (count($actsAs) > 0): echo "\n\t"; endif; foreach ($actsAs as $actAs): echo "\t"; var_export($actAs); echo ",\n\t"; endforeach; ?>);
+
 <?php } ?>
 <?php if (isset($orderBy)) { ?>
 	public $order = array(<?php if (count($orderBy) > 0): echo "\n\t"; endif; foreach ($orderBy as $order => $mode): echo "\t"; var_export($order); echo ' => '; var_export($mode); echo ",\n\t"; endforeach; ?>);
+
 <?php } else { ?>
 	public $order = array();
+
 <?php } ?>
 	public $recursive = 2;
 
@@ -92,7 +98,7 @@ endif;
 foreach (array('hasOne', 'belongsTo') as $assocType):
 	if (!empty($associations[$assocType])):
 		$typeCount = count($associations[$assocType]);
-		echo "\n/**\n * $assocType associations\n *\n * @var array\n */";
+		echo "\n\t/**\n\t * $assocType associations\n\t *\n\t * @var array\n\t */";
 		echo "\n\tpublic \$$assocType = array(";
 		foreach ($associations[$assocType] as $i => $relation):
 			$out = "\n\t\t'{$relation['alias']}' => array(\n";

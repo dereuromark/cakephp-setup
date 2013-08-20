@@ -38,10 +38,7 @@ class DebugLibTest extends MyCakeTestCase {
 		$this->debug($res);
 		$this->assertTrue($res);
 
-
-
 	}
-
 
 	public function testConfigVar() {
 		$res = $this->DebugLib->configVar('error_reporting');
@@ -75,7 +72,6 @@ class DebugLibTest extends MyCakeTestCase {
 		# post_max_size and upload_max_filesize
 	}
 
-
 	public function testDns() {
 		$res = $this->DebugLib->getmxrrAvailable();
 		$this->skipIf(!$res);
@@ -91,7 +87,6 @@ class DebugLibTest extends MyCakeTestCase {
 		$res = checkdnsrr('web.de', 'mx');
 		$this->assertTrue($res);
 	}
-
 
 	public function testSettings() {
 		$res = $this->DebugLib->execAllowed();
@@ -200,7 +195,6 @@ class DebugLibTest extends MyCakeTestCase {
 		$this->assertTrue(is_array($res) && empty($res));
 
 	}
-
 
 	public function testUptime() {
 		$res = $this->DebugLib->getUptime();

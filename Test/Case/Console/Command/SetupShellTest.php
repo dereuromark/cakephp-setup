@@ -18,7 +18,6 @@ class SetupShellTest extends MyCakeTestCase {
 
 }
 
-
 class TestSetupShell extends SetupShell {
 
 }

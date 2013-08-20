@@ -77,7 +77,6 @@ class DebugLib {
 		return $lines;
 	}
 
-
 /** other **/
 
 	/**
@@ -436,7 +435,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return $return_var;
 	}
 
-
 /** PHP Infos **/
 
 	public function phpVersion() {
@@ -621,7 +619,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return $res;
 	}
 
-
 	/**
 	 * Allow the <? tag.  Otherwise, only <?php and <script> tags are recognized. Using short tags should be avoided when developing applications or libraries that are meant for redistribution
 	 * @return boolean
@@ -642,7 +639,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return $res;
 	}
 
-
 	/**
 	 * Gets information about the server
 	 * @return string  Server information
@@ -656,7 +652,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		}
 		return 'n/a';
 	}
-
 
 /** test stuff - or deprecated **/
 
@@ -684,7 +679,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	return $ret;
 	}
 	*/
-
 
 	/** Database Infos **/
 
@@ -724,7 +718,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return $mysqlServerInfo[0][0]['version'];
 	}
 
-
 	/** deprecated **/
 
 	/**
@@ -750,9 +743,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		return $size;
 	}
 
-
 	/** old **/
-
 
 	/**
 	 * Calculates the total size of a MySQL database in KB/MB or GB...
@@ -781,7 +772,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		}
 		return round($size, 2) . $units[$i];
 	}
-
 
 	/**
 	 * HelperFunction to format 128M into the bytes

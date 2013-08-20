@@ -14,7 +14,6 @@ class InstallController extends SetupAppController {
 
 	public $uses = array('Install');
 
-
 	public function beforeFilter() {
 		parent::beforeFilter();
 
@@ -26,7 +25,6 @@ class InstallController extends SetupAppController {
 			throw new MethodNotAllowedException('Debug Mode needs to be enabled for this');
 		}
 	}
-
 
 	public function index() {
 

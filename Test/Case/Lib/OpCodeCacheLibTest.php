@@ -19,7 +19,7 @@ class OpCodeCacheLibTest extends MyCakeTestCase {
 		$this->assertFalse($is);
 
 		$is = OpCodeCacheLib::detect('xyz');
-		$this->assertTrue(is_null($is));
+		$this->assertTrue($is === null);
 	}
 
 }

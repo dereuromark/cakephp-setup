@@ -248,7 +248,6 @@ jQuery(function() {
 		$res .= '</div>';
 		$this->add(1, 'Start', $res);
 
-
 		/** Session Post Get... **/
 		$res = '<table width="100%"><tr><td>';
 		$res .= '<div class="globals"><b>GET</b><br/><pre>'.h(print_r($_GET, true)).'</pre>';
@@ -269,7 +268,6 @@ jQuery(function() {
 		$res .= '</td></tr></table>';
 		$this->add(1, '$_VARS', $res);
 
-
 		/** this->data... **/
 		//$res = '<table width="100%"><tr><td>';
 		//<b>this-&gt;data</b><br/>
@@ -279,7 +277,6 @@ jQuery(function() {
 		//$res.= '</td></tr></table>';
 
 		$this->add(1, 'this-&gt;data', $res);
-
 
 		/** Passed from controller to view **/
 		$viewVars = $this->_View->viewVars;
@@ -303,7 +300,6 @@ jQuery(function() {
 		$res .= '</div>';
 		$res .= '</td></tr></table>';
 		$this->add(1, 'ViewVars', $res);
-
 
 		/** View parameters **/
 		$res = '<table width="100%" style="table-layout:fixed;"><tr><td style="padding-right:10px;">';
@@ -496,7 +492,6 @@ jQuery(function() {
 
 		$this->add(1, 'Configs', $res);
 
-
 		/** Locales **/
 		$infos = array('LC_TIME' => setlocale(LC_TIME, 0), 'LC_NUMERIC' => setlocale(LC_NUMERIC, 0), 'LC_MONETARY' => setlocale(LC_MONETARY, 0), 'LC_CTYPE' => setlocale(LC_CTYPE, 0), 'LC_COLLATE' => setlocale
 			(LC_COLLATE, 0), 'LC_MESSAGES' => @setlocale(LC_MESSAGES, 0).' (only on some systems available)', // seems to run only on some systems
@@ -514,7 +509,6 @@ jQuery(function() {
 		}
 		$res .= '</ul><br />';
 		$this->add(1, 'Locales', $res);
-
 
 		/** MISC + Quicklinks **/
 		$res = '<table width="100%" style="table-layout:fixed"><tr><td style="padding-right:10px;">';
@@ -534,7 +528,6 @@ jQuery(function() {
 			$res .= '<li>'.$this->Html->link($name, $link).'</li>';
 		}
 		$res .= '</ul><br />';
-
 
 		if (false && defined('HTTP_HOST') && HTTP_HOST !== 'localhost') {
 			$res .= '<b>XHTML / CSS Validation</b><ul>';
@@ -563,7 +556,6 @@ jQuery(function() {
 
 		# Add SQL on Cake >= 1.3
 		$this->add(1, 'SQL-Log', $this->_View->element('sql_dump'));
-
 
 		//$res = '<table class="cake-sql-log debug_request"><tr><td>'.$cakeDebug.'</td></tr></table>';
 		//$this->add(3, 'SQL', $res);	// usually printed out right away (needs core hack!!!)

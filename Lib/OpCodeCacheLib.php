@@ -30,7 +30,6 @@ class OpCodeCacheLib {
 		return false;
 	}
 
-
 	/**
 	 * @return array $detectedEngines for general lookup or bool true/false for specific engine
 	 * @static
@@ -54,9 +53,7 @@ class OpCodeCacheLib {
 		return $res;
 	}
 
-
 }
-
 
 /**
  * PHP Opcode-Cache detection

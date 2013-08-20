@@ -60,6 +60,18 @@ if (count($helpers)):
 	echo ");\n";
 endif;
 
+// Remove paginator again for now.
+if (in_array('Paginator', $components)) {
+	$key = array_keys($components);
+	$key = array_shift($key);
+	unset($components[$key]);
+	$comps = $components;
+	$components = array();
+	foreach ($comps as $comp) {
+		$components[] = $comp;
+	}
+}
+
 if (count($components)):
 	echo "\tpublic \$components = array(";
 	for ($i = 0, $len = count($components); $i < $len; $i++):

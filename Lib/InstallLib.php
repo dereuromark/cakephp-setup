@@ -41,7 +41,6 @@ class InstallLib {
 		return $res;
 	}
 
-
 	/**
 	 * 2012-04-14 ms
 	 */

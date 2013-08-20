@@ -87,5 +87,4 @@ class SetupShell extends AppShell {
 		//$handle = new Folder(WWW_ROOT.'img'.DS.'content', true, 0777);
 	}
 
-
 }

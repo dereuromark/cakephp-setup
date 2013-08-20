@@ -20,7 +20,6 @@ class CurrentConfigShellTest extends MyCakeTestCase {
 
 }
 
-
 class TestCurrentConfigShell extends CurrentConfigShell {
 
 }

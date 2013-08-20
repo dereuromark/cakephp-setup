@@ -16,8 +16,6 @@ class DbDumpShellTest extends MyCakeTestCase {
 		$this->assertIsA($this->DbDumpShell, 'DbDumpShell');
 	}
 
-
-
 	public function testGetFiles() {
 		$this->DbDumpShell->startup();
 
@@ -28,7 +26,6 @@ class DbDumpShellTest extends MyCakeTestCase {
 
 	//TODO
 }
-
 
 class TestDbDumpShell extends DbDumpShell {
 	public function getFiles() {

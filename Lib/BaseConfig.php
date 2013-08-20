@@ -96,7 +96,7 @@ class BaseConfig {
 	/**
 	 * Return current name (or at least the settings itself...)
 	 *
-	 * @param bool $nameOnly
+	 * @param boolean $nameOnly
 	 * @return mixed nameString/configArray
 	 * 2009-06-02 ms
 	 */

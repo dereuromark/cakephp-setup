@@ -13,7 +13,6 @@ class BaseConfigTest extends CakeTestCase {
 		$this->Config = new TEST_DATABASE_CONFIG();
 	}
 
-
 	public function testConfig() {
 		$this->assertTrue(is_a($this->Config, 'TEST_DATABASE_CONFIG'));
 	}
