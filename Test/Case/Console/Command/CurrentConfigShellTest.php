@@ -15,7 +15,7 @@ class CurrentConfigShellTest extends MyCakeTestCase {
 
 	public function testObject() {
 		$this->assertTrue(is_object($this->CurrentConfigShell));
-		$this->assertIsA($this->CurrentConfigShell, 'CurrentConfigShell');
+		$this->assertInstanceOf('CurrentConfigShell', $this->CurrentConfigShell);
 	}
 
 }

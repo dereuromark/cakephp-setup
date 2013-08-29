@@ -12,11 +12,12 @@
  * You can also define some custom settings and if `merge` is set to `true` in your test config
  * it will then merge with `default` afterwards.
  *
+ * Tip: Use the CurrentConfig shell to test your enviroment setup for CLI.
+ *
  * @author Mark Scherer
  * @copyright Mark Scherer
  * @cakephp 2
  * @license MIT
- * 2011-07-30 ms
  */
 class BaseConfig {
 
@@ -30,9 +31,11 @@ class BaseConfig {
 	public $default = array();
 
 	/**
-	 * switch between local and live site(s) automatically by domain
-	 * or manually by Configure::read('Environment.name')
-	 * 2009-05-29 ms
+	 * Switch between local and live site(s) automatically by domain
+	 * or manually by Configure::read('Environment.name').
+	 *
+	 * If there is no prefix key for the test config it will set the prefix to zzz_ to avoid
+	 * accidential collision with the live database if there is different setup.
 	 */
 	public function __construct() {
 		$vars = get_object_vars($this);
@@ -67,6 +70,8 @@ class BaseConfig {
 	}
 
 	/**
+	 * Detect the environment and return its name.
+	 *
 	 * @return string
 	 */
 	public function getEnvironmentName() {
@@ -98,7 +103,6 @@ class BaseConfig {
 	 *
 	 * @param boolean $nameOnly
 	 * @return mixed nameString/configArray
-	 * 2009-06-02 ms
 	 */
 	public function current($nameOnly = false) {
 		if ($nameOnly) {
@@ -111,7 +115,8 @@ class BaseConfig {
 	}
 
 	/**
-	 * Wrapper to handle symlinks properly, as well
+	 * Wrapper to geht the absolute environment path.
+	 * Handles symlinks properly, as well.
 	 *
 	 * @return string $path
 	 */

@@ -214,7 +214,6 @@ jQuery(function() {
 });
 ');
 
-		#debug-important_stuff
 		return $output;
 	}
 
@@ -244,7 +243,8 @@ jQuery(function() {
 		$res .= '<div style="float:right">'.$this->Html->link('Error-Logs', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'logs')).'</div>';
 		$res .= '<div style="float:right; margin-right: 20px;">'.$this->Html->link('Configuration', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'index')).'</div>';
 		//$res .=  xdebug_time_index();
-		$res .= 'Cake-Version: '.$this->versionCake().BR.BR.'gerendert in <b>' . number_format(round(microtime(true) - $_SERVER['REQUEST_TIME'], 3), 3, ', ', '').' s</b>'.BR;
+		$res .= 'Cake-Version: '.$this->versionCake() . BR . BR;
+		$res .= __('rendered in %s', '<b>' . number_format(round(microtime(true) - $_SERVER['REQUEST_TIME'], 3), 3, ',', '') . ' s</b>') . BR;
 		$res .= '</div>';
 		$this->add(1, 'Start', $res);
 

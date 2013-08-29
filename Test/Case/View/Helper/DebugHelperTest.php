@@ -23,7 +23,7 @@ class DebugHelperTest extends MyCakeTestCase {
 	}
 
 	public function testObject() {
-		$this->assertTrue(is_a($this->Debug, 'DebugHelper'));
+		$this->assertInstanceOf('DebugHelper', $this->Debug);
 	}
 
 	public function testAdd() {

@@ -13,7 +13,7 @@ class SetupShellTest extends MyCakeTestCase {
 
 	public function testObject() {
 		$this->assertTrue(is_object($this->SetupShell));
-		$this->assertIsA($this->SetupShell, 'SetupShell');
+		$this->assertInstanceOf('SetupShell', $this->SetupShell);
 	}
 
 }

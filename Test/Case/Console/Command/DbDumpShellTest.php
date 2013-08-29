@@ -13,7 +13,7 @@ class DbDumpShellTest extends MyCakeTestCase {
 
 	public function testObject() {
 		$this->assertTrue(is_object($this->DbDumpShell));
-		$this->assertIsA($this->DbDumpShell, 'DbDumpShell');
+		$this->assertInstanceOf('DbDumpShell', $this->DbDumpShell);
 	}
 
 	public function testGetFiles() {

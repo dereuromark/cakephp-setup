@@ -14,7 +14,7 @@ class BaseConfigTest extends CakeTestCase {
 	}
 
 	public function testConfig() {
-		$this->assertTrue(is_a($this->Config, 'TEST_DATABASE_CONFIG'));
+		$this->assertInstanceOf('TEST_DATABASE_CONFIG', $this->Config);
 	}
 
 	public function testGetEnvironmentName() {
