@@ -19,6 +19,7 @@
 		"source": "https://github.com/dereuromark/setup"
 	},
 	"extra": {
+		"installer-name": "Setup",
 		"installer-paths": {
 			"Plugin/Setup/": ["dereuromark/setup-cakephp"]
 		}
