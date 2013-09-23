@@ -47,7 +47,7 @@ class DbMaintenanceShell extends AppShell {
 		}
 
 		$script = <<<SQL
-SELECT  CONCAT('ALTER TABLE ', table_name, ' CONVERT TO CHARACTER SET $encoding COLLATE $collate;') AS statement
+SELECT  CONCAT('ALTER TABLE `', table_name, '` CONVERT TO CHARACTER SET $encoding COLLATE $collate;') AS statement
 FROM    information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND     `TABLE_TYPE` = 'BASE TABLE';
@@ -101,7 +101,7 @@ SQL;
 		}
 
 		$script = <<<SQL
-SELECT  CONCAT('ALTER TABLE ', table_name, ' ENGINE=$engine;') AS statement
+SELECT  CONCAT('ALTER TABLE `', table_name, '` ENGINE=$engine;') AS statement
 FROM    information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND     `ENGINE` != '$engine'
@@ -148,7 +148,7 @@ SQL;
 		$prefix = empty($db->config['prefix']) ? '' : $db->config['prefix'];
 
 		$script = "
-SELECT CONCAT('DROP TABLE ', table_name, ';') AS statement
+SELECT CONCAT('DROP TABLE `', table_name, '`;') AS statement
 FROM information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND table_name like '$prefix%' OR table_name like '\_%';";

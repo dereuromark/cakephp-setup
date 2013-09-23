@@ -17,7 +17,7 @@ class OpCodeCacheLib {
 
 	/**
 	 * if opcode cache is enabled
-	 * @return boolean $success
+	 * @return boolean Success
 	 * 2010-10-21 ms
 	 */
 	public static function isEnabled() {
