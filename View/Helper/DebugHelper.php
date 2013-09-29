@@ -15,7 +15,6 @@ if (!defined('BR')) {
  * @author Mark Scherer
  * @license MIT
  * @cakephp 2.0
- * 2011-11-20 ms
  */
 class DebugHelper extends AppHelper {
 
@@ -76,7 +75,6 @@ class DebugHelper extends AppHelper {
 	 * Shows pr() messages, even with debug=0
 	 *
 	 * @access public (in the view via $html helper etc.)
-	 * 2008-12-08 ms
 	 */
 	public function pre($array, $class = null, $escape = true) {
 		$pre_array = '';
@@ -94,7 +92,6 @@ class DebugHelper extends AppHelper {
 
 	/**
 	 * change default "active/visible" tab
-	 * 2008-12-12 ms
 	 */
 	public function setDefault() {
 
@@ -102,7 +99,6 @@ class DebugHelper extends AppHelper {
 
 	/**
 	 * final print function
-	 * 2008-12-12 ms
 	 */
 	public function show() {
 		$output = '<div class="tabs cake-sql-log debug_request">';
@@ -220,7 +216,6 @@ jQuery(function() {
 	/**
 	 * adds a new tab
 	 * takes strings AND arrays now (automatic switch)
-	 * 2009-01-10 ms
 	 */
 	public function add($level, $title = null, $content = null) {
 		$level = (int)$level;
@@ -580,7 +575,7 @@ jQuery(function() {
 	/**
 	 * returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
-	 * @return string $version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
+	 * @return string Version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
 	public function retrieveLatestPHP() {
 		$url = 'http://www.php.net/downloads.php';
@@ -616,7 +611,7 @@ jQuery(function() {
 	/**
 	 * returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
-	 * @return string $version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
+	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
 	public function retrieveLatestMYSQL() {
 		$url = 'http://dev.mysql.com/downloads/mysql/'; // http://dev.mysql.com/downloads/mysql/5.1.html
@@ -652,7 +647,7 @@ jQuery(function() {
 	/**
 	 * returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
-	 * @return string $version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
+	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
 	public function retrieveLatestStable() {
 		$url = 'http://cakeforge.org/projects/cakephp/';
@@ -706,7 +701,6 @@ jQuery(function() {
 	/**
 	 * @return FALSE on failure, otherwise the found "content"
 	 * //TODO rewrite (without fopen etc)
-	 * 2009-04-05 ms
 	 */
 	public function readOutForeignPage($url, $start = '', $end = '') {
 		$file = @fopen($url, "r");
@@ -796,7 +790,6 @@ jQuery(function() {
 
 	/**
 	 * show both current and latest cake version (if activated in configs)
-	 * 2009-05-15 ms
 	 */
 	public function versionCake() {
 		//$current = Configure::read('Cake.version');

@@ -4,19 +4,27 @@ if (!defined('CHMOD_PUBLIC')) {
 	define('CHMOD_PUBLIC', 0770);
 }
 if (!defined('FILES')) {
-	define('FILES', APP.'files'.DS);
+	define('FILES', APP . 'files' . DS);
 }
 App::uses('AppShell', 'Console/Command');
 App::uses('Folder', 'Utility');
 
 /**
- * 2011-11-06 ms
+ * A shell to quickly create tmp folders.
+ *
+ * @author Mark Scherer
+ * @license MIT
  */
 class SetupShell extends AppShell {
 
+	/**
+	 * SetupShell::run()
+	 *
+	 * @return void
+	 */
 	public function run() {
 		$this->out('running ...');
-		$this->createFolders();
+		$this->_createFolders();
 		$this->out('tmp folders created');
 
 		if (!file_exists(APP . 'Config' . DS.'database.php')) {
@@ -29,7 +37,8 @@ class SetupShell extends AppShell {
 	 * - utf8 input
 	 * - utf8 output (from db or utf8 encoded files)
 	 * - colorful output (unix only)
-	 * 2012-12-12 ms
+	 *
+	 * @return void
 	 */
 	public function test() {
 		$this->out('Testing the console...');
@@ -68,7 +77,12 @@ class SetupShell extends AppShell {
 		$this->out('Done!');
 	}
 
-	public function createFolders() {
+	/**
+	 * SetupShell::_createFolders()
+	 *
+	 * @return void
+	 */
+	protected function _createFolders() {
 		$handle = new Folder(TMP, true, CHMOD_PUBLIC);
 		$handle = new Folder(TMP.'logs'.DS, true, CHMOD_PUBLIC);
 		$handle = new Folder(TMP.'work'.DS, true, CHMOD_PUBLIC);

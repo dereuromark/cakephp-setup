@@ -5,7 +5,6 @@
  *
  * @author Mark Scherer
  * @license MIT
- * 2010-09-08 ms
  */
 class MaintenanceLib {
 
@@ -52,7 +51,7 @@ class MaintenanceLib {
 	 * corresponding IP so the SetupComponent can trigger a warning message here.
 	 *
 	 * @param boolean $allowOverwrite Set to false to not allow access for whitelisted IPs.
-	 * @return bool Success
+	 * @return boolean Success
 	 */
 	public function isMaintenanceMode($allowOverwrite = true) {
 		if (!file_exists($this->file)) {
@@ -89,7 +88,7 @@ class MaintenanceLib {
 	 * Using 0 it will have no timeout.
 	 *
 	 * @param mixed $value False to deactivate, or Integer to activate.
-	 * @return bool Success
+	 * @return boolean Success
 	 */
 	public function setMaintenanceMode($value) {
 		if ($value === false) {

@@ -8,7 +8,6 @@ class Install extends Model {
 
 	/**
 	 * TODO: validate?
-	 * 2012-04-14 ms
 	 */
 	public function createDatabaseFile($data) {
 		$params = $data[$this->alias];

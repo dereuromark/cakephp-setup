@@ -11,21 +11,18 @@ class InstallLib {
 	const DATABASE_TEMPLATE_ENHANCED = 'database.enhanced.tmp';
 
 	/**
-	 * 2012-04-14 ms
 	 */
 	public static function configDir() {
 		return APP.DS.'Config'.DS;
 	}
 
 	/**
-	 * 2012-04-14 ms
 	 */
 	public static function databaseConfigurationExists() {
 		return file_exists(self::configDir() . 'database.php');
 	}
 
 	/**
-	 * 2012-04-14 ms
 	 */
 	public static function databaseConfigurationStatus() {
 		if (!self::databaseConfigurationExists()) {
@@ -42,7 +39,6 @@ class InstallLib {
 	}
 
 	/**
-	 * 2012-04-14 ms
 	 */
 	public static function writeTemplate($params) {
 		$file = CakePlugin::path('Setup') . 'files' . DS;

@@ -81,7 +81,6 @@ class DebugLib {
 
 	/**
 	 * @see http://www.php.net/manual/en/class.soapclient.php
-	 * 2011-02-08 ms
 	 */
 	public function soap() {
 		return class_exists('SoapServer') && class_exists('SoapClient');
@@ -101,7 +100,6 @@ class DebugLib {
 	/**
 	 * determins the server load (last 1 minute - last 5 minutes - last 15 minutes)
 	 * @return string
-	 * 2010-07-31 ms
 	 */
 	public function getServerLoad() {
 		if (!WINDOWS) {
@@ -125,7 +123,6 @@ class DebugLib {
 
 	/**
 	 * @deprecated?
-	 * 2011-02-03 ms
 	 */
 	public function serverUptime() {
 		if (WINDOWS) {
@@ -146,7 +143,6 @@ class DebugLib {
 	 *
 	 * Returns system uptime, like Unix-Command "uptime"
 	 *
-	 * @access public
 	 * @param boolean $digit set true in order to prepend leading "0" before minutes
 	 * @return array uptime uptime in days, hours and minutes - or empty on failure
 	 */
@@ -182,7 +178,6 @@ class DebugLib {
 
 	/**
 	 * @return array (database, table, size in mb)
-	 * 2010-11-06 ms
 	 */
 	public function getDatabaseSize($database = null, $table = null) {
 		if ($database == null) {
@@ -206,7 +201,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	 *
 	 * Same as "uname --release"
 	 *
-	 * @access public
 	 * @return string Kernel-Version
 	 */
 	public function getKernelVersion() {
@@ -243,7 +237,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	 *
 	 * Get CPU info, see /proc/spuinfo
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function getCpu() {
@@ -309,7 +302,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * memory info
 	 * @return array(total=>x, free=>y, used=>z)
-	 * 2010-10-26 ms
 	 */
 	public function getRam() {
 		if (!($fh = @fopen("/proc/meminfo", "r"))) {
@@ -376,7 +368,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * tests if memory limit can be raised temporarily (necessary for image resizing etc)
-	 * @return boolean success
+	 * @return boolean Success
 	 */
 	public function memoryLimitAdjustable() {
 		$int = (int)$this->memoryLimit();
@@ -393,7 +385,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * if available: Searches DNS for MX records corresponding to hostname.
 	 * @static
-	 * 2010-07-30 ms
 	 */
 	public function getmxrrAvailable() {
 		return function_exists('getmxrr');
@@ -402,7 +393,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * if available: Searches DNS for records of type type corresponding to host.
 	 * @static
-	 * 2010-07-30 ms
 	 */
 	public function checkdnsrrAvailable() {
 		return function_exists('checkdnsrr');
@@ -421,7 +411,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * @returns true on success, string error otherwise
-	 * 2010-01-05 ms
 	 */
 	public function wgetAllowed() {
 		$transport = 'wget';
@@ -482,7 +471,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * returns the value from php.ini directly, while the ini_get returns the runtime config value
-	 * 2010-07-31 ms
 	 */
 	public function configVar($var) {
 		return get_cfg_var($var);
@@ -490,7 +478,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * returns the runtime config value
-	 * 2010-07-31 ms
 	 */
 	public function runtimeVar($var) {
 		return ini_get($var);
@@ -498,7 +485,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * @return array with the names of the functions of a module or FALSE if extension is not available
-	 * 2010-07-30 ms
 	 */
 	public function extensionFunctions($extension) {
 		return get_extension_funcs($extension);
@@ -507,7 +493,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * open base dir path
 	 * @return string
-	 * 2010-07-31 ms
 	 */
 	public function openBasedir() {
 		$var = ini_get('open_basedir');
@@ -521,7 +506,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * @return boolean
-	 * 2010-07-30 ms
 	 */
 	public function magicQuotesGpc() {
 		$res = (bool)get_magic_quotes_gpc();
@@ -530,7 +514,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * @return
-	 * 2010-07-30 ms
 	 */
 	public function registerGlobals() {
 		$res = (bool)ini_get('register_globals');
@@ -539,7 +522,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * @return
-	 * 2010-07-30 ms
 	 */
 	public function displayErrors() {
 		$res = (bool)ini_get('display_errors');
@@ -601,8 +583,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Maximum amount of time each script may spend executing
-	 * @return int
-	 * 2010-07-30 ms
+	 * @return integer
 	 */
 	public function maxExecTime() {
 		$res = (int)ini_get('max_execution_time');
@@ -611,8 +592,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Maximum amount of time each script may spend parsing request data
-	 * @return int
-	 * 2010-07-30 ms
+	 * @return integer
 	 */
 	public function maxInputTime() {
 		$res = (int)ini_get('max_input_time');
@@ -622,7 +602,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * Allow the <? tag.  Otherwise, only <?php and <script> tags are recognized. Using short tags should be avoided when developing applications or libraries that are meant for redistribution
 	 * @return boolean
-	 * 2010-07-30 ms
 	 */
 	public function shortOpenTag() {
 		$res = (bool)ini_get('short_open_tag');
@@ -632,7 +611,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * should be OFF
 	 * @return boolean
-	 * 2010-07-30 ms
 	 */
 	public function safeMode() {
 		$res = (bool)ini_get('safe_mode');
@@ -722,7 +700,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * //should be in model?
-	 * @return int: size in bytes
+	 * @return integer: size in bytes
 	 */
 	public function fullDatabaseSize() {
 
@@ -747,7 +725,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Calculates the total size of a MySQL database in KB/MB or GB...
-	 * 2010-01-10 ms
 	 */
 	public function calcFullDatabaseSize($database, $db) {
 
@@ -777,7 +754,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	 * HelperFunction to format 128M into the bytes
 	 * Note: use CakeNumber here instead?
 	 *
-	 * 2010-07-30 ms
 	 */
 	public function returnInBytes($val) {
 		$val = trim($val);

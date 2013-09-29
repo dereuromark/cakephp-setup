@@ -29,7 +29,6 @@ if (!defined('WINDOWS')) {
  * @author Mark Scherer
  * @cakephp 2.0
  * @licence MIT
- * 2011-12-10 ms
  */
 class DbDumpShell extends AppShell {
 
@@ -52,7 +51,6 @@ class DbDumpShell extends AppShell {
 	 * -c: compress using gzip
 	 *
 	 * @return void
-	 * 2011-12-10 ms
 	 */
 	public function create() {
 		$db = ConnectionManager::getDataSource('default');
@@ -240,7 +238,6 @@ class DbDumpShell extends AppShell {
 	 * Deletes all sql backup files
 	 *
 	 * @return void
-	 * 2011-12-11 ms
 	 */
 	public function clear() {
 		$files = $this->_getFiles();
@@ -261,7 +258,6 @@ class DbDumpShell extends AppShell {
 	 * Automatically removes old dumps and keeps x newest ones
 	 *
 	 * @return void
-	 * 2011-12-11 ms
 	 */
 	public function cleanup() {
 		//TODO
@@ -270,8 +266,7 @@ class DbDumpShell extends AppShell {
 	/**
 	 * returns available files to restore
 	 * in reverse order (newest ones first!)
-	 * @return array $files
-	 * 2011-12-10 ms
+	 * @return array Files
 	 */
 	protected function _getFiles() {
 		$Directory = new RecursiveDirectoryIterator(BACKUPS);

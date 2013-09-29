@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 2011-10-26 ms
  */
 class AllCakeTests extends PHPUnit_Framework_TestSuite {
 

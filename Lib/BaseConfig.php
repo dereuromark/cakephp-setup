@@ -118,7 +118,7 @@ class BaseConfig {
 	 * Wrapper to geht the absolute environment path.
 	 * Handles symlinks properly, as well.
 	 *
-	 * @return string $path
+	 * @return string Path
 	 */
 	protected function _getEnvironmentPath() {
 		$path = realpath(APP);

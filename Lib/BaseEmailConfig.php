@@ -8,7 +8,6 @@
  *
  * @author Mark Scherer
  * @license MIT
- * 2012-03-30 ms
  */
 class BaseEmailConfig {
 

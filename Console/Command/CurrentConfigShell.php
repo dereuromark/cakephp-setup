@@ -11,7 +11,6 @@ App::uses('ConnectionManager', 'Model');
  * @author Mark Scherer
  * @cakephp 2
  * @license MIT
- * 2011-11-06 ms
  */
 class CurrentConfigShell extends AppShell {
 

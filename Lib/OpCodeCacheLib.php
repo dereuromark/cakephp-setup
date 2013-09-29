@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 2010-07-30 ms
  */
 class OpCodeCacheLib {
 
@@ -18,7 +17,6 @@ class OpCodeCacheLib {
 	/**
 	 * if opcode cache is enabled
 	 * @return boolean Success
-	 * 2010-10-21 ms
 	 */
 	public static function isEnabled() {
 		$is = self::detect();
@@ -31,9 +29,8 @@ class OpCodeCacheLib {
 	}
 
 	/**
-	 * @return array $detectedEngines for general lookup or bool true/false for specific engine
+	 * @return array detectedEngines for general lookup or bool true/false for specific engine
 	 * @static
-	 * 2010-09-08 ms
 	 */
 	public static function detect($engine = null) {
 		if ($engine !== null) {
@@ -103,7 +100,7 @@ class DetectOpCodeCache {
 	* check if we have Xcache
 
 	* @link http://xcache.lighttpd.net
-	* @return bool
+	* @return boolean
 	*/
 	public static function hasXcache() {
 		return function_exists('xcache_isset' );
@@ -113,7 +110,7 @@ class DetectOpCodeCache {
 	* check if we have Wincache
 
 	* @link http://www.iis.net/expand/WinCacheForPHP
-	* @return bool
+	* @return boolean
 	*/
 	public static function hasWincache() {
 		return function_exists('wincache_fcache_fileinfo');
@@ -123,7 +120,7 @@ class DetectOpCodeCache {
 	* check if we have Alternative PHP Cache
 
 	* @link http://pecl.php.net/package/apc
-	* @return bool
+	* @return boolean
 	*/
 	public static function hasApc() {
 		return function_exists('apc_add' );
@@ -133,7 +130,7 @@ class DetectOpCodeCache {
 	* check if we have eAccelerator
 
 	* @link http://eaccelerator.net
-	* @return bool
+	* @return boolean
 	*/
 	public static function hasEaccelerator() {
 		// !empty doesn't work, because no variable
@@ -144,7 +141,7 @@ class DetectOpCodeCache {
 	* check if we have ionCube Loader
 
 	* @link http://www.php-accelerator.co.uk
-	* @return bool
+	* @return boolean
 	*/
 	public static function hasIoncube() {
 		return (bool)strlen( ini_get('phpa' ));
@@ -154,7 +151,7 @@ class DetectOpCodeCache {
 	* check if we have Zend Optimizer+
 
 	* @link http://www.zend.com/products/server
-	* @return bool
+	* @return boolean
 	*/
 	public static function hasZend() {
 		return (bool)strlen( ini_get('zend_optimizer.enable_loader' ));
@@ -164,7 +161,7 @@ class DetectOpCodeCache {
 	* check if we have nuSphere phpExpress
 
 	* @link http://www.nusphere.com/products/phpexpress.htm
-	* @return bool
+	* @return boolean
 	*/
 	public static function hasNusphere() {
 		// in_array() check is slower then function_exists(), so don't use in production environment

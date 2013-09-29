@@ -13,7 +13,6 @@ App::uses('Validation', 'Utility');
  *
  * @author Mark Scherer
  * @licence MIT
- * 2012-12-20 ms
  */
 class MaintenanceShell extends AppShell {
 

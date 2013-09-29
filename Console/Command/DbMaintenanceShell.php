@@ -89,7 +89,7 @@ SQL;
 	public function engine() {
 		$db = ConnectionManager::getDataSource('default');
 		$database = $db->config['database'];
-		$engines = array('InnoDB', 'MyIsam');
+		$engines = array('InnoDB', 'MyISAM');
 		if (!empty($this->args[0])) {
 			$engine = $this->args[0];
 		} else {

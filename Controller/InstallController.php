@@ -4,7 +4,6 @@ App::uses('Install', 'Model');
 
 /**
  * Auto-Installer
- * 2010-01-19 ms
  */
 class InstallController extends SetupAppController {
 
