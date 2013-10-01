@@ -5,7 +5,7 @@ App::uses('MyCakeTestCase', 'Tools.TestSuite');
 class OpCodeCacheLibTest extends MyCakeTestCase {
 
 	/**
-	 * test the postal method of DeValidation
+	 * Test the postal method of DeValidation
 	 *
 	 * @return void
 	 */

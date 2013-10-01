@@ -264,7 +264,7 @@ class DbDumpShell extends AppShell {
 	}
 
 	/**
-	 * returns available files to restore
+	 * Returns available files to restore
 	 * in reverse order (newest ones first!)
 	 * @return array Files
 	 */

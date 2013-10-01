@@ -15,7 +15,7 @@ class OpCodeCacheLib {
 	);
 
 	/**
-	 * if opcode cache is enabled
+	 * If opcode cache is enabled
 	 * @return boolean Success
 	 */
 	public static function isEnabled() {

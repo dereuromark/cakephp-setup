@@ -1,11 +1,11 @@
 <?php
 /**
- * group test - Setup
+ * Group test - Setup
  */
 class AllSetupTest extends PHPUnit_Framework_TestSuite {
 
 	/**
-	 * suite method, defines tests for this suite.
+	 * Suite method, defines tests for this suite.
 	 *
 	 * @return void
 	 */

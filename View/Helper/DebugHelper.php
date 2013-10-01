@@ -91,14 +91,14 @@ class DebugHelper extends AppHelper {
 	}
 
 	/**
-	 * change default "active/visible" tab
+	 * Change default "active/visible" tab
 	 */
 	public function setDefault() {
 
 	}
 
 	/**
-	 * final print function
+	 * Final print function
 	 */
 	public function show() {
 		$output = '<div class="tabs cake-sql-log debug_request">';
@@ -214,7 +214,7 @@ jQuery(function() {
 	}
 
 	/**
-	 * adds a new tab
+	 * Adds a new tab
 	 * takes strings AND arrays now (automatic switch)
 	 */
 	public function add($level, $title = null, $content = null) {
@@ -231,7 +231,7 @@ jQuery(function() {
 	}
 
 	/**
-	 * sets normal default tabs
+	 * Sets normal default tabs
 	 */
 	protected function _debug($options = null) {
 		$res = '<div class="globals">';
@@ -573,7 +573,7 @@ jQuery(function() {
 	}
 
 	/**
-	 * returns version if newer than the current one
+	 * Returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
 	 * @return string Version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
@@ -609,7 +609,7 @@ jQuery(function() {
 	}
 
 	/**
-	 * returns version if newer than the current one
+	 * Returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
 	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
@@ -645,7 +645,7 @@ jQuery(function() {
 	}
 
 	/**
-	 * returns version if newer than the current one
+	 * Returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
 	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
@@ -789,7 +789,7 @@ jQuery(function() {
 	}
 
 	/**
-	 * show both current and latest cake version (if activated in configs)
+	 * Show both current and latest cake version (if activated in configs)
 	 */
 	public function versionCake() {
 		//$current = Configure::read('Cake.version');

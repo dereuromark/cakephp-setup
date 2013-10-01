@@ -2,7 +2,7 @@
 App::uses('File', 'Utility');
 
 /**
- * used in configurations controller + debug helper
+ * Used in configurations controller + debug helper
  */
 class DebugLib {
 
@@ -54,21 +54,15 @@ class DebugLib {
 		fseek($f, $cursor, SEEK_END);
 		$char = fgetc($f);
 
-		/**
-		* Trim trailing newline chars of the file
-		*/
+		// Trim trailing newline chars of the file
 		while ($char === "\n" || $char === "\r") {
 			fseek($f, $cursor--, SEEK_END);
 			$char = fgetc($f);
 		}
 
-		/**
-		* Read until the start of file or first newline char
-		*/
+		// Read until the start of file or first newline char
 		while ($char !== false && $char !== "\n" && $char !== "\r") {
-			/**
-			* Prepend the new char
-			*/
+			// Prepend the new char
 			$line = $char . $line;
 			fseek($f, $cursor--, SEEK_END);
 			$char = fgetc($f);
@@ -98,7 +92,8 @@ class DebugLib {
 	}
 
 	/**
-	 * determins the server load (last 1 minute - last 5 minutes - last 15 minutes)
+	 * Determines the server load (last 1 minute - last 5 minutes - last 15 minutes)
+	 *
 	 * @return string
 	 */
 	public function getServerLoad() {
@@ -300,7 +295,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * memory info
+	 * Memory info
 	 * @return array(total=>x, free=>y, used=>z)
 	 */
 	public function getRam() {
@@ -330,7 +325,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * get current memory usage
+	 * Get current memory usage
 	 *
 	 * @return integer number of bytes ram currently in use. 0 if memory_get_usage() is not available.
 	 * @static
@@ -367,7 +362,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * tests if memory limit can be raised temporarily (necessary for image resizing etc)
+	 * Tests if memory limit can be raised temporarily (necessary for image resizing etc)
 	 * @return boolean Success
 	 */
 	public function memoryLimitAdjustable() {
@@ -383,7 +378,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * if available: Searches DNS for MX records corresponding to hostname.
+	 * If available: Searches DNS for MX records corresponding to hostname.
 	 * @static
 	 */
 	public function getmxrrAvailable() {
@@ -391,7 +386,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * if available: Searches DNS for records of type type corresponding to host.
+	 * If available: Searches DNS for records of type type corresponding to host.
 	 * @static
 	 */
 	public function checkdnsrrAvailable() {
@@ -470,14 +465,14 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * returns the value from php.ini directly, while the ini_get returns the runtime config value
+	 * Returns the value from php.ini directly, while the ini_get returns the runtime config value
 	 */
 	public function configVar($var) {
 		return get_cfg_var($var);
 	}
 
 	/**
-	 * returns the runtime config value
+	 * Returns the runtime config value
 	 */
 	public function runtimeVar($var) {
 		return ini_get($var);
@@ -491,7 +486,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * open base dir path
+	 * Open base dir path
 	 * @return string
 	 */
 	public function openBasedir() {
@@ -609,7 +604,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * should be OFF
+	 * Should be OFF
 	 * @return boolean
 	 */
 	public function safeMode() {
@@ -678,7 +673,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * uses DB query, foolprove!
+	 * Uses DB query, foolprove!
 	 * >= 5: OK
 	 * < 5: error
 	 */

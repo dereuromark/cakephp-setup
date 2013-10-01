@@ -32,7 +32,7 @@
 <?php } ?>
 
 	/**
-	 * index method
+	 * Index method
 	 *
 	 * @return void
 	 */
@@ -43,7 +43,7 @@
 	}
 
 	/**
-	 * view method
+	 * View method
 	 *
 <?php if (!$wannaUseSession): ?>
 	 * @throws NotFoundException
@@ -66,7 +66,7 @@
 
 <?php $compact = array(); ?>
 	/**
-	 * add method
+	 * Add method
 	 *
 	 * @return void
 	 */
@@ -130,7 +130,7 @@
 
 <?php $compact = array(); ?>
 	/**
-	 * edit method
+	 * Edit method
 	 *
 <?php if (!$wannaUseSession): ?>
 	 * @throws NotFoundException
@@ -194,7 +194,7 @@
 	}
 
 	/**
-	 * delete method
+	 * Delete method
 	 *
 	 * @throws MethodNotAllowedException
 	 * @throws NotFoundException
@@ -231,7 +231,7 @@
 
 <?php if (!empty($upAndDown)) { ?>
 	/**
-	 * up method
+	 * Up method
 	 *
 	 * @param string $id
 	 * @return void
@@ -250,7 +250,7 @@
 	}
 
 	/**
-	 * down method
+	 * Down method
 	 *
 	 * @param string $id
 	 * @return void

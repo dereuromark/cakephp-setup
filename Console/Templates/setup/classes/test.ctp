@@ -2,7 +2,6 @@
 /**
  * Test Case bake template
  *
- *
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
@@ -45,7 +44,7 @@ class <?php echo $fullClassName; ?>Test extends CakeTestCase {
 <?php endif; ?>
 <?php if (!empty($construction)): ?>
 	/**
-	 * setUp method
+	 * SetUp method
 	 *
 	 * @return void
 	 */
@@ -57,7 +56,7 @@ class <?php echo $fullClassName; ?>Test extends CakeTestCase {
 	}
 
 /**
- * tearDown method
+ * TearDown method
  *
  * @return void
  */

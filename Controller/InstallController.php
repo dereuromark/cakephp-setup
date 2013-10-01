@@ -30,7 +30,7 @@ class InstallController extends SetupAppController {
 	}
 
 	/**
-	 * sql tables
+	 * Sql tables
 	 */
 	public function step1() {
 		if ($this->Common->isPosted()) {

@@ -2,7 +2,7 @@
 App::uses('String', 'Utility');
 
 /**
- * used in configurations controller + debug helper
+ * Used in configurations controller + debug helper
  */
 class InstallLib {
 
