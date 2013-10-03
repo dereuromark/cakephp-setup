@@ -58,10 +58,11 @@ class DbDumpShell extends AppShell {
 		$file = $this->_path().'dbdump_'.date("Y-m-d--H-i-s");
 
 		$options = array(
-			'--user='.$db->config['login'],
-			'--password='.$db->config['password'],
-			'--default-character-set='.$db->config['encoding'],
-			'--databases '.$db->config['database'],
+			'--user='. $db->config['login'],
+			'--password='. $db->config['password'],
+			'--default-character-set='. $db->config['encoding'],
+			'--host=' . $db->config['host'],
+			'--databases '. $db->config['database'],
 		);
 		$sources = $db->listSources();
 		if (array_key_exists('tables', $this->params) && empty($this->params['tables'])) {
@@ -107,7 +108,7 @@ class DbDumpShell extends AppShell {
 		$this->out(' - '.$this->_path());
 		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
 		if ($looksGood !== 'y') {
-			exit;
+			return $this->error('Aborted!');
 		}
 
 		if ($this->_create($options)) {
@@ -161,7 +162,9 @@ class DbDumpShell extends AppShell {
 	public function restore() {
 		$files = $this->_getFiles();
 		$this->out('Path: ' . $this->_path());
-		$this->out('Files need to start with "dbdump_" and have either .sql or .gz extension', 2);
+		$this->out('Files need to start with "dbdump_" and have either .sql or .gz extension.');
+		$this->out('Note that dumps created by "create" command will also DROP existing tables!', 2);
+
 		$this->out('Available files:');
 		if (empty($files)) {
 			return $this->error('No files found...');
@@ -170,10 +173,11 @@ class DbDumpShell extends AppShell {
 		foreach ($files as $key => $file) {
 			$this->out('['.$key.'] '.$file);
 		}
+
 		while (true) {
-			$x = $this->in('Select File (or q to quit)', null, 0);
+			$x = $this->in('Select File (or q to quit)', null, 'q');
 			if ($x === 'q') {
-				exit;
+				return $this->error('Aborted!');
 			}
 			if (!is_numeric($x)) {
 				continue;
@@ -189,7 +193,7 @@ class DbDumpShell extends AppShell {
 		$this->out($file);
 		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
 		if ($looksGood !== 'y') {
-			exit;
+			return $this->error('Aborted!');
 		}
 
 		$db = ConnectionManager::getDataSource('default');
@@ -246,7 +250,7 @@ class DbDumpShell extends AppShell {
 		return;
 		$looksGood = $this->in(__d('cake_console', 'Sure?'), array('y', 'n'), 'y');
 		if ($looksGood !== 'y') {
-			exit;
+			return $this->error('Aborted!');
 		}
 		foreach ($files as $file) {
 			unlink(BACKUPS . $file);

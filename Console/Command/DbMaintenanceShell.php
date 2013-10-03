@@ -17,16 +17,10 @@ if (!defined('WINDOWS')) {
  * - Cleanup utility
  *
  * @author Mark Scherer
- * @cakephp 2.0
+ * @cakephp 2.x
  * @licence MIT
  */
 class DbMaintenanceShell extends AppShell {
-
-	public $tasks = array();
-
-	public function startup() {
-		parent::startup();
-	}
 
 	/**
 	 * Assert proper (UTF8) encoding.
@@ -38,6 +32,7 @@ class DbMaintenanceShell extends AppShell {
 		$database = $db->config['database'];
 		$encoding = 'utf8';
 		$collate = 'utf8_unicode_ci';
+		$prefix = empty($db->config['prefix']) ? '' : $db->config['prefix'];
 
 		$script = "ALTER DATABASE $database CHARACTER SET $encoding COLLATE $collate;";
 		if (!$this->params['dry-run']) {
@@ -50,6 +45,7 @@ class DbMaintenanceShell extends AppShell {
 SELECT  CONCAT('ALTER TABLE `', table_name, '` CONVERT TO CHARACTER SET $encoding COLLATE $collate;') AS statement
 FROM    information_schema.tables AS tb
 WHERE   table_schema = '$database'
+AND     table_name LIKE '$prefix%'
 AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		$res = $db->fetchAll($script);
@@ -90,6 +86,8 @@ SQL;
 		$db = ConnectionManager::getDataSource('default');
 		$database = $db->config['database'];
 		$engines = array('InnoDB', 'MyISAM');
+		$prefix = empty($db->config['prefix']) ? '' : $db->config['prefix'];
+
 		if (!empty($this->args[0])) {
 			$engine = $this->args[0];
 		} else {
@@ -104,6 +102,7 @@ SQL;
 SELECT  CONCAT('ALTER TABLE `', table_name, '` ENGINE=$engine;') AS statement
 FROM    information_schema.tables AS tb
 WHERE   table_schema = '$database'
+AND     table_name LIKE '$prefix%'
 AND     `ENGINE` != '$engine'
 AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
@@ -151,7 +150,7 @@ SQL;
 SELECT CONCAT('DROP TABLE `', table_name, '`;') AS statement
 FROM information_schema.tables AS tb
 WHERE   table_schema = '$database'
-AND table_name like '$prefix%' OR table_name like '\_%';";
+AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$res = $db->fetchAll($script);
 		if (!$res) {
 			$this->error('Nothing to do...');
