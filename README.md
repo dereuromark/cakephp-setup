@@ -30,6 +30,36 @@ Currently this plugin contains only the parts I managed to open source yet:
 
 Possible dependencies: Tools Plugin (for bake templates for instance)
 
+### SetupComponent
+
+Just enable it via
+
+    public $components = array('Setup.Setup');
+
+Features:
+
+* Auto create missing tmp folders etc in debug mode (already in core since 2.4 now)
+* Catch redirect loops with meaningful exception (will also be logged then)
+* Quick-Switch: layout, maintenance, debug, clearcache (password protected in productive mode)
+* Notify Admin via Email about self-inflicted 404s or loops (configurable)
+
+and more.
+
+### Maintenance mode
+
+If you have to move, update or just fix the application, an easy way to put the site into maintenance mode
+is to use the shell for it. [Example on how to use it](http://www.dereuromark.de/2013/09/29/moving-a-cakephp-app/).
+Contains of:
+
+* Shell (`cake Setup.Maintenance [command]`)
+* Lib
+* (Optional) Setup component to display a flash message for admins in overwrite mode
+
+### DB Maintenance tools
+
+* CurrentConfig shell
+* DbDump shell
+* DbMaintenance shell
 
 ## Disclaimer
 Use at your own risk. Please provide any fixes or enhancements via issue or better pull request.
