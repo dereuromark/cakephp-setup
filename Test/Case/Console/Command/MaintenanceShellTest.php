@@ -8,6 +8,7 @@ class MaintenanceShellTest extends MyCakeTestCase {
 	public $MaintenanceShell;
 
 	public function setUp() {
+		parent::setUp();
 		$this->MaintenanceShell = new TestMaintenanceShell();
 	}
 

@@ -7,10 +7,12 @@ App::uses('Controller', 'Controller');
 class SetupComponentTest extends MyCakeTestCase {
 
 	public function setUp() {
+		parent::setUp();
 		$this->Setup = new SetupComponent(new ComponentCollection);
 	}
 
 	public function tearDown() {
+		parent::tearDown();
 
 	}
 

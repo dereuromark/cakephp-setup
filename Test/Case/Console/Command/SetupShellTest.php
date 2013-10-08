@@ -8,6 +8,7 @@ class SetupShellTest extends MyCakeTestCase {
 	public $SetupShell;
 
 	public function setUp() {
+		parent::setUp();
 		$this->SetupShell = new TestSetupShell();
 	}
 

@@ -10,6 +10,7 @@ class BaseConfigTest extends CakeTestCase {
 	public $Config;
 
 	public function setUp() {
+		parent::setUp();
 		$this->Config = new TEST_DATABASE_CONFIG();
 	}
 

@@ -7,6 +7,7 @@ class SystemLibTest extends MyCakeTestCase {
 	public $Config;
 
 	public function setUp() {
+		parent::setUp();
 		$this->SystemLib = new SystemLib();
 	}
 

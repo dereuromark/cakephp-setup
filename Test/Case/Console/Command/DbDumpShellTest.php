@@ -8,6 +8,7 @@ class DbDumpShellTest extends MyCakeTestCase {
 	public $DbDumpShell;
 
 	public function setUp() {
+		parent::setUp();
 		$this->DbDumpShell = new TestDbDumpShell();
 	}
 
