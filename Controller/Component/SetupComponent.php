@@ -218,12 +218,12 @@ class SetupComponent extends Component {
 		}
 		$referer = $Controller->referer();
 		if (strlen($referer) > 2 && (int)$this->Session->read('Report.404') < time()-5*MINUTE) {
-			$text = '404:'.TB.TB.'/'.$Controller->request->url.
-			NL.'Referer:'.TB.''.$referer.
-			NL.NL.'Browser: '.env('HTTP_USER_AGENT').
-			NL.'IP: '.env('REMOTE_ADDR');
+			$text = '404:' . TB . TB . '/' . $Controller->request->url .
+			NL . 'Referer:' . TB . '' . $referer .
+			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .
+			NL . 'IP: ' . env('REMOTE_ADDR');
 			if ($uid = $this->Session->read('Auth.User.id')) {
-				$text .= NL.NL.'UID: ' . $uid;
+				$text .= NL . NL . 'UID: ' . $uid;
 			}
 
 			if (!$this->_notification('404!', $text)) {
@@ -281,7 +281,7 @@ class SetupComponent extends Component {
 
 				$this->_notification('loop!', $text);
 			}
-			throw new InternalErrorException('Redirect Loop: '. implode(' - ' , $urls));
+			throw new InternalErrorException('Redirect Loop: ' . implode(' - ', $urls));
 		}
 	}
 
@@ -304,7 +304,7 @@ class SetupComponent extends Component {
 	public function log404($notifyAdminOnInteralErrors = false) {
 		if ($this->Controller->name === 'CakeError') {
 			$referer = $this->Controller->referer();
-			$this->Controller->log('REF: '.$referer.' - URL: '.$this->Controller->request->url, '404');
+			$this->Controller->log('REF: ' . $referer . ' - URL: ' . $this->Controller->request->url, '404');
 		}
 	}
 
@@ -387,7 +387,7 @@ class SetupComponent extends Component {
 			if (!empty($ip)) {
 				$host = gethostbyaddr($ip);
 			}
-			$id = $ip.'-'.$host;
+			$id = $ip . '-' . $host;
 		}
 		if (!empty($id)) {
 			$file = TMP . 'debugOverride-' . $id . '.txt';
@@ -500,7 +500,7 @@ class SetupComponent extends Component {
 	protected function _processErrorMessage($matches, $isCallback = false) {
 		$value = substr($matches[0], 3);
 		$value = ChmodLib::convertToOctal($value);
-		return 'to '.$value . '! ';
+		return 'to ' . $value . '! ';
 	}
 
 	/**
@@ -509,7 +509,7 @@ class SetupComponent extends Component {
 	 * @return array
 	 */
 	protected function _tmpFolders() {
-		if (file_exists(APP . 'Config' . DS.'setup.php')) {
+		if (file_exists(APP . 'Config' . DS . 'setup.php')) {
 			Configure::load('setup');
 			$customs = (array)Configure::read('Setup.folderRights');
 		} else {
@@ -536,8 +536,8 @@ class SetupComponent extends Component {
 
 		# add js/css cache
 		if (Configure::read('Asset.combine')) {
-			$defaults[JS.'cjs'.DS] = 0775;
-			$defaults[CSS.'ccss'.DS] = 0775;
+			$defaults[JS . 'cjs' . DS] = 0775;
+			$defaults[CSS . 'ccss' . DS] = 0775;
 		}
 		//TODO
 

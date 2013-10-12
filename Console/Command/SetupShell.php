@@ -27,7 +27,7 @@ class SetupShell extends AppShell {
 		$this->_createFolders();
 		$this->out('tmp folders created');
 
-		if (!file_exists(APP . 'Config' . DS.'database.php')) {
+		if (!file_exists(APP . 'Config' . DS . 'database.php')) {
 			$this->out('! database.php is missing !');
 		}
 	}
@@ -61,7 +61,7 @@ class SetupShell extends AppShell {
 			'question',
 		);
 		foreach ($list as $type) {
-			$this->out('<'.$type.'>This is a message of type \''.$type.'\'</'.$type.'>');
+			$this->out('<' . $type . '>This is a message of type \'' . $type . '\'</' . $type . '>');
 		}
 		$this->out();
 
@@ -84,17 +84,17 @@ class SetupShell extends AppShell {
 	 */
 	protected function _createFolders() {
 		$handle = new Folder(TMP, true, CHMOD_PUBLIC);
-		$handle = new Folder(TMP.'logs'.DS, true, CHMOD_PUBLIC);
-		$handle = new Folder(TMP.'work'.DS, true, CHMOD_PUBLIC);
-		$handle = new Folder(TMP.'sessions'.DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(TMP . 'logs' . DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(TMP . 'work' . DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(TMP . 'sessions' . DS, true, CHMOD_PUBLIC);
 
 		$handle = new Folder(CACHE, true, CHMOD_PUBLIC);
-		$handle = new Folder(CACHE.'models'.DS, true, CHMOD_PUBLIC);
-		$handle = new Folder(CACHE.'persistent'.DS, true, CHMOD_PUBLIC);
-		$handle = new Folder(CACHE.'views'.DS, true, CHMOD_PUBLIC);
-		$handle = new Folder(CACHE.'feeds'.DS, true, CHMOD_PUBLIC);
-		$handle = new Folder(CACHE.'searches'.DS, true, CHMOD_PUBLIC);
-		$handle = new Folder(CACHE.'data'.DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(CACHE . 'models' . DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(CACHE . 'persistent' . DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(CACHE . 'views' . DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(CACHE . 'feeds' . DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(CACHE . 'searches' . DS, true, CHMOD_PUBLIC);
+		$handle = new Folder(CACHE . 'data' . DS, true, CHMOD_PUBLIC);
 
 		$handle = new Folder(FILES, true, CHMOD_PUBLIC);
 		//$handle = new Folder(WWW_ROOT.'img'.DS.'avatars', true, CHMOD_PUBLIC);

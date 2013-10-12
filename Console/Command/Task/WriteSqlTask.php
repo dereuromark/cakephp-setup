@@ -20,7 +20,7 @@ class WriteSqlTask extends AppShell {
 	 * @return void
 	 */
 	public function execute($tables) {
-		$today = date(FORMAT_DB_DATE).'_'.date('H-i-s');
+		$today = date(FORMAT_DB_DATE) . '_' . date('H-i-s');
 
 		$File = new File(BACKUPS . 'dump_' . $today . '.sql', true, CHMOD_PUBLIC);
 

@@ -36,7 +36,7 @@ class OpCodeCacheLib {
 		if ($engine !== null) {
 			$engine = ucfirst(strtolower($engine));
 			if (in_array($engine, self::$engines)) {
-				$engine = 'has'.$engine;
+				$engine = 'has' . $engine;
 				return (bool)DetectOpCodeCache::$engine();
 			}
 			return null;
@@ -44,7 +44,7 @@ class OpCodeCacheLib {
 
 		$res = array();
 		foreach (self::$engines as $engine) {
-			$method = 'has'.$engine;
+			$method = 'has' . $engine;
 			$res[$engine] = (bool)DetectOpCodeCache::$method();
 		}
 		return $res;

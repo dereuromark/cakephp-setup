@@ -21,7 +21,7 @@ class SystemLibTest extends MyCakeTestCase {
 			$this->out('<div>USE LINUX TO FULLY TEST (only available on linux!)</div>', true);
 		}
 
-		$rootPath = ROOT.DS.APP_DIR;
+		$rootPath = ROOT . DS . APP_DIR;
 
 		$is = $this->SystemLib->diskSpace($rootPath);
 		$this->debug($is);

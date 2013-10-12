@@ -13,7 +13,7 @@ class InstallLib {
 	/**
 	 */
 	public static function configDir() {
-		return APP.DS.'Config'.DS;
+		return APP . DS . 'Config' . DS;
 	}
 
 	/**
@@ -61,7 +61,7 @@ class InstallLib {
 			if (in_array($key, array('persistent'))) {
 				$val = $val ? 'true' : 'false';
 			} else {
-				$val = '\''.$val.'\'';
+				$val = '\'' . $val . '\'';
 			}
 			$content[] = TB . TB . '\'' . $key . '\' => ' . $val;
 		}
@@ -74,7 +74,7 @@ class InstallLib {
 		$content = ltrim(implode(',' . PHP_EOL, $content));
 		$content = String::insert($file, array('fields'=>$content, 'testFields'=>$testContent));
 
-		$target = InstallLib::configDir().'database.php';
+		$target = InstallLib::configDir() . 'database.php';
 		return file_put_contents($target, $content);
 	}
 

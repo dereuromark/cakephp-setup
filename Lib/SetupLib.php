@@ -80,7 +80,7 @@ class SetupLib extends Object {
 		foreach ($this->folderRights as $folder => $right) {
 			$handle = new Folder($folder, true, $right);
 			if ($x = $handle->errors()) {
-				$this->log('SetupComponent: '.$x, E_ERROR);
+				$this->log('SetupComponent: ' . $x, E_ERROR);
 			}
 		}
 		$handle = null;
@@ -100,7 +100,7 @@ class SetupLib extends Object {
 
 			$typeArray = array();
 			if (is_array($type)) {
-				$this->log('Type for clearCaches should not be an array ('.implode(', ', $type).')');
+				$this->log('Type for clearCaches should not be an array (' . implode(', ', $type) . ')');
 				$type = array_shift($type);
 			}
 			if (strpos($type, '|') !== false) {

@@ -55,20 +55,20 @@ class DbDumpShell extends AppShell {
 	public function create() {
 		$db = ConnectionManager::getDataSource('default');
 		$usePrefix = empty($db->config['prefix']) ? '' : $db->config['prefix'];
-		$file = $this->_path().'dbdump_'.date("Y-m-d--H-i-s");
+		$file = $this->_path() . 'dbdump_' . date("Y-m-d--H-i-s");
 
 		$options = array(
-			'--user='. $db->config['login'],
-			'--password='. $db->config['password'],
-			'--default-character-set='. $db->config['encoding'],
+			'--user=' . $db->config['login'],
+			'--password=' . $db->config['password'],
+			'--default-character-set=' . $db->config['encoding'],
 			'--host=' . $db->config['host'],
-			'--databases '. $db->config['database'],
+			'--databases ' . $db->config['database'],
 		);
 		$sources = $db->listSources();
 		if (array_key_exists('tables', $this->params) && empty($this->params['tables'])) {
 			# prompt for tables
 			foreach ($sources as $key => $source) {
-				$this->out('['.$key.'] '.$source);
+				$this->out('[' . $key . '] ' . $source);
 			}
 			$tables = $this->in('What tables (separated by comma without spaces)', null, null);
 			$tables = explode(',', $tables);
@@ -78,15 +78,15 @@ class DbDumpShell extends AppShell {
 					$tableList[] = $sources[intval($table)];
 				}
 			}
-			$options[] = '--tables '.implode(' ', $tableList);
+			$options[] = '--tables ' . implode(' ', $tableList);
 			$file .= '_custom';
 
 		} elseif (!empty($this->params['tables'])) {
 			$sources = explode(',', $this->params['tables']);
 			foreach ($sources as $key => $val) {
-				$sources[$key] = $usePrefix.$val;
+				$sources[$key] = $usePrefix . $val;
 			}
-			$options[] = '--tables '.implode(' ', $sources);
+			$options[] = '--tables ' . implode(' ', $sources);
 			$file .= '_custom';
 		} elseif ($usePrefix) {
 			foreach ($sources as $key => $source) {
@@ -94,18 +94,18 @@ class DbDumpShell extends AppShell {
 					unset($sources[$key]);
 				}
 			}
-			$options[] = '--tables '.implode(' ', $sources);
-			$file .= '_'.rtrim($usePrefix, '_');
+			$options[] = '--tables ' . implode(' ', $sources);
+			$file .= '_' . rtrim($usePrefix, '_');
 		}
 		$file .= '.sql';
 		if (!empty($this->params['compress'])) {
 			$options[] = '| gzip';
 			$file .= '.gz';
 		}
-		$options[] = '> '.$file;
+		$options[] = '> ' . $file;
 
 		$this->out('Backup will be written to:');
-		$this->out(' - '.$this->_path());
+		$this->out(' - ' . $this->_path());
 		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
 		if ($looksGood !== 'y') {
 			return $this->error('Aborted!');
@@ -119,7 +119,7 @@ class DbDumpShell extends AppShell {
 	protected function _create($options) {
 		$command = $this->_command('mysqldump');
 		if (!empty($options)) {
-			$command .= ' '.implode(' ', $options);
+			$command .= ' ' . implode(' ', $options);
 		}
 		if (!empty($this->params['dry-run'])) {
 			$this->out($command);
@@ -171,7 +171,7 @@ class DbDumpShell extends AppShell {
 		}
 
 		foreach ($files as $key => $file) {
-			$this->out('['.$key.'] '.$file);
+			$this->out('[' . $key . '] ' . $file);
 		}
 
 		while (true) {
@@ -218,13 +218,13 @@ class DbDumpShell extends AppShell {
 		$command = $this->_command('mysql');
 
 		if (strpos($file, '.gz') !== false || !empty($this->params['compress'])) {
-			$command = $this->_command('gunzip').' < '.$file.' | '.$command;
+			$command = $this->_command('gunzip') . ' < ' . $file . ' | ' . $command;
 		} else {
-			$options[] = '< '.$file;
+			$options[] = '< ' . $file;
 		}
 
 		if (!empty($options)) {
-			$command .= ' '.implode(' ', $options);
+			$command .= ' ' . implode(' ', $options);
 		}
 		if (!empty($this->params['dry-run'])) {
 			$this->out($command);
@@ -245,7 +245,7 @@ class DbDumpShell extends AppShell {
 	 */
 	public function clear() {
 		$files = $this->_getFiles();
-		$this->out(count($files). ' files found');
+		$this->out(count($files) . ' files found');
 		$this->out('Aborting');
 		return;
 		$looksGood = $this->in(__d('cake_console', 'Sure?'), array('y', 'n'), 'y');
@@ -255,7 +255,7 @@ class DbDumpShell extends AppShell {
 		foreach ($files as $file) {
 			unlink(BACKUPS . $file);
 		}
-		$this->out('Done: '.__('%s deleted', count($files)));
+		$this->out('Done: ' . __('%s deleted', count($files)));
 	}
 
 	/**
@@ -275,7 +275,7 @@ class DbDumpShell extends AppShell {
 	protected function _getFiles() {
 		$Directory = new RecursiveDirectoryIterator(BACKUPS);
 		$It = new RecursiveIteratorIterator($Directory);
-		$Regex = new RegexIterator($It,'/dbdump_.*?[\.sql|\.gz]$/',RecursiveRegexIterator::GET_MATCH);
+		$Regex = new RegexIterator($It, '/dbdump_.*?[\.sql|\.gz]$/', RecursiveRegexIterator::GET_MATCH);
 		$files = array();
 		foreach ($Regex as $v) {
 			$files[] = $v[0];

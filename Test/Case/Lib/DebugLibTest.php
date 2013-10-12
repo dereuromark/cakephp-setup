@@ -58,7 +58,7 @@ class DebugLibTest extends MyCakeTestCase {
 		# change at runtime
 		$newValue = ((int)$res)*2;
 		$this->debug($newValue);
-		ini_set('memory_limit', $newValue.'M');
+		ini_set('memory_limit', $newValue . 'M');
 
 		# NOT WORKING!!! changable in PHP_INI_ALL?
 		$res2 = $this->DebugLib->configVar('memory_limit');

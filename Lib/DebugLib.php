@@ -11,7 +11,7 @@ class DebugLib {
 /** log files **/
 
 	public function hasContent($type) {
-		$file = TMP.'logs'.DS.$type.'.log';
+		$file = TMP . 'logs' . DS . $type . '.log';
 		if (isset($this->debugFileCache[$type])) {
 			return $this->debugFileCache[$type];
 		}
@@ -26,7 +26,7 @@ class DebugLib {
 	public function logFileContent($logFiles) {
 		$logFileContent = array();
 		foreach ($logFiles as $name) {
-			$File = new File(TMP.'logs'.DS.$name.'.log');
+			$File = new File(TMP . 'logs' . DS . $name . '.log');
 
 			if ($File->exists()) {
 				$logFileContent[$name] = array(
@@ -34,7 +34,7 @@ class DebugLib {
 					'size' => $File->size(),
 					'content' => $File->read(),
 					'modified'=> $File->lastChange(),
-					'file' => $File->name().'.'.$File->ext(),
+					'file' => $File->name() . '.' . $File->ext(),
 				);
 			}
 		}

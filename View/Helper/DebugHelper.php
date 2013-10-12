@@ -87,7 +87,7 @@ class DebugHelper extends AppHelper {
 		if ($escape) {
 			$res = h($res);
 		}
-		return '<pre '.$pre_class.'>'.nl2br($res).'</pre>';
+		return '<pre ' . $pre_class . '>' . nl2br($res) . '</pre>';
 	}
 
 	/**
@@ -109,14 +109,14 @@ class DebugHelper extends AppHelper {
 			foreach ($this->debugContent[$i] as $title => $content) {
 				if (!empty($content)) {
 					$sluggedTitle = strtolower(Inflector::slug($title));
-					$header .= '<li><a href="#debug-'.$sluggedTitle.'" id="tab-'.$sluggedTitle.'">'.$title.'</a></li>';
-					$body .= '<div class="content" id="debug-'.$sluggedTitle.'">'.$content.'</div>';
+					$header .= '<li><a href="#debug-' . $sluggedTitle . '" id="tab-' . $sluggedTitle . '">' . $title . '</a></li>';
+					$body .= '<div class="content" id="debug-' . $sluggedTitle . '">' . $content . '</div>';
 				}
 			}
 		}
 		$header .= '</ul>';
 
-		$output .= $header.$body.'</div>';
+		$output .= $header . $body . '</div>';
 		$output .= $this->Html->css('/setup/css/tabs');
 		$output .= $this->Html->script('/setup/js/tabs');
 
@@ -155,7 +155,7 @@ class DebugHelper extends AppHelper {
 				$script = '
 	$(\'.tabNavigation li a\').click(function () {
 		var selvalue = $(this).attr(\'id\');
-		var targeturl = "'.$url.'tab:" + selvalue + "/";
+		var targeturl = "' . $url . 'tab:" + selvalue + "/";
 		if (remember != \'\' && selvalue == remember) {
 			return false;
 		}
@@ -189,13 +189,13 @@ class DebugHelper extends AppHelper {
 
 			$output .= $this->Html->scriptBlock('
 jQuery(document).ready(function() {
-	var remember = \''.$rememberedId.'\';
+	var remember = \'' . $rememberedId . '\';
 
 	' . $script . '
 
 	' . (!empty($rememberedId) ? '
 
-	jQuery(\'div.tabs ul.tabNavigation a#'.$rememberedId.'\').click();
+	jQuery(\'div.tabs ul.tabNavigation a#' . $rememberedId . '\').click();
 
 	' : '') . '
 
@@ -235,29 +235,29 @@ jQuery(function() {
 	 */
 	protected function _debug($options = null) {
 		$res = '<div class="globals">';
-		$res .= '<div style="float:right">'.$this->Html->link('Error-Logs', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'logs')).'</div>';
-		$res .= '<div style="float:right; margin-right: 20px;">'.$this->Html->link('Configuration', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'index')).'</div>';
+		$res .= '<div style="float:right">' . $this->Html->link('Error-Logs', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'logs')) . '</div>';
+		$res .= '<div style="float:right; margin-right: 20px;">' . $this->Html->link('Configuration', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'index')) . '</div>';
 		//$res .=  xdebug_time_index();
-		$res .= 'Cake-Version: '.$this->versionCake() . BR . BR;
+		$res .= 'Cake-Version: ' . $this->versionCake() . BR . BR;
 		$res .= __('rendered in %s', '<b>' . number_format(round(microtime(true) - $_SERVER['REQUEST_TIME'], 3), 3, ',', '') . ' s</b>') . BR;
 		$res .= '</div>';
 		$this->add(1, 'Start', $res);
 
 		/** Session Post Get... **/
 		$res = '<table width="100%"><tr><td>';
-		$res .= '<div class="globals"><b>GET</b><br/><pre>'.h(print_r($_GET, true)).'</pre>';
+		$res .= '<div class="globals"><b>GET</b><br/><pre>' . h(print_r($_GET, true)) . '</pre>';
 		$res .= '</div>';
-		$res .= '<div class="globals"><b>POST</b><br/><pre>'.h(print_r($_POST, true)).'</pre>';
+		$res .= '<div class="globals"><b>POST</b><br/><pre>' . h(print_r($_POST, true)) . '</pre>';
 		$res .= '</div>';
-		$res .= '<div class="globals"><b>SESSION</b><br/><pre>'.h(print_r(!empty($_SESSION) ? $_SESSION : $this->Session->read(), true)).'</pre>';
+		$res .= '<div class="globals"><b>SESSION</b><br/><pre>' . h(print_r(!empty($_SESSION) ? $_SESSION : $this->Session->read(), true)) . '</pre>';
 		$res .= '</div>';
 		$res .= '</td><td>';
-		$res .= '<div class="globals"><b>REQUEST</b><br/><pre>'.h(print_r($_REQUEST, true)).'</pre>';
+		$res .= '<div class="globals"><b>REQUEST</b><br/><pre>' . h(print_r($_REQUEST, true)) . '</pre>';
 		$res .= '</div>';
-		$res .= '<div class="globals"><b>COOKIE</b><br/><pre>'.h(print_r($_COOKIE, true)).'</pre></div>';
+		$res .= '<div class="globals"><b>COOKIE</b><br/><pre>' . h(print_r($_COOKIE, true)) . '</pre></div>';
 
 		if (!empty($_FILES)) {
-			$res .= '<div class="globals"><b>FILES</b><br/><pre>'.h(print_r($_FILES, true)).'</pre></div>';
+			$res .= '<div class="globals"><b>FILES</b><br/><pre>' . h(print_r($_FILES, true)) . '</pre></div>';
 		}
 
 		$res .= '</td></tr></table>';
@@ -266,7 +266,7 @@ jQuery(function() {
 		/** this->data... **/
 		//$res = '<table width="100%"><tr><td>';
 		//<b>this-&gt;data</b><br/>
-		$res = '<div class="globals"><pre>'.h(print_r($this->_View->data, true)).'</pre>';
+		$res = '<div class="globals"><pre>' . h(print_r($this->_View->data, true)) . '</pre>';
 		$res .= '</div>';
 		//$res.= '</td><td>';
 		//$res.= '</td></tr></table>';
@@ -291,7 +291,7 @@ jQuery(function() {
 		$viewVars = array_reverse($viewVars);
 
 		$res = '<table width="100%"><tr><td>';
-		$res .= '<div class="globals"><b>View Vars</b><br/>'.$this->pre($viewVars).'';
+		$res .= '<div class="globals"><b>View Vars</b><br/>' . $this->pre($viewVars) . '';
 		$res .= '</div>';
 		$res .= '</td></tr></table>';
 		$this->add(1, 'ViewVars', $res);
@@ -301,47 +301,47 @@ jQuery(function() {
 
 		$res .= '<h3>Params</h3>';
 		$res .= '<b>View parameters</b><br /><br />';
-		$res .= '$this->request->base: '.(!empty($this->_View->base) ? $this->_View->base : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->here: '.(!empty($this->_View->here) ? $this->_View->here : '<i>n/a</i>').'<br/>';
-		$res .= '$this->name: '.(!empty($this->_View->name) ? $this->_View->name : '<i>n/a</i>').'<br/>';
-		$res .= '$this->_ViewPath: '.(!empty($this->_View->viewPath) ? $this->_View->viewPath : '<i>n/a</i>').'<br/>';
-		$res .= '$this->themePath: '.(!empty($this->_View->themePath) ? $this->_View->themePath : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->action: '.(!empty($this->_View->action) ? $this->_View->action : '<i>n/a</i>').'<br/>';
-		$res .= '$this->ext: '.(!empty($this->_View->ext) ? $this->_View->ext : '<i>n/a</i>').'<br/>';
-		$res .= '$this->layout: '.(!empty($this->_View->layout) ? $this->_View->layout : '<i>n/a</i>').'<br/>';
-		$res .= '$this->uses: '.(!empty($this->_View->uses) ? $this->_View->uses : '<i>n/a</i>').'<br/>';
-		$res .= '$this->validationErrors: '.(!empty($this->_View->validationErrors) ?'<pre class="">'.h(print_r($this->_View->validationErrors, true)).'</pre>' : '<i>n/a</i>').'<br/>';
-		$res .= '$this->pageTitle: '.(!empty($this->_View->pageTitle) ? $this->_View->pageTitle : '<i>n/a</i>').'<br/>';
-		$res .= '$this->parent: '.(!empty($this->_View->parent) ? $this->_View->parent : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->base: ' . (!empty($this->_View->base) ? $this->_View->base : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->here: ' . (!empty($this->_View->here) ? $this->_View->here : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->name: ' . (!empty($this->_View->name) ? $this->_View->name : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->_ViewPath: ' . (!empty($this->_View->viewPath) ? $this->_View->viewPath : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->themePath: ' . (!empty($this->_View->themePath) ? $this->_View->themePath : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->action: ' . (!empty($this->_View->action) ? $this->_View->action : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->ext: ' . (!empty($this->_View->ext) ? $this->_View->ext : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->layout: ' . (!empty($this->_View->layout) ? $this->_View->layout : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->uses: ' . (!empty($this->_View->uses) ? $this->_View->uses : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->validationErrors: ' . (!empty($this->_View->validationErrors) ?'<pre class="">' . h(print_r($this->_View->validationErrors, true)) . '</pre>' : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->pageTitle: ' . (!empty($this->_View->pageTitle) ? $this->_View->pageTitle : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->parent: ' . (!empty($this->_View->parent) ? $this->_View->parent : '<i>n/a</i>') . '<br/>';
 		$res .= '<br /><br />';
 
 		/** URL **/
 		$res .= '<b>Url Resolving</b><br /><br />';
-		$res .= '$this->request->params[\'prefix\']: '.(!empty($this->_View->request->params['prefix']) ?h($this->_View->request->params['prefix']) : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->params[\'admin\']: '.(!empty($this->_View->request->params['admin']) ?h($this->_View->request->params['admin']) : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->params[\'plugin\']: '.(!empty($this->_View->request->params['plugin']) ?h($this->_View->request->params['plugin']) : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->params[\'prefix\']: ' . (!empty($this->_View->request->params['prefix']) ?h($this->_View->request->params['prefix']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'admin\']: ' . (!empty($this->_View->request->params['admin']) ?h($this->_View->request->params['admin']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'plugin\']: ' . (!empty($this->_View->request->params['plugin']) ?h($this->_View->request->params['plugin']) : '<i>n/a</i>') . '<br/>';
 
-		$res .= '$this->request->params[\'controller\']: '.(!empty($this->_View->request->params['controller']) ?h($this->_View->request->params['controller']) : '<i>n/a</i>').'<br/>';
-		$res .= '$this->request->params[\'action\']: '.(!empty($this->_View->request->params['action']) ?h($this->_View->request->params['action']) : '<i>n/a</i>').'<br/>';
+		$res .= '$this->request->params[\'controller\']: ' . (!empty($this->_View->request->params['controller']) ?h($this->_View->request->params['controller']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'action\']: ' . (!empty($this->_View->request->params['action']) ?h($this->_View->request->params['action']) : '<i>n/a</i>') . '<br/>';
 
 		if (!empty($this->_View->request->params['pass'])) {
-			$res .= '$this->request->params[\'pass\']:'.pre(h($this->_View->request->params['pass']));
+			$res .= '$this->request->params[\'pass\']:' . pre(h($this->_View->request->params['pass']));
 		}
 
 		if (!empty($this->_View->request->params['named'])) {
-			$res .= '$this->request->params[\'named\']:'.pre(h($this->_View->request->params['named']));
+			$res .= '$this->request->params[\'named\']:' . pre(h($this->_View->request->params['named']));
 		}
 		if (!empty($this->_View->request->params['ext'])) {
-			$res .= '$this->request->params[\'ext\']:'.pre(h($this->_View->request->params['ext']));
+			$res .= '$this->request->params[\'ext\']:' . pre(h($this->_View->request->params['ext']));
 		}
 		if (isset($this->_View->request->query)) {
-			$res .= '$this->request->query:'.pre(h($this->_View->request->query));
+			$res .= '$this->request->query:' . pre(h($this->_View->request->query));
 		}
 		if (!empty($this->_View->request->params['isAjax'])) {
-			$res .= '$this->request->params[\'isAjax\']:'.pre(h($this->_View->request->params['isAjax']));
+			$res .= '$this->request->params[\'isAjax\']:' . pre(h($this->_View->request->params['isAjax']));
 		}
 		if (!empty($this->_View->request->params['models'])) {
-			$res .= '$this->request->params[\'models\']: '.pre($this->_View->request->params['models']).'<br/>';
+			$res .= '$this->request->params[\'models\']: ' . pre($this->_View->request->params['models']) . '<br/>';
 		}
 
 		$res .= '</td><td>';
@@ -350,46 +350,46 @@ jQuery(function() {
 		$res .= '<h3>Live</h3>';
 		$res .= '<p>';
 
-		$res .= 'session_id(): '.session_id().'<br />';
-		$res .= 'time(): '.time().' ('.$this->Datetime->niceDate(time()).')'.BR;
+		$res .= 'session_id(): ' . session_id() . '<br />';
+		$res .= 'time(): ' . time() . ' (' . $this->Datetime->niceDate(time()) . ')' . BR;
 
-		$res .= 'Session Expiration: '.(!empty($_SESSION['Config']['time']) ?date(FORMAT_NICE_YMDHMS, $_SESSION['Config']['time']):'---').BR;
+		$res .= 'Session Expiration: ' . (!empty($_SESSION['Config']['time']) ?date(FORMAT_NICE_YMDHMS, $_SESSION['Config']['time']):'---') . BR;
 		$res .= '</p>';
 
 		$res .= '<h3>Environment</h3>';
 		$res .= '<p>';
-		$res .= 'env(\'HTTP_HOST\'): '.env('HTTP_HOST').' (official referer method)<br />';
-		$res .= 'env(\'HTTP_REFERER\'): '.env('HTTP_REFERER').' (not to trust!)<br />';
+		$res .= 'env(\'HTTP_HOST\'): ' . env('HTTP_HOST') . ' (official referer method)<br />';
+		$res .= 'env(\'HTTP_REFERER\'): ' . env('HTTP_REFERER') . ' (not to trust!)<br />';
 
-		$res .= 'env(\'CGI_MODE\'): '.env('CGI_MODE').'<br />';
-		$res .= 'env(\'PHP_SELF\'): '.env('PHP_SELF').'<br />';
-		$res .= 'env(\'HTTP_BASE\'): '.env('HTTP_BASE').'<br />';
-		$res .= 'env(\'DOCUMENT_ROOT\'): '.env('DOCUMENT_ROOT').'<br />';
+		$res .= 'env(\'CGI_MODE\'): ' . env('CGI_MODE') . '<br />';
+		$res .= 'env(\'PHP_SELF\'): ' . env('PHP_SELF') . '<br />';
+		$res .= 'env(\'HTTP_BASE\'): ' . env('HTTP_BASE') . '<br />';
+		$res .= 'env(\'DOCUMENT_ROOT\'): ' . env('DOCUMENT_ROOT') . '<br />';
 
-		$res .= 'env(\'SCRIPT_NAME\'): '.env('SCRIPT_NAME').'<br />';
-		$res .= 'env(\'REDIRECT_QUERY_STRING\'): '.env('REDIRECT_QUERY_STRING').'<br />';
-		$res .= 'env(\'REDIRECT_URL\'): '.env('REDIRECT_URL').'<br />';
-		$res .= 'URL length: '.(mb_strlen(env('REDIRECT_URL')) + mb_strlen(env('REDIRECT_QUERY_STRING'))). ' (of 2,048)<br />';
+		$res .= 'env(\'SCRIPT_NAME\'): ' . env('SCRIPT_NAME') . '<br />';
+		$res .= 'env(\'REDIRECT_QUERY_STRING\'): ' . env('REDIRECT_QUERY_STRING') . '<br />';
+		$res .= 'env(\'REDIRECT_URL\'): ' . env('REDIRECT_URL') . '<br />';
+		$res .= 'URL length: ' . (mb_strlen(env('REDIRECT_URL')) + mb_strlen(env('REDIRECT_QUERY_STRING'))) . ' (of 2,048)<br />';
 
-		$res .= 'env(\'HTTPS\'): '.env('HTTPS').'<br />';
+		$res .= 'env(\'HTTPS\'): ' . env('HTTPS') . '<br />';
 
-		$res .= 'env(\'REMOTE_ADDR\'): '. ($ip = env('REMOTE_ADDR')).'<br />';
+		$res .= 'env(\'REMOTE_ADDR\'): ' . ($ip = env('REMOTE_ADDR')) . '<br />';
 		$res .= 'gethostbyaddr(env(\'REMOTE_ADDR\')): ' . ($ip ? gethostbyaddr($ip) : '' ) . '<br />';
-		$res .= 'env(\'HTTP_USER_AGENT\'): '.env('HTTP_USER_AGENT').'<br />';
+		$res .= 'env(\'HTTP_USER_AGENT\'): ' . env('HTTP_USER_AGENT') . '<br />';
 
 		$res .= '</p>';
 
 		$res .= '<h3>System</h3>';
 
 		//$res .= 'Lazy Loading: '.($this->_lazyLoading() ? 'JA' : 'NEIN').'<br />';
-		$res .= 'Opcode Cache: '.($this->_opCodeCache() ? 'JA' : 'NEIN').'<br />';
-		$res .= 'XDebug: '.($this->_xdebug() ? 'JA' : 'NEIN').'<br />';
-		$res .= 'Memory Usage: '.CakeNumber::toReadableSize(DebugLib::memoryUsage()).' (Peak: '.CakeNumber::toReadableSize(DebugLib::peakMemoryUsage()).')';
+		$res .= 'Opcode Cache: ' . ($this->_opCodeCache() ? 'JA' : 'NEIN') . '<br />';
+		$res .= 'XDebug: ' . ($this->_xdebug() ? 'JA' : 'NEIN') . '<br />';
+		$res .= 'Memory Usage: ' . CakeNumber::toReadableSize(DebugLib::memoryUsage()) . ' (Peak: ' . CakeNumber::toReadableSize(DebugLib::peakMemoryUsage()) . ')';
 		$res .= '<br />';
-		$res .= 'PHP-Version: '.$this->versionPHP().'<br />';
+		$res .= 'PHP-Version: ' . $this->versionPHP() . '<br />';
 		# currently: just read out "http://www.php.net/downloads.php -> <h2>...</h2>"
 
-		$res .= 'DB-Version: '.$this->versionDB().'';
+		$res .= 'DB-Version: ' . $this->versionDB() . '';
 		$res .= '</p>';
 
 		$res .= '<p>';
@@ -399,15 +399,15 @@ jQuery(function() {
 			if (is_array($currentConfig)) {
 				$currentConfig = pre($currentConfig);
 			}
-			$res .= 'Database Config: '.$currentConfig;
+			$res .= 'Database Config: ' . $currentConfig;
 			$res .= '</p>';
 			$res .= '<p>';
 		}
 
 		$res .= '<u>Core Config:</u><br />';
-		$res .= 'Security Level: '.Configure::read('Security.level').'<br />';
+		$res .= 'Security Level: ' . Configure::read('Security.level') . '<br />';
 		$settings = Cache::settings();
-		$res .= 'Cache-Engine: '.(!empty($settings['engine']) ? $settings['engine'] : '<b>NONE</b>').'<br />';
+		$res .= 'Cache-Engine: ' . (!empty($settings['engine']) ? $settings['engine'] : '<b>NONE</b>') . '<br />';
 		if (!empty($settings['engine']) && $settings['engine'] === 'File') {
 			$res .= 'Cache-Folder writable: ' . (is_writable(TMP) ? 'YES' : '<b>NO</b>') . '<br />';
 		}
@@ -425,7 +425,7 @@ jQuery(function() {
 		foreach ($files as $key => $val) {
 			$files[$key] = str_replace(ROOT, '', $val);
 		}
-		$res .= '<details><summary>'.count($files).' '.__('Files').'</summary>';
+		$res .= '<details><summary>' . count($files) . ' ' . __('Files') . '</summary>';
 		$res .= pre($files);
 		$res .= '</details>';
 		$res .= '</p>';
@@ -433,7 +433,7 @@ jQuery(function() {
 		$res .= '<h3>Loaded Classes</h3>';
 		$res .= '<p>';
 		$classes = get_declared_classes();
-		$res .= '<details><summary>'.count($classes).' '.__('Classes').'</summary>';
+		$res .= '<details><summary>' . count($classes) . ' ' . __('Classes') . '</summary>';
 		$res .= pre($classes);
 		$res .= '</details>';
 		$res .= '</p>';
@@ -452,7 +452,7 @@ jQuery(function() {
 		if (!empty($options['custom'])) {
 			$res .= '<h3>Dynamic (controller/action)</h3>';
 			foreach ($options['custom'] as $key => $val) {
-				$res .= '<b>'.$key.':</b>'.BR;
+				$res .= '<b>' . $key . ':</b>' . BR;
 				$res .= pre(h($val)); #
 			}
 		}
@@ -462,7 +462,7 @@ jQuery(function() {
 		foreach ($infos as $info) {
 			$conf = Configure::read($info);
 			if (!empty($conf)) {
-				$res .= '<b>'.$info.':</b>';
+				$res .= '<b>' . $info . ':</b>';
 				$res .= pre(h($conf));
 			}
 		}
@@ -488,19 +488,18 @@ jQuery(function() {
 		$this->add(1, 'Configs', $res);
 
 		/** Locales **/
-		$infos = array('LC_TIME' => setlocale(LC_TIME, 0), 'LC_NUMERIC' => setlocale(LC_NUMERIC, 0), 'LC_MONETARY' => setlocale(LC_MONETARY, 0), 'LC_CTYPE' => setlocale(LC_CTYPE, 0), 'LC_COLLATE' => setlocale
-			(LC_COLLATE, 0), 'LC_MESSAGES' => @setlocale(LC_MESSAGES, 0).' (only on some systems available)', // seems to run only on some systems
+		$infos = array('LC_TIME' => setlocale(LC_TIME, 0), 'LC_NUMERIC' => setlocale(LC_NUMERIC, 0), 'LC_MONETARY' => setlocale(LC_MONETARY, 0), 'LC_CTYPE' => setlocale(LC_CTYPE, 0), 'LC_COLLATE' => setlocale(LC_COLLATE, 0), 'LC_MESSAGES' => @setlocale(LC_MESSAGES, 0) . ' (only on some systems available)', // seems to run only on some systems
 			);
 		$res = '<h3>Locale stuff</h3><ul>';
 		foreach ($infos as $name => $content) {
-			$res .= '<li><b>'.$name.':</b> '.$content.'</li>';
+			$res .= '<li><b>' . $name . ':</b> ' . $content . '</li>';
 		}
 		$res .= '</ul><br />';
 
 		$infos = array('date_default_timezone' => date_default_timezone_get(), 'time based on timezone' => date(FORMAT_NICE_YMDHMS), 'mb settings' => pre(mb_get_info()), );
 		$res .= '<b>internal stuff:</b><ul>';
 		foreach ($infos as $name => $content) {
-			$res .= '<li><b>'.$name.':</b> '.$content.'</li>';
+			$res .= '<li><b>' . $name . ':</b> ' . $content . '</li>';
 		}
 		$res .= '</ul><br />';
 		$this->add(1, 'Locales', $res);
@@ -513,22 +512,22 @@ jQuery(function() {
 			'http://www.google.de/search?client=firefox-a&amp;rls=org.mozilla%3Ade%3Aofficial&amp;channel=s&amp;hl=de&amp;q=cheat+sheet&amp;meta=&amp;btnG=Google-Suche' => 'Google General CheatSheet', );
 		$res .= 'Useful links:<ul>';
 		foreach ($links as $link => $name) {
-			$res .= '<li>'.$this->Html->link($name, $link).'</li>';
+			$res .= '<li>' . $this->Html->link($name, $link) . '</li>';
 		}
 		$res .= '</ul><br />';
 
 		$links = array('http://www.cakephp-forum.com/search.php?search_id=newposts' => 'German CakePHP-Forum', 'http://www.cakephpforum.net/index.php?act=Search&CODE=getnew' => 'English CakePHP-Forum', );
 		$res .= 'CakeCommunity:<ul>';
 		foreach ($links as $link => $name) {
-			$res .= '<li>'.$this->Html->link($name, $link).'</li>';
+			$res .= '<li>' . $this->Html->link($name, $link) . '</li>';
 		}
 		$res .= '</ul><br />';
 
 		if (false && defined('HTTP_HOST') && HTTP_HOST !== 'localhost') {
 			$res .= '<b>XHTML / CSS Validation</b><ul>';
 			$res .=
-				'<li><a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0?" height="26" title="check on it" /></a> <a href="http://jigsaw.w3.org/css-validator/validator?uri='.
-				$this->Html->url('/', true) . CSS_URL . $this->_View->layout.
+				'<li><a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0?" height="26" title="check on it" /></a> <a href="http://jigsaw.w3.org/css-validator/validator?uri=' .
+				$this->Html->url('/', true) . CSS_URL . $this->_View->layout .
 				'.css&warning=2&profile=css3&usermedium=all" target="_blank"><img src="http://www.w3.org/Icons/valid-css" title="check on it" alt="Valid CSS?" height="26" /></a>
 				</li>';
 			$res .= '</ul>';
@@ -541,7 +540,7 @@ jQuery(function() {
 			'<SCRIPT SRC=http://ha.ckers.org/xss.js></SCRIPT>');
 
 		foreach ($strings as $string) {
-			$res .= '<li><div style="border:1px solid yellow; padding:2px;">'.h($string).'</div></li>';
+			$res .= '<li><div style="border:1px solid yellow; padding:2px;">' . h($string) . '</div></li>';
 		}
 		$res .= '</ul><br />';
 
@@ -585,7 +584,7 @@ jQuery(function() {
 		}
 
 		# cache retrieval!!!
-		$handle = new File(CACHE.'persistent'.DS.'version_php.txt', true);
+		$handle = new File(CACHE . 'persistent' . DS . 'version_php.txt', true);
 		if (!$handle->exists() || !$handle->writable()) {
 			$this->log('cache not writable', 'error');
 			return false;
@@ -621,7 +620,7 @@ jQuery(function() {
 		}
 
 		# cache retrieval!!!
-		$handle = new File(CACHE.'persistent'.DS.'version_mysql.txt', true);
+		$handle = new File(CACHE . 'persistent' . DS . 'version_mysql.txt', true);
 		if (!$handle->exists() || !$handle->writable()) {
 			$this->log('cache not writable', 'error');
 			return false;
@@ -657,7 +656,7 @@ jQuery(function() {
 		}
 
 		# cache retrieval!!!
-		$handle = new File(CACHE.'persistent'.DS.'version_cake.txt', true);
+		$handle = new File(CACHE . 'persistent' . DS . 'version_cake.txt', true);
 		if (!$handle->exists() || !$handle->writable()) {
 			$this->log('cache not writable', 'error');
 			return false;
@@ -705,7 +704,7 @@ jQuery(function() {
 	public function readOutForeignPage($url, $start = '', $end = '') {
 		$file = @fopen($url, "r");
 
-		if ($file == null || trim((String)$file) === '') {
+		if ($file == null || trim((string)$file) === '') {
 			//echo "Service out of order";
 			return false;
 		}
@@ -758,11 +757,11 @@ jQuery(function() {
 		} elseif (!empty($new) && $dbVNumeric == $new) {
 			$newText = '<b>same :-)</span></b>';
 		} elseif (!empty($new)) {
-			$newText = '<b><span class="latestVersionWarning">'.$new.'</span></b>';
+			$newText = '<b><span class="latestVersionWarning">' . $new . '</span></b>';
 		}
 
-		$version = '<b>'.$dbV.'</b>';
-		$version .= ' &nbsp;|&nbsp; latest stable: '.$newText.'';
+		$version = '<b>' . $dbV . '</b>';
+		$version .= ' &nbsp;|&nbsp; latest stable: ' . $newText . '';
 
 		return $version;
 	}
@@ -779,11 +778,11 @@ jQuery(function() {
 		} elseif (!empty($new) && $current == $newNumeric) {
 			$newText = '<b>same :-)</span></b>';
 		} elseif (!empty($new)) {
-			$newText = '<b><span class="latestVersionWarning">'.$new.'</span></b>';
+			$newText = '<b><span class="latestVersionWarning">' . $new . '</span></b>';
 		}
 
-		$version = '<b>PHP '.$current.'</b>';
-		$version .= ' &nbsp;|&nbsp; latest stable: '.$newText.'';
+		$version = '<b>PHP ' . $current . '</b>';
+		$version .= ' &nbsp;|&nbsp; latest stable: ' . $newText . '';
 
 		return $version;
 	}
@@ -803,11 +802,11 @@ jQuery(function() {
 		} elseif (!empty($new) && $current == $new) {
 			$newText = '<b>same :-)</span></b>';
 		} elseif (!empty($new)) {
-			$newText = '<b><span class="cakeLatestVersionWarning">'.$new.'</span></b>';
+			$newText = '<b><span class="cakeLatestVersionWarning">' . $new . '</span></b>';
 		}
 
-		$version = '<b>'.$current.'</b>';
-		$version .= ' &nbsp;|&nbsp; latest stable: '.$newText.'';
+		$version = '<b>' . $current . '</b>';
+		$version .= ' &nbsp;|&nbsp; latest stable: ' . $newText . '';
 
 		return $version;
 	}
