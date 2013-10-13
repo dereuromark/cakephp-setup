@@ -33,7 +33,7 @@ class DebugLib {
 					'name' => $File->name(),
 					'size' => $File->size(),
 					'content' => $File->read(),
-					'modified'=> $File->lastChange(),
+					'modified' => $File->lastChange(),
 					'file' => $File->name() . '.' . $File->ext(),
 				);
 			}
@@ -151,9 +151,9 @@ class DebugLib {
 		$buffer = split(" ", fgets($fh, 4096));
 		fclose($fh);
 
-		$sys_ticks = trim($buffer[0]);
+		$sysTicks = trim($buffer[0]);
 
-		$mins = $sys_ticks / 60;
+		$mins = $sysTicks / 60;
 		$hours = $mins / 60;
 		$days = floor($hours / 24);
 		$hours = floor($hours - ($days * 24));
@@ -166,7 +166,7 @@ class DebugLib {
 		$result["days"] = $days;
 		$result["hours"] = $hours;
 		$result["mins"] = $mins;
-		$result['timestamp'] = time() - (int)$sys_ticks;
+		$result['timestamp'] = time() - (int)$sysTicks;
 
 		return $result;
 	}
@@ -411,12 +411,12 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		$transport = 'wget';
 		//$return_var = null;
 		//passthru("wget --version", $return_var);
-		$return_var = `wget --version`;
+		$returnVar = `wget --version`;
 		//die(returns($return_var));
-		if (!empty($return_var)) {
+		if (!empty($returnVar)) {
 			return true;
 		}
-		return $return_var;
+		return $returnVar;
 	}
 
 /** PHP Infos **/
@@ -663,8 +663,8 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	public function dbUptime() {
 		$uptime = $this->Configuration->query('show status like "Uptime"');
 		$value = $uptime[0]['STATUS']['Value'];
-		$db_uptime = intval($value / 3600) . 'h ' . str_pad(intval(($value / 60) % 60), 2, '0', STR_PAD_LEFT) . 'm';
-		return $db_uptime;
+		$dbUptime = intval($value / 3600) . 'h ' . str_pad(intval(($value / 60) % 60), 2, '0', STR_PAD_LEFT) . 'm';
+		return $dbUptime;
 	}
 
 	public function dbTime() {
@@ -704,10 +704,10 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 			return - 1;
 		}
 
-		$table_count = mysql_num_rows($tables);
+		$tableCount = mysql_num_rows($tables);
 		$size = 0;
 
-		for ($i = 0; $i < $table_count; $i++) {
+		for ($i = 0; $i < $tableCount; $i++) {
 			$tname = mysql_tablename($tables, $i);
 			$r = mysql_query("SHOW TABLE STATUS FROM " . $database . " LIKE '" . $tname . "'");
 			$data = mysql_fetch_array($r);
@@ -728,10 +728,10 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 			return - 1;
 		}
 
-		$table_count = mysql_num_rows($tables);
+		$tableCount = mysql_num_rows($tables);
 		$size = 0;
 
-		for ($i = 0; $i < $table_count; $i++) {
+		for ($i = 0; $i < $tableCount; $i++) {
 			$tname = mysql_tablename($tables, $i);
 			$r = mysql_query("SHOW TABLE STATUS FROM " . $database . " LIKE '" . $tname . "'");
 			$data = mysql_fetch_array($r);

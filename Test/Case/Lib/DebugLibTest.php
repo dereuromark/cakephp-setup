@@ -56,7 +56,7 @@ class DebugLibTest extends MyCakeTestCase {
 		$this->assertTrue(!empty($res) && $res >= 0);
 
 		# change at runtime
-		$newValue = ((int)$res)*2;
+		$newValue = ((int)$res) * 2;
 		$this->debug($newValue);
 		ini_set('memory_limit', $newValue . 'M');
 

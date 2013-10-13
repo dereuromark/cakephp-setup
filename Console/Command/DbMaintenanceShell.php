@@ -183,7 +183,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	public function getOptionParser() {
 		$subcommandParser = array(
 			'options' => array(
-				'dry-run'=> array(
+				'dry-run' => array(
 					'short' => 'd',
 					'help' => __d('cake_console', 'Dry run the command, nothing will actually be modified.'),
 					'boolean' => true

@@ -72,7 +72,7 @@ class InstallLib {
 		}
 
 		$content = ltrim(implode(',' . PHP_EOL, $content));
-		$content = String::insert($file, array('fields'=>$content, 'testFields'=>$testContent));
+		$content = String::insert($file, array('fields' => $content, 'testFields' => $testContent));
 
 		$target = InstallLib::configDir() . 'database.php';
 		return file_put_contents($target, $content);

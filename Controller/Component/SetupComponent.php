@@ -217,7 +217,7 @@ class SetupComponent extends Component {
 			return;
 		}
 		$referer = $Controller->referer();
-		if (strlen($referer) > 2 && (int)$this->Session->read('Report.404') < time()-5*MINUTE) {
+		if (strlen($referer) > 2 && (int)$this->Session->read('Report.404') < time() - 5 * MINUTE) {
 			$text = '404:' . TB . TB . '/' . $Controller->request->url .
 			NL . 'Referer:' . TB . '' . $referer .
 			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .
@@ -266,7 +266,7 @@ class SetupComponent extends Component {
 			}
 		}
 
-		$stack[] = array('url' => $url, 'time'=>time(), 'status' => $status, 'referer'=>$Controller->referer(), 'current'=>$Controller->request->here);
+		$stack[] = array('url' => $url, 'time' => time(), 'status' => $status, 'referer' => $Controller->referer(), 'current' => $Controller->request->here);
 		if (count($stack) > 5) {
 			array_shift($stack);
 		}

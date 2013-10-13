@@ -287,21 +287,21 @@ class DbDumpShell extends AppShell {
 	public function getOptionParser() {
 		$subcommandParser = array(
 			'options' => array(
-				'dry-run'=> array(
+				'dry-run' => array(
 					'short' => 'd',
 					'help' => __d('cake_console', 'Dry run the update, no files will actually be modified.'),
 					'boolean' => true
 				),
-				'tables'=> array(
+				'tables' => array(
 					'short' => 't',
 					'help' => __d('cake_console', 'custom tables to dump (separate using , and NO SPACES - use no prefix). Use -t only for prompting tables.'),
 				),
-				'compress'=> array(
+				'compress' => array(
 					'short' => 'c',
 					'help' => __d('cake_console', 'compress using gzip'),
 					'boolean' => true
 				),
-				'path'=> array(
+				'path' => array(
 					'short' => 'p',
 					'help' => __d('cake_console', 'Use a custom backup directory'),
 					'default' => ''

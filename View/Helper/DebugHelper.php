@@ -77,17 +77,17 @@ class DebugHelper extends AppHelper {
 	 * @access public (in the view via $html helper etc.)
 	 */
 	public function pre($array, $class = null, $escape = true) {
-		$pre_array = '';
-		$pre_class = '';
+		$preArray = '';
+		$preClass = '';
 
 		if (!empty($class)) {
-			$pre_class = $class;
+			$preClass = $class;
 		}
 		$res = Debugger::exportVar($array, 10);
 		if ($escape) {
 			$res = h($res);
 		}
-		return '<pre ' . $pre_class . '>' . nl2br($res) . '</pre>';
+		return '<pre ' . $preClass . '>' . nl2br($res) . '</pre>';
 	}
 
 	/**
@@ -235,8 +235,8 @@ jQuery(function() {
 	 */
 	protected function _debug($options = null) {
 		$res = '<div class="globals">';
-		$res .= '<div style="float:right">' . $this->Html->link('Error-Logs', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'logs')) . '</div>';
-		$res .= '<div style="float:right; margin-right: 20px;">' . $this->Html->link('Configuration', array('plugin'=>'setup', 'admin'=>true, 'controller'=>'configuration', 'action'=>'index')) . '</div>';
+		$res .= '<div style="float:right">' . $this->Html->link('Error-Logs', array('plugin' => 'setup', 'admin' => true, 'controller' => 'configuration', 'action' => 'logs')) . '</div>';
+		$res .= '<div style="float:right; margin-right: 20px;">' . $this->Html->link('Configuration', array('plugin' => 'setup', 'admin' => true, 'controller' => 'configuration', 'action' => 'index')) . '</div>';
 		//$res .=  xdebug_time_index();
 		$res .= 'Cake-Version: ' . $this->versionCake() . BR . BR;
 		$res .= __('rendered in %s', '<b>' . number_format(round(microtime(true) - $_SERVER['REQUEST_TIME'], 3), 3, ',', '') . ' s</b>') . BR;
@@ -310,19 +310,19 @@ jQuery(function() {
 		$res .= '$this->ext: ' . (!empty($this->_View->ext) ? $this->_View->ext : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->layout: ' . (!empty($this->_View->layout) ? $this->_View->layout : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->uses: ' . (!empty($this->_View->uses) ? $this->_View->uses : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->validationErrors: ' . (!empty($this->_View->validationErrors) ?'<pre class="">' . h(print_r($this->_View->validationErrors, true)) . '</pre>' : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->validationErrors: ' . (!empty($this->_View->validationErrors) ? '<pre class="">' . h(print_r($this->_View->validationErrors, true)) . '</pre>' : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->pageTitle: ' . (!empty($this->_View->pageTitle) ? $this->_View->pageTitle : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->parent: ' . (!empty($this->_View->parent) ? $this->_View->parent : '<i>n/a</i>') . '<br/>';
 		$res .= '<br /><br />';
 
 		/** URL **/
 		$res .= '<b>Url Resolving</b><br /><br />';
-		$res .= '$this->request->params[\'prefix\']: ' . (!empty($this->_View->request->params['prefix']) ?h($this->_View->request->params['prefix']) : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->request->params[\'admin\']: ' . (!empty($this->_View->request->params['admin']) ?h($this->_View->request->params['admin']) : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->request->params[\'plugin\']: ' . (!empty($this->_View->request->params['plugin']) ?h($this->_View->request->params['plugin']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'prefix\']: ' . (!empty($this->_View->request->params['prefix']) ? h($this->_View->request->params['prefix']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'admin\']: ' . (!empty($this->_View->request->params['admin']) ? h($this->_View->request->params['admin']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'plugin\']: ' . (!empty($this->_View->request->params['plugin']) ? h($this->_View->request->params['plugin']) : '<i>n/a</i>') . '<br/>';
 
-		$res .= '$this->request->params[\'controller\']: ' . (!empty($this->_View->request->params['controller']) ?h($this->_View->request->params['controller']) : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->request->params[\'action\']: ' . (!empty($this->_View->request->params['action']) ?h($this->_View->request->params['action']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'controller\']: ' . (!empty($this->_View->request->params['controller']) ? h($this->_View->request->params['controller']) : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->request->params[\'action\']: ' . (!empty($this->_View->request->params['action']) ? h($this->_View->request->params['action']) : '<i>n/a</i>') . '<br/>';
 
 		if (!empty($this->_View->request->params['pass'])) {
 			$res .= '$this->request->params[\'pass\']:' . pre(h($this->_View->request->params['pass']));
@@ -353,7 +353,7 @@ jQuery(function() {
 		$res .= 'session_id(): ' . session_id() . '<br />';
 		$res .= 'time(): ' . time() . ' (' . $this->Datetime->niceDate(time()) . ')' . BR;
 
-		$res .= 'Session Expiration: ' . (!empty($_SESSION['Config']['time']) ?date(FORMAT_NICE_YMDHMS, $_SESSION['Config']['time']):'---') . BR;
+		$res .= 'Session Expiration: ' . (!empty($_SESSION['Config']['time']) ? date(FORMAT_NICE_YMDHMS, $_SESSION['Config']['time']) : '---') . BR;
 		$res .= '</p>';
 
 		$res .= '<h3>Environment</h3>';
@@ -745,7 +745,7 @@ jQuery(function() {
 
 		$dbV = $configuration->query('select version() as version'); # DateBase Version?
 		$dbV = $dbV[0][0]['version'];
-		$dbVSplits = (strpos($dbV, '-') !== null?explode('-', $dbV) : array($dbV));
+		$dbVSplits = (strpos($dbV, '-') !== null ? explode('-', $dbV) : array($dbV));
 		$dbVNumeric = $dbVSplits[0];
 
 		$new = $this->retrieveLatestMYSQL();
@@ -769,7 +769,7 @@ jQuery(function() {
 	public function versionPHP() {
 		$current = phpversion();
 		$new = $this->retrieveLatestPHP();
-		$newNumeric = (strlen($new) > 4?substr($new, 4) : $new);
+		$newNumeric = (strlen($new) > 4 ? substr($new, 4) : $new);
 
 		if ($new === false) {
 			$newText = '<b>n/a</b> (could not be retrieved)';
