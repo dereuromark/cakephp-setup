@@ -43,8 +43,9 @@ class ClearShell extends AppShell {
 		'css' => 'css/ccss', 'js' => 'js/cjs'
 	);
 
-	//@deprecated with new command parser help?
-
+	/**
+	 * @deprecated with new command parser help?
+	 */
 	public function help() {
 		$help = <<<TEXT
 The Clear Shell deletes all tmp files (cache, logs)
@@ -81,6 +82,8 @@ TEXT;
 	/**
 	 * Delete logs and subfolders (traces, detailed logs, ...)
 	 * pass a specific folder to delete only this subfolder (defaults to all)
+	 *
+	 * @return void
 	 */
 	public function logs() {
 		$this->out('Deleting logs:');
@@ -106,6 +109,8 @@ TEXT;
 	 * groups:
 	 * - webroot to clear js/css cache
 	 * - app to clear application cache files
+	 *
+	 * @return void
 	 */
 	public function cache() {
 		if (count($this->args) === 1) {
@@ -150,7 +155,7 @@ TEXT;
 	 * Clears content of cache engines
 	 *
 	 * @param mixed any amount of strings - keys of configure cache engines
-	 * @return array associative array with cleanup results
+	 * @return void
 	 */
 	public function engines() {
 		if (!isset($this->_Cleaner)) {
@@ -164,16 +169,33 @@ TEXT;
 		}
 	}
 
+	/**
+	 * ClearShell::all()
+	 *
+	 * @return void
+	 */
 	public function all() {
 		$this->cache();
 		$this->logs();
 		$this->tmp();
 	}
 
+	/**
+	 * ClearShell::tmp()
+	 *
+	 * @return void
+	 */
 	public function tmp() {
 		$this->_empty(TMP, array(TMP . 'logs' . DS, TMP . 'cache' . DS));
 	}
 
+	/**
+	 * ClearShell::_empty()
+	 *
+	 * @param string $dir
+	 * @param array $excludes
+	 * @return void
+	 */
 	public function _empty($dir, $excludes = array()) {
 		$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
 			RecursiveIteratorIterator::CHILD_FIRST);
@@ -211,6 +233,11 @@ TEXT;
 		}
 	}
 
+	/**
+	 * ClearShell::webroot()
+	 *
+	 * @return void
+	 */
 	public function webroot() {
 		$this->css();
 		$this->js();
@@ -218,6 +245,8 @@ TEXT;
 
 	/**
 	 * Delete the given dir (must be relative to APP)
+	 *
+	 * @return void
 	 */
 	public function custom() {
 		if (empty($this->args)) {
@@ -225,27 +254,10 @@ TEXT;
 		}
 	}
 
-	//@deprecated
-
-	protected function _cache() {
-		clearCache(null, 'models', null);
-		clearCache(null, 'persistent', null);
-		clearCache(null, 'views', null);
-
-		if (!is_dir(CACHE . 'models')) {
-			mkdir(CACHE . 'models', CHMOD_PUBLIC, true);
-		}
-		if (!is_dir(CACHE . 'persistent')) {
-			mkdir(CACHE . 'persistent', CHMOD_PUBLIC, true);
-		}
-		if (!is_dir(CACHE . 'views')) {
-			mkdir(CACHE . 'views', CHMOD_PUBLIC, true);
-		}
-		$this->out('clear tmp: models, persistant, views');
-	}
-
 	/**
 	 * Expects /app/webroot/js/cjs/
+	 *
+	 * @return void
 	 */
 	public function js() {
 		$folder = WWW_ROOT . 'js' . DS . 'cjs' . DS;
@@ -264,6 +276,8 @@ TEXT;
 
 	/**
 	 * Expects /app/webroot/css/ccss/
+	 *
+	 * @return void
 	 */
 	public function css() {
 		$folder = WWW_ROOT . 'css' . DS . 'ccss' . DS;
@@ -291,11 +305,6 @@ TEXT;
 					'short' => 'r',
 					'help' => __d('cake_console', 'Remove subfolders, as well'),
 					'boolean' => true
-				),
-				'ext' => array(
-					'short' => 'e',
-					'help' => __d('cake_console', 'Specify extensions [php|txt|...]'),
-					//'default' => '' # null = all
 				),
 				'dry-run' => array(
 					'short' => 'd',
