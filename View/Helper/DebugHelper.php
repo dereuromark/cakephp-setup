@@ -392,16 +392,20 @@ jQuery(function() {
 		$res .= '</p>';
 
 		$res .= '<p>';
-		$configObject = new DATABASE_CONFIG();
-		if (method_exists($configObject, 'current')) {
-			$currentConfig = $configObject->current(true);
-			if (is_array($currentConfig)) {
-				$currentConfig = pre($currentConfig);
+		if (class_exists('DATABASE_CONFIG')) {
+			$configObject = new DATABASE_CONFIG();
+			if (method_exists($configObject, 'current')) {
+				$currentConfig = $configObject->current(true);
+				if (is_array($currentConfig)) {
+					$currentConfig = pre($currentConfig);
+				}
+				$res .= 'Database Config: ' . $currentConfig;
 			}
-			$res .= 'Database Config: ' . $currentConfig;
-			$res .= '</p>';
-			$res .= '<p>';
+		} else {
+			$res .= 'No Database Config found.';
 		}
+		$res .= '</p>';
+		$res .= '<p>';
 
 		$res .= '<u>Core Config:</u><br />';
 		$res .= 'Security Level: ' . Configure::read('Security.level') . '<br />';
