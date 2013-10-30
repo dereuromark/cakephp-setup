@@ -402,6 +402,7 @@ class SetupComponent extends Component {
 	/**
 	 * Clear tmp folders
 	 * if not specified, clear all tmp folders!?
+	 *
 	 * @param type
 	 * - c (cache)
 	 * - p (packed files)

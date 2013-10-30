@@ -270,6 +270,7 @@ class DbDumpShell extends AppShell {
 	/**
 	 * Returns available files to restore
 	 * in reverse order (newest ones first!)
+	 *
 	 * @return array Files
 	 */
 	protected function _getFiles() {

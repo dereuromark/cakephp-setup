@@ -43,7 +43,6 @@ class SystemLibTest extends MyCakeTestCase {
 	}
 
 	public function testTree() {
-
 	}
 
 }

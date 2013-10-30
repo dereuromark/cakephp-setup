@@ -26,7 +26,6 @@ class InstallController extends SetupAppController {
 	}
 
 	public function index() {
-
 	}
 
 	/**
@@ -60,7 +59,6 @@ class InstallController extends SetupAppController {
 	 * ?
 	 */
 	public function step2() {
-
 	}
 
 }

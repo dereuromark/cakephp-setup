@@ -4,11 +4,11 @@
  */
 class AllCakeTests extends PHPUnit_Framework_TestSuite {
 
-/**
- * Suite define the tests for this suite
- *
- * @return void
- */
+	/**
+	 * Suite define the tests for this suite
+	 *
+	 * @return void
+	 */
 	public static function suite() {
 		ini_set('memory_limit', '512M'); # needs around 300M usually
 

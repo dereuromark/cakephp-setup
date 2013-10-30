@@ -29,6 +29,7 @@ class DbDumpShellTest extends MyCakeTestCase {
 }
 
 class TestDbDumpShell extends DbDumpShell {
+
 	public function getFiles() {
 		return $this->_getFiles();
 	}

@@ -94,7 +94,6 @@ class DebugHelper extends AppHelper {
 	 * Change default "active/visible" tab
 	 */
 	public function setDefault() {
-
 	}
 
 	/**
@@ -548,12 +547,8 @@ jQuery(function() {
 
 		$this->add(2, 'Misc', $res);
 
-		# Add SQL on Cake >= 1.3
+		# Add SQL tab
 		$this->add(1, 'SQL-Log', $this->_View->element('sql_dump'));
-
-		//$res = '<table class="cake-sql-log debug_request"><tr><td>'.$cakeDebug.'</td></tr></table>';
-		//$this->add(3, 'SQL', $res);	// usually printed out right away (needs core hack!!!)
-
 	}
 
 	protected function _opCodeCache() {
@@ -574,6 +569,7 @@ jQuery(function() {
 	/**
 	 * Returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
+	 *
 	 * @return string Version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
 	public function retrieveLatestPHP() {
@@ -610,6 +606,7 @@ jQuery(function() {
 	/**
 	 * Returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
+	 *
 	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
 	public function retrieveLatestMYSQL() {
@@ -646,6 +643,7 @@ jQuery(function() {
 	/**
 	 * Returns version if newer than the current one
 	 * NEW: use CACHED version if available (to save time)
+	 *
 	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
 	 */
 	public function retrieveLatestStable() {

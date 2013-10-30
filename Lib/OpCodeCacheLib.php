@@ -62,13 +62,13 @@ class OpCodeCacheLib {
 class DetectOpCodeCache {
 
 	/**
-	* @public $extensions
-	*/
+	 * @public $extensions
+	 */
 	protected $extensions = array();
 
 	/**
-	* @public $instance
-	*/
+	 * @public $instance
+	 */
 	private static $instance;
 
 	public function __construct() {
@@ -86,18 +86,18 @@ class DetectOpCodeCache {
 
 		$object = self::getInstance();
 
-		return ($object->hasXcache() or
-			$object->hasWincache() or
-			$object->hasApc() or
-			$object->hasEaccelerator() or
-			$object->hasIoncube() or
-			$object->hasZend() or
+		return ($object->hasXcache() ||
+			$object->hasWincache() ||
+			$object->hasApc() ||
+			$object->hasEaccelerator() ||
+			$object->hasIoncube() ||
+			$object->hasZend() ||
 			$object->hasNusphere()
 		);
 	}
 
 	/**
-	* check if we have Xcache
+	 * check if we have Xcache
 
 	* @link http://xcache.lighttpd.net
 	* @return boolean
@@ -107,7 +107,7 @@ class DetectOpCodeCache {
 	}
 
 	/**
-	* check if we have Wincache
+	 * check if we have Wincache
 
 	* @link http://www.iis.net/expand/WinCacheForPHP
 	* @return boolean
@@ -117,7 +117,7 @@ class DetectOpCodeCache {
 	}
 
 	/**
-	* check if we have Alternative PHP Cache
+	 * check if we have Alternative PHP Cache
 
 	* @link http://pecl.php.net/package/apc
 	* @return boolean
@@ -127,7 +127,7 @@ class DetectOpCodeCache {
 	}
 
 	/**
-	* check if we have eAccelerator
+	 * check if we have eAccelerator
 
 	* @link http://eaccelerator.net
 	* @return boolean
@@ -138,7 +138,7 @@ class DetectOpCodeCache {
 	}
 
 	/**
-	* check if we have ionCube Loader
+	 * check if we have ionCube Loader
 
 	* @link http://www.php-accelerator.co.uk
 	* @return boolean
@@ -148,7 +148,7 @@ class DetectOpCodeCache {
 	}
 
 	/**
-	* check if we have Zend Optimizer+
+	 * check if we have Zend Optimizer+
 
 	* @link http://www.zend.com/products/server
 	* @return boolean
@@ -158,7 +158,7 @@ class DetectOpCodeCache {
 	}
 
 	/**
-	* check if we have nuSphere phpExpress
+	 * check if we have nuSphere phpExpress
 
 	* @link http://www.nusphere.com/products/phpexpress.htm
 	* @return boolean

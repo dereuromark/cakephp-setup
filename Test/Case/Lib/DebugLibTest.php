@@ -18,9 +18,9 @@ class DebugLibTest extends MyCakeTestCase {
 		$this->assertTrue(is_int($res) && $res == 134217728);
 	}
 
-/**
- * test
- */
+	/**
+	 * test
+	 */
 	public function testMemoryUsage() {
 		$res = $this->DebugLib->memoryUsage();
 		$this->debug($res);
@@ -37,7 +37,6 @@ class DebugLibTest extends MyCakeTestCase {
 		$res = $this->DebugLib->memoryLimitAdjustable();
 		$this->debug($res);
 		$this->assertTrue($res);
-
 	}
 
 	public function testConfigVar() {
@@ -128,7 +127,6 @@ class DebugLibTest extends MyCakeTestCase {
 		$res = $this->DebugLib->safeMode();
 		$this->debug($res);
 		$this->assertFalse($res);
-
 	}
 
 	public function testPhpVersion() {
@@ -193,7 +191,6 @@ class DebugLibTest extends MyCakeTestCase {
 		$res = $this->DebugLib->openBasedir();
 		$this->debug($res);
 		$this->assertTrue(is_array($res) && empty($res));
-
 	}
 
 	public function testUptime() {
