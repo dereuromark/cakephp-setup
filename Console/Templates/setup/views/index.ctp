@@ -21,7 +21,7 @@
 	<table class="list">
 		<tr>
 <?php
-	if (App::import('Model', $plugin.'.'.$modelClass) || App::import('Model', $modelClass)) {
+	if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
 		$relationModel = new $modelClass;
 	}
 	$skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
@@ -94,7 +94,7 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 				echo "\t\t<td>\n\t\t\t<?php echo nl2br(h(\${$singularVar}['{$modelClass}']['{$field}'])); ?>\n\t\t</td>\n";
 
 			} elseif ($schema[$field]['type'] === 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
-				echo "\t\t<td>\n\t\t\t<?php echo ".$modelClass."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
+				echo "\t\t<td>\n\t\t\t<?php echo " . $modelClass . "::" . $enumMethod . "(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
 			} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') !== false) {
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
@@ -113,12 +113,12 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 
 	/** CORE-MOD **/
 	if (!empty($upDown)) {
-		echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('up'), array('action'=>'up', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape'=>false)); ?>\n";
-		echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('down'), array('action'=>'down', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape'=>false)); ?>\n";
+		echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('up'), array('action' => 'up', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
+		echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('down'), array('action' => 'down', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
 	}
-	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('view'), array('action'=>'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape'=>false)); ?>\n";
-	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('edit'), array('action'=>'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape'=>false)); ?>\n";
-	echo "\t\t\t<?php echo \$this->Form->postLink(\$this->Format->icon('delete'), array('action'=>'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape'=>false), __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
+	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('view'), array('action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
+	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('edit'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
+	echo "\t\t\t<?php echo \$this->Form->postLink(\$this->Format->icon('delete'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false), __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
 	/** CORE-MOD END **/
 		echo "\t\t</td>\n";
 	echo "\t</tr>\n";

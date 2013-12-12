@@ -31,7 +31,7 @@
 	<fieldset>
 		<legend><?php echo "<?php echo __('" . $displayAction . " %s', __('{$singularHumanName}')); ?>";?></legend>
 <?php
-	if (App::import('Model', $plugin.'.'.$modelClass) || App::import('Model', $modelClass)) {
+	if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
 		$relationModel = new $modelClass;
 	}
 	$skipFields = array('slug', 'lft', 'rght', 'created', 'modified', 'approved', 'deleted', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
@@ -63,22 +63,22 @@
 		} elseif (in_array($field, $relations) || in_array($schema[$field]['type'], array('time', 'date', 'datetime'))) {
 			$options = array();
 			if (in_array($field, $relations)) {
-				$options[] = "'empty' => Configure::read('Select.defaultBefore').$emptyValue.Configure::read('Select.defaultAfter')";
+				$options[] = "'empty' => Configure::read('Select.defaultBefore') . $emptyValue . Configure::read('Select.defaultAfter')";
 			} else {
-				$options[] = "'empty'=>'- -'";
+				$options[] = "'empty' => '- -'";
 			}
 			if ($schema[$field]['type'] === 'datetime' || $schema[$field]['type'] === 'date') {
-				$options[] = "'dateFormat'=>'DMY'";
+				$options[] = "'dateFormat' => 'DMY'";
 			}
 			if ($schema[$field]['type'] === 'datetime' || $schema[$field]['type'] === 'time') {
-				$options[] = "'timeFormat'=>24";
+				$options[] = "'timeFormat' => 24";
 			}
 			$options = implode(', ', $options);
 
 			echo "\t\techo \$this->Form->input('{$field}', array({$options}));\n";
 
 		} elseif ($schema[$field]['type'] === 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
-			echo "\t\techo \$this->Form->input('{$field}', array('options' => ".Inflector::camelize($modelClass)."::".$enumMethod."(), 'empty' => Configure::read('Select.defaultBefore').$emptyValue.Configure::read('Select.defaultAfter')));\n";
+			echo "\t\techo \$this->Form->input('{$field}', array('options' => " . Inflector::camelize($modelClass) . "::" . $enumMethod . "(), 'empty' => Configure::read('Select.defaultBefore') . $emptyValue . Configure::read('Select.defaultAfter')));\n";
 		} else {
 			echo "\t\techo \$this->Form->input('{$field}');\n";
 		}

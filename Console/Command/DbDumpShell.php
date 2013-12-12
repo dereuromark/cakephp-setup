@@ -2,6 +2,8 @@
 App::uses('AppShell', 'Console/Command');
 App::uses('Inflector', 'Utility');
 App::uses('ConnectionManager', 'Model');
+App::uses('NumberLib', 'Tools.Utility');
+
 if (!defined('BACKUPS')) {
 	define('BACKUPS', APP . 'files' . DS . 'backup' . DS);
 }
@@ -161,7 +163,8 @@ class DbDumpShell extends AppShell {
 	 */
 	public function restore() {
 		$files = $this->_getFiles();
-		$this->out('Path: ' . $this->_path());
+		$path = $this->_path();
+		$this->out('Path: ' . $path);
 		$this->out('Files need to start with "dbdump_" and have either .sql or .gz extension.');
 		$this->out('Note that dumps created by "create" command will also DROP existing tables!', 2);
 
@@ -171,7 +174,8 @@ class DbDumpShell extends AppShell {
 		}
 
 		foreach ($files as $key => $file) {
-			$this->out('[' . $key . '] ' . $file);
+			$size = filesize($path . $file);
+			$this->out('[' . $key . '] ' . $file . ' (' . NumberLib::toReadableSize($size) . ')');
 		}
 
 		while (true) {

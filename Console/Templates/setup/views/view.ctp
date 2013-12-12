@@ -19,7 +19,7 @@
 <h2><?php echo "<?php  echo __('{$singularHumanName}');?>";?></h2>
 	<dl>
 <?php
-if (App::import('Model', $plugin.'.'.$modelClass) || App::import('Model', $modelClass)) {
+if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
 	$relationModel = new $modelClass;
 }
 $skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
@@ -48,7 +48,7 @@ foreach ($fields as $field) {
 	if ($isKey !== true) {
 
 		if ($field === 'modified' && !empty($fieldCreated)) {
-			echo "<?php if (\${$singularVar}['{$modelClass}']['created'] != \${$singularVar}['{$modelClass}']['{$field}']) { ?>\n";
+			echo "<?php if (\${$singularVar}['{$modelClass}']['created'] !== \${$singularVar}['{$modelClass}']['{$field}']) { ?>\n";
 		}
 
 		echo "\t\t<dt><?php echo __('" . Inflector::humanize($field) . "'); ?></dt>\n";
@@ -89,7 +89,7 @@ foreach ($fields as $field) {
 
 		/** enums **/
 		} elseif ($schema[$field]['type'] === 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
-			echo "\t\t<dd>\n\t\t\t<?php echo ".Inflector::camelize($modelClass)."::".$enumMethod."(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
+			echo "\t\t<dd>\n\t\t\t<?php echo " . Inflector::camelize($modelClass) . "::" . $enumMethod . "(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
 
 		/** CORE-MOD (protection against js injection by using h() function) **/
 		} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') !== false) {
