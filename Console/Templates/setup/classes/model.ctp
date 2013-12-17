@@ -36,7 +36,8 @@ foreach (array('hasOne', 'belongsTo', 'hasMany', 'hasAndBelongsToMany') as $asso
 ?>
  */
 class <?php echo $name ?> extends <?php echo $plugin; ?>AppModel {
-<?php if ($useDbConfig != 'default'): ?>
+
+<?php if ($useDbConfig !== 'default'): ?>
 	public $useDbConfig = '<?php echo $useDbConfig; ?>';
 
 <?php endif;?>
@@ -50,11 +51,11 @@ if (!empty($primaryKey) && $primaryKey !== 'id'): ?>
 <?php endif;
 
 /** CORE-MOD 2008-12-01 **/
-if (!empty($displayField) && $displayField != 'name' && $displayField != 'title'): ?>
+if (!empty($displayField) && $displayField !== 'name' && $displayField !== 'title'): ?>
 	public $displayField = '<?php echo $displayField; ?>';
 
 <?php endif; ?>
-<?php if (isset($actsAs)) { ?>
+<?php if (!empty($actsAs)) { ?>
 	public $actsAs = array(<?php if (count($actsAs) > 0): echo "\n\t"; endif; foreach ($actsAs as $actAs): echo "\t"; var_export($actAs); echo ",\n\t"; endforeach; ?>);
 
 <?php } ?>
@@ -65,7 +66,7 @@ if (!empty($displayField) && $displayField != 'name' && $displayField != 'title'
 	public $order = array();
 
 <?php } ?>
-	public $recursive = 2;
+	public $recursive = 0;
 
 <?php
 /** CORE-MOD END **/
