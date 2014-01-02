@@ -7,10 +7,14 @@ App::uses('File', 'Utility');
 if (!defined('BR')) {
 	define('BR', '<br />');
 }
-// only used in debug mode! needs to be started manually!!!
 
 /**
  * A helper to display a debug bar at the bottom of each page to quickly tab through all debug output.
+ *
+ * Only used in debug mode! needs to be started manually.
+ *
+ * Remember functionality can be modified using Debug.rememberEngine (ajax, cookie, ...)
+ * in Configure.
  *
  * @author Mark Scherer
  * @license MIT
@@ -18,19 +22,15 @@ if (!defined('BR')) {
  */
 class DebugHelper extends AppHelper {
 
-	public $helpers = array('Html', 'Session', 'Tools.Datetime'); // this needs to be started manually, as well
+	public $helpers = array('Html', 'Session', 'Tools.Datetime');
 
-	protected $level = 0;
+	public $level = 0;
 
-	protected $debugContent = array('1' => array(), '2' => array(), '3' => array());
+	public $debugContent = array('1' => array(), '2' => array(), '3' => array());
 
-	protected $Model = '';
+	public $model = null;
 
-	protected $rememberMe = false; //cookie or ajax (= session)
-
-	protected $rememberEngine = 'cookie';
-
-	public $packages = array('Tools.AppJs::debug');
+	protected $_rememberEngine = 'cookie';
 
 	public function __construct(View $View, $level = null, $options = array()) {
 		parent::__construct($View, $options);
@@ -44,13 +44,8 @@ class DebugHelper extends AppHelper {
 		$this->level = (int)$level;
 		$this->_debug($options);
 
-		if (Configure::read('Debug.ajax_remember')) {
-			$this->rememberMe = true;
-			$this->rememberEngine = 'ajax';
-		} elseif (Configure::read('Debug.cookie_remember')) {
-			$this->rememberMe = true;
-		} elseif (Configure::read('Debug.remember')) {
-			$this->rememberMe = true;
+		if (Configure::read('Debug.rememberEngine') !== null) {
+			$this->_rememberEngine = Configure::read('Debug.rememberEngine');
 		}
 	}
 
@@ -68,7 +63,7 @@ class DebugHelper extends AppHelper {
 	}
 
 	protected function _useModel($name) {
-		$this->Model = $name;
+		$this->model = $name;
 	}
 
 	/**
@@ -119,9 +114,9 @@ class DebugHelper extends AppHelper {
 		$output .= $this->Html->css('/setup/css/tabs');
 		$output .= $this->Html->script('/setup/js/tabs');
 
-		if ($this->rememberMe) {
+		if ($this->_rememberEngine) {
 
-			if ($this->rememberEngine === 'ajax') {
+			if ($this->_rememberEngine === 'ajax') {
 				$debugTab = $this->Session->read('Debug.tab');
 
 			} else {
@@ -150,7 +145,7 @@ class DebugHelper extends AppHelper {
 				$url .= '/';
 			}
 
-			if ($this->rememberEngine === 'ajax') {
+			if ($this->_rememberEngine === 'ajax') {
 				$script = '
 	$(\'.tabNavigation li a\').click(function () {
 		var selvalue = $(this).attr(\'id\');
@@ -303,15 +298,12 @@ jQuery(function() {
 		$res .= '$this->request->base: ' . (!empty($this->_View->base) ? $this->_View->base : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->request->here: ' . (!empty($this->_View->here) ? $this->_View->here : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->name: ' . (!empty($this->_View->name) ? $this->_View->name : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->_ViewPath: ' . (!empty($this->_View->viewPath) ? $this->_View->viewPath : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->viewPath: ' . (!empty($this->_View->viewPath) ? $this->_View->viewPath : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->themePath: ' . (!empty($this->_View->themePath) ? $this->_View->themePath : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->request->action: ' . (!empty($this->_View->action) ? $this->_View->action : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->ext: ' . (!empty($this->_View->ext) ? $this->_View->ext : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->layout: ' . (!empty($this->_View->layout) ? $this->_View->layout : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->uses: ' . (!empty($this->_View->uses) ? $this->_View->uses : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->validationErrors: ' . (!empty($this->_View->validationErrors) ? '<pre class="">' . h(print_r($this->_View->validationErrors, true)) . '</pre>' : '<i>n/a</i>') . '<br/>';
 		$res .= '$this->pageTitle: ' . (!empty($this->_View->pageTitle) ? $this->_View->pageTitle : '<i>n/a</i>') . '<br/>';
-		$res .= '$this->parent: ' . (!empty($this->_View->parent) ? $this->_View->parent : '<i>n/a</i>') . '<br/>';
+		$res .= '$this->validationErrors: ' . (!empty($this->_View->validationErrors) ? '<pre class="">' . h(print_r($this->_View->validationErrors, true)) . '</pre>' : '<i>n/a</i>') . '<br/>';
 		$res .= '<br /><br />';
 
 		/** URL **/
@@ -564,179 +556,19 @@ jQuery(function() {
 	}
 
 	protected function _xdebug() {
-		//return version_compare(phpversion('xdebug'), '2.2.0-dev', '>='
 		$v = phpversion('xdebug');
 		//$v = ini_get('xdebug.coverage_enable');
 		return $v;
 	}
 
 	/**
-	 * Returns version if newer than the current one
-	 * NEW: use CACHED version if available (to save time)
+	 * DebugHelper::versionDB()
 	 *
-	 * @return string Version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
+	 * @return string
 	 */
-	public function retrieveLatestPHP() {
-		$url = 'http://www.php.net/downloads.php';
-		$retrieve = Configure::read('Debug.check_for_php_version');
-		if (empty($retrieve)) {
-			return null;
-		}
-
-		# cache retrieval!!!
-		$handle = new File(CACHE . 'persistent' . DS . 'version_php.txt', true);
-		if (!$handle->exists() || !$handle->writable()) {
-			$this->log('cache not writable', 'error');
-			return false;
-		}
-		$cacheChange = $handle->lastChange();
-		$cacheContent = $handle->read();
-		//pr (time()-$cacheChange);
-		if (!empty($cacheContent) && (time() - $cacheChange) < 2 * 24 * 3600) { # 2daily updated
-			# use cached content
-			return $cacheContent;
-		}
-
-		# no cache, so get info and save to cache afterwards
-		$file = $this->readOutForeignPage($url, '<h2>', '</h2>');
-		if (!empty($file)) {
-			$handle->write($file, 'w', true);
-			return h($file);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns version if newer than the current one
-	 * NEW: use CACHED version if available (to save time)
-	 *
-	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
-	 */
-	public function retrieveLatestMYSQL() {
-		$url = 'http://dev.mysql.com/downloads/mysql/'; // http://dev.mysql.com/downloads/mysql/5.1.html
-		$retrieve = Configure::read('Debug.check_for_mysql_version');
-		if (empty($retrieve)) {
-			return null;
-		}
-
-		# cache retrieval!!!
-		$handle = new File(CACHE . 'persistent' . DS . 'version_mysql.txt', true);
-		if (!$handle->exists() || !$handle->writable()) {
-			$this->log('cache not writable', 'error');
-			return false;
-		}
-		$cacheChange = $handle->lastChange();
-		$cacheContent = $handle->read();
-		//pr (time()-$cacheChange);
-		if (!empty($cacheContent) && (time() - $cacheChange) < 2 * 24 * 3600) { # 2daily updated
-			# use cached content
-			return $cacheContent;
-		}
-
-		# no cache, so get info and save to cache afterwards
-		$file = $this->readOutForeignPage($url, '<td class="dlcol3">', '</td>');
-		if (!empty($file)) {
-			$handle->write($file, 'w', true);
-			return h($file);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns version if newer than the current one
-	 * NEW: use CACHED version if available (to save time)
-	 *
-	 * @return string version on SUCCESS, FALSE if could not find out, NULL if deactivated in config
-	 */
-	public function retrieveLatestStable() {
-		$url = 'http://cakeforge.org/projects/cakephp/';
-		$retrieve = Configure::read('Debug.check_for_cake_version');
-		if (empty($retrieve)) {
-			return null;
-		}
-
-		# cache retrieval!!!
-		$handle = new File(CACHE . 'persistent' . DS . 'version_cake.txt', true);
-		if (!$handle->exists() || !$handle->writable()) {
-			$this->log('cache not writable', 'error');
-			return false;
-		}
-		$cacheChange = $handle->lastChange();
-		$cacheContent = $handle->read();
-		//pr (time()-$cacheChange);
-		if (!empty($cacheContent) && (time() - $cacheChange) < 24 * 3600) { # daily updated
-			# use cached content
-			return h($cacheContent);
-		}
-
-		# no cache, so get info and save to cache afterwards
-		$file = $this->readOutForeignPage($url, '<strong>Stable</strong></td><td>', '<');
-		if (!empty($file)) {
-			$handle->write($file, 'w', true);
-			return h($file);
-		}
-		/*
-		$file = file_get_contents($url);
-		$file = strstr($file, '<table cellspacing="8" cellpadding="6" border="0">');
-		if (!empty($file)) {
-		//pr (substr($file, 0, 100))
-		$file = strstr($file, '<strong>Stable</strong></td><td>');
-		if (!empty($file)) {
-		$file = substr($file, mb_strlen('<strong>Stable</strong></td><td>'), 20);
-		if (!empty($file)) {
-		$pos = strpos($file, '<');
-		$file = trim(substr($file, 0, $pos));
-		if (!empty($file)) {
-		return h($file);
-		}
-		}
-		}
-
-		}
-		*/
-		return false;
-	}
-
-	/**
-	 * @return FALSE on failure, otherwise the found "content"
-	 * //TODO rewrite (without fopen etc)
-	 */
-	public function readOutForeignPage($url, $start = '', $end = '') {
-		$file = @fopen($url, "r");
-
-		if ($file == null || trim((string)$file) === '') {
-			//echo "Service out of order";
-			return false;
-		}
-		$i = 0;
-		while (!feof($file)) {
-
-			// Wenn das File entsprechend groß ist, kann es unter Umständen
-			// notwendig sein, die Zahl 2000 entsprechend zu erhöhen. Im Falle
-			// eines Buffer-Overflows gibt PHP eine entsprechende Fehlermeldung aus.
-
-			$row[$i] = fgets($file, 2000);
-			$i++;
-		}
-		fclose($file);
-
-		// Nun werden die Daten entsprechend gefiltert.
-		$result = null;
-		for ($j = 0; $j < $i; $j++) {
-			if ($resa = strstr($row[$j], $start)) {
-				$resb = str_replace($start, "", $resa);
-				$endpiece = strstr($resb, $end);
-				$result = str_replace($endpiece, "", $resb);
-			}
-		}
-		return trim($result);
-	}
-
 	public function versionDB() {
 		$configuration = null;
-		$Model = (!empty($this->Model) ? $this->Model : 'Setup.Configuration');
+		$Model = (!empty($this->model) ? $this->model : 'Setup.Configuration');
 		if (App::import('Model', $Model)) {
 			$configuration = ClassRegistry::init($Model);
 		}
@@ -744,72 +576,36 @@ jQuery(function() {
 		if (!is_object($configuration)) {
 			return '- n/a -';
 		}
-
 		$dbV = $configuration->query('select version() as version'); # DateBase Version?
 		$dbV = $dbV[0][0]['version'];
-		$dbVSplits = (strpos($dbV, '-') !== null ? explode('-', $dbV) : array($dbV));
-		$dbVNumeric = $dbVSplits[0];
-
-		$new = $this->retrieveLatestMYSQL();
-
-		if ($new === false) {
-			$newText = '<b>n/a</b> (could not be retrieved)';
-		} elseif ($new === null) {
-			$newText = '<b>n/a</b> (deactivated in config)';
-		} elseif (!empty($new) && $dbVNumeric == $new) {
-			$newText = '<b>same :-)</span></b>';
-		} elseif (!empty($new)) {
-			$newText = '<b><span class="latestVersionWarning">' . $new . '</span></b>';
-		}
+		//$dbVSplits = (strpos($dbV, '-') !== null ? explode('-', $dbV) : array($dbV));
+		//$dbVNumeric = $dbVSplits[0];
 
 		$version = '<b>' . $dbV . '</b>';
-		$version .= ' &nbsp;|&nbsp; latest stable: ' . $newText . '';
-
 		return $version;
 	}
 
+	/**
+	 * DebugHelper::versionPHP()
+	 *
+	 * @return string
+	 */
 	public function versionPHP() {
 		$current = phpversion();
-		$new = $this->retrieveLatestPHP();
-		$newNumeric = (strlen($new) > 4 ? substr($new, 4) : $new);
-
-		if ($new === false) {
-			$newText = '<b>n/a</b> (could not be retrieved)';
-		} elseif ($new === null) {
-			$newText = '<b>n/a</b> (deactivated in config)';
-		} elseif (!empty($new) && $current == $newNumeric) {
-			$newText = '<b>same :-)</span></b>';
-		} elseif (!empty($new)) {
-			$newText = '<b><span class="latestVersionWarning">' . $new . '</span></b>';
-		}
 
 		$version = '<b>PHP ' . $current . '</b>';
-		$version .= ' &nbsp;|&nbsp; latest stable: ' . $newText . '';
-
 		return $version;
 	}
 
 	/**
 	 * Show both current and latest cake version (if activated in configs)
+	 *
+	 * @return string
 	 */
 	public function versionCake() {
-		//$current = Configure::read('Cake.version');
 		$current = Configure::version();
 
-		$new = $this->retrieveLatestStable();
-		if ($new === false) {
-			$newText = '<b>n/a</b> (could not be retrieved)';
-		} elseif ($new === null) {
-			$newText = '<b>n/a</b> (deactivated in config)';
-		} elseif (!empty($new) && $current == $new) {
-			$newText = '<b>same :-)</span></b>';
-		} elseif (!empty($new)) {
-			$newText = '<b><span class="cakeLatestVersionWarning">' . $new . '</span></b>';
-		}
-
 		$version = '<b>' . $current . '</b>';
-		$version .= ' &nbsp;|&nbsp; latest stable: ' . $newText . '';
-
 		return $version;
 	}
 
