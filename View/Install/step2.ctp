@@ -9,4 +9,4 @@ TODO
 
 
 <br /><br /><br />
-<?php echo $this->Html->link(__('Go to admin area'), array('admin'=>true, 'controller'=>'setup', 'action'=>'index')); ?>
+<?php echo $this->Html->link(__('Go to admin area'), array('admin' => true, 'controller' => 'setup', 'action' => 'index')); ?>

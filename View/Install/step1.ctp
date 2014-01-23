@@ -32,10 +32,10 @@ File does not exist
 	echo $this->Form->input('host');
 	echo $this->Form->input('login');
 	echo $this->Form->input('password');
-	echo $this->Form->input('persistent', array('type'=>'checkbox', ));
+	echo $this->Form->input('persistent', array('type' => 'checkbox', ));
 	echo $this->Form->input('encoding');
 
-echo $this->Form->input('enhanced_database_class', array('type'=>'checkbox', 'label'=>__('Use enhanced database class (Setup plugin)')));
+echo $this->Form->input('enhanced_database_class', array('type' => 'checkbox', 'label' => __('Use enhanced database class (Setup plugin)')));
 
 ?>
 </fieldset>
