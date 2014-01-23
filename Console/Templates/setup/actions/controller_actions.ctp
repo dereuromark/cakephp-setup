@@ -45,21 +45,15 @@
 	/**
 	 * View method
 	 *
-<?php if (!$wannaUseSession): ?>
 	 * @throws NotFoundException
-<?php endif; ?>
 	 * @param string $id
 	 * @return void
 	 */
 	public function <?php echo $admin ?>view($id = null) {
 		$this-><?php echo $currentModelName ?>->recursive = 0;
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.id'=>$id))))) {
-<?php if ($wannaUseSession): ?>
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.id' => $id))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			return $this->Common->autoRedirect(array('action' => 'index'));
-<?php else: ?>
-			throw new NotFoundException(__('invalidRecord'));
-<?php endif; ?>
 		}
 		$this->set(compact('<?php echo $singularName; ?>'));
 	}
@@ -74,17 +68,11 @@
 		if ($this->Common->isPosted()) {
 			$this-><?php echo $currentModelName; ?>->create();
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
-<?php if ($wannaUseSession): ?>
 				$var = $this->request->data['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
 				$this->Common->flashMessage(__('record add %s saved', h($var)), 'success');
 				return $this->Common->postRedirect(array('action' => 'index'));
-<?php else: ?>
-				return $this->flash(__('record add saved'), array('action' => 'index'));
-<?php endif; ?>
 			}
-<?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('formContainsErrors'), 'error');
-<?php endif; ?>
 <?php if (!empty($modelObj->scaffoldDefaultValues)): ?>
 		} else {
 <?php
@@ -132,34 +120,22 @@
 	/**
 	 * Edit method
 	 *
-<?php if (!$wannaUseSession): ?>
 	 * @throws NotFoundException
-<?php endif; ?>
 	 * @param string $id
 	 * @return void
 	 */
 	public function <?php echo $admin; ?>edit($id = null) {
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.id'=>$id))))) {
-<?php if ($wannaUseSession): ?>
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.id'=>$id))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			return $this->Common->autoRedirect(array('action' => 'index'));
-<?php else: ?>
-			throw new NotFoundException(__('invalidRecord'));
-<?php endif; ?>
 		}
 		if ($this->Common->isPosted()) {
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
-<?php if ($wannaUseSession): ?>
 				$var = $this->request->data['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
 				$this->Common->flashMessage(__('record edit %s saved', h($var)), 'success');
 				return $this->Common->postRedirect(array('action' => 'index'));
-<?php else: ?>
-				return $this->flash(__('record edit saved'), array('action' => 'index'));
-<?php endif; ?>
 			}
-<?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('formContainsErrors'), 'error');
-<?php endif; ?>
 		} else {
 			$this->request->data = $<?php echo $singularName; ?>;
 		}
@@ -203,29 +179,17 @@
 	 */
 	public function <?php echo $admin; ?>delete($id = null) {
 		$this->request->onlyAllow('post', 'delete');
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
-<?php if ($wannaUseSession): ?>
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			return $this->Common->autoRedirect(array('action'=>'index'));
-<?php else: ?>
-			throw new NotFoundException(__('invalidRecord'));
-<?php endif; ?>
+			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$var = $<?php echo $singularName; ?>['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
 
 		if ($this-><?php echo $currentModelName; ?>->delete($id)) {
-<?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('record del %s done', h($var)), 'success');
 			return $this->Common->postRedirect(array('action' => 'index'));
-<?php else: ?>
-			return $this->flash(__('record del done'), array('action' => 'index'));
-<?php endif; ?>
 		}
-<?php if ($wannaUseSession): ?>
 		$this->Common->flashMessage(__('record del %s not done exception', h($var)), 'error');
-<?php else: ?>
-		return $this->flash(__('record del not done'), array('action' => 'index'));
-<?php endif; ?>
 		return $this->Common->autoRedirect(array('action' => 'index'));
 	}
 
@@ -238,12 +202,8 @@
 	 */
 	public function <?php echo $admin; ?>up($id = null) {
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
-<?php if ($wannaUseSession): ?>
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			return $this->Common->autoRedirect(array('action'=>'index'));
-<?php else: ?>
-			return $this->flash(__('invalidRecord'), array('action' => 'index'));
-<?php endif; ?>
+			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$this-><?php echo $currentModelName; ?>->moveUp($id, 1);
 		return $this->redirect(array('action' => 'index'));
@@ -256,13 +216,9 @@
 	 * @return void
 	 */
 	public function <?php echo $admin; ?>down($id = null) {
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
-<?php if ($wannaUseSession): ?>
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
-			return $this->Common->autoRedirect(array('action'=>'index'));
-<?php else: ?>
-			return $this->flash(__('invalidRecord'), array('action' => 'index'));
-<?php endif; ?>
+			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$this-><?php echo $currentModelName; ?>->moveDown($id, 1);
 		return $this->redirect(array('action' => 'index'));
