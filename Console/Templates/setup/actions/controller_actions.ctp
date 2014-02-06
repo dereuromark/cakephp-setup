@@ -19,10 +19,6 @@
 
 <?php if (empty($admin)) { ?>
 
-/****************************************************************************************
- * USER functions
- ****************************************************************************************/
-
 <?php } else { ?>
 
 /****************************************************************************************
@@ -125,7 +121,7 @@
 	 * @return void
 	 */
 	public function <?php echo $admin; ?>edit($id = null) {
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.id'=>$id))))) {
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.id' => $id))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -179,7 +175,7 @@
 	 */
 	public function <?php echo $admin; ?>delete($id = null) {
 		$this->request->onlyAllow('post', 'delete');
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields' => array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -201,7 +197,7 @@
 	 * @return void
 	 */
 	public function <?php echo $admin; ?>up($id = null) {
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions'=>array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields' => array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -216,7 +212,7 @@
 	 * @return void
 	 */
 	public function <?php echo $admin; ?>down($id = null) {
-		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields'=>array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
+		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields' => array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
