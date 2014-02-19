@@ -185,7 +185,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		if ($table) {
 			//TODO
 
-			# nothing found, return false
+			// nothing found, return false
 			return false;
 		}
 		return $res;
@@ -754,7 +754,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		$val = trim($val);
 		$last = strtolower($val[strlen($val) - 1]);
 		switch ($last) {
-				# The 'G' modifier is available since PHP 5.1.0
+				// The 'G' modifier is available since PHP 5.1.0
 			case 'g':
 				$val *= 1024;
 			case 'm':

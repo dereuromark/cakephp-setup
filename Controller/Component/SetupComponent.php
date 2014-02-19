@@ -53,7 +53,7 @@ class SetupComponent extends Component {
 	public function initialize(Controller $Controller) {
 		$this->Controller = $Controller;
 
-		# create missing tmp folders
+		// create missing tmp folders
 		if (Configure::read('debug') > 0) {
 			$this->setupDirs();
 		}
@@ -65,13 +65,13 @@ class SetupComponent extends Component {
 			CommonComponent::transientFlashMessage($message, 'warning');
 		}
 
-		# the following is only allowed with proper clearance
+		// the following is only allowed with proper clearance
 		if (!$this->isAuthorized()) {
 			//$Controller->Common->flashMessage(__('not possible in productive mode'), 'warning');
 			return;
 		}
 
-		# layout
+		// layout
 		if ($Controller->request->query('layout') !== null) {
 			if (($x = $this->setLayout($Controller->request->query('layout'))) !== false) {
 				$Controller->Common->flashMessage(__('layout %s activated', $Controller->request->query('layout')), 'success');
@@ -81,7 +81,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
-		# maintenance mode
+		// maintenance mode
 		if ($Controller->request->query('maintenance') !== null) {
 			if (($x = $this->setMaintenance($Controller->request->query('maintenance'))) !== false) {
 				$Controller->Common->flashMessage(__('maintenance activated'), 'success');
@@ -91,7 +91,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('maintenance'));
 		}
 
-		# debug mode
+		// debug mode
 		if ($Controller->request->query('debug') !== null) {
 			if (($x = $this->setDebug($Controller->request->query('debug'))) !== false) {
 				$Controller->Common->flashMessage(__('debug set to %s', $x), 'success');
@@ -101,7 +101,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('debug'));
 		}
 
-		# clear cache
+		// clear cache
 		if ($Controller->request->query('clearcache') !== null) {
 			if (($x = $this->clearCache($Controller->request->query('clearcache'))) !== false) {
 				$Controller->Common->flashMessage(__('cache cleared'), 'success');
@@ -111,7 +111,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('clearcache'));
 		}
 
-		# clear tmp - more powerful as clearcache
+		// clear tmp - more powerful as clearcache
 		if ($Controller->request->query('cleartmp') !== null) {
 			if (($x = $this->clearTmp($Controller->request->query('cleartmp'))) !== false) {
 				$Controller->Common->flashMessage(__('tmp cleared'), 'success');
@@ -121,7 +121,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('cleartmp'));
 		}
 
-		# clear session
+		// clear session
 		if ($Controller->request->query('clearsession') !== null) {
 			if ($this->clearSession()) {
 				$Controller->Common->flashMessage(__('session cleared'), 'success');
@@ -135,7 +135,7 @@ class SetupComponent extends Component {
 
 		// deprecated named params:
 
-		# set maintenance mode
+		// set maintenance mode
 		if (isset($Controller->request->params['named']['maintenance'])) {
 			if (($x = $this->setMaintenance($Controller->request->params['named']['maintenance'])) !== false) {
 				$Controller->Common->flashMessage(__('maintenance activated'), 'success');
@@ -145,7 +145,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('maintenance'));
 		}
 
-		# set debug
+		// set debug
 		if (isset($Controller->request->params['named']['debug'])) {
 			if (($x = $this->setDebug($Controller->request->params['named']['debug'])) !== false) {
 				$Controller->Common->flashMessage(__('debug set to %s', $x), 'success');
@@ -155,7 +155,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('debug'));
 		}
 
-		# clear cache
+		// clear cache
 		if (!empty($Controller->request->params['named']['clearcache'])) {
 			if (($x = $this->clearCache($Controller->request->params['named']['clearcache'])) !== false) {
 				$Controller->Common->flashMessage(__('cache cleared'), 'success');
@@ -165,7 +165,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('clearcache'));
 		}
 
-		# clear tmp - more powerful as clearcache
+		// clear tmp - more powerful as clearcache
 		if (!empty($Controller->request->params['named']['cleartmp'])) {
 			if (($x = $this->clearTmp($Controller->request->params['named']['cleartmp'])) !== false) {
 				$Controller->Common->flashMessage(__('tmp cleared'), 'success');
@@ -175,7 +175,7 @@ class SetupComponent extends Component {
 			$Controller->redirect($this->_cleanedUrl('cleartmp'));
 		}
 
-		# clear session
+		// clear session
 		if (!empty($Controller->request->params['named']['clearsession'])) {
 			if ($this->clearSession()) {
 				$Controller->Common->flashMessage(__('session cleared'), 'success');
@@ -423,10 +423,10 @@ class SetupComponent extends Component {
 	 */
 	public function clearCache($type) {
 		$this->Setup = new SetupLib();
-		# filesystem
+		// filesystem
 		$this->Setup->clearCache($type);
 
-		# memcache:
+		// memcache:
 		$config = 'default';
 		$this->Setup->clearCache2(false, $config);
 
@@ -535,7 +535,7 @@ class SetupComponent extends Component {
 			CACHE . 'views' . DS => 0775
 		);
 
-		# add js/css cache
+		// add js/css cache
 		if (Configure::read('Asset.combine')) {
 			$defaults[JS . 'cjs' . DS] = 0775;
 			$defaults[CSS . 'ccss' . DS] = 0775;

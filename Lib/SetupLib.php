@@ -76,7 +76,7 @@ class SetupLib extends Object {
 	 * @return void
 	 */
 	 public function tmpStructure() {
-		# check (tmp) folder integrity
+		// check (tmp) folder integrity
 		foreach ($this->folderRights as $folder => $right) {
 			$handle = new Folder($folder, true, $right);
 			if ($x = $handle->errors()) {
@@ -115,7 +115,7 @@ class SetupLib extends Object {
 				$typeArray[] = $types[$type];
 			}
 
-		# defaults
+		// defaults
 		if (empty($typeArray)) {
 			$typeArray = array('models', 'persistent', 'views');
 		}

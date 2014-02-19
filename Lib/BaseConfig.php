@@ -76,7 +76,7 @@ class BaseConfig {
 	 */
 	public function getEnvironmentName() {
 		$environment = (string) Configure::read('Environment.name');
-		# if no manual setting available, use host to decide which config to use
+		// if no manual setting available, use host to decide which config to use
 		if (empty($environment) && !empty($_SERVER['HTTP_HOST'])) {
 			$server = (string) $_SERVER['HTTP_HOST'];
 			foreach ($this->_environments as $e) {

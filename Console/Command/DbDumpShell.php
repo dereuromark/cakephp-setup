@@ -68,7 +68,7 @@ class DbDumpShell extends AppShell {
 		);
 		$sources = $db->listSources();
 		if (array_key_exists('tables', $this->params) && empty($this->params['tables'])) {
-			# prompt for tables
+			// prompt for tables
 			foreach ($sources as $key => $source) {
 				$this->out('[' . $key . '] ' . $source);
 			}

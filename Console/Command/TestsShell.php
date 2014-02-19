@@ -37,7 +37,7 @@ class TestsShell extends AppShell {
 		'Datasource',
 	);
 
-	# if specified (param deep [d]) it can match deep test folders (instead of flat ones)
+	// if specified (param deep [d]) it can match deep test folders (instead of flat ones)
 	//TODO
 	public $matches = array(
 		'Helper' => 'View/Helper',

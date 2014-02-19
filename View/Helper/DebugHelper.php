@@ -275,7 +275,7 @@ jQuery(function() {
 		if (isset($viewVars['scripts_for_layout'])) {
 			unset($viewVars['scripts_for_layout']);
 		}
-		# play nice with DebugKit
+		// play nice with DebugKit
 		if (isset($viewVars['debugToolbarPanels'])) {
 			unset($viewVars['debugToolbarPanels']);
 		}
@@ -378,7 +378,7 @@ jQuery(function() {
 		$res .= 'Memory Usage: ' . CakeNumber::toReadableSize(DebugLib::memoryUsage()) . ' (Peak: ' . CakeNumber::toReadableSize(DebugLib::peakMemoryUsage()) . ')';
 		$res .= '<br />';
 		$res .= 'PHP-Version: ' . $this->versionPHP() . '<br />';
-		# currently: just read out "http://www.php.net/downloads.php -> <h2>...</h2>"
+		// currently: just read out "http://www.php.net/downloads.php -> <h2>...</h2>"
 
 		$res .= 'DB-Version: ' . $this->versionDB() . '';
 		$res .= '</p>';
@@ -410,7 +410,7 @@ jQuery(function() {
 
 		$res .= '<u>Other:</u>';
 		$res .= '<p>';
-		# if salt and cipher key are altered in core.php
+		// if salt and cipher key are altered in core.php
 		Debugger::checkSecurityKeys();
 		$res .= '</p>';
 
@@ -463,7 +463,7 @@ jQuery(function() {
 		}
 
 		/*
-		# INCORRECT!!!
+		// INCORRECT!!!
 		$res .= '<h3>Controller-Components included</h3>';
 
 		$x = Inflector::camelize($this->_View->request->params['controller']).'Controller';
@@ -543,7 +543,7 @@ jQuery(function() {
 
 		$this->add(2, 'Misc', $res);
 
-		# Add SQL tab
+		// Add SQL tab
 		$this->add(1, 'SQL-Log', $this->_View->element('sql_dump'));
 	}
 

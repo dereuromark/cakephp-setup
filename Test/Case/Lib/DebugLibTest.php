@@ -54,12 +54,12 @@ class DebugLibTest extends MyCakeTestCase {
 		$this->debug($res);
 		$this->assertTrue(!empty($res) && $res >= 0);
 
-		# change at runtime
+		// change at runtime
 		$newValue = ((int)$res) * 2;
 		$this->debug($newValue);
 		ini_set('memory_limit', $newValue . 'M');
 
-		# NOT WORKING!!! changable in PHP_INI_ALL?
+		// NOT WORKING!!! changable in PHP_INI_ALL?
 		$res2 = $this->DebugLib->configVar('memory_limit');
 		$this->debug($res2);
 		$this->assertTrue(!empty($res2) && $res2 >= 0);
@@ -68,7 +68,7 @@ class DebugLibTest extends MyCakeTestCase {
 		$this->debug($res);
 		$this->assertTrue(!empty($res2) && $res2 >= 0);
 
-		# post_max_size and upload_max_filesize
+		// post_max_size and upload_max_filesize
 	}
 
 	public function testDns() {

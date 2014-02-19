@@ -155,8 +155,8 @@ class SystemLib {
 	public function diskSpace($rootPath) {
 		$space = array();
 		if (!WINDOWS) {
-			# b = bytes, a = files too, c = grand total, x = only current file system
-			# h = human readable
+			// b = bytes, a = files too, c = grand total, x = only current file system
+			// h = human readable
 			$command = sprintf('du -bx %s', $rootPath);
 			exec($command, $output, $status);
 			if ($status === 0) { # zero => success
@@ -185,7 +185,7 @@ class SystemLib {
 
 		}
 		if ($root === null) {
-			# shortest string?
+			// shortest string?
 			$root = $this->_findRoot($data);
 		}
 		if ($root === null) {
@@ -224,7 +224,7 @@ class SystemLib {
 			}
 		}
 		if ($root === null) {
-			# shortest string?
+			// shortest string?
 			$root = $this->_findRoot($data);
 		}
 		if ($root === null) {
@@ -240,7 +240,7 @@ class SystemLib {
 		$sizeAndPath = explode(TB, $data[$root]);
 		$urlToRoot = $sizeAndPath[1];
 		$sizeOfRoot = $sizeAndPath[0];
-		# root
+		// root
 		$res[DS] = array(
 			'size' => $sizeOfRoot,
 			'url' => $urlToRoot,
@@ -250,10 +250,10 @@ class SystemLib {
 			$sizeAndPath = explode(TB, $data[$i]);
 
 			$name = str_replace($urlToRoot, DS, $sizeAndPath[1]);
-			# split by DS
+			// split by DS
 			$pieces = explode(DS, $name);
 
-			# insert into array
+			// insert into array
 			//TODO
 			//$res[$name] = array();
 		}

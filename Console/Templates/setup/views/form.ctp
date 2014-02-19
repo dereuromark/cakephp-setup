@@ -42,7 +42,7 @@
 <?php
 	echo "\t<?php\n";
 
-	# display "empty" default value for belongsTo relations
+	// display "empty" default value for belongsTo relations
 	$relations = array();
 	if (!empty($associations['belongsTo'])) {
 		foreach ($associations['belongsTo'] as $rel) {
