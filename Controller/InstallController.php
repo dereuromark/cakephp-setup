@@ -7,10 +7,6 @@ App::uses('Install', 'Model');
  */
 class InstallController extends SetupAppController {
 
-	public $helpers = array('Html', 'Form', 'Session', 'Tools.Common', 'Tools.Format');
-
-	public $components = array('Session', 'Tools.Common');
-
 	public $uses = array('Install');
 
 	public function beforeFilter() {

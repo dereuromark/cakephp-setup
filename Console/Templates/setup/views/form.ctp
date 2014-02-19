@@ -57,9 +57,10 @@
 
 		if (strpos($action, 'add') !== false && $field === $primaryKey) {
 			continue;
-		/** mod! 2010-10-13 ms **/
+
 		} elseif (in_array($field, $skipFields) || ($field === 'sort' && $upDown)) {
 			continue;
+
 		} elseif (in_array($field, $relations) || in_array($schema[$field]['type'], array('time', 'date', 'datetime'))) {
 			$options = array();
 			if (in_array($field, $relations)) {
@@ -79,6 +80,7 @@
 
 		} elseif ($schema[$field]['type'] === 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
 			echo "\t\techo \$this->Form->input('{$field}', array('options' => " . Inflector::camelize($modelClass) . "::" . $enumMethod . "(), 'empty' => Configure::read('Select.defaultBefore') . $emptyValue . Configure::read('Select.defaultAfter')));\n";
+
 		} else {
 			echo "\t\techo \$this->Form->input('{$field}');\n";
 		}

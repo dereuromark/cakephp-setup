@@ -18,7 +18,7 @@
 <div class="page index">
 	<h2><?php echo "<?php echo __('{$pluralHumanName}');?>";?></h2>
 
-	<table class="list">
+	<table class="table list">
 		<tr>
 <?php
 	if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
@@ -30,11 +30,10 @@
 	}
 ?>
 <?php foreach ($fields as $field):
-	/** CORE-MOD - 2009-04-11 ms - no primaryKeys **/
+	// Don't display primaryKeys
 	if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] === 'primary') || ($field === 'sort' && $upDown)) {
 		continue;
 	}
-	/** CORE-MOD END **/
 ?>
 		<th><?php echo "<?php echo \$this->Paginator->sort('{$field}');?>";?></th>
 <?php endforeach;?>
@@ -45,11 +44,10 @@
 foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 	echo "\t<tr>\n";
 	foreach ($fields as $field) {
-		/** CORE-MOD (no id) **/
+		// Don't display primaryKeys
 		if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] === 'primary') || ($field === 'sort' && $upDown)) {
 			continue;
 		}
-		/** CORE-MOD END **/
 
 		$isKey = false;
 		if (!empty($associations['belongsTo'])) {
@@ -62,65 +60,54 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 			}
 		}
 		if ($isKey !== true) {
-			/** CORE-MOD (datetime) **/
 			if ($field === 'created' || $field === 'modified' || $schema[$field]['type'] === 'datetime') {
+				// Localize date/time output
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
-			/** CORE-MOD END **/
 
-			/** CORE-MOD (date) **/
 			} elseif ($schema[$field]['type'] === 'date') {
+				// Localize date only output
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Datetime->niceDate(\${$singularVar}['{$modelClass}']['{$field}'], FORMAT_NICE_YMD); ?>\n\t\t</td>\n";
-			/** CORE-MOD END **/
 
-			/** CORE-MOD (yes/no) **/
 			} elseif ($schema[$field]['type'] === 'boolean') {
+				// Boolean Yes/No images
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Format->yesNo(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
-			/** CORE-MOD END **/
 
-			/** CORE-MOD (protection against js injection by using h() function) **/
-			/*
-			} elseif (strlen($field) > 3 && substr($field, -3, 3)=='_id') {
-				# "unchanged" output?
-				// echo "\t\t<td>\n\t\t\t<?php echo \${$singularVar}['{$modelClass}']['{$field}']; ?>\n\t\t</td>\n";
-				# no difference to normal output right now...
-				echo "\t\t<td>\n\t\t\t<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
-			*/
-
-			/** CORE-MOD (nl2br + h) **/
 			} elseif ($schema[$field]['type'] === 'text') {
-				# "unchanged" output?
-				/* echo "\t\t<td>\n\t\t\t<?php echo \${$singularVar}['{$modelClass}']['{$field}']; ?>\n\t\t</td>\n"; */
-				# no difference to normal output right now...
+				// Newlines in textareas
 				echo "\t\t<td>\n\t\t\t<?php echo nl2br(h(\${$singularVar}['{$modelClass}']['{$field}'])); ?>\n\t\t</td>\n";
 
 			} elseif ($schema[$field]['type'] === 'integer' && method_exists($modelClass, $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
+				// Handle Tools "enums"
 				echo "\t\t<td>\n\t\t\t<?php echo " . $modelClass . "::" . $enumMethod . "(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
-			} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') !== false) {
+			} elseif ($schema[$field]['type'] === 'decimal' || $schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') !== false) {
+				// Money formatting
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
 			} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',') !== false) {
+				// Generic float value handling
 				echo "\t\t<td>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 
 			} else {
+				// Protection against js injection by using h() function)
 				echo "\t\t<td>\n\t\t\t<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</td>\n";
 			}
-			/** CORE-MOD END **/
 		}
 	}
 
 		echo "\t\t<td class=\"actions\">\n";
 
-	/** CORE-MOD **/
+	// Sortable Behavior buttons
 	if (!empty($upDown)) {
 		echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('up'), array('action' => 'up', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
 		echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('down'), array('action' => 'down', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
 	}
+
 	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('view'), array('action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
 	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('edit'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
 	echo "\t\t\t<?php echo \$this->Form->postLink(\$this->Format->icon('delete'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false), __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
-	/** CORE-MOD END **/
-		echo "\t\t</td>\n";
+
+	echo "\t\t</td>\n";
 	echo "\t</tr>\n";
 
 	echo "<?php } ?>\n";
@@ -135,20 +122,14 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 </div>
 
 <div class="actions">
-<?php
-	/*<h3><?php echo "<?php echo __('Actions'); ?>"; ?></h3>*/
-?>
 	<ul>
 		<li><?php echo "<?php echo \$this->Html->link(__('New %s', __('{$singularHumanName}')), array('action' => 'add')); ?>";?></li>
 <?php
 	$done = array();
 	foreach ($associations as $type => $data) {
 		foreach ($data as $alias => $details) {
-			if ($details['controller'] != $this->name && !in_array($details['controller'], $done)) {
+			if ($details['controller'] !== $this->name && !in_array($details['controller'], $done)) {
 				echo "\t\t<li><?php echo \$this->Html->link(__('List %s', __('" . Inflector::humanize($details['controller']) . "')), array('controller' => '{$details['controller']}', 'action' => 'index')); ?> </li>\n";
-				/*
-				echo "\t\t<li><?php echo \$this->Html->link(__('New %s', __('" . Inflector::humanize(Inflector::underscore($alias)) . "')), array('controller' => '{$details['controller']}', 'action' => 'add')); ?> </li>\n";
-				*/
 				$done[] = $details['controller'];
 			}
 		}
