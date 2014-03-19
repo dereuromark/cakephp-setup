@@ -81,6 +81,9 @@ To enable it, all you need to add is this snippet before the closing `</body>` t
 ?>
 ```
 
+Make sure you have AssetDispatcher enabled for it to include the required css/js code necessary for the tabs
+to be tabbable.
+
 ## Disclaimer
 Use at your own risk. Please provide any fixes or enhancements via issue or better pull request.
 
