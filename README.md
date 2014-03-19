@@ -61,6 +61,26 @@ Contains of:
 * DbDump shell
 * DbMaintenance shell
 
+### Debug Tabs
+As an alternative even before DebugKit existed I used a very basic tab box at the bottom to debug my apps.
+This is quite useful to me as it does not require a lot of clicking open content. It is all visible right away.
+To enable it, all you need to add is this snippet before the closing `</body>` tag in your layout ctp:
+```php
+<?php
+	if ($debug = Configure::read('debug')) {
+		$this->loadHelper('Setup.Debug', $debug);
+
+		// Custom tabs (optional)
+		if (!empty($debugItem)) {
+			$this->Debug->add(1, 'Custom Debug Dump', $debugItem);
+		}
+
+  	// Display the tabs
+		echo $this->Debug->show();
+	}
+?>
+```
+
 ## Disclaimer
 Use at your own risk. Please provide any fixes or enhancements via issue or better pull request.
 
