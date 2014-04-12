@@ -574,7 +574,7 @@ class SetupComponent extends Component {
 			$this->Email->reset();
 		}
 
-		$this->Email->to(Configure::read('Config.admin_email'), Configure::read('Config.admin_emailname'));
+		$this->Email->to(Configure::read('Config.adminEmail'), Configure::read('Config.adminName'));
 		$this->Email->subject($title);
 		$this->Email->template('simple_email');
 		$this->Email->viewVars(compact('text'));

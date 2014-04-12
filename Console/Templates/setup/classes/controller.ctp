@@ -4,18 +4,18 @@
  *
  * Allows templating of Controllers generated from bake.
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       Cake.Console.Templates.default.classes
  * @since         CakePHP(tm) v 1.3
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 echo "<?php\n";
@@ -71,7 +71,7 @@ if (in_array('Paginator', $components)) {
 	}
 }
 
-if (count($components)):
+if (count($components) && $components !== array('Session')):
 	echo "\tpublic \$components = array(";
 	for ($i = 0, $len = count($components); $i < $len; $i++):
 		if ($i != $len - 1):
@@ -80,13 +80,11 @@ if (count($components)):
 			echo "'" . Inflector::camelize($components[$i]) . "'";
 		endif;
 	endfor;
-	echo ");\n";
+	echo ");\n\n";
 endif;
 
-
-/** CORE-MOD 2008-12-01 **/
 if (isset($orderBy) && count($orderBy) > 0) {
-	echo "\tpublic \$paginate = array('order'=>array(";
+	echo "\tpublic \$paginate = array('order' => array(";
 	echo "\n\t";
 
 	foreach ($orderBy as $order => $mode) {
@@ -96,7 +94,7 @@ if (isset($orderBy) && count($orderBy) > 0) {
 		var_export($mode);
 		echo ",\n\t";
 	}
-	echo "));\n\n"; //'".$currentModelName.".modified'=>'DESC'
+	echo "));\n\n";
 
 } else {
 	echo "\tpublic \$paginate = array();\n\n";
@@ -104,12 +102,11 @@ if (isset($orderBy) && count($orderBy) > 0) {
 
 echo "\tpublic function beforeFilter() {\n";
 echo "\t\tparent::beforeFilter();\n";
-echo "\t}\n\n";
+echo "\t}\n\n\t";
 
 
-echo trim($actions);
-
-/** CORE-MOD END **/
+echo trim($actions) . "\n";
 
 endif; ?>
+
 }

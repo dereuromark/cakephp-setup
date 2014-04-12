@@ -25,7 +25,7 @@ class SetupLib extends Object {
 	 * @param array $url Array containing the current url
 	 * @return array Cleaned url array
 	 */
-	public function cleanedUrl($type, $urlArray) {
+	public static function cleanedUrl($type, $urlArray) {
 		$types = (array)$type;
 		foreach ($types as $type) {
 			if (isset($urlArray['named'][$type])) {

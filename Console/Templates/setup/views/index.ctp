@@ -1,18 +1,19 @@
 <?php
 /**
  *
- * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       Cake.Console.Templates.default.views
  * @since         CakePHP(tm) v 1.2.0.5234
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
 <div class="page index">
@@ -25,17 +26,21 @@
 		$relationModel = new $modelClass;
 	}
 	$skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
+	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFieldsIndex')) {
+		$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFieldsIndex);
+	}
 	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields')) {
 		$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFields);
 	}
 ?>
-<?php foreach ($fields as $field):
+<?php
+	foreach ($fields as $field):
 	// Don't display primaryKeys
-	if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] === 'primary') || ($field === 'sort' && $upDown)) {
+		if (in_array($field, $skipFields) || (!empty($schema[$field]['key']) && $schema[$field]['key'] === 'primary') || ($field === 'sort' && $upDown)) {
 		continue;
 	}
 ?>
-		<th><?php echo "<?php echo \$this->Paginator->sort('{$field}');?>";?></th>
+				<th><?php echo "<?php echo \$this->Paginator->sort('{$field}');?>";?></th>
 <?php endforeach;?>
 		<th class="actions"><?php echo "<?php echo __('Actions');?>";?></th>
 	</tr>
@@ -127,6 +132,8 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 <?php
 	$done = array();
 	foreach ($associations as $type => $data) {
+		// We dont need them
+		break;
 		foreach ($data as $alias => $details) {
 			if ($details['controller'] !== $this->name && !in_array($details['controller'], $done)) {
 				echo "\t\t<li><?php echo \$this->Html->link(__('List %s', __('" . Inflector::humanize($details['controller']) . "')), array('controller' => '{$details['controller']}', 'action' => 'index')); ?> </li>\n";
