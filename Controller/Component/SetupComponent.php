@@ -311,7 +311,7 @@ class SetupComponent extends Component {
 	/**
 	 * SetupComponent::isAuthorized()
 	 *
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function isAuthorized() {
 		if (!Configure::read('Config.productive')) {
@@ -327,7 +327,7 @@ class SetupComponent extends Component {
 	 * Set layout for this session.
 	 *
 	 * @param string $layout
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function setLayout($layout) {
 		if (!$layout) {
@@ -343,7 +343,7 @@ class SetupComponent extends Component {
 	 * -´duration query string can be used to set a timeout maintenance window
 	 *
 	 * @param mixed $maintenance
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function setMaintenance($maintenance) {
 		$ip = env('REMOTE_ADDR');
@@ -367,7 +367,7 @@ class SetupComponent extends Component {
 	 *
 	 * @param level: 0, 1, 2
 	 * @param type: session/ip [optional] (defaults to session)
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function setDebug($level, $type = 'session') {
 		$level = (int)$level;
@@ -419,7 +419,7 @@ class SetupComponent extends Component {
 	/**
 	 * Clear cache of tmp folders
 	 *
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function clearCache($type) {
 		$this->Setup = new SetupLib();
@@ -436,7 +436,7 @@ class SetupComponent extends Component {
 	/**
 	 * Destroy the current user's session.
 	 *
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function clearSession() {
 		$this->Session->destroy();
@@ -564,7 +564,7 @@ class SetupComponent extends Component {
 	 *
 	 * @param string $title
 	 * @param string $message
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	protected function _notification($title, $text) {
 		if (!isset($this->Email)) {

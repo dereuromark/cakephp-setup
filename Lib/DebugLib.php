@@ -138,7 +138,7 @@ class DebugLib {
 	 *
 	 * Returns system uptime, like Unix-Command "uptime"
 	 *
-	 * @param boolean $digit set true in order to prepend leading "0" before minutes
+	 * @param bool $digit set true in order to prepend leading "0" before minutes
 	 * @return array uptime uptime in days, hours and minutes - or empty on failure
 	 */
 	public function getUptime($digit = false) {
@@ -327,7 +327,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * Get current memory usage
 	 *
-	 * @return integer number of bytes ram currently in use. 0 if memory_get_usage() is not available.
+	 * @return int number of bytes ram currently in use. 0 if memory_get_usage() is not available.
 	 * @static
 	 */
 	public static function memoryUsage($real = false) {
@@ -340,7 +340,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	/**
 	 * Get peak memory use
 	 *
-	 * @return integer peak memory useage (in bytes).  Returns 0 if memory_get_peak_usage() is not available
+	 * @return int peak memory useage (in bytes).  Returns 0 if memory_get_peak_usage() is not available
 	 * @static
 	 */
 	public static function peakMemoryUsage($real = false) {
@@ -363,7 +363,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Tests if memory limit can be raised temporarily (necessary for image resizing etc)
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function memoryLimitAdjustable() {
 		$int = (int)$this->memoryLimit();
@@ -500,7 +500,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	public function magicQuotesGpc() {
 		$res = (bool)get_magic_quotes_gpc();
@@ -530,7 +530,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * 2010-07-30 ms
-	 * @return boolean
+	 * @return bool
 	 */
 	public function fileUpload() {
 		$res = (bool)ini_get('file_uploads');
@@ -578,7 +578,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Maximum amount of time each script may spend executing
-	 * @return integer
+	 * @return int
 	 */
 	public function maxExecTime() {
 		$res = (int)ini_get('max_execution_time');
@@ -587,7 +587,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Maximum amount of time each script may spend parsing request data
-	 * @return integer
+	 * @return int
 	 */
 	public function maxInputTime() {
 		$res = (int)ini_get('max_input_time');
@@ -596,7 +596,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Allow the <? tag.  Otherwise, only <?php and <script> tags are recognized. Using short tags should be avoided when developing applications or libraries that are meant for redistribution
-	 * @return boolean
+	 * @return bool
 	 */
 	public function shortOpenTag() {
 		$res = (bool)ini_get('short_open_tag');
@@ -605,7 +605,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * Should be OFF
-	 * @return boolean
+	 * @return bool
 	 */
 	public function safeMode() {
 		$res = (bool)ini_get('safe_mode');
@@ -695,7 +695,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/**
 	 * //should be in model?
-	 * @return integer: size in bytes
+	 * @return int: size in bytes
 	 */
 	public function fullDatabaseSize() {
 

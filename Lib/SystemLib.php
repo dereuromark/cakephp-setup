@@ -9,9 +9,21 @@
 class SystemLib {
 
 	/**
+	* Returns upload limit on configurations.
+	*
+	* @return int
+	*/
+	public static function uploadLimit() {
+		$maxUpload = (int)ini_get('upload_max_filesize');
+		$maxPost = (int)ini_get('post_max_size');
+		$memoryLimit = (int)ini_get('memory_limit');
+		return min($maxUpload, $maxPost, $memoryLimit);
+	}
+
+	/**
 	 * Turn bitmasked level into readable string
 	 *
-	 * @param integer Error levels as bitmask
+	 * @param int Error levels as bitmask
 	 * @return string Errors separated by pipe (|)
 	 */
 	public static function error2string($value) {
@@ -47,7 +59,7 @@ class SystemLib {
 	 * Turn readable string into bitmasked level
 	 *
 	 * @param string Errors separated by pipe (|)
-	 * @return integer Error levels as bitmask
+	 * @return int Error levels as bitmask
 	 */
 	public static function string2error($string) {
 		$levelNames = array(

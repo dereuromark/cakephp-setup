@@ -101,7 +101,7 @@ class BaseConfig {
 	/**
 	 * Return current name (or at least the settings itself...)
 	 *
-	 * @param boolean $nameOnly
+	 * @param bool $nameOnly
 	 * @return mixed nameString/configArray
 	 */
 	public function current($nameOnly = false) {

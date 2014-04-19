@@ -185,7 +185,7 @@ class TestsShell extends AppShell {
 	 * Create test case file based on templates
 	 * //TODO: make different templates per type
 	 *
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	protected function _isEmptyTest($type, $file, $path) {
 		$fullPath = $path . $file . 'Test.php';
@@ -200,7 +200,7 @@ class TestsShell extends AppShell {
 	 * Create test case file based on templates
 	 * //TODO: make different templates per type
 	 *
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	protected function _createTest($type, $class, $path) {
 
@@ -413,7 +413,7 @@ class All' . $name . 'Test extends PHPUnit_Framework_TestSuite {
 	 * TestsShell::_containsTestFiles()
 	 *
 	 * @param mixed $path
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	protected function _containsTestFiles($path) {
 		$Folder = new Folder($path);

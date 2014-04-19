@@ -26,7 +26,7 @@ class MaintenanceLib {
 	 *    $Maintenance->checkMaintenance();
 	 *  }
 	 *
-	 * @param boolean $exit
+	 * @param bool $exit
 	 * @return void
 	 */
 	public function checkMaintenance($exit = true) {
@@ -50,8 +50,8 @@ class MaintenanceLib {
 	 * If overwritable, it will set Configure value 'Maintenance.overwrite' with the
 	 * corresponding IP so the SetupComponent can trigger a warning message here.
 	 *
-	 * @param boolean $allowOverwrite Set to false to not allow access for whitelisted IPs.
-	 * @return boolean Success
+	 * @param bool $allowOverwrite Set to false to not allow access for whitelisted IPs.
+	 * @return bool Success
 	 */
 	public function isMaintenanceMode($allowOverwrite = true) {
 		if (!file_exists($this->file)) {
@@ -88,7 +88,7 @@ class MaintenanceLib {
 	 * Using 0 it will have no timeout.
 	 *
 	 * @param mixed $value False to deactivate, or Integer to activate.
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function setMaintenanceMode($value) {
 		if ($value === false) {
@@ -134,7 +134,7 @@ class MaintenanceLib {
 	 * Clear whitelist. If IPs are passed, only those will be removed, otherwise all.
 	 *
 	 * @param array $ips
-	 * @return boolean Success
+	 * @return bool Success
 	 */
 	public function clearWhitelist($ips = array()) {
 		$files = glob(TMP . "maintenanceOverride-*.txt");
@@ -154,7 +154,7 @@ class MaintenanceLib {
 	 * MaintenanceLib::_addToWhitelist()
 	 *
 	 * @param string $ip Valid IP address.
-	 * @return boolean Success.
+	 * @return bool Success.
 	 */
 	protected function _addToWhitelist($ip) {
 		$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ip) . '.txt';
