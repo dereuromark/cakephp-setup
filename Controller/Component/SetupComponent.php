@@ -66,7 +66,7 @@ class SetupComponent extends Component {
 		}
 
 		// the following is only allowed with proper clearance
-		if (!$this->isAuthorized()) {
+		if (!$this->isAuthorized() || strpos($Controller->request->here, '/test.php') !== false) {
 			//$Controller->Common->flashMessage(__('not possible in productive mode'), 'warning');
 			return;
 		}
@@ -123,60 +123,6 @@ class SetupComponent extends Component {
 
 		// clear session
 		if ($Controller->request->query('clearsession') !== null) {
-			if ($this->clearSession()) {
-				$Controller->Common->flashMessage(__('session cleared'), 'success');
-			} else {
-				$Controller->Common->flashMessage(__('session not cleared'), 'error');
-			}
-			//$clearCacheUrl = array('action' => $Controller->request->params['action']);
-			$Controller->redirect($this->_cleanedUrl('clearsession'));
-			//$Controller->redirect(array_merge($clearCacheUrl, $Controller->request->params['pass']));
-		}
-
-		// deprecated named params:
-
-		// set maintenance mode
-		if (isset($Controller->request->params['named']['maintenance'])) {
-			if (($x = $this->setMaintenance($Controller->request->params['named']['maintenance'])) !== false) {
-				$Controller->Common->flashMessage(__('maintenance activated'), 'success');
-			} else {
-				$Controller->Common->flashMessage(__('maintenance deactivated'), 'error');
-			}
-			$Controller->redirect($this->_cleanedUrl('maintenance'));
-		}
-
-		// set debug
-		if (isset($Controller->request->params['named']['debug'])) {
-			if (($x = $this->setDebug($Controller->request->params['named']['debug'])) !== false) {
-				$Controller->Common->flashMessage(__('debug set to %s', $x), 'success');
-			} else {
-				$Controller->Common->flashMessage(__('debug not set'), 'error');
-			}
-			$Controller->redirect($this->_cleanedUrl('debug'));
-		}
-
-		// clear cache
-		if (!empty($Controller->request->params['named']['clearcache'])) {
-			if (($x = $this->clearCache($Controller->request->params['named']['clearcache'])) !== false) {
-				$Controller->Common->flashMessage(__('cache cleared'), 'success');
-			} else {
-				$Controller->Common->flashMessage(__('cache not cleared'), 'error');
-			}
-			$Controller->redirect($this->_cleanedUrl('clearcache'));
-		}
-
-		// clear tmp - more powerful as clearcache
-		if (!empty($Controller->request->params['named']['cleartmp'])) {
-			if (($x = $this->clearTmp($Controller->request->params['named']['cleartmp'])) !== false) {
-				$Controller->Common->flashMessage(__('tmp cleared'), 'success');
-			} else {
-				$Controller->Common->flashMessage(__('tmp not cleared'), 'error');
-			}
-			$Controller->redirect($this->_cleanedUrl('cleartmp'));
-		}
-
-		// clear session
-		if (!empty($Controller->request->params['named']['clearsession'])) {
 			if ($this->clearSession()) {
 				$Controller->Common->flashMessage(__('session cleared'), 'success');
 			} else {
