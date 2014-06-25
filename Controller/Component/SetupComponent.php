@@ -320,11 +320,13 @@ class SetupComponent extends Component {
 	 */
 	public function setDebug($level, $type = 'session') {
 		$level = (int)$level;
-		if ($level < 0 || $level > 2) {
-			return false;
-		}
+
 		if ($type === 'session') {
-			return CakeSession::write('Setup.debug', $level);
+			if ($level < 0) {
+				$this->Session->delete('Setup.debug');
+				return false;
+			}
+			return $this->Session->write('Setup.debug', $level);
 		}
 
 		$cookieName = Configure::read('Session.cookie');
