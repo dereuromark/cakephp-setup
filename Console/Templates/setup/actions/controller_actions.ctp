@@ -163,7 +163,7 @@
 	 * @return void
 	 */
 	public function <?php echo $admin; ?>delete($id = null) {
-		$this->request->allowMethod('post', 'delete');
+		$this->request->allowMethod(array('post', 'delete'));
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>' => $id), 'fields' => array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
 			$this->Common->flashMessage(__('invalidRecord'), 'error');
 			return $this->Common->autoRedirect(array('action' => 'index'));

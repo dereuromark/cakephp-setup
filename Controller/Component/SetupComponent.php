@@ -12,6 +12,7 @@ App::uses('Component', 'Controller');
 App::uses('Folder', 'Utility');
 App::uses('ChmodLib', 'Tools.Utility');
 App::uses('SetupLib', 'Setup.Lib');
+App::uses('CommonComponent', 'Tools.Controller/Component');
 
 /**
  * Attach this to your AppController to power up debugging:
@@ -53,6 +54,11 @@ class SetupComponent extends Component {
 	public function initialize(Controller $Controller) {
 		$this->Controller = $Controller;
 
+		// For debug overwrite
+		if (($debug = $this->Session->read('Setup.debug')) !== null) {
+			Configure::write('debug', $debug);
+		}
+
 		// create missing tmp folders
 		if (Configure::read('debug') > 0) {
 			$this->setupDirs();
@@ -65,9 +71,8 @@ class SetupComponent extends Component {
 			CommonComponent::transientFlashMessage($message, 'warning');
 		}
 
-		// the following is only allowed with proper clearance
+		// The following is only allowed with proper clearance
 		if (!$this->isAuthorized() || strpos($Controller->request->here, '/test.php') !== false) {
-			//$Controller->Common->flashMessage(__('not possible in productive mode'), 'warning');
 			return;
 		}
 
@@ -94,7 +99,7 @@ class SetupComponent extends Component {
 		// debug mode
 		if ($Controller->request->query('debug') !== null) {
 			if (($x = $this->setDebug($Controller->request->query('debug'))) !== false) {
-				$Controller->Common->flashMessage(__('debug set to %s', $x), 'success');
+				$Controller->Common->flashMessage(__('debug set to %s', $Controller->request->query('debug')), 'success');
 			} else {
 				$Controller->Common->flashMessage(__('debug not set'), 'error');
 			}
@@ -128,9 +133,7 @@ class SetupComponent extends Component {
 			} else {
 				$Controller->Common->flashMessage(__('session not cleared'), 'error');
 			}
-			//$clearCacheUrl = array('action' => $Controller->request->params['action']);
 			$Controller->redirect($this->_cleanedUrl('clearsession'));
-			//$Controller->redirect(array_merge($clearCacheUrl, $Controller->request->params['pass']));
 		}
 
 		$this->issueMailing($Controller);
@@ -159,7 +162,7 @@ class SetupComponent extends Component {
 		if ($Controller->name !== 'CakeError' || empty($this->notifications['404'])) {
 			return;
 		}
-  	if (env('REMOTE_ADDR') === '127.0.0.1' || Configure::read('debug') > 0) {
+		if (env('REMOTE_ADDR') === '127.0.0.1' || Configure::read('debug') > 0) {
 			return;
 		}
 		$referer = $Controller->referer();
@@ -320,6 +323,10 @@ class SetupComponent extends Component {
 		if ($level < 0 || $level > 2) {
 			return false;
 		}
+		if ($type === 'session') {
+			return CakeSession::write('Setup.debug', $level);
+		}
+
 		$cookieName = Configure::read('Session.cookie');
 		if (empty($cookieName)) {
 			$cookieName = 'CAKEPHP';
