@@ -289,6 +289,8 @@ class SetupComponent extends Component {
 	 * Set maintance mode for everybody except for the own IP which will
 	 * be whitelisted.
 	 *
+	 * Alternatively, this can be done using the Console shell.
+	 *
 	 * -´duration query string can be used to set a timeout maintenance window
 	 *
 	 * @param mixed $maintenance
@@ -314,8 +316,8 @@ class SetupComponent extends Component {
 	/**
 	 * Override debug level
 	 *
-	 * @param level: 0, 1, 2
-	 * @param type: session/ip [optional] (defaults to session)
+	 * @param bool|int $level Debug level
+	 * @param string $type Type - session/ip [optional] (defaults to session)
 	 * @return bool Success
 	 */
 	public function setDebug($level, $type = 'session') {
@@ -329,6 +331,14 @@ class SetupComponent extends Component {
 			return $this->Session->write('Setup.debug', $level);
 		}
 
+		$file = TMP . 'debugOverride-' . $id . '.txt';
+		if ($level < 0) {
+			if (file_exists($file)) {
+				unlink($file);
+			}
+			return false;
+		}
+
 		$cookieName = Configure::read('Session.cookie');
 		if (empty($cookieName)) {
 			$cookieName = 'CAKEPHP';
@@ -336,7 +346,7 @@ class SetupComponent extends Component {
 		if ($type === 'session') {
 			$id = isset($_COOKIE[$cookieName]) ? $_COOKIE[$cookieName] : '';
 
-		} elseif ($type = 'ip') {
+		} elseif ($type === 'ip') {
 			$ip = env('REMOTE_ADDR');
 			$host = 'unknown';
 			if (!empty($ip)) {
@@ -345,7 +355,6 @@ class SetupComponent extends Component {
 			$id = $ip . '-' . $host;
 		}
 		if (!empty($id)) {
-			$file = TMP . 'debugOverride-' . $id . '.txt';
 			if (file_put_contents($file, $level)) {
 				return $level;
 			}
@@ -363,6 +372,7 @@ class SetupComponent extends Component {
 	 * - p (packed files)
 	 * - t (tmp folder)
 	 * - ...
+	 * @return bool Success
 	 */
 	public function clearTmp($type) {
 		$folders = $this->_defaults();
