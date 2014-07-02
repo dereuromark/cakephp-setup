@@ -23,7 +23,7 @@ class BaseConfig {
 
 	protected $_environments = array('default');
 
-	protected $_defaults = array(
+	protected $_defaultConfig = array(
 		'encoding' => 'utf8',
 		'persistent' => false,
 	);
@@ -44,10 +44,10 @@ class BaseConfig {
 				$this->_environments[] = $var;
 			}
 		}
-		$this->default = array_merge($this->_defaults, $this->default);
+		$this->default += $this->_defaultConfig;
 		$environment = $this->getEnvironmentName();
 		if ($environment && isset($this->{$environment})) {
-			$this->default = array_merge($this->default, $this->{$environment});
+			$this->default = $this->{$environment} + $this->default;
 		}
 
 		if (!isset($this->test)) {
@@ -64,7 +64,7 @@ class BaseConfig {
 			$this->test['prefix'] = 'zzz_';
 		}
 		if (!empty($this->test['merge'])) {
-			$this->test = array_merge($this->default, $this->test);
+			$this->test += $this->default;
 			unset($this->test['merge']);
 		}
 	}
