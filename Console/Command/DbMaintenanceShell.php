@@ -34,11 +34,15 @@ class DbMaintenanceShell extends AppShell {
 		$collate = 'utf8_unicode_ci';
 		$prefix = empty($db->config['prefix']) ? '' : $db->config['prefix'];
 
-		$script = "ALTER DATABASE $database CHARACTER SET $encoding COLLATE $collate;";
-		if (!$this->params['dry-run']) {
-			$db->execute($script);
-		} else {
-			$this->out($script);
+		try {
+			$script = "ALTER DATABASE $database CHARACTER SET $encoding COLLATE $collate;";
+			if (!$this->params['dry-run']) {
+				$db->execute($script);
+			} else {
+				$this->out($script);
+			}
+		} catch (Exception $e) {
+			$this->err('Could not alter database: ' . $e->getMessage().' - Skipping.');
 		}
 
 		$script = <<<SQL
