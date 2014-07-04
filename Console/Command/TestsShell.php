@@ -404,7 +404,7 @@ class All' . $name . 'Test extends PHPUnit_Framework_TestSuite {
 	 */
 	protected function _path() {
 		if (!empty($this->params['plugin'])) {
-			return App::pluginPath($this->params['plugin']) . 'Test' . DS;
+			return CakePlugin::path($this->params['plugin']) . 'Test' . DS;
 		}
 		return TESTS;
 	}
