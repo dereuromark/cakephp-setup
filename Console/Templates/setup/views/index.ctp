@@ -108,7 +108,7 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 
 	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('view'), array('action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
 	echo "\t\t\t<?php echo \$this->Html->link(\$this->Format->icon('edit'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false)); ?>\n";
-	echo "\t\t\t<?php echo \$this->Form->postLink(\$this->Format->icon('delete'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false), __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
+	echo "\t\t\t<?php echo \$this->Form->postLink(\$this->Format->icon('delete'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('escape' => false, 'confirm' => __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}']))); ?>\n";
 
 	echo "\t\t</td>\n";
 	echo "\t</tr>\n";
