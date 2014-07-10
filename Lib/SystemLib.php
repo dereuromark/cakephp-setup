@@ -9,10 +9,10 @@
 class SystemLib {
 
 	/**
-	* Returns upload limit on configurations.
-	*
-	* @return int
-	*/
+	 * Returns upload limit on configurations.
+	 *
+	 * @return int
+	 */
 	public static function uploadLimit() {
 		$maxUpload = (int)ini_get('upload_max_filesize');
 		$maxPost = (int)ini_get('post_max_size');

@@ -42,7 +42,7 @@ class DbMaintenanceShell extends AppShell {
 				$this->out($script);
 			}
 		} catch (Exception $e) {
-			$this->err('Could not alter database: ' . $e->getMessage().' - Skipping.');
+			$this->err('Could not alter database: ' . $e->getMessage() . ' - Skipping.');
 		}
 
 		$script = <<<SQL
