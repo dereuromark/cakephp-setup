@@ -1,0 +1,15 @@
+<?php
+
+App::uses('BaseConfig', 'Setup.Lib');
+
+class DATABASE_CONFIG extends BaseConfig {
+
+	public $default = array(
+		:fields
+	);
+	
+	public $test = array(
+		:testFields
+	);
+
+}

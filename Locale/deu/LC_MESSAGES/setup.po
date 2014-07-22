@@ -1,0 +1,3 @@
+
+msgid "Maintenance work"
+msgstr "Wartungsarbeiten - in Kürze wieder verfügbar"

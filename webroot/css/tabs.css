@@ -1,0 +1,90 @@
+div.tabs {
+	text-align:left;font-family: verdana,helvetica,arial,sans-serif;font-size: 12px;
+}
+
+div.tabs table tr td {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+    color: black;
+}
+
+div.tabs table {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-right: 0 none;
+    clear: both;
+    color: #333333;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+div.tabs th {
+  border-color: #555555;
+  border-style: none none solid;
+  border-width: 0 0 2px;
+  padding: 4px;
+  text-align: left;
+	vertical-align:middle;
+	color: blue;
+}
+
+div.tabs ul, div.tabs li {
+    margin: 0 12px;
+}
+
+div.tabs {
+	background:#2A2A2F none repeat scroll 0 0;
+	clear:both;
+	padding:0 10px 10px;
+}
+
+div.tabs h3 {
+    color: #009900;
+    font-size: 18px;
+    text-shadow: 1px 1px 2px rgba(0, 90, 0, 0.4);
+	font-weight: bold;
+    margin-bottom: 0.5em;
+    margin-top: 0.1em;
+}
+
+div.tabs ul, #box ol {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+}
+
+div.tabs ul.tabNavigation {
+	overflow:hidden;
+	padding-top:10px;
+}
+
+
+div.tabs ul.tabNavigation li {
+	float:left;
+}
+
+div.tabs ul.tabNavigation li a {
+background:#1C1C1C none repeat scroll 0 0;
+float:left;
+margin-right:2px;
+padding:5px 10px;
+}
+div.tabs ul.tabNavigation li a.active {
+	background:#222225 none repeat scroll 0 0;
+	color:#CCCCCC;
+}
+
+div.tabs a {
+color:#7D94BC;
+font-weight:bold;
+text-decoration:none;
+}
+
+div.tabs div.content {
+background:#222225 none repeat scroll 0 0;
+color:#999999;
+display:none;
+padding:20px 20px 1px;
+}

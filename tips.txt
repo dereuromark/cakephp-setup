@@ -1,0 +1,5 @@
+Import Huge SQL file:
+	...\bin\mysql -u root dbname < dumpfilename.sql
+
+Same other direction:
+	...\bin\mysqldump -h host -u root -p dbname > dumpfilename.sql 

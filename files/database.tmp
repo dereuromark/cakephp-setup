@@ -1,0 +1,13 @@
+<?php
+
+class DATABASE_CONFIG  {
+
+	public $default = array(
+		:fields
+	);
+	
+	public $test = array(
+		:testFields
+	);
+
+}
