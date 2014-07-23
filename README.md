@@ -1,4 +1,4 @@
-# CakePHP Setup Plugin
+# CakePHP Setup Plugin [![Build Status](https://api.travis-ci.org/dereuromark/cakephp-setup.png)](https://travis-ci.org/dereuromark/cakephp-setup)
 
 This plugin provides useful tools for managing a cakephp app.
 
@@ -86,9 +86,6 @@ to be tabbable.
 
 ## Disclaimer
 Use at your own risk. Please provide any fixes or enhancements via issue or better pull request.
-
-### Status
-[![Build Status](https://api.travis-ci.org/dereuromark/setup.png)](https://travis-ci.org/dereuromark/setup)
 
 ### Branching strategy
 The master branch is the currently active and maintained one and works with the current 2.x stable version.
