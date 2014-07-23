@@ -1,9 +1,9 @@
 {
-	"name": "blindner/cakephp-setup",
+	"name": "dereuromark/cakephp-setup",
 	"type": "cakephp-plugin",
 	"description": "A CakePHP plugin containing lots of useful management tools",
 	"keywords": ["cakephp", "plugin", "setup", "management", "backup", "bake", "templates"],
-	"homepage": "https://github.com/blindner/cakephp-setup",
+	"homepage": "https://github.com/dereuromark/cakephp-setup",
 	"license": "MIT",
 	"authors": [
 		{
@@ -16,9 +16,6 @@
 		"composer/installers": "*"
 	},
 	"extra": {
-		"installer-name": "Setup",
-		"installer-paths": {
-			"Plugin/Setup/": ["blindner/cakephp-setup"]
-		}
+		"installer-name": "Setup"
 	}
 }
