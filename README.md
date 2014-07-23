@@ -8,7 +8,7 @@ This plugin provides useful tools for managing a cakephp app.
 * Clone/Copy the files in this directory into `app/Plugin/Setup`
 * Don't forget to include the plugin in your bootstrap's `CakePlugin::load()` statement or use `CakePlugin::loadAll()`
 
-Tip: You can also use packagist now @ https://packagist.org/packages/dereuromark/setup-cakephp
+Tip: You can also use packagist now @ https://packagist.org/packages/dereuromark/cakephp-setup
 
 
 ## Documentation
