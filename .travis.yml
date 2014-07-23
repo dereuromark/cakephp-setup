@@ -3,39 +3,37 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 5.5
 
 env:
-  - CAKE_VERSION=master
-  - CAKE_VERSION=2.5
+  global:
+    - REPO_NAME=setup
+    - PLUGIN_NAME=Setup
+    - REQUIRE=""
+
+  matrix:
+    - DB=mysql CAKE_VERSION=master
+    - DB=mysql CAKE_VERSION=2.6
+
+matrix:
+  include:
+    - php: 5.4
+      env:
+        - DB=mysql CAKE_VERSION=master COVERALLS=1
 
 before_script:
-  - git clone --depth 1 --branch $CAKE_VERSION git://github.com/cakephp/cakephp ../cakephp && cd ../cakephp
-  - rm -R app
-  - git clone --depth 1 --branch master git://github.com/dereuromark/tools-app app
-  - git clone --depth 1 --branch master git://github.com/dereuromark/tools plugins/Tools
-  - cp -R ../setup plugins/Setup
-  - sh -c "mysql -e 'CREATE DATABASE cakephp_test;'"
-  - mkdir ./app/tmp
-  - mkdir ./app/tmp/logs
-  - mkdir ./app/tmp/sessions
-  - mkdir ./app/tmp/tests
-  - mkdir ./app/tmp/cache
-  - mkdir ./app/tmp/cache/persistent
-  - mkdir ./app/tmp/cache/models
-  - chmod -R 0777 ./app/tmp
-  - echo "<?php
-    class DATABASE_CONFIG {
-    public \$test = array(
-      'datasource' => 'Database/Mysql',
-      'database' => 'cakephp_test',
-      'host' => '0.0.0.0',
-      'login' => 'travis',
-      'persistent' => false,
-    );
-    }" > app/Config/database.php
-  - cd app
+  - git clone -b master https://github.com/FriendsOfCake/travis.git --depth 1 ../travis
+  - ../travis/before_script.sh
+  - cd ../cakephp/app
+  - echo "Configure::write('Security.salt', 'AycG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi');" >> Config/bootstrap.php
+  - echo "Configure::write('Security.cipherSeed', '16659201697453542496749683615');" >> Config/bootstrap.php
+  - cd ..
+
 script:
-  - ../lib/Cake/Console/cake test Setup AllSetup --stderr
+  - ../travis/script.sh
+
+after_success:
+  - ../travis/after_success.sh
 
 notifications:
   email: false
