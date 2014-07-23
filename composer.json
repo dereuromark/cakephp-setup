@@ -1,5 +1,5 @@
 {
-	"name": "dereuromark/setup-cakephp",
+	"name": "dereuromark/cakephp-setup",
 	"type": "cakephp-plugin",
 	"description": "A CakePHP plugin containing lots of useful management tools",
 	"keywords": ["cakephp", "plugin", "setup", "management", "backup", "bake", "templates"],
