@@ -1,4 +1,8 @@
-# CakePHP Setup Plugin [![Build Status](https://api.travis-ci.org/dereuromark/cakephp-setup.png)](https://travis-ci.org/dereuromark/cakephp-setup)
+# CakePHP Setup Plugin
+
+[![Build Status](https://api.travis-ci.org/dereuromark/cakephp-setup.png)](https://travis-ci.org/dereuromark/cakephp-setup)
+[![License](https://poser.pugx.org/dereuromark/cakephp-setup/license.png)](https://packagist.org/packages/dereuromark/cakephp-setup)
+[![Total Downloads](https://poser.pugx.org/dereuromark/setup-cakephp/d/total.png)](https://packagist.org/packages/dereuromark/cakephp-setup)
 
 This plugin provides useful tools for managing a cakephp app.
 
