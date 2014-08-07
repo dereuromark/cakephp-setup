@@ -381,6 +381,18 @@ jQuery(function() {
 		// currently: just read out "http://www.php.net/downloads.php -> <h2>...</h2>"
 
 		$res .= 'DB-Version: ' . $this->versionDB() . '';
+
+		if (CakePlugin::loaded('XHProf') && Configure::read('XHProf.html')) {
+			$res .=  '<br /><br />';
+			$res .= 'Profiling: ';
+			$url = sprintf(
+				Configure::read('XHProf.html') . '/index.php?run=%s&source=%s',
+				Configure::read('XHProf.replaceRunId'),
+				Configure::read('XHProf.namespace')
+			);
+			$res .= $this->Html->link('XHProf Output', $url);
+		}
+
 		$res .= '</p>';
 
 		$res .= '<p>';
