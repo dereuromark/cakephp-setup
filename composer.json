@@ -8,12 +8,29 @@
 	"authors": [
 		{
 			"name": "Mark Scherer",
+			"role": "Author",
 			"homepage": "http://www.dereuromark.de"
 		}
 	],
 	"require": {
-		"php": ">=5.3",
-		"composer/installers": "*"
+		"php": ">=5.4",
+		"composer/installers": "*",
+		"cakephp/cakephp": "3.0.*-dev"
+	},
+	"autoload": {
+		"psr-4": {
+			"Setup\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Setup\\Test\\": "tests",
+			"Cake\\Test\\Fixture\\": "vendor/cakephp/cakephp/tests/Fixture"
+		}
+	},
+	"support":{
+		"source": "https://github.com/dereuromark/cakephp-setup",
+		"issues": "https://github.com/dereuromark/cakephp-setup/issues"
 	},
 	"extra": {
 		"installer-name": "Setup"
