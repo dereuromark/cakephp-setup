@@ -11,7 +11,7 @@
 		<ini name="apc.enable_cli" value="1"/>
 	</php>
 	<testsuites>
-		<testsuite name="Tools">
+		<testsuite name="Setup">
 			<directory>./tests/</directory>
 		</testsuite>
 	</testsuites>
@@ -26,9 +26,6 @@
 		<whitelist>
 			<directory suffix=".php">Plugin/Setup</directory>
 			<exclude>
-				<directory suffix=".php">Plugin/Setup/Vendor</directory>
-				<directory suffix=".php">Plugin/Setup/Config/Schema</directory>
-				<directory suffix=".php">Plugin/Setup/Test</directory>
 				<directory suffix=".php">Plugin/Setup/TestSuite</directory>
 			</exclude>
 		</whitelist>

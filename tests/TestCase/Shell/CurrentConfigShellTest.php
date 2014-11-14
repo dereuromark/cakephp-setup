@@ -1,9 +1,15 @@
 <?php
+namespace Setup\Test\TestCase\Shell;
 
-App::uses('CurrentConfigShell', 'Setup.Console/Command');
-App::uses('MyCakeTestCase', 'Tools.TestSuite');
+use Setup\Shell\CurrentConfigShell;
+use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleOutput;
+use Cake\Console\Shell;
+use Cake\Core\Plugin;
+use Cake\TestSuite\TestCase;
 
-class CurrentConfigShellTest extends MyCakeTestCase {
+
+class CurrentConfigShellTest extends TestCase {
 
 	public $CurrentConfigShell;
 
@@ -15,7 +21,7 @@ class CurrentConfigShellTest extends MyCakeTestCase {
 
 	public function testObject() {
 		$this->assertTrue(is_object($this->CurrentConfigShell));
-		$this->assertInstanceOf('CurrentConfigShell', $this->CurrentConfigShell);
+		$this->assertInstanceOf('Setup\Shell\CurrentConfigShell', $this->CurrentConfigShell);
 	}
 
 }

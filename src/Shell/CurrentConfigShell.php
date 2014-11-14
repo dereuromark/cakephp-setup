@@ -1,7 +1,9 @@
 <?php
-App::uses('AppShell', 'Console/Command');
-App::uses('ConnectionManager', 'Model');
+namespace Setup\Shell;
 
+use Cake\Console\Shell;
+use App\Model\ConnectionManager;
+use Cake\Cache\Cache;
 /**
  * Outputs the current configuration
  * - DB (default and test)
@@ -12,7 +14,7 @@ App::uses('ConnectionManager', 'Model');
  * @cakephp 2
  * @license MIT
  */
-class CurrentConfigShell extends AppShell {
+class CurrentConfigShell extends Shell {
 
 	/**
 	 * CurrentConfigShell::main()

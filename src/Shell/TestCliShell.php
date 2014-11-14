@@ -1,5 +1,6 @@
 <?php
-App::uses('AppShell', 'Console/Command');
+namespace Setup;
+namespace ;
 
 /**
  * Test CLI for Router and alike.
