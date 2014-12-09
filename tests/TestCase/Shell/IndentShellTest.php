@@ -12,7 +12,7 @@ use Cake\TestSuite\TestCase;
  * Class TestCompletionStringOutput
  *
  */
-class TestWhitespaceOutput extends ConsoleOutput {
+class TestIndentOutput extends ConsoleOutput {
 
 	public $output = '';
 
@@ -34,7 +34,7 @@ class IndentShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->out = new TestWhitespaceOutput();
+		$this->out = new TestIndentOutput();
 		$io = new ConsoleIo($this->out);
 
 		$this->Shell = $this->getMock(
