@@ -76,6 +76,7 @@ class IndentShellTest extends TestCase {
 		$this->assertContains('found: 1', $output);
 
   	$result = file_get_contents(TMP . 'indent.php');
+
 		$expected = file_get_contents($this->testFilePath . 'indent_basic.php');
 		$this->assertTextEquals($expected, $result);
 	}
@@ -95,6 +96,7 @@ class IndentShellTest extends TestCase {
 		$this->assertContains('found: 1', $output);
 
 		$result = file_get_contents(TMP . 'indent.php');
+
 		$expected = file_get_contents($this->testFilePath . 'indent_again.php');
 		$this->assertTextEquals($expected, $result);
 	}

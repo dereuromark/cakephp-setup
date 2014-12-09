@@ -6,9 +6,9 @@ class Foo {
 		$mixedSpaces && $tabs;
 	}
 
-	 	public function tabSpacetab() {
-	 				$totallyWeird;
-	 	}
+		public function tabSpacetab() {
+					$totallyWeird;
+		}
 
 	public function twoSpaces() {
 	$onlyFourHereThen;
