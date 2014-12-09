@@ -8,20 +8,46 @@ use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
 
+/**
+ * Class TestCompletionStringOutput
+ *
+ */
+class TestCurrentConfigOutput extends ConsoleOutput {
 
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
+	}
+
+}
+
+/**
+ * CurrentConfig shell test
+ */
 class CurrentConfigShellTest extends TestCase {
 
-	public $CurrentConfigShell;
+	public $Shell;
 
 	public function setUp() {
 		parent::setUp();
 
-		$this->CurrentConfigShell = new TestCurrentConfigShell();
+		$this->out = new TestCurrentConfigOutput();
+		$io = new ConsoleIo($this->out);
+
+		$this->Shell = $this->getMock(
+			'Setup\Shell\CurrentConfigShell',
+			['in', 'err', '_stop'],
+			[$io]
+		);
 	}
 
-	public function testObject() {
-		$this->assertTrue(is_object($this->CurrentConfigShell));
-		$this->assertInstanceOf('Setup\Shell\CurrentConfigShell', $this->CurrentConfigShell);
+	public function testMain() {
+		$this->Shell->runCommand(['clean', TMP]);
+		$output = $this->out->output;
+
+		$this->assertContains('[driver]', $output);
+		$this->assertContains('[className]', $output);
 	}
 
 }

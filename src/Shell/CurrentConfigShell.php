@@ -2,8 +2,9 @@
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
-use App\Model\ConnectionManager;
+use Cake\Datasource\ConnectionManager;
 use Cake\Cache\Cache;
+
 /**
  * Outputs the current configuration
  * - DB (default and test)
@@ -11,7 +12,6 @@ use Cake\Cache\Cache;
  * - ...
  *
  * @author Mark Scherer
- * @cakephp 2
  * @license MIT
  */
 class CurrentConfigShell extends Shell {
@@ -24,8 +24,8 @@ class CurrentConfigShell extends Shell {
 	public function main() {
 		$this->out('DB default:');
 		try {
-			$db = ConnectionManager::getDataSource('default');
-			$this->out(print_r($db->config, true));
+			$db = ConnectionManager::get('default');
+			$this->out(print_r($db->config(), true));
 		} catch (Exception $e) {
 			$this->err($e->getMessage());
 		}
@@ -33,8 +33,8 @@ class CurrentConfigShell extends Shell {
 		$this->out('');
 		$this->out('DB test:');
 		try {
-			$db = ConnectionManager::getDataSource('test');
-			$this->out(print_r($db->config, true));
+			$db = ConnectionManager::get('test');
+			$this->out(print_r($db->config(), true));
 		} catch (Exception $e) {
 			$this->err($e->getMessage());
 		}
