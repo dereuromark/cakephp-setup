@@ -73,7 +73,6 @@ class IndentShellTest extends TestCase {
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('y'));
 
-
 		$this->Shell->runCommand(['folder', TMP . 'indent' . DS]);
 		$output = $this->out->output;
 		$this->assertContains('found: 1', $output);
