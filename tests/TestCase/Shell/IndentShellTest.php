@@ -44,7 +44,10 @@ class IndentShellTest extends TestCase {
 		);
 
 		$this->testFilePath = dirname(dirname(dirname(__FILE__))) . DS . 'test_files' . DS;
-		copy($this->testFilePath . 'indent.php', TMP . 'indent.php');
+		if (!is_dir(TMP . 'indent')) {
+			mkdir(TMP . 'indent', 0770, true);
+		}
+		copy($this->testFilePath . 'indent.php', TMP . 'indent' . DS . 'indent.php');
 	}
 
 	/**
@@ -53,8 +56,8 @@ class IndentShellTest extends TestCase {
 	 * @return void
 	 */
 	public function tearDown() {
-		if (file_exists(TMP . 'indent.php')) {
-			//unlink(TMP . 'indent.php');
+		if (file_exists(TMP . 'indent' . DS . 'indent.php')) {
+			unlink(TMP . 'indent' . DS . 'indent.php');
 		}
 
 		parent::tearDown();
@@ -71,11 +74,11 @@ class IndentShellTest extends TestCase {
 			->will($this->returnValue('y'));
 
 
-		$this->Shell->runCommand(['folder', TMP]);
+		$this->Shell->runCommand(['folder', TMP . 'indent' . DS]);
 		$output = $this->out->output;
 		$this->assertContains('found: 1', $output);
 
-  	$result = file_get_contents(TMP . 'indent.php');
+  	$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
 
 		$expected = file_get_contents($this->testFilePath . 'indent_basic.php');
 		$this->assertTextEquals($expected, $result);
@@ -91,11 +94,11 @@ class IndentShellTest extends TestCase {
 			->will($this->returnValue('y'));
 
 
-		$this->Shell->runCommand(['folder', TMP, '-a']);
+		$this->Shell->runCommand(['folder', TMP . 'indent' . DS, '-a']);
 		$output = $this->out->output;
 		$this->assertContains('found: 1', $output);
 
-		$result = file_get_contents(TMP . 'indent.php');
+		$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
 
 		$expected = file_get_contents($this->testFilePath . 'indent_again.php');
 		$this->assertTextEquals($expected, $result);

@@ -42,6 +42,10 @@ class WhitespaceShellTest extends TestCase {
 			['in', 'err', '_stop'],
 			[$io]
 		);
+
+		if (!is_dir(TMP . 'whitespace')) {
+			mkdir(TMP . 'whitespace', 0770, true);
+		}
 	}
 
 /**
@@ -64,18 +68,18 @@ class WhitespaceShellTest extends TestCase {
 			->will($this->returnValue('y'));
 
 		$content = PHP_EOL . ' <?php echo $foo;' . PHP_EOL . '?> ' . PHP_EOL . PHP_EOL;
-		file_put_contents(TMP . 'Foo.php', $content);
-		$this->Shell->runCommand(['clean', TMP]);
+		file_put_contents(TMP . 'whitespace' . DS . 'Foo.php', $content);
+		$this->Shell->runCommand(['clean', TMP . 'whitespace' . DS]);
 		$output = $this->out->output;
 
 		$this->assertTextContains('Found 1 files.', $output);
 		$this->assertTextContains('found 1 leading, 1 trailing ws', $output);
 		$this->assertTextContains('fixed 1 leading, 1 trailing ws', $output);
 
-		$output = file_get_contents(TMP . 'Foo.php');
+		$output = file_get_contents(TMP . 'whitespace' . DS . 'Foo.php');
 		$expected = '<?php echo $foo;' . PHP_EOL . '?>';
 
-		unlink(TMP . 'Foo.php');
+		unlink(TMP . 'whitespace' . DS . 'Foo.php');
 		$this->assertEquals($expected, $output);
 	}
 
