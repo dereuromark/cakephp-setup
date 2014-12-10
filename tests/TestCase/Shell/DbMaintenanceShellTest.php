@@ -72,8 +72,8 @@ class DbMaintenanceShellTest extends TestCase {
 
 		//debug($output);
 		$expected = ' CHARACTER SET utf8 COLLATE utf8_unicode_ci;';
-		$this->assertTextContains($expected, $output);
-		$this->assertTextContains('Done :)', $output);
+		$this->assertContains($expected, $output);
+		$this->assertContains('Done :)', $output);
 	}
 
 /**
@@ -90,8 +90,8 @@ class DbMaintenanceShellTest extends TestCase {
 
 		//debug($output);
 		$expected = ' ENGINE=InnoDB;';
-		$this->assertTextContains($expected, $output);
-		$this->assertTextContains('Done :)', $output);
+		$this->assertContains($expected, $output);
+		$this->assertContains('Done :)', $output);
 	}
 
 /**
@@ -108,8 +108,8 @@ class DbMaintenanceShellTest extends TestCase {
 
 		//debug($output);
 		$expected = ' tables found';
-		$this->assertTextContains($expected, $output);
-		$this->assertTextContains('Done :)', $output);
+		$this->assertContains($expected, $output);
+		$this->assertContains('Done :)', $output);
 	}
 
 }
