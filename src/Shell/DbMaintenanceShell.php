@@ -87,6 +87,7 @@ SQL;
 	 * Args (optional)
 	 * - target engine (MyIsam, InnoDB)
 	 *
+	 * @param string|null $engine Engine to convert to.
 	 * @return void
 	 */
 	public function engine($engine = null) {
