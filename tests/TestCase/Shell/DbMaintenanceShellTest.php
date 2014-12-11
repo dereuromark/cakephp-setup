@@ -7,6 +7,7 @@ use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Class TestCompletionStringOutput
@@ -82,13 +83,18 @@ class DbMaintenanceShellTest extends TestCase {
  * @return void
  */
 	public function testEngine() {
+		$config = ConnectionManager::config('test');
+		if ((strpos($config['driver'], 'Mysql') === false)) {
+			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
+		}
+
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['engine', 'InnoDB', '-d', '-v']);
 		$output = $this->out->output;
 
-		debug($output);
+		var_dump($output);
 		$expected = ' ENGINE=InnoDB;';
 		$this->assertContains($expected, trim($output));
 		$this->assertContains('Done :)', trim($output));
