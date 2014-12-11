@@ -88,10 +88,10 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->Shell->runCommand(['engine', 'InnoDB', '-d', '-v']);
 		$output = $this->out->output;
 
-		//debug($output);
+		debug($output);
 		$expected = ' ENGINE=InnoDB;';
-		$this->assertContains($expected, $output);
-		$this->assertContains('Done :)', $output);
+		$this->assertContains($expected, trim($output));
+		$this->assertContains('Done :)', trim($output));
 	}
 
 /**
