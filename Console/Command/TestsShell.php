@@ -43,7 +43,7 @@ class TestsShell extends AppShell {
 		'Helper' => 'View/Helper',
 		'Behavior' => 'Model/Behavior',
 		'Datasource' => 'Model/Datasource',
-		'Task' => 'Shell/Task',
+		'Task' => 'Console/Command/Task',
 		'Shell' => 'Console/Command',
 		'Component' => 'Controller/Component',
 	);
@@ -72,12 +72,13 @@ class TestsShell extends AppShell {
 			$filePaths = App::path($pathType, $this->params['plugin']);
 			foreach ($filePaths as $filePath) {
 				$Folder = new Folder($filePath);
-				$files = $Folder->find();
+				$files = $Folder->find('.*\.php');
 				foreach ($files as $file) {
-					$fileList[$type][] = $file;
+					$fileList[$type][$filePath . $file] = $file;
 				}
 			}
 		}
+
 		$this->_assert($fileList);
 	}
 
@@ -123,14 +124,13 @@ class TestsShell extends AppShell {
 			}
 
 			$Folder = new Folder($testPath . $path, $create, CHMOD_PUBLIC);
-			$testFiles = $Folder->find();
+			$testFiles = $Folder->find('.*\.php');
 			foreach ($testFiles as $key => $val) {
 				$testFiles[$key] = substr($val, 0, -8);
 			}
 
 			$missing = array();
 			$ok = array();
-			$deleted = array();
 
 			foreach ($fileList as $key => $file) {
 				$excludeList = array('MyCakeTestCase');
@@ -139,11 +139,14 @@ class TestsShell extends AppShell {
 					continue;
 				}
 
-				if (!in_array($file, $testFiles)) {
+				if (!$this->_needsTest($type, $file, $key)) {
+					$ok[] = $file;
+				} elseif (!in_array($file, $testFiles)) {
 					$missing[] = $file;
 				} elseif ($this->_isEmptyTest($type, $file, $testPath . $path . DS)) {
 					$this->out('Empty test: ' . $type . ' ' . $file);
-					if (!empty($this->params['create'])) {
+					$ok[] = $file;
+					if (!empty($this->params['create']) && !empty($this->params['overwrite'])) {
 						$this->out('...Replacing test... ' . $file . 'Test');
 						$this->_createTest($type, $file, $testPath . $path . DS);
 					}
@@ -152,9 +155,10 @@ class TestsShell extends AppShell {
 					$ok[] = $file;
 				}
 			}
+
 			$deleted = $testFiles;
-			foreach ($deleted as $key => $file) {
-				if (in_array($file, $ok)) {
+			foreach ($testFiles as $key => $file) {
+				if (in_array($file, $fileList)) {
 					unset($deleted[$key]);
 				}
 			}
@@ -179,6 +183,24 @@ class TestsShell extends AppShell {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Checks if a test file is needed here.
+	 * Skip abstract classes for now as they are most likely extended anyway.
+	 *
+	 * @return bool Success
+	 */
+	protected function _needsTest($type, $file, $path) {
+		$fullPath = $path;
+		if (!file_exists($fullPath)) {
+			throw new Exception('Invalid path for some reason: ' . $fullPath);
+		}
+		$content = file_get_contents($fullPath);
+		if (!preg_match('/abstract class ([a-z0-9_-]+) extends /i', $content)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -214,12 +236,17 @@ class TestsShell extends AppShell {
 		}
 
 		$init = '$this->' . $class . ' = new ' . $class . '();';
+		$namespace = $class;
+		if ($this->params['plugin']) {
+			$namespace = $this->params['plugin'] . '.' . $class;
+		}
+
 		if ($type === 'Model') {
-			$namespace = $class;
-			if ($this->params['plugin']) {
-				$namespace = $this->params['plugin'] . '.' . $class;
-			}
-			$init = '$this->' . $class . ' = ClassRegistry::init(\'' . $namespace . '\');';
+			$init = '
+		$this->' . $class . ' = ClassRegistry::init(\'' . $namespace . '\');';
+		} elseif ($type === 'Helper') {
+			$init = '
+		$this->' . $class . ' = new '.$class.'(new View());';
 		}
 
 		$template = '<?php
@@ -245,7 +272,14 @@ class ' . $class . 'Test extends MyCakeTestCase {
 
 	//TODO
 
-}';
+}
+';
+		$templatePath = CakePlugin::path('Setup') . 'files' . DS . 'templates' . DS;
+		if (file_exists($templatePath . $type . '.php')) {
+			$template = file_get_contents($templatePath . $type . '.php');
+			$template = str_replace(array('{class}', '{package}', '{init}'), array($class, $package, $init), $template);
+
+		}
 
 		if (!is_dir($dir = dirname($fullPath = $path . $class . 'Test.php'))) {
 			mkdir($dir, 0770, true);
@@ -446,6 +480,11 @@ class All' . $name . 'Test extends PHPUnit_Framework_TestSuite {
 			'short' => 'c',
 			'boolean' => true,
 			'help' => __d('cake_console', 'Create missing folder and files.')
+		);
+		$subcommandParserAssert['options']['overwrite'] = array(
+			'short' => 'o',
+			'boolean' => true,
+			'help' => __d('cake_console', 'Overwrite existing files.')
 		);
 
 		return parent::getOptionParser()
