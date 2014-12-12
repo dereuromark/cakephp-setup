@@ -52,7 +52,7 @@ class ResetShellTest extends TestCase {
 		$this->Shell->runCommand(['email']);
 		$output = $this->out->output;
 
-		$expected = '0 emails resetted';
+		$expected = '1 emails resetted';
 		$this->assertTextContains($expected, (string)$output);
 	}
 
@@ -65,7 +65,7 @@ class ResetShellTest extends TestCase {
 		$this->Shell->runCommand(['email', 'example@example.de']);
 		$output = $this->out->output;
 
-		$expected = '0 emails resetted';
+		$expected = '1 emails resetted';
 		$this->assertTextContains($expected, (string)$output);
 	}
 
@@ -81,7 +81,7 @@ class ResetShellTest extends TestCase {
 		$this->Shell->runCommand(['pwd']);
 		$output = $this->out->output;
 
-		$expected = '0 pwds resetted';
+		$expected = '1 pwds resetted';
 		$this->assertTextContains($expected, (string)$output);
 	}
 
@@ -94,7 +94,7 @@ class ResetShellTest extends TestCase {
 		$this->Shell->runCommand(['pwd', '123']);
 		$output = $this->out->output;
 
-		$expected = '0 pwds resetted';
+		$expected = '1 pwds resetted';
 		$this->assertTextContains($expected, (string)$output);
 	}
 
