@@ -17,6 +17,11 @@
 
 echo "<?php\n";
 ?>
+<?php if ($type === 'Controller') {
+	$uses[] = array('MyControllerTestCase', 'Tools.TestSuite');
+} else {
+	$uses[] = array('MyTestCase', 'Tools.TestSuite');
+} ?>
 <?php foreach ($uses as $dependency): ?>
 App::uses('<?php echo $dependency[0]; ?>', '<?php echo $dependency[1]; ?>');
 <?php endforeach; ?>
@@ -26,9 +31,9 @@ App::uses('<?php echo $dependency[0]; ?>', '<?php echo $dependency[1]; ?>');
  *
  */
 <?php if ($type === 'Controller'): ?>
-class <?php echo $fullClassName; ?>Test extends ControllerTestCase {
+class <?php echo $fullClassName; ?>Test extends MyControllerTestCase {
 <?php else: ?>
-class <?php echo $fullClassName; ?>Test extends CakeTestCase {
+class <?php echo $fullClassName; ?>Test extends MyCakeTestCase {
 <?php endif; ?>
 
 <?php if (!empty($fixtures)): ?>

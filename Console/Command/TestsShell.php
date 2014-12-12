@@ -65,6 +65,10 @@ class TestsShell extends AppShell {
 	public function assert() {
 		$fileList = array();
 		foreach ($this->types as $type) {
+			if (!empty($this->args[0]) && $this->args[0] !== $type) {
+				continue;
+			}
+
 			$pathType = $type;
 			if (!empty($this->matches[$type])) {
 				$pathType = $this->matches[$type];
@@ -183,6 +187,8 @@ class TestsShell extends AppShell {
 				}
 			}
 		}
+
+		$this->out('Done!');
 	}
 
 	/**
@@ -244,9 +250,27 @@ class TestsShell extends AppShell {
 		if ($type === 'Model') {
 			$init = '
 		$this->' . $class . ' = ClassRegistry::init(\'' . $namespace . '\');';
+		} elseif ($type === 'Component') {
+			$init = '
+		$this->Controller = new Controller(new CakeRequest(), new CakeResponse());
+		$this->Controller->constructClasses();
+		$this->Controller->' . $class . ' = new '.$class.'($this->Controller->Components);';
 		} elseif ($type === 'Helper') {
 			$init = '
 		$this->' . $class . ' = new '.$class.'(new View());';
+		} elseif ($type === 'Shell' || $type === 'Task'){
+			$init = '
+		$output = new TestConsoleOutput();
+		$error = $this->getMock(\'ConsoleOutput\', array(), array(), \'\', false);
+		$input = $this->getMock(\'ConsoleInput\', array(), array(), \'\', false);
+		$this->' . $class . ' = new ' . $class . '($output, $error, $input);';
+		}
+
+		$body = '//TODO';
+
+		$methods = $this->_getTestableMethods($class, $this->params['plugin'], $package);
+		if (!empty($methods)) {
+			$body = $this->_body($methods);
 		}
 
 		$template = '<?php
@@ -270,14 +294,19 @@ class ' . $class . 'Test extends MyCakeTestCase {
 		$this->assertInstanceOf(\'' . $class . '\', $this->' . $class . ');
 	}
 
-	//TODO
+	' . $body . '
 
 }
 ';
+
+		if ($type === 'Shell' || $type === 'Task') {
+			$type = 'Console';
+		}
+
 		$templatePath = CakePlugin::path('Setup') . 'files' . DS . 'templates' . DS;
 		if (file_exists($templatePath . $type . '.php')) {
 			$template = file_get_contents($templatePath . $type . '.php');
-			$template = str_replace(array('{class}', '{package}', '{init}'), array($class, $package, $init), $template);
+			$template = str_replace(array('{class}', '{package}', '{init}', '{body}'), array($class, $package, $init, $body), $template);
 
 		}
 
@@ -285,6 +314,34 @@ class ' . $class . 'Test extends MyCakeTestCase {
 			mkdir($dir, 0770, true);
 		}
 		return file_put_contents($fullPath, $template);
+	}
+
+	/**
+	 * TestsShell::_body()
+	 *
+	 * @return string
+	 */
+	protected function _body($methods) {
+		$body = array();
+		$count = 0;
+		foreach ($methods as $method) {
+			$method = Inflector::camelize($method);
+			$template = <<<PHP
+/**
+	 * test$method method
+	 *
+	 * @return void
+	 */
+	public function test$method() {
+		\$this->markTestIncomplete('test$method not implemented.');
+	}
+
+
+PHP;
+			$body[] = ($count === 0 ? '' : "\t") . $template;
+			$count++;
+		}
+		return trim(implode("", $body));
 	}
 
 	/**
@@ -310,6 +367,51 @@ class ' . $class . 'Test extends MyCakeTestCase {
 			$this->_bake($type);
 		}
 		$this->_bake($this->types);
+	}
+
+	protected function _methods($methods) {
+		$body = '';
+		foreach ($methods as $method) {
+			$name = Inflector::camelize($method);
+			$body .= '
+	/**
+	 * test' . $method . ' method
+	 *
+	 * @return void
+	 */
+		public function test' . $method . '() {
+			$this->markTestIncomplete(\'test' . $method . ' not implemented.\');
+		}
+';
+		}
+		return $body;
+	}
+
+	/**
+	 * Get methods declared in the class given.
+	 * No parent methods will be returned
+	 *
+	 * @param string $className Name of class to look at.
+	 * @return array Array of method names.
+	 */
+	protected function _getTestableMethods($className, $plugin, $package) {
+		$namespace = ($plugin ? $plugin . '.' : '') . $package;
+		App::uses($className, $namespace);
+		if (!class_exists($className)) {
+			throw new InternalErrorException('Cannot find/load class: ' . $className.' in namespace ' . $namespace);
+		}
+
+		$classMethods = get_class_methods($className);
+		$parentMethods = get_class_methods(get_parent_class($className));
+
+		$thisMethods = array_diff($classMethods, $parentMethods);
+		$out = array();
+		foreach ($thisMethods as $method) {
+			if (substr($method, 0, 1) !== '_' && $method != strtolower($className)) {
+				$out[] = $method;
+			}
+		}
+		return $out;
 	}
 
 	/**

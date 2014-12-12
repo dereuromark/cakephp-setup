@@ -1,7 +1,9 @@
 <?php
 
 App::uses('{class}', '{package}');
-App::uses('View', 'View');
+App::uses('Controller', 'Controller');
+App::uses('CakeRequest', 'Network');
+App::uses('CakeResponse', 'Network');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 /**
@@ -9,7 +11,7 @@ App::uses('MyCakeTestCase', 'Tools.TestSuite');
  */
 class {class}Test extends MyCakeTestCase {
 
-	public ${class};
+	public $Controller;
 
 	/**
 	 * @return void
@@ -20,12 +22,22 @@ class {class}Test extends MyCakeTestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function tearDown() {
+		parent::tearDown();
+
+		unset($this->Controller);
+		ClassRegistry::flush();
+	}
+
+	/**
 	 * testObject()
 	 *
 	 * @return void
 	 */
 	public function testObject() {
-		$this->assertInstanceOf('{class}', $this->{class});
+		$this->assertInstanceOf('{class}', $this->Controller->{class});
 	}
 
 	{body}
