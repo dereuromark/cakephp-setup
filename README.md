@@ -1,7 +1,7 @@
 # CakePHP Setup Plugin
 
 [![Build Status](https://api.travis-ci.org/dereuromark/cakephp-setup.png?branch=cake3)](https://travis-ci.org/dereuromark/cakephp-setup)
-[![Coverage Status](https://coveralls.io/repos/dereuromark/cakephp-tools/badge.png?branch=cake3)](https://coveralls.io/r/dereuromark/cakephp-tools)
+[![Coverage Status](https://coveralls.io/repos/dereuromark/cakephp-setup/badge.png?branch=cake3)](https://coveralls.io/r/dereuromark/cakephp-setup)
 [![License](https://poser.pugx.org/dereuromark/cakephp-setup/license.png)](https://packagist.org/packages/dereuromark/cakephp-setup)
 
 This CakePHP 3.0 plugin provides useful development tools for managing a cakephp app.
