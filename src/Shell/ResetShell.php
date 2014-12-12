@@ -43,8 +43,7 @@ class ResetShell extends Shell {
 		$this->out('Resetting...');
 
 		if (empty($this->params['dry-run'])) {
-			$this->Users->updateAll(array(CLASS_USERS . '.email' => $email . ''), array(CLASS_USERS . '.email !=' => $email));
-			$count = 0; //TODO $this->Users->connection()->lastInsertId();
+			$count = $this->Users->updateAll(array('email' => $email . ''), array('email !=' => $email));
 		} else {
 			$count = $this->Users->find('all', ['conditions' => [CLASS_USERS . '.email !=' => $email]])->count();
 		}
@@ -86,11 +85,10 @@ class ResetShell extends Shell {
 			return $this->error(CLASS_USERS . ' table doesnt have a password field!');
 		}
 
-		$newPwd = '\'' . $pw . '\'';
+		$newPwd = $pw;
 
 		if (empty($this->params['dry-run'])) {
-			$this->Users->updateAll(array(CLASS_USERS . '.password' => $newPwd), array(CLASS_USERS . '.password !=' => $pw));
-			$count = 0; //TODO $this->Users->getAffectedRows();
+			$count = $this->Users->updateAll(array('password' => $newPwd), array('password !=' => $pw));
 		} else {
 			$count = $this->Users->find('all', ['conditions' => [CLASS_USERS . '.password !=' => $pw]])->count();
 		}
