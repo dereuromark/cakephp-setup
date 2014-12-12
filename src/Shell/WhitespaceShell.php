@@ -119,6 +119,7 @@ class WhitespaceShell extends Shell {
 
 	/**
 	 * Whitespaces at the end of the file
+	 * If PHP file with trailing ?> that will be removed as per coding standards.
 	 *
 	 * @return void
 	 */
@@ -143,6 +144,11 @@ class WhitespaceShell extends Shell {
 		foreach ($files as $file) {
 			$this->out('Processing ' . $file, 1, Shell::VERBOSE);
 			$content = $store = file_get_contents($file);
+			$content = trim($content);
+			$ext = pathinfo($file, PATHINFO_EXTENSION);
+			if ($ext === 'php' && substr($content, -2, 2) === '?>') {
+				$content = substr($content, 0, -2);
+			}
 
 			$newline = PHP_EOL;
 			$x = substr_count($content, "\r\n");
@@ -190,7 +196,8 @@ Either provide a path as first argument, use -p PluginName or run it as it is fo
 				'parser' => $subcommandParser
 			))
 			->addSubcommand('eof', array(
-				'help' => 'Fix whitespace issues at the end of PHP files (a single newline as per coding standards)',
+				'help' => 'Fix whitespace issues at the end of PHP files:
+A single newline as per coding standards and no closing ?> tag for PHP files.',
 				'parser' => $subcommandParser
 			));
 	}

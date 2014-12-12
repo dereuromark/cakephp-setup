@@ -83,4 +83,27 @@ class WhitespaceShellTest extends TestCase {
 		$this->assertEquals($expected, $output);
 	}
 
+	/**
+	 * WhitespaceShellTest::testEof()
+	 *
+	 * @return void
+	 */
+	public function testEof() {
+		$this->Shell->expects($this->any())->method('in')
+			->will($this->returnValue('y'));
+
+		$content = PHP_EOL . ' <?php echo $foo;' . PHP_EOL . '?> ' . PHP_EOL . PHP_EOL;
+		file_put_contents(TMP . 'whitespace' . DS . 'Foo.php', $content);
+		$this->Shell->runCommand(['eof', TMP . 'whitespace' . DS]);
+		$output = $this->out->output;
+
+		//debug($output);die();
+
+		$output = file_get_contents(TMP . 'whitespace' . DS . 'Foo.php');
+		$expected = '<?php echo $foo;' . PHP_EOL;
+
+		unlink(TMP . 'whitespace' . DS . 'Foo.php');
+		$this->assertEquals($expected, $output);
+	}
+
 }
