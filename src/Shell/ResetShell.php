@@ -57,25 +57,25 @@ class ResetShell extends Shell {
 	 */
 	public function pwd($pwd = null) {
 		if (!empty($pwd)) {
-			$pwToHash = $pwd;
+			$pwdToHash = $pwd;
 		}
-		while (empty($pwToHash) || mb_strlen($pwToHash) < 2) {
-			$pwToHash = $this->in(__('Password to Hash (2 characters at least)'));
+		while (empty($pwdToHash) || mb_strlen($pwdToHash) < 2) {
+			$pwdToHash = $this->in(__('Password to Hash (2 characters at least)'));
 		}
 		$this->hr();
 		$this->out('Password:');
-		$this->out($pwToHash);
+		$this->out($pwdToHash);
 
 		$hasher = 'Default';
 		if ($hashType = Configure::read('Passwordable.passwordHasher')) {
 			$hasher = $hashType;
 		}
 		$passwordHasher = PasswordHasherFactory::build($hasher);
-		$pw = $passwordHasher->hash($pwToHash);
+		$pwd = $passwordHasher->hash($pwdToHash);
 
 		$this->hr();
 		$this->out('Hash:');
-		$this->out($pw);
+		$this->out($pwd);
 
 		$this->hr();
 		$this->out('resetting...');
@@ -85,12 +85,10 @@ class ResetShell extends Shell {
 			return $this->error(CLASS_USERS . ' table doesnt have a password field!');
 		}
 
-		$newPwd = $pw;
-
 		if (empty($this->params['dry-run'])) {
-			$count = $this->Users->updateAll(array('password' => $newPwd), array('password !=' => $pw));
+			$count = $this->Users->updateAll(array('password' => $pwd), array('password !=' => $pwd));
 		} else {
-			$count = $this->Users->find('all', ['conditions' => [CLASS_USERS . '.password !=' => $pw]])->count();
+			$count = $this->Users->find('all', ['conditions' => [CLASS_USERS . '.password !=' => $pwd]])->count();
 		}
 		$this->out($count . ' pwds resetted - DONE');
 	}

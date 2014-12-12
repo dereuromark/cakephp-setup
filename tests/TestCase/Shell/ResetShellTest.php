@@ -53,7 +53,7 @@ class ResetShellTest extends TestCase {
 		$output = $this->out->output;
 
 		$expected = '0 emails resetted';
-		$this->assertTextContains($expected, $output);
+		$this->assertTextContains($expected, (string)$output);
 	}
 
 	/**
@@ -66,7 +66,7 @@ class ResetShellTest extends TestCase {
 		$output = $this->out->output;
 
 		$expected = '0 emails resetted';
-		$this->assertTextContains($expected, $output);
+		$this->assertTextContains($expected, (string)$output);
 	}
 
 	/**
@@ -82,7 +82,7 @@ class ResetShellTest extends TestCase {
 		$output = $this->out->output;
 
 		$expected = '0 pwds resetted';
-		$this->assertTextContains($expected, $output);
+		$this->assertTextContains($expected, (string)$output);
 	}
 
 	/**
@@ -95,7 +95,7 @@ class ResetShellTest extends TestCase {
 		$output = $this->out->output;
 
 		$expected = '0 pwds resetted';
-		$this->assertTextContains($expected, $output);
+		$this->assertTextContains($expected, (string)$output);
 	}
 
 }
