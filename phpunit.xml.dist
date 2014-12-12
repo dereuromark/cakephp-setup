@@ -24,10 +24,7 @@
 	</listeners>
 	<filter>
 		<whitelist>
-			<directory suffix=".php">Plugin/Setup</directory>
-			<exclude>
-				<directory suffix=".php">Plugin/Setup/TestSuite</directory>
-			</exclude>
+			<directory suffix=".php">./src</directory>
 		</whitelist>
 	</filter>
 </phpunit>
