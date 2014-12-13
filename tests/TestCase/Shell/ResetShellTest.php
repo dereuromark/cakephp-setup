@@ -7,6 +7,7 @@ use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
+use Cake\Core\Configure;
 
 /**
  * Class TestCompletionStringOutput
@@ -30,12 +31,15 @@ class ResetShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
+		Configure::write('App.namespace', 'TestApp');
+
 		$this->out = new TestResetOutput();
-		$io = new ConsoleIo($this->out);
+		$this->err = new TestResetOutput();
+		$io = new ConsoleIo($this->out, $this->err);
 
 		$this->Shell = $this->getMock(
 			'Setup\Shell\ResetShell',
-			['in', 'err', '_stop'],
+			['in', '_stop'],
 			[$io]
 		);
 	}

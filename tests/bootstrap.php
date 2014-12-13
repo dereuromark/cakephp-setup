@@ -24,6 +24,13 @@ define('CONFIG', dirname(__FILE__) . DS . 'config' . DS);
 require ROOT . '/vendor/cakephp/cakephp/src/basics.php';
 require ROOT . '/vendor/autoload.php';
 
+require CAKE . 'Core/ClassLoader.php';
+
+$loader = new Cake\Core\ClassLoader;
+$loader->register();
+
+$loader->addNamespace('TestApp', ROOT . DS . 'tests' . DS . 'TestApp' . DS);
+
 Cake\Core\Configure::write('App', [
 		'namespace' => 'App',
 		'encoding' => 'UTF-8']);
@@ -58,7 +65,8 @@ $cache = [
 
 Cake\Cache\Cache::config($cache);
 
-Cake\Core\Plugin::load('Setup', ['path' => './']);
+Cake\Core\Plugin::load('Setup', ['path' => ROOT . DS]);
+Cake\Core\Plugin::load('Tools', ['path' => ROOT . DS . 'plugins' . DS . 'Tools' . DS]);
 
 // Ensure default test connection is defined
 if (!getenv('db_class')) {
