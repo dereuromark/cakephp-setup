@@ -16,6 +16,9 @@ and
 Note that `require-dev` usually totally enough for using this plugin, as it only provides helpful
 dev tools. It is not needed for production environments.
 
+If you want, however, to use certain shells like "User" in the productive enviroment, as well, please
+use `require` then.
+
 Details @ https://packagist.org/packages/dereuromark/cakephp-setup
 
 This will load the plugin (within your boostrap file):
