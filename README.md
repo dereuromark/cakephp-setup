@@ -10,37 +10,18 @@ This CakePHP 3.0 plugin provides useful development tools for managing a cakephp
 
 This cake3 branch only works for **CakePHP3.x** - please use the master branch for CakePHP 2.x!
 
-## Installation
-
-Put the files in `ROOT/plugins/Setup`, using Packagist/Composer:
-```
-"require-dev": {
-	"dereuromark/cakephp-setup": "dev-cake3"
-}
-```
-and
-
-	composer update
-
-Note that `require-dev` usually totally enough for using this plugin, as it only provides helpful
-dev tools. It is not needed for production environments.
-
-Details @ https://packagist.org/packages/dereuromark/cakephp-setup
-
-This will load the plugin (within your boostrap file):
-```php
-Plugin::load('Setup');
-```
-or
-```php
-Plugin::loadAll();
-```
-
-## Documentation
+## What is this plugin for?
+This plugin aims to be a help for development of CakePHP applications. It extends and leverages
+my Tools Plugin.
 
 Currently this plugin contains only the parts I managed to migrate yet:
 
-*	Some useful debugging shells
+* Some useful development tools and debugging shells
+* TestSuite additions
+
+## Installation & Docs
+
+- [Documentation](docs/README.md)
 
 Possible dependencies: Tools Plugin
 
