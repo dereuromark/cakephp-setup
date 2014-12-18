@@ -31,7 +31,7 @@ class InstallController extends SetupAppController {
 		if ($this->Common->isPosted()) {
 			$this->Install = @ClassRegistry::init('Install');
 			if ($this->Install->createDatabaseFile($this->request->data)) {
-				$this->Common->flashMessage('database.php created', 'success');
+				$this->Flash->message('database.php created', 'success');
 				return $this->Common->postRedirect(array('action' => 'step2'));
 			}
 
