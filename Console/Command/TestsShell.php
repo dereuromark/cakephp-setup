@@ -395,7 +395,7 @@ PHP;
 	 * @return array Array of method names.
 	 */
 	protected function _getTestableMethods($className, $plugin, $package) {
-		$namespace = ($plugin ? $plugin . '.' : '') . $package;
+		$namespace = $package;
 		App::uses($className, $namespace);
 		if (!class_exists($className)) {
 			throw new InternalErrorException('Cannot find/load class: ' . $className.' in namespace ' . $namespace);
