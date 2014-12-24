@@ -35,5 +35,6 @@
 	},
 	"extra": {
 		"installer-name": "Setup"
-	}
+	},
+	"minimum-stability": "dev"
 }
