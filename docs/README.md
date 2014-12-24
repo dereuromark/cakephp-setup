@@ -12,6 +12,8 @@ This cake3 branch only works for **CakePHP3.x** - please use the master branch f
 * [Upgrade guide from 2.x to 3.x](Upgrade.md)
 
 ## Detailed Documentation - Quicklinks
+* [Maintenance Mode](Maintenance/Maintenance.md)
+* [Setup Component](Component/Setup.md)
 * [Useful Setup Shells](Console/Shells.md)
 
 

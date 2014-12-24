@@ -14,6 +14,8 @@ class Maintenance {
 
 	public $file;
 
+	public $template = 'maintenance.ctp';
+
 	public function __construct() {
 		$this->file = TMP . 'maintenance.txt';
 	}
@@ -40,7 +42,13 @@ class Maintenance {
 		$Response = new Response();
 		$Response->statusCode(503);
 		$Response->header('Retry-After', DAY);
-		$Response->body(__d('setup', 'Maintenance work'));
+		$body = __d('setup', 'Maintenance work');
+		$template = APP . 'Template' . DS . 'Error' . DS . $this->template;
+		if (file_exists($template)) {
+			$body = file_get_contents($template);
+		}
+
+		$Response->body($body);
 		if ($exit) {
 			$Response->send();
 			exit;
