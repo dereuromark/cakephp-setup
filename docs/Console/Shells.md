@@ -3,7 +3,7 @@
 You can run any shell from the ROOT dir as `/bin/cake [shell] [command]` (or `.\bin\cake [shell] [command]` for Windows).
 
 
-## Maintenance Shells
+## Application Maintenance Shells
 
 ### CurrentConfigShell
 This shell lets you quickly see what the current config is, both for DB and cache.

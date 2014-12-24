@@ -23,10 +23,7 @@ if (!defined('WINDOWS')) {
  * Attach this to your AppController to power up debugging:
  * - Quick-Switch: layout, maintenance, debug, clearcache (password protected in productive mode)
  * - Notify Admin via Email about self-inflicted 404s or loops (configurable)
- *
- * TODO:
- * - Catch redirect loops with meaningful exception (will also be logged then)
- *
+
  * Note that debug, clearcache, maintenance etc for productive mode, since they require a password,
  * are emergency commands only (in case you cannot power up ssh shell access that quickly).
  * Change your password immediately afterwards for security reasons as pwds should not be passed
@@ -47,8 +44,8 @@ class SetupComponent extends Component {
 	public $notifications = array(
 		'404' => true,
 		'loops' => false, //TODO,
-		'memory' => false,
-		'execTime' => false,
+		'memory' => false, //TODO,
+		'execTime' => false, //TODO,
 	);
 
 	/**
@@ -218,9 +215,10 @@ class SetupComponent extends Component {
 	 * Set maintance mode for everybody except for the own IP which will
 	 * be whitelisted.
 	 *
-	 * Alternatively, this can be done using the Console shell.
+	 * Alternatively, this can and should be done using the CLI shell.
 	 *
-	 * -´duration query string can be used to set a timeout maintenance window
+	 * URL Options:
+	 * - ´duration` query string can be used to set a timeout maintenance window
 	 *
 	 * @param mixed $maintenance
 	 * @return bool Success
@@ -231,7 +229,7 @@ class SetupComponent extends Component {
 		$length = (int)$this->Controller->request->query('duration');
 
 		$Maintenance = new MaintenanceLib();
-		if (!$Maintenance->setMaintenanceMode($length)) {
+		if (!$Maintenance->setMaintenanceMode($maintenance ? $length : false)) {
 			return false;
 		}
 		if (!$Maintenance->whitelist(array($ip))) {

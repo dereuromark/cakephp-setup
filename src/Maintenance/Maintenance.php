@@ -30,7 +30,7 @@ class Maintenance {
 	 *    $Maintenance->checkMaintenance();
 	 *  }
 	 *
-	 * @param bool $exit
+	 * @param bool $exit If Response should be sent and exited.
 	 * @return void
 	 */
 	public function checkMaintenance($exit = true) {
@@ -41,8 +41,8 @@ class Maintenance {
 		$Response->statusCode(503);
 		$Response->header('Retry-After', DAY);
 		$Response->body(__d('setup', 'Maintenance work'));
-		$Response->send();
 		if ($exit) {
+			$Response->send();
 			exit;
 		}
 	}
@@ -90,7 +90,7 @@ class Maintenance {
 	 * Integer (in minutes) to activate with timeout.
 	 * Using 0 it will have no timeout.
 	 *
-	 * @param mixed $value False to deactivate, or Integer to activate.
+	 * @param int|false $value False to deactivate, or Integer to activate.
 	 * @return bool Success
 	 */
 	public function setMaintenanceMode($value) {
