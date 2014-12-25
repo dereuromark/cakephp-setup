@@ -5,7 +5,7 @@ Installing the Plugin is pretty much as with every other CakePHP Plugin.
 
 Put the files in `ROOT/plugins/Setup`, using Packagist/Composer:
 ```
-"require-dev": {
+"require": {
 	"dereuromark/cakephp-setup": "dev-cake3"
 }
 ```
@@ -13,11 +13,11 @@ and
 
 	composer update
 
-Note that `require-dev` usually totally enough for using this plugin, as it only provides helpful
-dev tools. It is not needed for production environments.
+Note that you can also use `require-dev` if you dont' need it for production environments and only use the dev tools.
 
 If you want, however, to use certain shells like "User" in the productive enviroment, as well, please
 use `require` then.
+Maintenance Mode and additional SetupComponent functionality would also not be available, otherwise.
 
 Details @ https://packagist.org/packages/dereuromark/cakephp-setup
 
@@ -27,5 +27,5 @@ Plugin::load('Setup');
 ```
 or
 ```php
-Plugin::loadAll(...);
+Plugin::loadAll();
 ```

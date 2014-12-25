@@ -18,15 +18,29 @@ Commands
 
 
 ## Maintenance Dispatching Filter
-..coming up - this should then be the preferred way of triggering the maintenance mode display, as it can way cleaner
-abort the dispatching.
+This should then be the preferred way of triggering the maintenance mode display, as it can way cleaner
+short-circuit the dispatching.
 
-For now just use that in bootstrap:
+Just add this in your bootstrap:
+```php
+use Setup\Routing\Filter\MaintenanceFilter;
+
+DispatcherFactory::add(new MaintenanceFilter());
+```
+
+You might want to wrap it with
+```php
+if (php_sapi_name() !== 'cli') {}
+```
+to only add this filter for non CLI requests.
+
+Alternativly, as low-level approach, you could still use the deprecated approach without any dispatching filter:
 ```php
 if (php_sapi_name() !== 'cli') {
     $Maintenance = new Setup\Maintenance\Maintenance();
     $Maintenance->checkMaintenance();
 }
+But this is not recommended anymore.
 
 
 ## Maintenance Component
@@ -40,9 +54,16 @@ If you want to customize the output (defaults to the translated string `__d('set
 put a template in `APP . 'Template' . DS . 'Error' . DS` named `maintenance.ctp`. It needs to be pure HTML (no PHP or CakePHP
 functionality).
 
+There are also some Configure values in case you really want to render a complete maintenance view.
+In that case you can use complete PHP/CakePHP functionality:
+- template (true/false, defaults to false)
+- layout (true/false, defaults to false)
+
+It will then use the `APP . 'Template' . DS . 'Error' . DS` . 'maintenance.ctp'` template and if applicable,
+the `APP . 'Template' . DS . 'Layout' . DS . 'maintenance.ctp'` layout.
 
 ## Setup Component
-The setup component adds some additional goddies on top:
+The Setup component adds some additional goddies on top:
 
 You can set the maintenance mode via URL, if you quickly need to jump into it again:
 ```
@@ -60,3 +81,13 @@ In productive mode you need a pwd, though, on top: `?pwd={YOURPWD}`.
 For security reasons you need to change the password, once used.
 Also, deactivate the URl access completely by removing the config pwd, when not in use, to
 prevent brute force guesses.
+
+
+## Extra Sugar
+You can shell alias the MaintenanceShell for less typing in your `bootstrap_cli.php`:
+```php
+use Cake\Console\ShellDispatcher;
+
+// Custom shell aliases
+ShellDispatcher::alias('m', 'Setup.Maintenance'); // Or any other alias
+```

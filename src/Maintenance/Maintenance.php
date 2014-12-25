@@ -34,9 +34,13 @@ class Maintenance {
 	 *
 	 * @param bool $exit If Response should be sent and exited.
 	 * @return void
+	 * @deprecated Use Maintenance DispatcherFilter
 	 */
-	public function checkMaintenance($exit = true) {
-		if (!$this->isMaintenanceMode()) {
+	public function checkMaintenance($ipAddress = null, $exit = true) {
+		if ($ipAddress === null) {
+			$ipAddress = env('REMOTE_ADDRESS');
+		}
+		if (!$this->isMaintenanceMode($ipAddress)) {
 			return;
 		}
 		$Response = new Response();
@@ -61,10 +65,10 @@ class Maintenance {
 	 * If overwritable, it will set Configure value 'Maintenance.overwrite' with the
 	 * corresponding IP so the SetupComponent can trigger a warning message here.
 	 *
-	 * @param bool $allowOverwrite Set to false to not allow access for whitelisted IPs.
+	 * @param string $ipAdddres If passed it allows access when it matches whitelisted IPs.
 	 * @return bool Success
 	 */
-	public function isMaintenanceMode($allowOverwrite = true) {
+	public function isMaintenanceMode($ipAddress = null) {
 		if (!file_exists($this->file)) {
 			return false;
 		}
@@ -75,17 +79,14 @@ class Maintenance {
 		}
 
 		if ($content > 0 && $content < time()) {
-			$this->_setMaintenanceMode(false);
+			$this->setMaintenanceMode(false);
 			return false;
 		}
 
-		if ($allowOverwrite) {
-			$overwrite = env('REMOTE_ADDR');
-			if ($overwrite) {
-				if (file_exists(TMP . 'maintenanceOverride-' . $this->_slugIp($overwrite) . '.txt')) {
-					Configure::write('Maintenance.overwrite', $overwrite);
-					return false;
-				}
+		if ($ipAddress) {
+			if (file_exists(TMP . 'maintenanceOverride-' . $this->_slugIp($ipAddress) . '.txt')) {
+				Configure::write('Maintenance.overwrite', $ipAddress);
+				return false;
 			}
 		}
 
