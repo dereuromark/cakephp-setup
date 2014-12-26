@@ -16,6 +16,14 @@ Commands
 - whitelist [{ip}] [-r]
 - reset
 
+### Example usage
+```
+cake Setup.Maintenance activate
+// Optionally whitelist your IP:
+cake Setup.Maintenance whitelist YOURIP
+// ... Do your work ...
+cake Setup.Maintenance deactivate
+```
 
 ## Maintenance Dispatching Filter
 This should then be the preferred way of triggering the maintenance mode display, as it can way cleaner
@@ -40,6 +48,7 @@ if (php_sapi_name() !== 'cli') {
     $Maintenance = new Setup\Maintenance\Maintenance();
     $Maintenance->checkMaintenance();
 }
+```
 But this is not recommended anymore.
 
 
