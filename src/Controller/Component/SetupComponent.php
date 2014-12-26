@@ -39,8 +39,6 @@ class SetupComponent extends Component {
 
 	public $Controller;
 
-	public $dirs = array();
-
 	public $notifications = array(
 		'404' => true,
 		'loops' => false, //TODO,
@@ -81,9 +79,10 @@ class SetupComponent extends Component {
 		// maintenance mode
 		if ($this->Controller->request->query('maintenance') !== null) {
 			if (($x = $this->setMaintenance($this->Controller->request->query('maintenance'))) !== false) {
-				$this->Controller->Flash->message(__d('setup', 'Maintenance mode activated'), 'success');
+				$mode = $this->Controller->request->query('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
+				$this->Controller->Flash->message(__d('setup', 'Maintenance mode %s', $mode), 'success');
 			} else {
-				$this->Controller->Flash->message(__d('setup', 'Maintenance mode not activated'), 'error');
+				$this->Controller->Flash->message(__d('setup', 'Maintenance mode not %s', $mode), 'error');
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('maintenance'));
 		}

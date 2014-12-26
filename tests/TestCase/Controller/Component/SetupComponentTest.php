@@ -19,13 +19,10 @@ class SetupComponentTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->request = new Request('/?maintenance=1');
-		$this->Controller = $this->getMock('Cake\Controller\Controller', ['referer'], [$this->request]);
+		$this->Controller = new Controller();
 		$this->Controller->loadComponent('Tools.Flash');
 		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
-
-		$this->Controller->request->params = array('action' => 'index');
 	}
 
 	public function tearDown() {
@@ -38,16 +35,39 @@ class SetupComponentTest extends TestCase {
 	 * @return void
 	 */
 	public function testSetMaintenance() {
-		$request = $this->request;
+		$request = new Request('/?maintenance=1');
+		$this->Controller->request = $request;
+		$this->Controller->request->params = array('action' => 'index');
+
+		$request = $request;
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
 
 		$this->Setup->beforeFilter($event);
 
-		$this->Controller->expects($this->never())
-			->method('redirect');
+		$result = $this->Controller->request->session()->read('messages');
+		$expected = array('success' => array(__d('setup', 'Maintenance mode %s', __d('setup', 'activated'))));
+		$this->assertSame($expected, $result);
+
+		$result = $this->Controller->response->header();
+		$expected = ['Location' => '/'];
+		$this->assertSame($expected, $result);
+
+		// Deactivate
+		$request = new Request('/?maintenance=0');
+		$this->Controller = new Controller($request);
+		$this->Controller->loadComponent('Tools.Flash');
+		$this->Controller->Flash->Controller = $this->Controller;
+		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
+
+		$this->Controller->request->params = array('action' => 'index');
+
+		$request = $request;
+		$event = new Event('Controller.startup', $this->Controller, compact('request'));
+
+		$this->Setup->beforeFilter($event);
 
 		$result = $this->Controller->request->session()->read('messages');
-		$expected = array('success' => array(__d('setup', 'Maintenance mode activated')));
+		$expected = array('success' => array(__d('setup', 'Maintenance mode %s', __d('setup', 'deactivated'))));
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
