@@ -79,9 +79,9 @@ class SetupComponent extends Component {
 		if ($this->Controller->request->query('maintenance') !== null) {
 			if (($x = $this->setMaintenance($this->Controller->request->query('maintenance'))) !== false) {
 				$mode = $this->Controller->request->query('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
-				$this->Controller->Flash->message(__d('setup', 'Maintenance mode %s', $mode), 'success');
+				$this->Controller->Flash->message(__d('setup', 'Maintenance mode {0}', $mode), 'success');
 			} else {
-				$this->Controller->Flash->message(__d('setup', 'Maintenance mode not %s', $mode), 'error');
+				$this->Controller->Flash->message(__d('setup', 'Maintenance mode not {0}', $mode), 'error');
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('maintenance'));
 		}
