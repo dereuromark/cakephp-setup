@@ -74,14 +74,18 @@ class SetupComponent extends Component {
 			return;
 		}
 
+		if (!isset($this->Controller->Flash)) {
+			throw new \Exception('Flash component missing in AppController setup.');
+		}
+
 		// maintenance mode
 		if ($this->Controller->request->query('maintenance') !== null) {
 			if (($x = $this->setMaintenance($this->Controller->request->query('maintenance'))) !== false) {
-				$this->Controller->Flash->message(__('maintenance activated'), 'success');
+				$this->Controller->Flash->message(__d('setup', 'Maintenance mode activated'), 'success');
 			} else {
-				$this->Controller->Flash->message(__('maintenance not activated'), 'error');
+				$this->Controller->Flash->message(__d('setup', 'Maintenance mode not activated'), 'error');
 			}
-			$this->Controller->redirect($this->_cleanedUrl('maintenance'));
+			return $this->Controller->redirect($this->_cleanedUrl('maintenance'));
 		}
 
 		// debug mode
@@ -91,7 +95,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->message(__('debug not set'), 'error');
 			}
-			$this->Controller->redirect($this->_cleanedUrl('debug'));
+			return $this->Controller->redirect($this->_cleanedUrl('debug'));
 		}
 
 		// clear cache
@@ -101,7 +105,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->message(__('cache not cleared'), 'error');
 			}
-			$this->Controller->redirect($this->_cleanedUrl('clearcache'));
+			return $this->Controller->redirect($this->_cleanedUrl('clearcache'));
 		}
 
 		// clear session
@@ -111,7 +115,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->message(__('session not cleared'), 'error');
 			}
-			$this->Controller->redirect($this->_cleanedUrl('clearsession'));
+			return $this->Controller->redirect($this->_cleanedUrl('clearsession'));
 		}
 
 		// layout switch
@@ -121,7 +125,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->message(__('layout not activated'), 'error');
 			}
-			$this->Controller->redirect($this->_cleanedUrl('layout'));
+			return $this->Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
 		$this->issueMailing();
@@ -228,7 +232,7 @@ class SetupComponent extends Component {
 		// optional length in minutes
 		$length = (int)$this->Controller->request->query('duration');
 
-		$Maintenance = new MaintenanceLib();
+		$Maintenance = new Maintenance();
 		if (!$Maintenance->setMaintenanceMode($maintenance ? $length : false)) {
 			return false;
 		}
@@ -323,6 +327,7 @@ class SetupComponent extends Component {
 		if (Configure::read('Config.productive')) {
 			$type[] = 'pwd';
 		}
+
 		return Setup::cleanedUrl($type, $this->Controller->request->params + array('?' => $this->Controller->request->query));
 	}
 
