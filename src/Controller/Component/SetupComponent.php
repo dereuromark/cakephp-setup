@@ -6,8 +6,7 @@ use Cake\Core\Configure;
 use Tools\Controller\Component\FlashComponent;
 use Setup\Maintenance\Maintenance;
 use Cake\Event\Event;
-//App::uses('MaintenanceLib', 'Setup.Lib');
-//App::uses('EmailLib', 'Tools.Lib');
+use Tools\Network\Email\Email;
 use Setup\Utility\Setup;
 use Cake\Cache\Cache;
 
@@ -340,7 +339,7 @@ class SetupComponent extends Component {
 	 */
 	protected function _notification($title, $text) {
 		if (!isset($this->Email)) {
-			$this->Email = new EmailLib();
+			$this->Email = new Email();
 		} else {
 			$this->Email->reset();
 		}
