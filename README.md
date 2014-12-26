@@ -16,8 +16,8 @@ my Tools Plugin.
 
 Currently this plugin contains only the parts I managed to migrate yet:
 
+* Maintenance Mode (dynamic activation and deactivation incl. dynamic IP whitelisting)
 * Some useful development tools and debugging shells
-* TestSuite additions
 
 ## Installation & Docs
 
