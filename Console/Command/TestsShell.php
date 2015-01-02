@@ -94,13 +94,13 @@ class TestsShell extends AppShell {
 	 *
 	 * @return string Path
 	 */
-	protected function _getTestPath($type, $testPath) {
+	protected function _getTestPathElement($type, $testPath) {
 		$defaultPath = !empty($this->matches[$type]) ? str_replace('/', DS, $this->matches[$type]) : $type;
 
 		if (is_dir($testPath . $defaultPath)) {
 			return $defaultPath;
 		}
-		if ($defaultPath != $type && is_dir($testPath . $type)) {
+		if ($defaultPath !== $type && is_dir($testPath . $type)) {
 			return $type;
 		}
 		$path = strtolower(Inflector::pluralize($type));
@@ -120,7 +120,7 @@ class TestsShell extends AppShell {
 		$testPath = $this->_path() . 'Case' . DS;
 
 		foreach ($files as $type => $fileList) {
-			$path = $this->_getTestPath($type, $testPath);
+			$path = $this->_getTestPathElement($type, $testPath);
 			$create = !empty($this->params['create']);
 
 			foreach ($fileList as $key => $val) {
@@ -247,7 +247,9 @@ class TestsShell extends AppShell {
 			$namespace = $this->params['plugin'] . '.' . $class;
 		}
 
-		if ($type === 'Model') {
+		if ($type === 'Controller') {
+			$init = '';
+		} if ($type === 'Model') {
 			$init = '
 		$this->' . $class . ' = ClassRegistry::init(\'' . $namespace . '\');';
 		} elseif ($type === 'Component') {
@@ -270,7 +272,7 @@ class TestsShell extends AppShell {
 
 		$methods = $this->_getTestableMethods($class, $this->params['plugin'], $package);
 		if (!empty($methods)) {
-			$body = $this->_body($methods);
+			$body = $this->_body($methods, $class, $type);
 		}
 
 		$template = '<?php
@@ -303,7 +305,7 @@ class ' . $class . 'Test extends MyCakeTestCase {
 			$type = 'Console';
 		}
 
-		$templatePath = CakePlugin::path('Setup') . 'files' . DS . 'templates' . DS;
+		$templatePath = CakePlugin::path('Setup') . 'files' . DS . 'test_templates' . DS;
 		if (file_exists($templatePath . $type . '.php')) {
 			$template = file_get_contents($templatePath . $type . '.php');
 			$template = str_replace(array('{class}', '{package}', '{init}', '{body}'), array($class, $package, $init, $body), $template);
@@ -321,10 +323,11 @@ class ' . $class . 'Test extends MyCakeTestCase {
 	 *
 	 * @return string
 	 */
-	protected function _body($methods) {
+	protected function _body($methods, $class, $type) {
 		$body = array();
 		$count = 0;
 		foreach ($methods as $method) {
+			$action = $method;
 			$method = Inflector::camelize($method);
 			$template = <<<PHP
 /**
@@ -338,6 +341,25 @@ class ' . $class . 'Test extends MyCakeTestCase {
 
 
 PHP;
+			if ($type === 'Controller' && in_array($action, array('index', 'add'))) {
+				$name = substr($class, 0, -10);
+				$name = Inflector::underscore($name);
+				$template = <<<PHP
+/**
+	 * test$method method
+	 *
+	 * @return void
+	 */
+	public function test$method() {
+		\$this->get(array('controller' => '$name', 'action' => '$action'));
+		\$this->assertResponseCode(200);
+		\$this->assertResponseNoRedirect();
+	}
+
+
+PHP;
+			}
+
 			$body[] = ($count === 0 ? '' : "\t") . $template;
 			$count++;
 		}
@@ -484,12 +506,9 @@ PHP;
 
 		$types = array();
 		foreach ($testTypes as $testType) {
-			$path = $this->_getTestPath($testType, $testPath);
+			$path = $this->_getTestPathElement($testType, $testPath);
 
-			if (!is_dir($path)) {
-				$path = null;
-			}
-			if (empty($path)) {
+			if (empty($path) || !is_dir($testPath . $path)) {
 				continue;
 			}
 			if (!$this->_containsTestFiles($testPath . $path)) {
