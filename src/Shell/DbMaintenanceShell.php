@@ -40,7 +40,7 @@ class DbMaintenanceShell extends Shell {
 		try {
 			$script = "ALTER DATABASE $database CHARACTER SET $encoding COLLATE $collate;";
 			if (!$this->params['dry-run']) {
-				$db->execute($script);
+				$db->query($script);
 			} else {
 				$this->out($script);
 			}
@@ -59,8 +59,11 @@ SQL;
 		if (!$res) {
 			return $this->error('Nothing to do...');
 		}
+
+		$script = '';
 		foreach ($res as $r) {
-			$this->out(' - ' . $r['statement'], 1, Shell::VERBOSE);
+			$this->out($r['statement'], 1, Shell::VERBOSE);
+			$script .= $r['statement'];
 		}
 
 		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
@@ -68,13 +71,8 @@ SQL;
 			return $this->error('Aborted!');
 		}
 
-		$script = '';
-		foreach ($res as $r) {
-			$script .= $r['statement'];
-		}
-
 		if (!$this->params['dry-run']) {
-			$db->execute($script);
+			$db->query($script);
 		} else {
 			$this->out($script);
 		}
@@ -116,8 +114,11 @@ SQL;
 		if (!$res) {
 			return $this->error('Nothing to do...');
 		}
+
+		$script = '';
 		foreach ($res as $r) {
-			$this->out(' - ' . $r['statement'], 1, Shell::VERBOSE);
+			$this->out($r['statement'], 1, Shell::VERBOSE);
+			$script .= $r['statement'];
 		}
 
 		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
@@ -125,13 +126,8 @@ SQL;
 			return $this->error('Aborted!');
 		}
 
-		$script = '';
-		foreach ($res as $r) {
-			$script .= $r['statement'];
-		}
-
 		if (!$this->params['dry-run']) {
-			$db->execute($script);
+			$db->query($script);
 		} else {
 			$this->out($script);
 		}
@@ -139,19 +135,85 @@ SQL;
 	}
 
 	/**
-	 * Remove tmp or test tables if existent.
+	 * Adds or removes table prefixes.
+	 *
+	 * Since CakePHP 3.0 does not support them, this is very useful when
+	 * migrating 2.x apps that use those prefixes.
+	 *
+	 * @param string|null $action
+	 * @param string|null $prefix
+	 * @return void
+	 */
+	public function tablePrefix($action = null, $prefix = null) {
+		$db = ConnectionManager::get('default');
+		$config = $db->config();
+		$database = $config['database'];
+
+		while (!$action || !in_array($action, ['A', 'R'], true)) {
+			$action = $this->in('Add or remove?', ['A', 'R']);
+		}
+
+		while (!$prefix) {
+			$prefix = $this->in('Please select prefix:');
+		}
+
+		if ($action === 'R') {
+			$length = mb_strlen($prefix) + 1;
+			$script = <<<SQL
+SELECT  CONCAT('RENAME TABLE `', table_name, '` TO `', SUBSTR(table_name, $length), '`;') AS statement
+FROM    information_schema.tables AS tb
+WHERE   table_schema = '$database'
+AND     table_name LIKE '$prefix%'
+AND     `TABLE_TYPE` = 'BASE TABLE';
+SQL;
+		} else {
+			$script = <<<SQL
+SELECT  CONCAT('RENAME TABLE `', table_name, '` TO `$prefix', table_name, '`;') AS statement
+FROM    information_schema.tables AS tb
+WHERE   table_schema = '$database'
+AND     table_name NOT LIKE '$prefix%'
+AND     `TABLE_TYPE` = 'BASE TABLE';
+SQL;
+		}
+
+		$res = $db->query($script);
+		if (!$res) {
+			return $this->error('Nothing to do...');
+		}
+
+		$script = '';
+		foreach ($res as $r) {
+			$script .= $r['statement'];
+			$this->out($r['statement'], 1, Shell::VERBOSE);
+		}
+
+		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
+		if (strtoupper($continue) !== 'Y') {
+			return $this->error('Aborted!');
+		}
+
+		if (!$this->params['dry-run']) {
+			$db->query($script);
+		} else {
+			$this->out($script);
+		}
+		$this->out('Done :)');
+	}
+
+	/**
+	 * Remove grouped, tmp or test tables if existent.
 	 * - tables starting with underscore [_]
 	 * - all tables with the prefix if available, otherwise all tables!
 	 *
-	 * It is always a good idea to prefix your app with "app_" prefix for example then.
+	 * It is always a good idea to prefix your non-cake-app stuff with "foo_" prefix for example then.
 	 *
+	 * @param string|null $prefix
 	 * @return void
 	 */
-	public function cleanup() {
+	public function cleanup($prefix = null) {
 		$db = ConnectionManager::get('test');
 		$config = $db->config();
 		$database = $config['database'];
-		$prefix = ''; //$config['prefix'];
 
 		$script = "
 SELECT CONCAT('DROP TABLE `', table_name, '`;') AS statement
@@ -163,25 +225,23 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		if (!$res) {
 			$this->error('Nothing to do...');
 		}
+
+		$script = '';
 		foreach ($res as $r) {
-			$this->out(' - ' . $r['statement'], 1, Shell::VERBOSE);
+			$script .= $r['statement'];
+			$this->out($r['statement'], 1, Shell::VERBOSE);
 		}
 
 		$this->out('Database ' . $database . ': ' . count($res) . ' tables found');
 		if (!$prefix) {
-			$in = $this->in('No prefix set! Careful, this will drop all tables in that test datasource, continue?', array('Y', 'N'), 'N');
+			$in = $this->in('No prefix set! Careful, this will drop all tables in that database, continue?', array('Y', 'N'), 'N');
 			if ($in !== 'Y') {
 				$this->error('Aborted!');
 			}
 		}
 
-		$script = '';
-		foreach ($res as $r) {
-			$script .= $r['statement'];
-		}
-
 		if (!$this->params['dry-run']) {
-			$db->execute($script);
+			$db->query($script);
 		} else {
 			$this->out($script);
 		}
@@ -200,13 +260,18 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		);
 
 		return parent::getOptionParser()
-			->description("A Shell to do some basic maintenance.")
+			->description("A Shell to do some basic database maintenance for you.
+Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
 			->addSubcommand('encoding', array(
 				'help' => 'Convert encoding.',
 				'parser' => $subcommandParser
 			))
 			->addSubcommand('engine', array(
 				'help' => 'Convert engine.',
+				'parser' => $subcommandParser
+			))
+			->addSubcommand('table_prefix', array(
+				'help' => 'Add or remove table prefixes.',
 				'parser' => $subcommandParser
 			))
 			->addSubcommand('cleanup', array(
