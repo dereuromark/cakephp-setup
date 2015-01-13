@@ -344,6 +344,7 @@ PHP;
 			if ($type === 'Controller' && in_array($action, array('index', 'add'))) {
 				$name = substr($class, 0, -10);
 				$name = Inflector::underscore($name);
+				$plugin = !empty($this->params['plugin']) ? '\'plugin\' => \'' . Inflector::underscore($this->params['plugin']) . '\', '  : '';
 				$template = <<<PHP
 /**
 	 * test$method method
@@ -351,9 +352,9 @@ PHP;
 	 * @return void
 	 */
 	public function test$method() {
-		\$this->get(array('controller' => '$name', 'action' => '$action'));
+		\$this->get(array($plugin'controller' => '$name', 'action' => '$action'));
 		\$this->assertResponseCode(200);
-		\$this->assertResponseNoRedirect();
+		\$this->assertNoRedirect();
 	}
 
 
