@@ -39,7 +39,7 @@ class MaintenanceLibTest extends TestCase {
 		$this->assertTrue($status);
 
 		$content = file_get_contents(TMP . 'maintenance.txt');
-		$this->assertWithinMargin($content, time() + MINUTE, 2);
+		$this->assertWithinRange(time() + MINUTE, $content, 2);
 	}
 
 	/**
