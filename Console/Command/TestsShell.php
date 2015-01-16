@@ -426,6 +426,7 @@ PHP;
 
 		$classMethods = get_class_methods($className);
 		$parentMethods = get_class_methods(get_parent_class($className));
+		$parentMethods[] = 'isAuthorized';
 
 		$thisMethods = array_diff($classMethods, $parentMethods);
 		$out = array();
