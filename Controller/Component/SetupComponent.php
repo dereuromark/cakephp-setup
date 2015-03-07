@@ -258,7 +258,7 @@ class SetupComponent extends Component {
 		if (!Configure::read('Config.productive')) {
 			return true;
 		}
-		if (!empty($this->Controller->request->params['named']['pwd']) && $this->Controller->request->params['named']['pwd'] == Configure::read('Config.pwd')) {
+		if (!empty($this->Controller->request->query['pwd']) && $this->Controller->request->query['pwd'] === Configure::read('Config.pwd')) {
 			return true;
 		}
 		return false;
@@ -283,7 +283,7 @@ class SetupComponent extends Component {
 	 *
 	 * Alternatively, this can be done using the Console shell.
 	 *
-	 * -´duration query string can be used to set a timeout maintenance window
+	 * - 'duration' query string can be used to set a timeout maintenance window
 	 *
 	 * @param mixed $maintenance
 	 * @return bool Success
