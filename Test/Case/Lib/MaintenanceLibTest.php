@@ -43,14 +43,14 @@ class MaintenanceLibTest extends MyCakeTestCase {
 		$result = $this->Maintenance->whitelist();
 		$this->assertEmpty($result);
 
-		$whitelist = array('192.168.0.1');
+		$whitelist = ['192.168.0.1'];
 		$result = $this->Maintenance->whitelist($whitelist);
 		$this->assertTrue($result);
 
 		$result = $this->Maintenance->whitelist();
 		$this->assertNotEmpty($result);
 
-		$result = $this->Maintenance->clearWhitelist(array('192.111.111.111'));
+		$result = $this->Maintenance->clearWhitelist(['192.111.111.111']);
 		$this->assertTrue($result);
 		$result = $this->Maintenance->whitelist();
 		$this->assertSame($whitelist, $result);

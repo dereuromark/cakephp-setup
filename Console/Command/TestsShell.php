@@ -25,7 +25,7 @@ if (!defined('TB')) {
  */
 class TestsShell extends AppShell {
 
-	public $types = array(
+	public $types = [
 		'Controller',
 		'Model',
 		'Component',
@@ -35,18 +35,18 @@ class TestsShell extends AppShell {
 		'Task',
 		'Lib',
 		'Datasource',
-	);
+	];
 
 	// if specified (param deep [d]) it can match deep test folders (instead of flat ones)
 	//TODO
-	public $matches = array(
+	public $matches = [
 		'Helper' => 'View/Helper',
 		'Behavior' => 'Model/Behavior',
 		'Datasource' => 'Model/Datasource',
 		'Task' => 'Console/Command/Task',
 		'Shell' => 'Console/Command',
 		'Component' => 'Controller/Component',
-	);
+	];
 
 	/**
 	 * Analyse a specific file and its test to find out what methods are yet untested
@@ -63,7 +63,7 @@ class TestsShell extends AppShell {
 	 * @return void
 	 */
 	public function assert() {
-		$fileList = array();
+		$fileList = [];
 		foreach ($this->types as $type) {
 			if (!empty($this->args[0]) && $this->args[0] !== $type) {
 				continue;
@@ -133,11 +133,11 @@ class TestsShell extends AppShell {
 				$testFiles[$key] = substr($val, 0, -8);
 			}
 
-			$missing = array();
-			$ok = array();
+			$missing = [];
+			$ok = [];
 
 			foreach ($fileList as $key => $file) {
-				$excludeList = array('MyCakeTestCase');
+				$excludeList = ['MyCakeTestCase'];
 				if (in_array($file, $excludeList)) {
 					$ok[] = $file;
 					continue;
@@ -308,7 +308,7 @@ class ' . $class . 'Test extends MyCakeTestCase {
 		$templatePath = CakePlugin::path('Setup') . 'files' . DS . 'test_templates' . DS;
 		if (file_exists($templatePath . $type . '.php')) {
 			$template = file_get_contents($templatePath . $type . '.php');
-			$template = str_replace(array('{class}', '{package}', '{init}', '{body}'), array($class, $package, $init, $body), $template);
+			$template = str_replace(['{class}', '{package}', '{init}', '{body}'], [$class, $package, $init, $body], $template);
 
 		}
 
@@ -324,7 +324,7 @@ class ' . $class . 'Test extends MyCakeTestCase {
 	 * @return string
 	 */
 	protected function _body($methods, $class, $type) {
-		$body = array();
+		$body = [];
 		$count = 0;
 		foreach ($methods as $method) {
 			$action = $method;
@@ -341,7 +341,7 @@ class ' . $class . 'Test extends MyCakeTestCase {
 
 
 PHP;
-			if ($type === 'Controller' && in_array($action, array('index', 'add'))) {
+			if ($type === 'Controller' && in_array($action, ['index', 'add'])) {
 				$name = substr($class, 0, -10);
 				$name = Inflector::underscore($name);
 				$plugin = !empty($this->params['plugin']) ? '\'plugin\' => \'' . Inflector::underscore($this->params['plugin']) . '\', '  : '';
@@ -429,7 +429,7 @@ PHP;
 		$parentMethods[] = 'isAuthorized';
 
 		$thisMethods = array_diff($classMethods, $parentMethods);
-		$out = array();
+		$out = [];
 		foreach ($thisMethods as $method) {
 			if (substr($method, 0, 1) !== '_' && $method != strtolower($className)) {
 				$out[] = $method;
@@ -444,7 +444,7 @@ PHP;
 	 * @param array $types
 	 * @return void
 	 */
-	protected function _bake($types = array()) {
+	protected function _bake($types = []) {
 		$content = $this->_groupTemplate($types);
 		$name = $this->_getName($types);
 		$path = $this->_path() . 'Case' . DS;
@@ -482,7 +482,7 @@ PHP;
 	 * @param array $types
 	 * @return string
 	 */
-	protected function _getName($types = array()) {
+	protected function _getName($types = []) {
 		$types = (array)$types;
 
 		if (count($types) > 1) {
@@ -502,11 +502,11 @@ PHP;
 	 * - includes only new one if present
 	 * - expects flat test folder hierarchie (all folders in /Test/Case/)
 	 */
-	protected function _groupTemplate($testTypes = array()) {
+	protected function _groupTemplate($testTypes = []) {
 		$testPath = $this->_path() . 'Case' . DS;
 		$testTypes = (array)$testTypes;
 
-		$types = array();
+		$types = [];
 		foreach ($testTypes as $testType) {
 			$path = $this->_getTestPathElement($testType, $testPath);
 
@@ -523,7 +523,7 @@ PHP;
 			return false;
 		}
 
-		$tests = array();
+		$tests = [];
 		foreach ($types as $type => $path) {
 			$path = str_replace(DS, '\' . DS . \'', $path);
 			$tests[] = '$Suite->addTestDirectory($path . DS . \'' . $path . '\');';
@@ -579,51 +579,51 @@ class All' . $name . 'Test extends PHPUnit_Framework_TestSuite {
 	}
 
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'plugin' => array(
+		$subcommandParser = [
+			'options' => [
+				'plugin' => [
 					'short' => 'p',
 					'help' => __d('cake_console', 'The plugin to bake group tests for. Only the specified plugin will be baked then.'),
 					'default' => ''
-				),
-				'remove' => array(
+				],
+				'remove' => [
 					'short' => 'r',
 					'boolean' => true,
 					'help' => __d('cake_console', 'Remove unnecessary group tests.')
-				),
-				'strict' => array(
+				],
+				'strict' => [
 					'short' => 's',
 					'boolean' => true,
 					'help' => __d('cake_console', 'Count tests with only testObject as empty, as well.')
-				),
-			)
-		);
+				],
+			]
+		];
 		$subcommandParserAssert = $subcommandParser;
-		$subcommandParserAssert['options']['create'] = array(
+		$subcommandParserAssert['options']['create'] = [
 			'short' => 'c',
 			'boolean' => true,
 			'help' => __d('cake_console', 'Create missing folder and files.')
-		);
-		$subcommandParserAssert['options']['overwrite'] = array(
+		];
+		$subcommandParserAssert['options']['overwrite'] = [
 			'short' => 'o',
 			'boolean' => true,
 			'help' => __d('cake_console', 'Overwrite existing files.')
-		);
+		];
 
 		return parent::getOptionParser()
 			->description(__d('cake_console', "A shell to help automate testing in 2.x"))
-			->addSubcommand('group', array(
+			->addSubcommand('group', [
 				'help' => __d('cake_console', 'Bake GroupTest files'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('assert', array(
+			])
+			->addSubcommand('assert', [
 				'help' => __d('cake_console', 'Assert test files'),
 				'parser' => $subcommandParserAssert
-			))
-			->addSubcommand('analyze', array(
+			])
+			->addSubcommand('analyze', [
 				'help' => __d('cake_console', 'Analyse methods of a test file'),
 				'parser' => $subcommandParserAssert
-			));
+			]);
 	}
 
 }

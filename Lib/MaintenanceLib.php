@@ -112,7 +112,7 @@ class MaintenanceLib {
 	 * @param array $newIps IP addressed to be added to the whitelist.
 	 * @return mixed boolean succes for adding, an array of all whitelisted IPs otherwise.
 	 */
-	public function whitelist($newIps = array()) {
+	public function whitelist($newIps = []) {
 		if ($newIps) {
 			foreach ($newIps as $ip) {
 				$this->_addToWhitelist($ip);
@@ -121,7 +121,7 @@ class MaintenanceLib {
 		}
 
 		$files = glob(TMP . "maintenanceOverride-*.txt");
-		$ips = array();
+		$ips = [];
 		foreach ($files as $file) {
 			$ip = extractFileInfo('file', $file);
 			$ip = substr($ip, strpos($ip, '-') + 1);
@@ -136,7 +136,7 @@ class MaintenanceLib {
 	 * @param array $ips
 	 * @return bool Success
 	 */
-	public function clearWhitelist($ips = array()) {
+	public function clearWhitelist($ips = []) {
 		$files = glob(TMP . "maintenanceOverride-*.txt");
 		foreach ($files as $file) {
 			$ip = extractFileInfo('file', $file);

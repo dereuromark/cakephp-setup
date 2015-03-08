@@ -60,7 +60,7 @@ SQL;
 			$this->out(' - ' . $r[0]['statement'], 1, Shell::VERBOSE);
 		}
 
-		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
+		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
 			$this->error('Aborted!');
 		}
@@ -89,7 +89,7 @@ SQL;
 	public function engine() {
 		$db = ConnectionManager::getDataSource('default');
 		$database = $db->config['database'];
-		$engines = array('InnoDB', 'MyISAM');
+		$engines = ['InnoDB', 'MyISAM'];
 		$prefix = empty($db->config['prefix']) ? '' : $db->config['prefix'];
 
 		if (!empty($this->args[0])) {
@@ -118,7 +118,7 @@ SQL;
 			$this->out(' - ' . $r[0]['statement'], 1, Shell::VERBOSE);
 		}
 
-		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
+		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
 			$this->error('Aborted!');
 		}
@@ -165,7 +165,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		$this->out('Database ' . $database . ': ' . count($res) . ' tables found');
 		if (!$prefix) {
-			$res = $this->in('No prefix set! Careful, this will drop all tables in that test datasource, continue?', array('Y', 'N'), 'N');
+			$res = $this->in('No prefix set! Careful, this will drop all tables in that test datasource, continue?', ['Y', 'N'], 'N');
 			if ($res !== 'Y') {
 				$this->error('Aborted!');
 			}
@@ -185,30 +185,30 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	}
 
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'dry-run' => array(
+		$subcommandParser = [
+			'options' => [
+				'dry-run' => [
 					'short' => 'd',
 					'help' => __d('cake_console', 'Dry run the command, nothing will actually be modified.'),
 					'boolean' => true
-				),
-			)
-		);
+				],
+			]
+		];
 
 		return parent::getOptionParser()
 			->description(__d('cake_console', "A Shell to do some basic maintenance."))
-			->addSubcommand('encoding', array(
+			->addSubcommand('encoding', [
 				'help' => __d('cake_console', 'Convert encoding.'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('engine', array(
+			])
+			->addSubcommand('engine', [
 				'help' => __d('cake_console', 'Convert engine.'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('cleanup', array(
+			])
+			->addSubcommand('cleanup', [
 				'help' => __d('cake_console', 'Cleanup database.'),
 				'parser' => $subcommandParser
-			));
+			]);
 	}
 
 }

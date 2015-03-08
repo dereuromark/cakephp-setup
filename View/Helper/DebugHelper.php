@@ -22,17 +22,17 @@ if (!defined('BR')) {
  */
 class DebugHelper extends AppHelper {
 
-	public $helpers = array('Html', 'Session', 'Tools.Datetime');
+	public $helpers = ['Html', 'Session', 'Tools.Datetime'];
 
 	public $level = 0;
 
-	public $debugContent = array('1' => array(), '2' => array(), '3' => array());
+	public $debugContent = ['1' => [], '2' => [], '3' => []];
 
 	public $model = null;
 
 	protected $_rememberEngine = 'cookie';
 
-	public function __construct(View $View, $level = null, $options = array()) {
+	public function __construct(View $View, $level = null, $options = []) {
 		parent::__construct($View, $options);
 
 		$this->_ViewProperties = $this->_objectToArray($View);
@@ -51,7 +51,7 @@ class DebugHelper extends AppHelper {
 
 	protected function _objectToArray($obj, $level = 5) {
 		$_arr = is_object($obj) ? get_object_vars($obj) : $obj;
-		$arr = array();
+		$arr = [];
 		if ($level < 1) {
 			return $obj;
 		}
@@ -140,7 +140,7 @@ class DebugHelper extends AppHelper {
 				$rememberedId = '';
 			}
 
-			$url = $this->Html->url(array('plugin' => 'setup', 'controller' => 'debug', 'action' => 'tab'));
+			$url = $this->Html->url(['plugin' => 'setup', 'controller' => 'debug', 'action' => 'tab']);
 			if (!(substr($url, -1, 1) === '/')) {
 				$url .= '/';
 			}
@@ -229,8 +229,8 @@ jQuery(function() {
 	 */
 	protected function _debug($options = null) {
 		$res = '<div class="globals">';
-		$res .= '<div style="float:right">' . $this->Html->link('Error-Logs', array('plugin' => 'setup', 'admin' => true, 'controller' => 'configuration', 'action' => 'logs')) . '</div>';
-		$res .= '<div style="float:right; margin-right: 20px;">' . $this->Html->link('Configuration', array('plugin' => 'setup', 'admin' => true, 'controller' => 'configuration', 'action' => 'index')) . '</div>';
+		$res .= '<div style="float:right">' . $this->Html->link('Error-Logs', ['plugin' => 'setup', 'admin' => true, 'controller' => 'configuration', 'action' => 'logs']) . '</div>';
+		$res .= '<div style="float:right; margin-right: 20px;">' . $this->Html->link('Configuration', ['plugin' => 'setup', 'admin' => true, 'controller' => 'configuration', 'action' => 'index']) . '</div>';
 		//$res .=  xdebug_time_index();
 		$res .= 'Cake-Version: ' . $this->versionCake() . BR . BR;
 		$res .= __('rendered in %s', '<b>' . number_format(round(microtime(true) - $_SERVER['REQUEST_TIME'], 3), 3, ',', '') . ' s</b>') . BR;
@@ -450,7 +450,7 @@ jQuery(function() {
 		$this->add(1, 'Dynamic', $res);
 
 		/** Configs **/
-		$infos = array('Settings', 'Config');
+		$infos = ['Settings', 'Config'];
 		if (!empty($options['configs'])) {
 			$infos = array_merge($infos, $options['configs']);
 		}
@@ -495,15 +495,15 @@ jQuery(function() {
 		$this->add(1, 'Configs', $res);
 
 		/** Locales **/
-		$infos = array('LC_TIME' => setlocale(LC_TIME, 0), 'LC_NUMERIC' => setlocale(LC_NUMERIC, 0), 'LC_MONETARY' => setlocale(LC_MONETARY, 0), 'LC_CTYPE' => setlocale(LC_CTYPE, 0), 'LC_COLLATE' => setlocale(LC_COLLATE, 0), 'LC_MESSAGES' => @setlocale(LC_MESSAGES, 0) . ' (only on some systems available)', // seems to run only on some systems
-			);
+		$infos = ['LC_TIME' => setlocale(LC_TIME, 0), 'LC_NUMERIC' => setlocale(LC_NUMERIC, 0), 'LC_MONETARY' => setlocale(LC_MONETARY, 0), 'LC_CTYPE' => setlocale(LC_CTYPE, 0), 'LC_COLLATE' => setlocale(LC_COLLATE, 0), 'LC_MESSAGES' => @setlocale(LC_MESSAGES, 0) . ' (only on some systems available)', // seems to run only on some systems
+			];
 		$res = '<h3>Locale stuff</h3><ul>';
 		foreach ($infos as $name => $content) {
 			$res .= '<li><b>' . $name . ':</b> ' . $content . '</li>';
 		}
 		$res .= '</ul><br />';
 
-		$infos = array('date_default_timezone' => date_default_timezone_get(), 'time based on timezone' => date(FORMAT_NICE_YMDHMS), 'mb settings' => pre(mb_get_info()), );
+		$infos = ['date_default_timezone' => date_default_timezone_get(), 'time based on timezone' => date(FORMAT_NICE_YMDHMS), 'mb settings' => pre(mb_get_info()), ];
 		$res .= '<b>internal stuff:</b><ul>';
 		foreach ($infos as $name => $content) {
 			$res .= '<li><b>' . $name . ':</b> ' . $content . '</li>';
@@ -514,16 +514,16 @@ jQuery(function() {
 		/** MISC + Quicklinks **/
 		$res = '<table width="100%" style="table-layout:fixed"><tr><td style="padding-right:10px;">';
 
-		$links = array('http://de.php.net/manual/en/book.strings.php' => 'PHP.net', 'http://www.tolleiv.de/fileadmin/sidekicks/commands/' => 'PHP Spickzettel',
+		$links = ['http://de.php.net/manual/en/book.strings.php' => 'PHP.net', 'http://www.tolleiv.de/fileadmin/sidekicks/commands/' => 'PHP Spickzettel',
 			'http://www.addedbytes.com/download/mysql-cheat-sheet-v1/png/' => 'MySql Spickzettel', 'http://www.veign.com/downloads/guides/qrg0007.pdf' => 'CSS2 Spickzettel',
-			'http://www.google.de/search?client=firefox-a&amp;rls=org.mozilla%3Ade%3Aofficial&amp;channel=s&amp;hl=de&amp;q=cheat+sheet&amp;meta=&amp;btnG=Google-Suche' => 'Google General CheatSheet', );
+			'http://www.google.de/search?client=firefox-a&amp;rls=org.mozilla%3Ade%3Aofficial&amp;channel=s&amp;hl=de&amp;q=cheat+sheet&amp;meta=&amp;btnG=Google-Suche' => 'Google General CheatSheet', ];
 		$res .= 'Useful links:<ul>';
 		foreach ($links as $link => $name) {
 			$res .= '<li>' . $this->Html->link($name, $link) . '</li>';
 		}
 		$res .= '</ul><br />';
 
-		$links = array('http://www.cakephp-forum.com/search.php?search_id=newposts' => 'German CakePHP-Forum', 'http://www.cakephpforum.net/index.php?act=Search&CODE=getnew' => 'English CakePHP-Forum', );
+		$links = ['http://www.cakephp-forum.com/search.php?search_id=newposts' => 'German CakePHP-Forum', 'http://www.cakephpforum.net/index.php?act=Search&CODE=getnew' => 'English CakePHP-Forum', ];
 		$res .= 'CakeCommunity:<ul>';
 		foreach ($links as $link => $name) {
 			$res .= '<li>' . $this->Html->link($name, $link) . '</li>';
@@ -543,8 +543,8 @@ jQuery(function() {
 		$res .= '</td><td>';
 
 		$res .= 'XSS-Protection:<ul>';
-		$strings = array('\';alert(String.fromCharCode(88, 83, 83))//\';alert(String.fromCharCode(88, 83, 83))//";alert(String.fromCharCode(88, 83, 83))//\";alert(String.fromCharCode(88, 83, 83))//--></SCRIPT>">\'><SCRIPT>alert(String.fromCharCode(88, 83, 83))</SCRIPT>',
-			'<SCRIPT SRC=http://ha.ckers.org/xss.js></SCRIPT>');
+		$strings = ['\';alert(String.fromCharCode(88, 83, 83))//\';alert(String.fromCharCode(88, 83, 83))//";alert(String.fromCharCode(88, 83, 83))//\";alert(String.fromCharCode(88, 83, 83))//--></SCRIPT>">\'><SCRIPT>alert(String.fromCharCode(88, 83, 83))</SCRIPT>',
+			'<SCRIPT SRC=http://ha.ckers.org/xss.js></SCRIPT>'];
 
 		foreach ($strings as $string) {
 			$res .= '<li><div style="border:1px solid yellow; padding:2px;">' . h($string) . '</div></li>';

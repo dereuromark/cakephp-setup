@@ -13,9 +13,9 @@ class MaintenanceComponent extends Component {
 
 	//public $components = array('Tools.Flash');
 
-	protected $_defaultConfig = array(
+	protected $_defaultConfig = [
 		'check' => true,
-	);
+	];
 
 	/**
 	 * Main interaction.

@@ -32,16 +32,16 @@ class ClearShell extends AppShell {
 	/**
 	 * Predefined shorthands
 	 */
-	public $caches = array(
+	public $caches = [
 		'm' => 'models', 'p' => 'persistent', 'v' => 'views',
-	);
+	];
 
 	/**
 	 * Predefined matches in webroot
 	 */
-	public $webrootCaches = array(
+	public $webrootCaches = [
 		'css' => 'css/ccss', 'js' => 'js/cjs'
-	);
+	];
 
 	/**
 	 * @deprecated with new command parser help?
@@ -115,7 +115,7 @@ TEXT;
 	public function cache() {
 		if (count($this->args) === 1) {
 			if ($this->args[0] === 'webroot') {
-				$this->args = array('css', 'js');
+				$this->args = ['css', 'js'];
 			} elseif ($this->args[0] === 'app') {
 				$this->args = array_values($this->caches);
 			}
@@ -134,7 +134,7 @@ TEXT;
 			return;
 		}
 		foreach ($this->args as $arg) {
-			if (in_array($arg, array('css', 'js'))) {
+			if (in_array($arg, ['css', 'js'])) {
 				$this->{$arg}();
 				continue;
 			}
@@ -162,7 +162,7 @@ TEXT;
 			App::uses('ClearCacheLib', 'Setup.Lib');
 			$this->_Cleaner = new ClearCacheLib();
 		}
-		$output = call_user_func_array(array(&$this->_Cleaner, 'engines'), $this->args);
+		$output = call_user_func_array([&$this->_Cleaner, 'engines'], $this->args);
 
 		foreach ($output as $key => $result) {
 			$this->out($key . ': ' . ($result ? 'cleared' : 'error'));
@@ -186,7 +186,7 @@ TEXT;
 	 * @return void
 	 */
 	public function tmp() {
-		$this->_empty(TMP, array(TMP . 'logs' . DS, TMP . 'cache' . DS));
+		$this->_empty(TMP, [TMP . 'logs' . DS, TMP . 'cache' . DS]);
 	}
 
 	/**
@@ -196,7 +196,7 @@ TEXT;
 	 * @param array $excludes
 	 * @return void
 	 */
-	public function _empty($dir, $excludes = array()) {
+	public function _empty($dir, $excludes = []) {
 		$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
 			RecursiveIteratorIterator::CHILD_FIRST);
 		foreach ($Iterator as $path) {
@@ -299,59 +299,59 @@ TEXT;
 	 * @return ConsoleOptionParser
 	 */
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'remove' => array(
+		$subcommandParser = [
+			'options' => [
+				'remove' => [
 					'short' => 'r',
 					'help' => __d('cake_console', 'Remove subfolders, as well'),
 					'boolean' => true
-				),
-				'dry-run' => array(
+				],
+				'dry-run' => [
 					'short' => 'd',
 					'help' => __d('cake_console', 'Dry run the clear command, no files will actually be deleted. Should be combined with verbose!'),
 					'boolean' => true
-				)
-			)
-		);
+				]
+			]
+		];
 
 		return parent::getOptionParser()
 			->description(__d('cake_console', "The Clear Shell deletes all tmp files (cache, logs)"))
-			->addSubcommand('all', array(
+			->addSubcommand('all', [
 				'help' => __d('cake_console', 'Clear all'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('tmp', array(
+			])
+			->addSubcommand('tmp', [
 				'help' => __d('cake_console', 'Clear tmp (except logs and cache)'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('cache', array(
+			])
+			->addSubcommand('cache', [
 				'help' => __d('cake_console', 'Clear cache'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('engines', array(
+			])
+			->addSubcommand('engines', [
 				'help' => __d('cake_console', 'Clear cache engines'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('logs', array(
+			])
+			->addSubcommand('logs', [
 				'help' => __d('cake_console', 'Clear log files'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('webroot', array(
+			])
+			->addSubcommand('webroot', [
 				'help' => __d('cake_console', 'Clear js/css files'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('js', array(
+			])
+			->addSubcommand('js', [
 				'help' => __d('cake_console', 'Clear js files'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('css', array(
+			])
+			->addSubcommand('css', [
 				'help' => __d('cake_console', 'Clear css files'),
 				'parser' => $subcommandParser
-			))
-				->addSubcommand('custom', array(
+			])
+				->addSubcommand('custom', [
 				'help' => __d('cake_console', 'Clear custom dir'),
 				'parser' => $subcommandParser
-			));
+			]);
 	}
 
 }

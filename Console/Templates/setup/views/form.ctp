@@ -33,7 +33,7 @@
 	if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
 		$relationModel = new $modelClass;
 	}
-	$skipFields = array('slug', 'lft', 'rght', 'created', 'modified', 'approved', 'deleted', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
+	$skipFields = ['slug', 'lft', 'rght', 'created', 'modified', 'approved', 'deleted', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields')) {
 		$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFields);
 	}
@@ -42,7 +42,7 @@
 	echo "\t<?php\n";
 
 	// display "empty" default value for belongsTo relations
-	$relations = array();
+	$relations = [];
 	if (!empty($associations['belongsTo'])) {
 		foreach ($associations['belongsTo'] as $rel) {
 			$relations[] = $rel['foreignKey'];
@@ -60,8 +60,8 @@
 		} elseif (in_array($field, $skipFields) || ($field === 'sort' && $upDown)) {
 			continue;
 
-		} elseif (in_array($field, $relations) || in_array($schema[$field]['type'], array('time', 'date', 'datetime'))) {
-			$options = array();
+		} elseif (in_array($field, $relations) || in_array($schema[$field]['type'], ['time', 'date', 'datetime'])) {
+			$options = [];
 			if (in_array($field, $relations)) {
 				$options[] = "'empty' => Configure::read('Select.defaultBefore') . $emptyValue . Configure::read('Select.defaultAfter')";
 			} else {
@@ -106,7 +106,7 @@
 <?php endif;?>
 		<li><?php echo "<?php echo \$this->Html->link(__('List %s', __('{$pluralHumanName}')), array('action' => 'index'));?>";?></li>
 <?php
-		$done = array();
+		$done = [];
 		foreach ($associations as $type => $data) {
 			// We dont need them
 			break;

@@ -9,7 +9,7 @@ App::uses('Folder', 'Utility');
  */
 class SetupLib extends Object {
 
-	protected $folderRights = array();
+	protected $folderRights = [];
 
 	/**
 	 * Import the folder rights
@@ -41,7 +41,7 @@ class SetupLib extends Object {
 		$named = $urlArray['named'];
 		$pass = $urlArray['pass'];
 
-		$returnArray = array();
+		$returnArray = [];
 		if (isset($urlArray['controller'])) {
 			$returnArray['controller'] = $urlArray['controller'];
 		}
@@ -96,9 +96,9 @@ class SetupLib extends Object {
 	 * @return void
 	 */
 	public function clearCache($type) {
-		$types = array('m' => 'models', 'model' => 'models', 'v' => 'views', 'views' => 'views', 'p' => 'persistent', 'persistent' => 'persistent');
+		$types = ['m' => 'models', 'model' => 'models', 'v' => 'views', 'views' => 'views', 'p' => 'persistent', 'persistent' => 'persistent'];
 
-			$typeArray = array();
+			$typeArray = [];
 			if (is_array($type)) {
 				$this->log('Type for clearCaches should not be an array (' . implode(', ', $type) . ')');
 				$type = array_shift($type);
@@ -117,7 +117,7 @@ class SetupLib extends Object {
 
 		// defaults
 		if (empty($typeArray)) {
-			$typeArray = array('models', 'persistent', 'views');
+			$typeArray = ['models', 'persistent', 'views'];
 		}
 
 		foreach ($typeArray as $t) {

@@ -18,13 +18,13 @@ class TestCliShell extends AppShell {
 		$url = Router::url('/');
 		$this->out('Router::url(\'/\'): ' . NL . TB . $url);
 
-		$url = Router::url(array('controller' => 'test'));
+		$url = Router::url(['controller' => 'test']);
 		$this->out('Router::url(array(\'controller\' => \'test\')): ' . NL . TB . $url);
 
 		$url = Router::url('/', true);
 		$this->out('Router::url(\'/\', true): ' . NL . TB . $url);
 
-		$url = Router::url(array('controller' => 'test'), true);
+		$url = Router::url(['controller' => 'test'], true);
 		$this->out('Router::url(array(\'controller\' => \'test\'), true): ' . NL . TB . $url);
 	}
 
@@ -36,9 +36,9 @@ class TestCliShell extends AppShell {
 	public function getOptionParser() {
 		return parent::getOptionParser()
 			->description('Test CLI')
-			->addSubcommand('router', array(
+			->addSubcommand('router', [
 				'help' => 'Test router environment',
-			));
+			]);
 	}
 
 }

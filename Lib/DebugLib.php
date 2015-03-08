@@ -6,7 +6,7 @@ App::uses('File', 'Utility');
  */
 class DebugLib {
 
-	public $debugFileCache = array();
+	public $debugFileCache = [];
 
 /** log files **/
 
@@ -24,18 +24,18 @@ class DebugLib {
 	}
 
 	public function logFileContent($logFiles) {
-		$logFileContent = array();
+		$logFileContent = [];
 		foreach ($logFiles as $name) {
 			$File = new File(TMP . 'logs' . DS . $name . '.log');
 
 			if ($File->exists()) {
-				$logFileContent[$name] = array(
+				$logFileContent[$name] = [
 					'name' => $File->name(),
 					'size' => $File->size(),
 					'content' => $File->read(),
 					'modified' => $File->lastChange(),
 					'file' => $File->name() . '.' . $File->ext(),
-				);
+				];
 			}
 		}
 		return $logFileContent;
@@ -98,7 +98,7 @@ class DebugLib {
 	 */
 	public function getServerLoad() {
 		if (!WINDOWS) {
-			$load = array();
+			$load = [];
 			$res = (string) @exec('uptime');
 			// last 1 minute : last 5 minutes : last 15 minutes
 			if (preg_match("/averages?: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/", $res, $load) <= 0) {
@@ -106,7 +106,7 @@ class DebugLib {
 			}
 
 			if (is_array($load) && count($load) > 2) {
-				return array($load[1], $load[2], $load[3]);
+				return [$load[1], $load[2], $load[3]];
 			}
 		}
 		return false;
@@ -126,7 +126,7 @@ class DebugLib {
 		$command = 'uptime';
 		exec($command, $output, $status);
 		if ($status !== 0) { # zero => success
-			return array();
+			return [];
 		}
 		//$space = $output;
 		//die(returns($space));
@@ -142,7 +142,7 @@ class DebugLib {
 	 * @return array uptime uptime in days, hours and minutes - or empty on failure
 	 */
 	public function getUptime($digit = false) {
-		$result = array();
+		$result = [];
 
 		$fh = @fopen("/proc/uptime", "r");
 		if (!is_resource($fh)) {
@@ -235,8 +235,8 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 	 * @return array
 	 */
 	public function getCpu() {
-		$results = array();
-		$buffer = array();
+		$results = [];
+		$buffer = [];
 
 		if (!($fh = @fopen("/proc/cpuinfo", "r"))) {
 			return false;
@@ -302,7 +302,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		if (!($fh = @fopen("/proc/meminfo", "r"))) {
 			return false;
 		}
-		$results = array();
+		$results = [];
 
 		while ($buffer = fgets($fh, 4096)) {
 			if (empty($buffer) || strpos($buffer, ':') === false) {
@@ -494,7 +494,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		if (strpos($var, ':') !== false) {
 			$paths = explode(':', $var);
 		} else {
-			$paths = array();
+			$paths = [];
 		}
 		return $paths;
 	}
@@ -629,7 +629,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 /** test stuff - or deprecated **/
 
 	public function getOpenBasedir() {
-		$ret = array('ok' => 0, 'value' => implode('<br/>', $tthis->openBasedir()), 'descr' => 'open basedir restrictions');
+		$ret = ['ok' => 0, 'value' => implode('<br/>', $tthis->openBasedir()), 'descr' => 'open basedir restrictions'];
 		return $ret;
 	}
 
@@ -681,7 +681,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 		$v = $this->_getDbServerVersion();
 		$ok = (int)$v;
 		$ok = ($ok >= 5 ? 2 : -1);
-		$ret = array('ok' => $ok, 'value' => $v, 'descr' => 'must be 5 or higher');
+		$ret = ['ok' => $ok, 'value' => $v, 'descr' => 'must be 5 or higher'];
 		return $ret;
 	}
 
@@ -738,7 +738,7 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 			$size += ($data['Index_length'] + $data['Data_length']);
 		}
 
-		$units = array(' B', ' KB', ' MB', ' GB', ' TB');
+		$units = [' B', ' KB', ' MB', ' GB', ' TB'];
 		for ($i = 0; $size > 1024; $i++) {
 			$size /= 1024;
 		}

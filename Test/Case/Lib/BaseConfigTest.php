@@ -51,18 +51,18 @@ class BaseConfigTest extends CakeTestCase {
 
 class TEST_DATABASE_CONFIG extends BaseConfig {
 
-	public $default = array(
+	public $default = [
 		'name' => 'local',
-		'environment' => array(HTTP_HOST),
-	);
+		'environment' => [HTTP_HOST],
+	];
 
-	public $cli = array(
+	public $cli = [
 		'name' => 'cli',
-		'path' => array(APP),
-	);
+		'path' => [APP],
+	];
 
-	public $test = array(
+	public $test = [
 		'name' => 'testconfig',
 		'merge' => true
-	);
+	];
 }

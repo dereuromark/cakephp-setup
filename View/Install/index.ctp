@@ -8,4 +8,4 @@
 </ul>
 
 <h3>Begin</h3>
-<?php echo $this->Html->link(__('Continue to step %s', 1), array('action' => 'step1')); ?>
+<?php echo $this->Html->link(__('Continue to step %s', 1), ['action' => 'step1']); ?>

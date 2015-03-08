@@ -10,9 +10,9 @@ Configure::write('Plugin.name', 'Setup');
  */
 class SetupAppController extends AppController {
 
-	public $components = array('Session', 'Tools.Common');
+	public $components = ['Session', 'Tools.Common'];
 
-	public $helpers = array('Tools.Common', 'Tools.Format', 'Tools.Datetime', 'Tools.Numeric');
+	public $helpers = ['Tools.Common', 'Tools.Format', 'Tools.Datetime', 'Tools.Numeric'];
 
 	/**
 	 * Dynamically enable the table for configurations if desired
@@ -20,7 +20,7 @@ class SetupAppController extends AppController {
 	public function __construct(CakeRequest $request, CakeResponse $response) {
 		parent::__construct($request, $response);
 
-		$this->uses = array('Setup.Configuration');
+		$this->uses = ['Setup.Configuration'];
 		/*
 		if (($table = Configure::read('Configuration.table')) !== null) {
 			if ($table === false) {

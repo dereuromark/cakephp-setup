@@ -21,7 +21,7 @@
 if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
 	$relationModel = new $modelClass;
 }
-$skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
+$skipFields = ['id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFields')) {
 	$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFields);
 }
@@ -107,7 +107,7 @@ foreach ($fields as $field) {
 	echo "\t\t<li><?php echo \$this->Form->postLink(__('Delete %s', __('{$singularHumanName}')), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('confirm' => __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}']))); ?> </li>\n";
 	echo "\t\t<li><?php echo \$this->Html->link(__('List %s', __('{$pluralHumanName}')), array('action' => 'index')); ?> </li>\n";
 
-	$done = array();
+	$done = [];
 	foreach ($associations as $type => $data) {
 		// We dont need them
 		break;
@@ -147,10 +147,10 @@ if (!empty($associations['hasOne'])) :
 endif;
 
 if (empty($associations['hasMany'])) {
-	$associations['hasMany'] = array();
+	$associations['hasMany'] = [];
 }
 if (empty($associations['hasAndBelongsToMany'])) {
-	$associations['hasAndBelongsToMany'] = array();
+	$associations['hasAndBelongsToMany'] = [];
 }
 $relations = array_merge($associations['hasMany'], $associations['hasAndBelongsToMany']);
 

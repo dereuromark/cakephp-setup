@@ -50,7 +50,7 @@ class InstallLib {
 		}
 		$file = file_get_contents($file);
 
-		$content = array();
+		$content = [];
 		if (empty($enhanced)) {
 			unset($params['name']);
 			unset($params['environment']);
@@ -58,7 +58,7 @@ class InstallLib {
 		unset($params['enhanced_database_class']);
 
 		foreach ($params as $key => $val) {
-			if (in_array($key, array('persistent'))) {
+			if (in_array($key, ['persistent'])) {
 				$val = $val ? 'true' : 'false';
 			} else {
 				$val = '\'' . $val . '\'';
@@ -72,7 +72,7 @@ class InstallLib {
 		}
 
 		$content = ltrim(implode(',' . PHP_EOL, $content));
-		$content = String::insert($file, array('fields' => $content, 'testFields' => $testContent));
+		$content = String::insert($file, ['fields' => $content, 'testFields' => $testContent]);
 
 		$target = InstallLib::configDir() . 'database.php';
 		return file_put_contents($target, $content);

@@ -27,7 +27,7 @@ class SystemLib {
 	 * @return string Errors separated by pipe (|)
 	 */
 	public static function error2string($value) {
-		$levelNames = array(
+		$levelNames = [
 			E_ERROR => 'E_ERROR',
 			E_WARNING => 'E_WARNING',
 			E_PARSE => 'E_PARSE',
@@ -38,11 +38,11 @@ class SystemLib {
 			E_COMPILE_WARNING => 'E_COMPILE_WARNING',
 			E_USER_ERROR => 'E_USER_ERROR',
 			E_USER_WARNING => 'E_USER_WARNING',
-			E_USER_NOTICE => 'E_USER_NOTICE');
+			E_USER_NOTICE => 'E_USER_NOTICE'];
 		if (defined('E_STRICT')) {
 			$levelNames[E_STRICT] = 'E_STRICT';
 		}
-		$levels = array();
+		$levels = [];
 		if (($value & E_ALL) == E_ALL) {
 			$levels[] = 'E_ALL';
 			$value &= ~ E_ALL;
@@ -62,7 +62,7 @@ class SystemLib {
 	 * @return int Error levels as bitmask
 	 */
 	public static function string2error($string) {
-		$levelNames = array(
+		$levelNames = [
 			'E_ERROR',
 			'E_WARNING',
 			'E_PARSE',
@@ -74,7 +74,7 @@ class SystemLib {
 			'E_USER_ERROR',
 			'E_USER_WARNING',
 			'E_USER_NOTICE',
-			'E_ALL');
+			'E_ALL'];
 		if (defined('E_STRICT')) {
 			$levelNames[] = 'E_STRICT';
 		}
@@ -98,7 +98,7 @@ class SystemLib {
 	 */
 	public static function systemLocales() {
 		if (WINDOWS) {
-			return array();
+			return [];
 		}
 		ob_start();
 		system('locale -a');
@@ -113,12 +113,12 @@ class SystemLib {
 	 * @return array array(used, available, percent_used, percent_available) - or empty on error
 	 */
 	public static function freeDiskSpace($mounted = '/') {
-		$space = array(
+		$space = [
 			'percent_used' => 0,
 			'percent_available' => 0,
 			'total' => 0,
 			'used' => 0,
-			'available' => 0);
+			'available' => 0];
 		if (WINDOWS) {
 			return $space;
 		}
@@ -142,19 +142,19 @@ class SystemLib {
 		} */
 
 		$sizeAndPath = explode(' ', $revelant);
-		$array = array();
+		$array = [];
 		foreach ($sizeAndPath as $key => $value) {
 			if (($value = trim($value)) !== '') {
 				$array[] = $value;
 			}
 		}
 
-		$space = array(
+		$space = [
 			'percent_used' => (int)$array[4],
 			'percent_available' => 100 - (int)$array[4],
 			'total' => $array[1] * 1024,
 			'used' => $array[2] * 1024,
-			'available' => $array[3] * 1024);
+			'available' => $array[3] * 1024];
 		return $space;
 	}
 
@@ -165,7 +165,7 @@ class SystemLib {
 	 * @return array
 	 */
 	public function diskSpace($rootPath) {
-		$space = array();
+		$space = [];
 		if (!WINDOWS) {
 			// b = bytes, a = files too, c = grand total, x = only current file system
 			// h = human readable
@@ -190,7 +190,7 @@ class SystemLib {
 		if (empty($data)) {
 			return $data;
 		}
-		$res = array();
+		$res = [];
 		if ($root !== null) {
 			//$rootKey = array_keys($data, $root);
 			$rootKey = count($data) - 1;
@@ -216,10 +216,10 @@ class SystemLib {
 				$url = '/';
 			}
 			$pieces = explode(DS, $url);
-			$data[$key] = array(
+			$data[$key] = [
 				'size' => $size,
 				'path' => $url,
-				'pieces' => $pieces);
+				'pieces' => $pieces];
 		}
 		//return $data;
 	}
@@ -227,7 +227,7 @@ class SystemLib {
 	/** TODO: js file tree **/
 
 	public function dirToTree(&$data, $root = null) {
-		$res = array();
+		$res = [];
 		if ($root !== null) {
 			$rootKey = array_keys($root, $data);
 			$root === null;
@@ -248,15 +248,15 @@ class SystemLib {
 	}
 
 	public function _generateTree(&$data, $root) {
-		$res = array();
+		$res = [];
 		$sizeAndPath = explode(TB, $data[$root]);
 		$urlToRoot = $sizeAndPath[1];
 		$sizeOfRoot = $sizeAndPath[0];
 		// root
-		$res[DS] = array(
+		$res[DS] = [
 			'size' => $sizeOfRoot,
 			'url' => $urlToRoot,
-			'children' => array());
+			'children' => []];
 
 		for ($i = $root; $i >= 0; $i--) {
 			$sizeAndPath = explode(TB, $data[$i]);

@@ -34,7 +34,7 @@ if (!defined('WINDOWS')) {
  */
 class DbDumpShell extends AppShell {
 
-	public $tasks = array('WriteSql');
+	public $tasks = ['WriteSql'];
 
 	public function startup() {
 		parent::startup();
@@ -59,13 +59,13 @@ class DbDumpShell extends AppShell {
 		$usePrefix = empty($db->config['prefix']) ? '' : $db->config['prefix'];
 		$file = $this->_path() . 'dbdump_' . date("Y-m-d--H-i-s");
 
-		$options = array(
+		$options = [
 			'--user=' . $db->config['login'],
 			'--password=' . $db->config['password'],
 			'--default-character-set=' . $db->config['encoding'],
 			'--host=' . $db->config['host'],
 			'--databases ' . $db->config['database'],
-		);
+		];
 		$sources = $db->listSources();
 		if (array_key_exists('tables', $this->params) && empty($this->params['tables'])) {
 			// prompt for tables
@@ -74,7 +74,7 @@ class DbDumpShell extends AppShell {
 			}
 			$tables = $this->in('What tables (separated by comma without spaces)', null, null);
 			$tables = explode(',', $tables);
-			$tableList = array();
+			$tableList = [];
 			foreach ($tables as $table) {
 				if (isset($sources[intval($table)])) {
 					$tableList[] = $sources[intval($table)];
@@ -108,7 +108,7 @@ class DbDumpShell extends AppShell {
 
 		$this->out('Backup will be written to:');
 		$this->out(' - ' . $this->_path());
-		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
+		$looksGood = $this->in(__d('cake_console', 'Look okay?'), ['y', 'n'], 'y');
 		if ($looksGood !== 'y') {
 			return $this->error('Aborted!');
 		}
@@ -195,7 +195,7 @@ class DbDumpShell extends AppShell {
 		$this->out();
 		$this->out('Restoring:');
 		$this->out($file);
-		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
+		$looksGood = $this->in(__d('cake_console', 'Look okay?'), ['y', 'n'], 'y');
 		if ($looksGood !== 'y') {
 			return $this->error('Aborted!');
 		}
@@ -203,13 +203,13 @@ class DbDumpShell extends AppShell {
 		$db = ConnectionManager::getDataSource('default');
 		$file = BACKUPS . $file;
 
-		$options = array(
+		$options = [
 			'--user=' . $db->config['login'],
 			'--password=' . $db->config['password'],
 			'--default-character-set=' . $db->config['encoding'],
 			'--host=' . $db->config['host'],
 			$db->config['database'],
-		);
+		];
 		if (!empty($this->params['verbose'])) {
 			$options[] = '--verbose';
 		}
@@ -252,7 +252,7 @@ class DbDumpShell extends AppShell {
 		$this->out(count($files) . ' files found');
 		$this->out('Aborting');
 		return;
-		$looksGood = $this->in(__d('cake_console', 'Sure?'), array('y', 'n'), 'y');
+		$looksGood = $this->in(__d('cake_console', 'Sure?'), ['y', 'n'], 'y');
 		if ($looksGood !== 'y') {
 			return $this->error('Aborted!');
 		}
@@ -281,7 +281,7 @@ class DbDumpShell extends AppShell {
 		$Directory = new RecursiveDirectoryIterator(BACKUPS);
 		$It = new RecursiveIteratorIterator($Directory);
 		$Regex = new RegexIterator($It, '/dbdump_.*?[\.sql|\.gz]$/', RecursiveRegexIterator::GET_MATCH);
-		$files = array();
+		$files = [];
 		foreach ($Regex as $v) {
 			$files[] = $v[0];
 		}
@@ -290,40 +290,40 @@ class DbDumpShell extends AppShell {
 	}
 
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'dry-run' => array(
+		$subcommandParser = [
+			'options' => [
+				'dry-run' => [
 					'short' => 'd',
 					'help' => __d('cake_console', 'Dry run the update, no files will actually be modified.'),
 					'boolean' => true
-				),
-				'tables' => array(
+				],
+				'tables' => [
 					'short' => 't',
 					'help' => __d('cake_console', 'custom tables to dump (separate using , and NO SPACES - use no prefix). Use -t only for prompting tables.'),
-				),
-				'compress' => array(
+				],
+				'compress' => [
 					'short' => 'c',
 					'help' => __d('cake_console', 'compress using gzip'),
 					'boolean' => true
-				),
-				'path' => array(
+				],
+				'path' => [
 					'short' => 'p',
 					'help' => __d('cake_console', 'Use a custom backup directory'),
 					'default' => ''
-				)
-			)
-		);
+				]
+			]
+		];
 
 		return parent::getOptionParser()
 			->description(__d('cake_console', "A Shell to dump and restore SQL databases. The advantage: It uses native cli commands which save a lot of resources and are very fast."))
-			->addSubcommand('create', array(
+			->addSubcommand('create', [
 				'help' => __d('cake_console', 'Dump SQL to file'),
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('restore', array(
+			])
+			->addSubcommand('restore', [
 				'help' => __d('cake_console', 'Restore SQL from file'),
 				'parser' => $subcommandParser
-			));
+			]);
 	}
 
 }

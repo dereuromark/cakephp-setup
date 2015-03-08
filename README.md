@@ -1,18 +1,18 @@
 # CakePHP Setup Plugin
-
 [![Build Status](https://api.travis-ci.org/dereuromark/cakephp-setup.png)](https://travis-ci.org/dereuromark/cakephp-setup)
+[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.4-8892BF.svg)](https://php.net/)
 [![License](https://poser.pugx.org/dereuromark/cakephp-setup/license.png)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Total Downloads](https://poser.pugx.org/dereuromark/setup-cakephp/d/total.png)](https://packagist.org/packages/dereuromark/cakephp-setup)
 
-This plugin provides useful tools for managing a cakephp app.
+This plugin provides useful tools for managing a CakePHP app.
 
 
 ## Installation
 
-* Clone/Copy the files in this directory into `app/Plugin/Setup`
+* Clone/Copy the files in this directory into `APP/Plugin/Setup`
 * Don't forget to include the plugin in your bootstrap's `CakePlugin::load()` statement or use `CakePlugin::loadAll()`
 
-Tip: You can also use packagist now @ https://packagist.org/packages/dereuromark/cakephp-setup
+Tip: You can also use Packagist now @ https://packagist.org/packages/dereuromark/cakephp-setup
 
 
 ## Documentation

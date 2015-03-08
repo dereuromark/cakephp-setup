@@ -31,18 +31,18 @@ App::uses('SetupLib', 'Setup.Lib');
  */
 class SetupComponent extends Component {
 
-	public $components = array('Session');
+	public $components = ['Session'];
 
 	public $Controller;
 
-	public $dirs = array();
+	public $dirs = [];
 
-	public $notifications = array(
+	public $notifications = [
 		'404' => true,
 		'loops' => false, //TODO,
 		'memory' => false,
 		'execTime' => false,
-	);
+	];
 
 	/**
 	 * Main interaction.
@@ -196,7 +196,7 @@ class SetupComponent extends Component {
 			$stack = (array)$this->Session->read('Debug.Redirect.stack');
 
 		} else {
-			$stack = array();
+			$stack = [];
 		}
 
 		$inStack = false;
@@ -207,11 +207,11 @@ class SetupComponent extends Component {
 			}
 		}
 
-		$stack[] = array('url' => $url, 'time' => time(), 'status' => $status, 'referer' => $Controller->referer(), 'current' => $Controller->request->here);
+		$stack[] = ['url' => $url, 'time' => time(), 'status' => $status, 'referer' => $Controller->referer(), 'current' => $Controller->request->here];
 		if (count($stack) > 5) {
 			array_shift($stack);
 		}
-		$stack = array('time' => time(), 'stack' => $stack);
+		$stack = ['time' => time(), 'stack' => $stack];
 		$this->Session->write('Debug.Redirect', $stack);
 
 		if ($inStack) {
@@ -298,7 +298,7 @@ class SetupComponent extends Component {
 		if (!$Maintenance->setMaintenanceMode($length)) {
 			return false;
 		}
-		if (!$Maintenance->whitelist(array($ip))) {
+		if (!$Maintenance->whitelist([$ip])) {
 			return false;
 		}
 
@@ -407,8 +407,8 @@ class SetupComponent extends Component {
 	 */
 	public function setupDirs() {
 		Configure::write('Setup.folderRights', $this->_tmpFolders());
-		$errors = array();
-		$messages = array();
+		$errors = [];
+		$messages = [];
 		foreach (Configure::read('Setup.folderRights') as $dir => $mode) {
 			if ($dir === TMP && !WINDOWS) {
 				continue; # the main tmp folder must be adjusted manually (0775)
@@ -435,7 +435,7 @@ class SetupComponent extends Component {
 			//TODO: ChmodLib::convertFromOctal() on the error messages!!!
 			foreach ($errors as $key => $val) {
 				//mb_ereg_replace();
-				$value = preg_replace_callback('/to\s[0-9][0-9][0-9]\s/s', array($this, '_processErrorMessage'), $val);
+				$value = preg_replace_callback('/to\s[0-9][0-9][0-9]\s/s', [$this, '_processErrorMessage'], $val);
 				$errors[$key] = $value;
 			}
 		}
@@ -471,7 +471,7 @@ class SetupComponent extends Component {
 			Configure::load('setup');
 			$customs = (array)Configure::read('Setup.folderRights');
 		} else {
-			$customs = array();
+			$customs = [];
 		}
 		return array_merge($customs, $this->_defaults());
 	}
@@ -482,7 +482,7 @@ class SetupComponent extends Component {
 	 * @return array
 	 */
 	protected function _defaults() {
-		$defaults = array(
+		$defaults = [
 			TMP => 0775,
 			TMP . 'logs' . DS => 0775,
 			TMP . 'sessions' . DS => 0775,
@@ -490,7 +490,7 @@ class SetupComponent extends Component {
 			CACHE . 'models' . DS => 0775,
 			CACHE . 'persistent' . DS => 0775,
 			CACHE . 'views' . DS => 0775
-		);
+		];
 
 		// add js/css cache
 		if (Configure::read('Asset.combine')) {
@@ -512,7 +512,7 @@ class SetupComponent extends Component {
 		if (Configure::read('Config.productive')) {
 			$type[] = 'pwd';
 		}
-		return SetupLib::cleanedUrl($type, $this->Controller->request->params + array('?' => $this->Controller->request->query));
+		return SetupLib::cleanedUrl($type, $this->Controller->request->params + ['?' => $this->Controller->request->query]);
 	}
 
 	/**

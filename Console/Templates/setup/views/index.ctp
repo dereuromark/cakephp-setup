@@ -23,7 +23,7 @@
 	if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
 		$relationModel = new $modelClass;
 	}
-	$skipFields = array('id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by');
+	$skipFields = ['id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFieldsIndex')) {
 		$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFieldsIndex);
 	}
@@ -128,7 +128,7 @@ foreach (\${$pluralVar} as \${$singularVar}) { ?>\n";
 	<ul>
 		<li><?php echo "<?php echo \$this->Html->link(__('New %s', __('{$singularHumanName}')), array('action' => 'add')); ?>";?></li>
 <?php
-	$done = array();
+	$done = [];
 	foreach ($associations as $type => $data) {
 		// We dont need them
 		break;

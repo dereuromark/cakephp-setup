@@ -48,7 +48,7 @@ class SetupShell extends AppShell {
 		$this->out('This is an utf8 umlauts test with äöüÄÖÜ& output');
 		$this->out();
 
-		$list = array(
+		$list = [
 			'emergency',
 			'alert',
 			'critical',
@@ -59,7 +59,7 @@ class SetupShell extends AppShell {
 			'success',
 			'comment',
 			'question',
-		);
+		];
 		foreach ($list as $type) {
 			$this->out('<' . $type . '>This is a message of type \'' . $type . '\'</' . $type . '>');
 		}

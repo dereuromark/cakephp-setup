@@ -6,7 +6,7 @@ App::uses('Controller', 'Controller');
 
 class DebugHelperTest extends MyCakeTestCase {
 
-	public $fixtures = array('core.cake_session');
+	public $fixtures = ['core.cake_session'];
 
 	public $Debug;
 

@@ -7,7 +7,7 @@ App::uses('Install', 'Model');
  */
 class InstallController extends SetupAppController {
 
-	public $uses = array('Install');
+	public $uses = ['Install'];
 
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -32,11 +32,11 @@ class InstallController extends SetupAppController {
 			$this->Install = @ClassRegistry::init('Install');
 			if ($this->Install->createDatabaseFile($this->request->data)) {
 				$this->Flash->message('database.php created', 'success');
-				return $this->Common->postRedirect(array('action' => 'step2'));
+				return $this->Common->postRedirect(['action' => 'step2']);
 			}
 
 		} else {
-			$this->request->data['Install'] = array(
+			$this->request->data['Install'] = [
 				'datasource' => 'Database/Mysql',
 				'host' => 'localhost',
 				'login' => 'root',
@@ -46,8 +46,8 @@ class InstallController extends SetupAppController {
 				'enhanced_database_class' => true,
 				'name' => 'default',
 				'environment' => HTTP_HOST,
-				'path' => array(),
-			);
+				'path' => [],
+			];
 		}
 	}
 

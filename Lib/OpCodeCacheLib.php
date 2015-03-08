@@ -4,7 +4,7 @@
  */
 class OpCodeCacheLib {
 
-	public static $engines = array(
+	public static $engines = [
 		'Xcache',
 		'Wincache',
 		'Apc',
@@ -12,7 +12,7 @@ class OpCodeCacheLib {
 		'Ioncube',
 		'Zend',
 		'Nusphere'
-	);
+	];
 
 	/**
 	 * If opcode cache is enabled
@@ -41,7 +41,7 @@ class OpCodeCacheLib {
 			return null;
 		}
 
-		$res = array();
+		$res = [];
 		foreach (self::$engines as $engine) {
 			$method = 'has' . $engine;
 			$res[$engine] = (bool)DetectOpCodeCache::$method();
@@ -63,7 +63,7 @@ class DetectOpCodeCache {
 	/**
 	 * @public $extensions
 	 */
-	protected $extensions = array();
+	protected $extensions = [];
 
 	/**
 	 * @public $instance

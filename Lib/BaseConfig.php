@@ -21,14 +21,14 @@
  */
 class BaseConfig {
 
-	protected $_environments = array('default');
+	protected $_environments = ['default'];
 
-	protected $_defaultConfig = array(
+	protected $_defaultConfig = [
 		'encoding' => 'utf8',
 		'persistent' => false,
-	);
+	];
 
-	public $default = array();
+	public $default = [];
 
 	/**
 	 * Switch between local and live site(s) automatically by domain

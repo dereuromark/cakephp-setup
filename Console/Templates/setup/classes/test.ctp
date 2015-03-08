@@ -18,9 +18,9 @@
 echo "<?php\n";
 ?>
 <?php if ($type === 'Controller') {
-	$uses[] = array('MyControllerTestCase', 'Tools.TestSuite');
+	$uses[] = ['MyControllerTestCase', 'Tools.TestSuite'];
 } else {
-	$uses[] = array('MyTestCase', 'Tools.TestSuite');
+	$uses[] = ['MyTestCase', 'Tools.TestSuite'];
 } ?>
 <?php foreach ($uses as $dependency): ?>
 App::uses('<?php echo $dependency[0]; ?>', '<?php echo $dependency[1]; ?>');

@@ -25,7 +25,7 @@ echo "App::uses('{$plugin}AppModel', '{$pluginPath}Model');\n";
  * <?php echo $name ?> Model
  *
 <?php
-foreach (array('hasOne', 'belongsTo', 'hasMany', 'hasAndBelongsToMany') as $assocType) {
+foreach (['hasOne', 'belongsTo', 'hasMany', 'hasAndBelongsToMany'] as $assocType) {
 	if (!empty($associations[$assocType])) {
 		foreach ($associations[$assocType] as $relation) {
 			//echo " * @property {$relation['className']} \${$relation['alias']}\n";
@@ -92,7 +92,7 @@ endif;
 ?>
 
 <?php
-foreach (array('hasOne', 'belongsTo') as $assocType):
+foreach (['hasOne', 'belongsTo'] as $assocType):
 	if (!empty($associations[$assocType])):
 		$typeCount = count($associations[$assocType]);
 		echo "\n\t/**\n\t * $assocType associations\n\t *\n\t * @var array\n\t */";

@@ -43,7 +43,7 @@
 		$this->set(compact('<?php echo $singularName; ?>'));
 	}
 
-<?php $compact = array(); ?>
+<?php $compact = []; ?>
 	/**
 	 * Add method
 	 *
@@ -71,7 +71,7 @@
 <?php endif; ?>
 
 <?php
-	foreach (array('belongsTo', 'hasAndBelongsToMany') as $assoc) {
+	foreach (['belongsTo', 'hasAndBelongsToMany'] as $assoc) {
 		foreach ($modelObj->{$assoc} as $associationName => $relation) {
 			if (!empty($associationName)) {
 				$otherModelName = $this->_modelName($associationName);
@@ -101,7 +101,7 @@
 ?>
 	}
 
-<?php $compact = array(); ?>
+<?php $compact = []; ?>
 	/**
 	 * Edit method
 	 *
@@ -125,7 +125,7 @@
 			$this->request->data = $<?php echo $singularName; ?>;
 		}
 <?php
-		foreach (array('belongsTo', 'hasAndBelongsToMany') as $assoc):
+		foreach (['belongsTo', 'hasAndBelongsToMany'] as $assoc):
 			foreach ($modelObj->{$assoc} as $associationName => $relation):
 				if (!empty($associationName)) {
 					$otherModelName = $this->_modelName($associationName);

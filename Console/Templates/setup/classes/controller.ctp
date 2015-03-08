@@ -64,13 +64,13 @@ if (in_array('Paginator', $components)) {
 	$key = array_shift($key);
 	unset($components[$key]);
 	$comps = $components;
-	$components = array();
+	$components = [];
 	foreach ($comps as $comp) {
 		$components[] = $comp;
 	}
 }
 
-if (count($components) && $components !== array('Session')):
+if (count($components) && $components !== ['Session']):
 	echo "\tpublic \$components = array(";
 	for ($i = 0, $len = count($components); $i < $len; $i++):
 		if ($i != $len - 1):
