@@ -1,11 +1,10 @@
 <?php
 namespace Setup\Routing\Filter;
 
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Routing\DispatcherFilter;
-use Cake\Routing\Router;
 use Setup\Maintenance\Maintenance;
-use Cake\Core\Configure;
 
 /**
  * Maintenance Mode filter
@@ -24,34 +23,34 @@ use Cake\Core\Configure;
  */
 class MaintenanceFilter extends DispatcherFilter {
 
-/**
- * Default priority for all methods in this filter
- *
- * Per default the priority is 1 (10 is default)
- * to assert that other dispatchers like Asset are not running first.
- *
- * @var int
- */
+	/**
+	 * Default priority for all methods in this filter
+	 *
+	 * Per default the priority is 1 (10 is default)
+	 * to assert that other dispatchers like Asset are not running first.
+	 *
+	 * @var int
+	 */
 	protected $_priority = 1;
 
 	protected $_staticTemplate = 'maintenance';
 
-/**
- * Extended default config to be merged with default config.
- *
- * @var array
- */
+	/**
+	 * Extended default config to be merged with default config.
+	 *
+	 * @var array
+	 */
 	protected $_defaultConfigExt = [
 		'template' => null,
 		'layout' => null,
 	];
 
-/**
- * Constructor.
- *
- * @param array $config Settings for the filter.
- * @throws \InvalidArgumentException When 'when' conditions are not callable.
- */
+	/**
+	 * Constructor.
+	 *
+	 * @param array $config Settings for the filter.
+	 * @throws \InvalidArgumentException When 'when' conditions are not callable.
+	 */
 	public function __construct($config = []) {
 		$this->_defaultConfig = $this->_defaultConfigExt + $this->_defaultConfig;
 		parent::__construct($config);
@@ -97,28 +96,28 @@ class MaintenanceFilter extends DispatcherFilter {
 	 */
 	public function _body() {
 		$template = (bool)Configure::read('Maintenance.template');
-    if ($template) {
-    	$template = 'maintenance';
-    	$layout = (bool)Configure::read('Maintenance.layout');
-    	if ($layout) {
-    		$layout = 'maintenance';
-    	} else {
-    		$layout = null;
-    	}
+		if ($template) {
+			$template = 'maintenance';
+			$layout = (bool)Configure::read('Maintenance.layout');
+			if ($layout) {
+				$layout = 'maintenance';
+			} else {
+				$layout = null;
+			}
 
-      $View = $this->_getView();
-      $body = $View->render($template, $layout);
-      return $body;
-    }
-
-    $template = APP . 'Template' . DS . 'Error' . DS . $this->_staticTemplate;
-		if (file_exists($template)) {
-			$body = file_get_contents($template);
+			$View = $this->_getView();
+			$body = $View->render($template, $layout);
 			return $body;
 		}
 
-    $body = __d('setup', 'Maintenance work');
-    return $body;
+		$template = APP . 'Template' . DS . 'Error' . DS . $this->_staticTemplate;
+			if (file_exists($template)) {
+				$body = file_get_contents($template);
+				return $body;
+			}
+
+		$body = __d('setup', 'Maintenance work');
+		return $body;
 	}
 
   /**

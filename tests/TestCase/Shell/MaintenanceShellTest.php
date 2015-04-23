@@ -1,14 +1,10 @@
 <?php
 namespace Setup\Test\TestCase\Shell;
 
-use Setup\Shell\ResetShell;
-use Tools\TestSuite\ConsoleOutput;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
-use Cake\Core\Plugin;
+use Tools\TestSuite\ConsoleOutput;
 use Tools\TestSuite\TestCase;
-use Cake\Core\Configure;
-
 
 class MaintenanceShellTest extends TestCase {
 

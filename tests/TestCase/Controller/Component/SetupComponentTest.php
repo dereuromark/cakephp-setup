@@ -2,17 +2,13 @@
 
 namespace Setup\Test\TestCase\Controller\Component;
 
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
+use Cake\Controller\ComponentRegistry;
+use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\Network\Request;
 use Cake\Network\Response;
-use Setup\Routing\Filter\MaintenanceFilter;
-use Tools\TestSuite\TestCase;
 use Setup\Controller\Component\SetupComponent;
-use Cake\Controller\ComponentRegistry;
-
-use Cake\Controller\Controller;
+use Tools\TestSuite\TestCase;
 
 class SetupComponentTest extends TestCase {
 

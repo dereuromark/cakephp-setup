@@ -2,9 +2,6 @@
 
 namespace Setup\Test\TestCase\Routing\Filter;
 
-use Cake\Core\App;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Network\Request;
 use Cake\Network\Response;
@@ -16,30 +13,30 @@ use Tools\TestSuite\TestCase;
  */
 class MaintenanceFilterTest extends TestCase {
 
-/**
- * setUp method
- *
- * @return void
- */
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 	}
 
-/**
- * tearDown method
- *
- * @return void
- */
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
 	public function tearDown() {
 		parent::tearDown();
 	}
 
-/**
- * Tests that $response->checkNotModified() is called and bypasses
- * file dispatching
- *
- * @return void
- */
+	/**
+	 * Tests that $response->checkNotModified() is called and bypasses
+	 * file dispatching
+	 *
+	 * @return void
+	 */
 	public function testMaintenance() {
 		$filter = new MaintenanceFilter();
 
@@ -56,11 +53,11 @@ class MaintenanceFilterTest extends TestCase {
 		unlink(TMP . 'maintenance.txt');
 	}
 
-/**
- * Test that no exceptions are thrown for //index.php type URLs.
- *
- * @return void
- */
+	/**
+	 * Test that no exceptions are thrown for //index.php type URLs.
+	 *
+	 * @return void
+	 */
 	public function testNoMaintenance() {
 		$filter = new MaintenanceFilter();
 

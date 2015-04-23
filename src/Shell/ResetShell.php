@@ -1,13 +1,11 @@
 <?php
 namespace Setup\Shell;
 
-use Cake\Console\Shell;
-use Cake\Filesystem\Folder;
-use Cake\Core\Plugin;
-use Cake\Core\Configure;
-use Cake\Validation\Validation;
-use Cake\ORM\TableRegistry;
 use Cake\Auth\PasswordHasherFactory;
+use Cake\Console\Shell;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+use Cake\Validation\Validation;
 
 if (!defined('CLASS_USERS')) {
 	define('CLASS_USERS', 'Users');

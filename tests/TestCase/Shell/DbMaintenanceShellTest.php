@@ -1,13 +1,12 @@
 <?php
 namespace Setup\Test\TestCase\Shell;
 
-use Setup\Shell\DbMaintenanceShell;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
-use Cake\Core\Plugin;
-use Cake\TestSuite\TestCase;
 use Cake\Datasource\ConnectionManager;
+use Cake\TestSuite\TestCase;
+use Setup\Shell\DbMaintenanceShell;
 
 /**
  * Class TestCompletionStringOutput
@@ -27,11 +26,11 @@ class TestDbMaintenanceOutput extends ConsoleOutput {
  */
 class DbMaintenanceShellTest extends TestCase {
 
-/**
- * setUp method
- *
- * @return void
- */
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 
@@ -49,21 +48,21 @@ class DbMaintenanceShellTest extends TestCase {
 		}
 	}
 
-/**
- * tearDown
- *
- * @return void
- */
+	/**
+	 * tearDown
+	 *
+	 * @return void
+	 */
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Shell);
 	}
 
-/**
- * Test clean command
- *
- * @return void
- */
+	/**
+	 * Test clean command
+	 *
+	 * @return void
+	 */
 	public function testEncoding() {
 		$config = ConnectionManager::config('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
@@ -82,11 +81,11 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->assertContains('Done :)', $output);
 	}
 
-/**
- * Test clean command
- *
- * @return void
- */
+	/**
+	 * Test clean command
+	 *
+	 * @return void
+	 */
 	public function testEngine() {
 		$config = ConnectionManager::config('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
@@ -104,17 +103,17 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->assertContains('Done :)', trim($output));
 	}
 
-/**
- * Test clean command
- *
- * @return void
- */
+	/**
+	 * Test clean command
+	 *
+	 * @return void
+	 */
 	public function testClean() {
 		$config = ConnectionManager::config('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}
-		
+
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('Y'));
 

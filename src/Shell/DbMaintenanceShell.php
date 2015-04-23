@@ -1,10 +1,9 @@
 <?php
 namespace Setup\Shell;
 
-use Cake\Console\Shell;
-use Cake\Filesystem\Folder;
-use Cake\Datasource\ConnectionManager;
 use Cake\Collection\Collection;
+use Cake\Console\Shell;
+use Cake\Datasource\ConnectionManager;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {

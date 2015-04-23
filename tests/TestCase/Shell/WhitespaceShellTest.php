@@ -1,12 +1,11 @@
 <?php
 namespace Setup\Test\TestCase\Shell;
 
-use Setup\Shell\WhitespaceShell;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
-use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\WhitespaceShell;
 
 /**
  * Class TestCompletionStringOutput
@@ -26,11 +25,11 @@ class TestWhitespaceOutput extends ConsoleOutput {
  */
 class WhitespaceShellTest extends TestCase {
 
-/**
- * setUp method
- *
- * @return void
- */
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 
@@ -48,21 +47,21 @@ class WhitespaceShellTest extends TestCase {
 		}
 	}
 
-/**
- * tearDown
- *
- * @return void
- */
+	/**
+	 * tearDown
+	 *
+	 * @return void
+	 */
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Shell);
 	}
 
-/**
- * Test clean command
- *
- * @return void
- */
+	/**
+	 * Test clean command
+	 *
+	 * @return void
+	 */
 	public function testClean() {
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('y'));

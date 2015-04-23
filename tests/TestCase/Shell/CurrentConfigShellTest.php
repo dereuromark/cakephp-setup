@@ -1,12 +1,11 @@
 <?php
 namespace Setup\Test\TestCase\Shell;
 
-use Setup\Shell\CurrentConfigShell;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
-use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\CurrentConfigShell;
 
 /**
  * Class TestCompletionStringOutput

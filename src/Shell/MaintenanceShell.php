@@ -2,8 +2,8 @@
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
-use Setup\Maintenance\Maintenance;
 use Cake\Validation\Validation;
+use Setup\Maintenance\Maintenance;
 
 /**
  * Activate and deactivate "Maintenance Mode" for an application.

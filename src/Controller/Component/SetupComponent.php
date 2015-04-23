@@ -1,14 +1,14 @@
 <?php
 namespace Setup\Controller\Component;
 
+use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
-use Tools\Controller\Component\FlashComponent;
-use Setup\Maintenance\Maintenance;
 use Cake\Event\Event;
-use Tools\Network\Email\Email;
+use Setup\Maintenance\Maintenance;
 use Setup\Utility\Setup;
-use Cake\Cache\Cache;
+use Tools\Controller\Component\FlashComponent;
+use Tools\Network\Email\Email;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {

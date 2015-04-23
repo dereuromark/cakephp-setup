@@ -1,10 +1,10 @@
 <?php
 namespace Setup\Test\TestCase\Maintenance;
 
-use Tools\TestSuite\TestCase;
 use Setup\Maintenance\Maintenance;
+use Tools\TestSuite\TestCase;
 
-class MaintenanceLibTest extends TestCase {
+class MaintenanceTest extends TestCase {
 
 	public $Maintenance;
 

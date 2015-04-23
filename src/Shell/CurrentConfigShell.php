@@ -1,9 +1,9 @@
 <?php
 namespace Setup\Shell;
 
+use Cake\Cache\Cache;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
-use Cake\Cache\Cache;
 
 /**
  * Outputs the current configuration

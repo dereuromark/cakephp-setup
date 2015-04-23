@@ -2,9 +2,9 @@
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
+use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
-use Cake\Core\Plugin;
 
 /**
  * Shell to remove superfluous whitespace.
@@ -71,7 +71,7 @@ class WhitespaceShell extends Shell {
 				$this->report[$e][0]++;
 			}
 			$this->out('');
-			$this->out('contains ' . implode(' and ' , $errors) . ' whitespaces: ' . $this->shortPath($file));
+			$this->out('contains ' . implode(' and ', $errors) . ' whitespaces: ' . $this->shortPath($file));
 
 			$dirname = dirname($file);
 			if (in_array($dirname, $folders)) {
@@ -107,7 +107,7 @@ class WhitespaceShell extends Shell {
 				foreach ($errors as $e) {
 					$this->report[$e][1]++;
 				}
-				$this->out('fixed ' . implode(' and ' , $errors) . ' whitespaces: ' . $this->shortPath($file));
+				$this->out('fixed ' . implode(' and ', $errors) . ' whitespaces: ' . $this->shortPath($file));
 			}
 		}
 

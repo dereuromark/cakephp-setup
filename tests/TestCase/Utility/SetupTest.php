@@ -1,8 +1,8 @@
 <?php
 namespace Setup\Test\TestCase\Utility;
 
-use Tools\TestSuite\TestCase;
 use Setup\Utility\Setup;
+use Tools\TestSuite\TestCase;
 
 class SetupTest extends TestCase {
 

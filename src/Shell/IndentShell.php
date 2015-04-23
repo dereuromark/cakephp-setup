@@ -3,7 +3,6 @@ namespace Setup\Shell;
 
 use Cake\Console\Shell;
 use Cake\Filesystem\Folder;
-use Cake\Core\Plugin;
 
 if (!defined('TB')) {
 	define('TB', "\t");

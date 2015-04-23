@@ -1,12 +1,11 @@
 <?php
 namespace Setup\Test\TestCase\Shell;
 
-use Setup\Shell\IndentShell;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
-use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\IndentShell;
 
 /**
  * Class TestCompletionStringOutput
@@ -91,7 +90,6 @@ class IndentShellTest extends TestCase {
 	public function testFolderAgainWithHalf() {
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('y'));
-
 
 		$this->Shell->runCommand(['folder', TMP . 'indent' . DS, '-a']);
 		$output = $this->out->output;
