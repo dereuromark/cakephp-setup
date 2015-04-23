@@ -55,7 +55,7 @@ class SetupComponent extends Component {
 		$this->Controller = $event->subject();
 
 		// For debug overwrite
-		if (($debug = $this->Session->read('Setup.debug')) !== null) {
+		if (($debug = $this->request->session()->read('Setup.debug')) !== null) {
 			Configure::write('debug', $debug);
 		}
 
@@ -138,7 +138,7 @@ class SetupComponent extends Component {
 	 * @return void
 	 */
 	public function startup(Event $event) {
-		if ($layout = $this->Session->read('Setup.layout')) {
+		if ($layout = $this->request->session()->read('Setup.layout')) {
 			$this->Controller->layout = $layout;
 		}
 	}
@@ -156,19 +156,19 @@ class SetupComponent extends Component {
 			return;
 		}
 		$referer = $this->Controller->referer();
-		if (strlen($referer) > 2 && (int)$this->Session->read('Report.404') < time() - 5 * MINUTE) {
+		if (strlen($referer) > 2 && (int)$this->request->session()->read('Report.404') < time() - 5 * MINUTE) {
 			$text = '404:' . TB . TB . '/' . $this->Controller->request->url .
 			NL . 'Referer:' . TB . '' . $referer .
 			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .
 			NL . 'IP: ' . env('REMOTE_ADDR');
-			if ($uid = $this->Session->read('Auth.User.id')) {
+			if ($uid = $this->request->session()->read('Auth.User.id')) {
 				$text .= NL . NL . 'UID: ' . $uid;
 			}
 
 			if (!$this->_notification('404!', $text)) {
 				throw new \InternalErrorException('Cannot send admin notification email');
 			}
-			$this->Session->write('Report.404', time());
+			$this->request->session()->write('Report.404', time());
 		}
 	}
 
@@ -208,9 +208,9 @@ class SetupComponent extends Component {
 	 */
 	public function setLayout($layout) {
 		if (!$layout) {
-			return $this->Session->delete('Setup.layout');
+			return $this->request->session()->delete('Setup.layout');
 		}
-		return $this->Session->write('Setup.layout', $layout);
+		return $this->request->session()->write('Setup.layout', $layout);
 	}
 
 	/**
@@ -255,10 +255,10 @@ class SetupComponent extends Component {
 
 		if ($type === 'session') {
 			if ($level < 0) {
-				$this->Session->delete('Setup.debug');
+				$this->request->session()->delete('Setup.debug');
 				return false;
 			}
-			return $this->Session->write('Setup.debug', $level);
+			return $this->request->session()->write('Setup.debug', $level);
 		}
 
 		$file = TMP . 'debugOverride-' . $id . '.txt';
@@ -311,7 +311,7 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	public function clearSession() {
-		$this->Session->destroy();
+		$this->request->session()->destroy();
 		return true;
 	}
 

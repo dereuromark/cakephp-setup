@@ -21,15 +21,10 @@ define('CAKE', CORE_PATH . APP_DIR . DS);
 define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
 define('CONFIG', dirname(__FILE__) . DS . 'config' . DS);
 
-require ROOT . '/vendor/cakephp/cakephp/src/basics.php';
+ini_set('intl.default_locale', 'de-DE');
+
 require ROOT . '/vendor/autoload.php';
-
-require CAKE . 'Core/ClassLoader.php';
-
-$loader = new Cake\Core\ClassLoader;
-$loader->register();
-
-$loader->addNamespace('TestApp', ROOT . DS . 'tests' . DS . 'TestApp' . DS);
+require CORE_PATH . 'config/bootstrap.php';
 
 Cake\Core\Configure::write('App', [
 		'namespace' => 'App',
@@ -75,7 +70,7 @@ if (!getenv('db_class')) {
 	putenv('db_dsn=sqlite::memory:');
 }
 
-if (WINDOWS) {
+if (false && WINDOWS) {
 	Cake\Datasource\ConnectionManager::config('test', [
 		'className' => 'Cake\Database\Connection',
 		'driver' => 'Cake\Database\Driver\Mysql',
