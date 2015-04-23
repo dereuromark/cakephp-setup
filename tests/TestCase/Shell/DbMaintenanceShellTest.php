@@ -65,6 +65,11 @@ class DbMaintenanceShellTest extends TestCase {
  * @return void
  */
 	public function testEncoding() {
+		$config = ConnectionManager::config('test');
+		if ((strpos($config['driver'], 'Mysql') === false)) {
+			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
+		}
+
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('Y'));
 
@@ -105,6 +110,11 @@ class DbMaintenanceShellTest extends TestCase {
  * @return void
  */
 	public function testClean() {
+		$config = ConnectionManager::config('test');
+		if ((strpos($config['driver'], 'Mysql') === false)) {
+			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
+		}
+		
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('Y'));
 
