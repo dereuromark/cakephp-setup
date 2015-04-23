@@ -4,6 +4,7 @@ namespace Setup\Shell;
 use Cake\Console\Shell;
 use Cake\Filesystem\Folder;
 use Cake\Datasource\ConnectionManager;
+use Cake\Collection\Collection;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {
@@ -248,6 +249,107 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$this->out('Done :)');
 	}
 
+	/**
+	 * Fixes 0000-00-00 00:00:00 dates to NULL.
+	 * Also alerts about wrong "DEFAULT NOT NULL" etc.
+	 *
+	 * @return void
+	 */
+	public function dates($prefix = null) {
+		$db = ConnectionManager::get('default');
+		$config = $db->config();
+		$database = $config['database'];
+
+		$script = "
+SELECT table_name
+FROM information_schema.tables AS tb
+WHERE   table_schema = '$database'
+AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
+
+		$res = $db->query($script);
+		if (!$res) {
+			$this->error('Nothing to do...');
+		}
+		$tables = new Collection($res);
+
+		$todo = [];
+
+		foreach ($tables as $table) {
+			if (substr($table['table_name'], 0, 1) === '_') {
+				continue;
+			}
+
+			// Structure
+			$sql = "DESCRIBE " . $table['table_name'] . ";";
+			$this->out('Checking for tables that need updating:', 1, static::VERBOSE);
+			$this->out('- ' . $sql, 1, static::VERBOSE);
+			$res = $db->query($sql);
+			$fields = new Collection($res);
+
+			$fieldList = [];
+			foreach ($fields as $field) {
+				$name = $field['Field'];
+				$type = $field['Type'];
+				$null = $field['Null'];
+				if ($type !== 'date' && $type !== 'datetime') {
+					continue;
+				}
+				$fieldList[] = $field['Field'];
+
+				if ($null === 'YES' && empty($field['Default'])) {
+					continue;
+				}
+				// We need to migrate sth
+				$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NULL DEFAULT NULL;';
+			}
+
+			if (empty($fieldList)) {
+				continue;
+			}
+
+			// Data for $fieldList
+			$z = '0000-00-00 00:00:00';
+			$conditions = [];
+			foreach ($fieldList as $fieldName) {
+				$conditions[] = "`" . $fieldName . "` = '" . $z . "'";
+			}
+			$conditions = implode(' OR ', $conditions);
+
+			$sql = 'SELECT COUNT(*) as count FROM ' . $table['table_name'] . ' WHERE ' . $conditions;
+			$this->out('Checking for records that need updating:', 1, static::VERBOSE);
+			$this->out(' - ' . $sql, 1, static::VERBOSE);
+			$res = $db->query($sql);
+			$res = (new Collection($res))->toArray();
+			if (empty($res[0]['count'])) {
+				continue;
+			}
+
+			$sets = [];
+			foreach ($fieldList as $fieldName) {
+				$todo[] = 'UPDATE ' . $table['table_name'] . ' SET ' . '`' . $fieldName . '` = NULL' . ' WHERE ' . $conditions . ';';
+			}
+		}
+
+		if (!$todo) {
+			$this->out('Nothing to do :)');
+			return;
+		}
+		$this->out(count($todo) . ' tables/fields need updating.');
+		$continue = $this->in('Continue?', ['y', 'n'], 'y');
+		if ($continue !== 'y') {
+			return $this->error('Aborted!');
+		}
+		$sql = implode(PHP_EOL, $todo);
+		if (!empty($this->params['dry-run'])) {
+			$this->out($sql);
+			return;
+		}
+
+		// Execute
+		$db->query($sql);
+		$this->out('Done :)');
+	}
+
 	public function getOptionParser() {
 		$subcommandParser = array(
 			'options' => array(
@@ -272,6 +374,10 @@ Use -d -v (dry-run and verbose mode) to only display queries but not execute the
 			))
 			->addSubcommand('table_prefix', array(
 				'help' => 'Add or remove table prefixes.',
+				'parser' => $subcommandParser
+			))
+			->addSubcommand('dates', array(
+				'help' => 'Correct date(time) fields.',
 				'parser' => $subcommandParser
 			))
 			->addSubcommand('cleanup', array(
