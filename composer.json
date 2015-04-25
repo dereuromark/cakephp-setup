@@ -17,6 +17,9 @@
 		"cakephp/cakephp": "3.0.*",
 		"dereuromark/cakephp-tools": "dev-cake3"
 	},
+	"require-dev": {
+		"cakephp/migrations": "dev-master"
+	},
 	"autoload": {
 		"psr-4": {
 			"Setup\\": "src"
@@ -35,6 +38,5 @@
 	},
 	"extra": {
 		"installer-name": "Setup"
-	},
-	"minimum-stability": "dev"
+	}
 }
