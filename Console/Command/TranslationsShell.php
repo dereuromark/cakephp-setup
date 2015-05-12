@@ -3,13 +3,9 @@ App::uses('Folder', 'Utility');
 App::uses('AppShell', 'Console/Command');
 
 /**
- * A shell to to help automate testing in 2.x
- * - bake group test files
- * - assert that all classes are tested and if not create test files
+ * A shell to to help automate PO validation
  *
- * Please backup/commit any unsaved files before you start this shell
- *
- * Run it as `cake Setup.Tests`.
+ * Run it as `cake Setup.Translations`.
  *
  * @copyright Mark Scherer
  * @license MIT
@@ -19,8 +15,7 @@ class TranslationsShell extends AppShell {
 	public $tasks = array('DbConfig', 'Extract');
 
 	/**
-	 * Make sure all classes are tested
-	 * use --create [-c] param to create missing ones
+	 * Asserts all languages in the Locale folder.
 	 *
 	 * @return void
 	 */
@@ -116,8 +111,6 @@ class TranslationsShell extends AppShell {
 
 			$this->out('Done, ' . $errors . ' errors.');
 		}
-
-		//$this->_assert($fileList);
 	}
 
 	public function getOptionParser() {
