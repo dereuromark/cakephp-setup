@@ -17,7 +17,7 @@
 		"composer/installers": "*"
 	},
 	"require-dev": {
-		"dereuromark/cakephp-tools": "dev-2.x"
+		"dereuromark/cakephp-tools": "2.x-dev"
 	},
 	"support": {
 		"source": "https://github.com/dereuromark/cakephp-setup"
