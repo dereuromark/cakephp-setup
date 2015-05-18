@@ -14,8 +14,8 @@
 	],
 	"require": {
 		"php": ">=5.4",
-		"cakephp/cakephp": "3.0.*",
-		"dereuromark/cakephp-tools": "dev-cake3"
+		"cakephp/cakephp": "~3.0",
+		"dereuromark/cakephp-tools": "dev-master"
 	},
 	"require-dev": {
 		"cakephp/migrations": "dev-master"
@@ -35,8 +35,5 @@
 	"support":{
 		"source": "https://github.com/dereuromark/cakephp-setup",
 		"issues": "https://github.com/dereuromark/cakephp-setup/issues"
-	},
-	"extra": {
-		"installer-name": "Setup"
 	}
 }
