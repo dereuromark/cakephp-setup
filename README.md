@@ -11,7 +11,7 @@ This CakePHP 3.0 plugin provides useful development tools for managing a CakePHP
 
 ## Version notice
 
-This cake3 branch only works for **CakePHP3.x** - please use the master branch for CakePHP 2.x!
+This branch only works for **CakePHP3.x** - please use the corresponding branch for CakePHP 2.x!
 
 ## What is this plugin for?
 This plugin aims to be a help for development of CakePHP applications. It extends and leverages
