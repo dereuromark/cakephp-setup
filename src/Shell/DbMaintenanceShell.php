@@ -148,6 +148,9 @@ SQL;
 		$db = ConnectionManager::get('default');
 		$config = $db->config();
 		$database = $config['database'];
+		if (!empty($this->params['database'])) {
+			$database = $this->params['database'];
+		}
 
 		while (!$action || !in_array($action, ['A', 'R'], true)) {
 			$action = $this->in('Add or remove?', ['A', 'R']);
@@ -157,10 +160,11 @@ SQL;
 			$prefix = $this->in('Please select prefix:');
 		}
 
+		$space = "\n";
 		if ($action === 'R') {
 			$length = mb_strlen($prefix) + 1;
 			$script = <<<SQL
-SELECT  CONCAT('RENAME TABLE `', table_name, '` TO `', SUBSTR(table_name, $length), '`;') AS statement
+SELECT  CONCAT('RENAME TABLE `$database`.`', table_name, '` TO `$database`.`', SUBSTR(table_name, $length), '`;$space') AS statement
 FROM    information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND     table_name LIKE '$prefix%'
@@ -168,7 +172,7 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		} else {
 			$script = <<<SQL
-SELECT  CONCAT('RENAME TABLE `', table_name, '` TO `$prefix', table_name, '`;') AS statement
+SELECT  CONCAT('RENAME TABLE `$database`.`', table_name, '` TO `$database`.`$prefix', table_name, '`;$space') AS statement
 FROM    information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND     table_name NOT LIKE '$prefix%'
@@ -177,7 +181,7 @@ SQL;
 		}
 
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			return $this->error('Nothing to do...');
 		}
 
@@ -187,7 +191,7 @@ SQL;
 			$this->out($r['statement'], 1, Shell::VERBOSE);
 		}
 
-		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
+		$continue = $this->in($res->count() . ' tables will be altered.', array('Y', 'N'), 'N');
 		if (strtoupper($continue) !== 'Y') {
 			return $this->error('Aborted!');
 		}
@@ -360,6 +364,16 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			)
 		);
 
+		$tablePrefixParser = $subcommandParser;
+		$tablePrefixParser['options']['database'] = [
+			'help' => 'Database name, defaults to the currently configured one',
+			'default' => ''
+		];
+		$tablePrefixParser['arguments'] = [
+			'action' => ['help' => __('[A]dd or [R]remove.'), 'required' => false],
+			'prefix' => ['help' => __('Prefix to work with.'), 'required' => false]
+		];
+
 		return parent::getOptionParser()
 			->description("A Shell to do some basic database maintenance for you.
 Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
@@ -373,7 +387,7 @@ Use -d -v (dry-run and verbose mode) to only display queries but not execute the
 			))
 			->addSubcommand('table_prefix', array(
 				'help' => 'Add or remove table prefixes.',
-				'parser' => $subcommandParser
+				'parser' => $tablePrefixParser
 			))
 			->addSubcommand('dates', array(
 				'help' => 'Correct date(time) fields.',

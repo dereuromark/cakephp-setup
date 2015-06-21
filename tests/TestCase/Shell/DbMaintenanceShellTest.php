@@ -126,4 +126,47 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->assertContains('Done :)', $output);
 	}
 
+	/**
+	 * Test table_prefix command
+	 *
+	 * @return void
+	 */
+	public function testTablePrefix() {
+		$config = ConnectionManager::config('test');
+		if ((strpos($config['driver'], 'Mysql') === false)) {
+			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
+		}
+
+		$this->Shell->expects($this->any())->method('in')
+			->will($this->returnValue('Y'));
+
+		$this->Shell->runCommand(['table_prefix', 'R', 'foo_', '-d', '-v']);
+		$output = $this->out->output;
+
+		debug($output);
+		$expected = 'Nothing to do...';
+		$this->assertContains($expected, $output);
+	}
+
+
+	/**
+	 * Test table_prefix command
+	 *
+	 * @return void
+	 */
+	public function testTablePrefixAdd() {
+		$config = ConnectionManager::config('test');
+		if ((strpos($config['driver'], 'Mysql') === false)) {
+			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
+		}
+
+		$this->Shell->expects($this->any())->method('in')
+			->will($this->returnValue('Y'));
+
+		$this->Shell->runCommand(['table_prefix', 'A', 'foo_', '-d', '-v']);
+		$output = $this->out->output;
+
+		debug($output);
+	}
+
 }

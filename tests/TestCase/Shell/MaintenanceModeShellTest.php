@@ -6,7 +6,7 @@ use Cake\Console\Shell;
 use Tools\TestSuite\ConsoleOutput;
 use Tools\TestSuite\TestCase;
 
-class MaintenanceShellTest extends TestCase {
+class MaintenanceModeShellTest extends TestCase {
 
 	public $Shell;
 
@@ -17,7 +17,7 @@ class MaintenanceShellTest extends TestCase {
 		$io = new ConsoleIo($this->out, $this->err);
 
 		$this->Shell = $this->getMock(
-			'Setup\Shell\MaintenanceShell',
+			'Setup\Shell\MaintenanceModeShell',
 			['in', '_stop'],
 			[$io]
 		);

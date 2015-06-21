@@ -15,7 +15,7 @@ use Setup\Maintenance\Maintenance;
  * @author Mark Scherer
  * @licence MIT
  */
-class MaintenanceShell extends Shell {
+class MaintenanceModeShell extends Shell {
 
 	public $Maintenance;
 
