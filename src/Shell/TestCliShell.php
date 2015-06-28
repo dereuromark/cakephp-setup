@@ -18,16 +18,18 @@ class TestCliShell extends Shell {
 	 * @return void
 	 */
 	public function router() {
+		//TODO: opt in plugin and prefix
+
 		$url = Router::url('/');
 		$this->out('Router::url(\'/\'): ' . PHP_EOL . "\t" . $url);
 
-		$url = Router::url(array('controller' => 'test'));
+		$url = Router::url(array('controller' => 'Test'));
 		$this->out('Router::url(array(\'controller\' => \'test\')): ' . PHP_EOL . "\t" . $url);
 
 		$url = Router::url('/', true);
 		$this->out('Router::url(\'/\', true): ' . PHP_EOL . "\t" . $url);
 
-		$url = Router::url(array('controller' => 'test'), true);
+		$url = Router::url(array('controller' => 'Test'), true);
 		$this->out('Router::url(array(\'controller\' => \'test\'), true): ' . PHP_EOL . "\t" . $url);
 	}
 
