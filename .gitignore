@@ -2,4 +2,5 @@
 /phpunit.phar
 /vendor/
 /tmp/
+/logs/
 /plugins/Tools

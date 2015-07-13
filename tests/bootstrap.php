@@ -10,7 +10,7 @@ if (!defined('WINDOWS')) {
 
 define('ROOT', dirname(__DIR__));
 define('TMP', ROOT . DS . 'tmp' . DS);
-define('LOGS', TMP . 'logs' . DS);
+define('LOGS', ROOT . DS . 'logs' . DS);
 define('CACHE', TMP . 'cache' . DS);
 define('APP', sys_get_temp_dir());
 define('APP_DIR', 'src');
