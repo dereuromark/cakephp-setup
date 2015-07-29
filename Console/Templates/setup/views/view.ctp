@@ -84,11 +84,11 @@ foreach ($fields as $field) {
 
 		} elseif ($schema[$field]['type'] === 'decimal' || $schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') !== false) {
 			// Money formatting
-			echo "\t\t<dt>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</dt>\n";
+			echo "\t\t<dd>\n\t\t\t<?php echo \$this->Numeric->money(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</dd>\n";
 
 		} elseif ($schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',') !== false) {
 			// Generic float value handling
-			echo "\t\t<dt>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</dt>\n";
+			echo "\t\t<dd>\n\t\t\t<?php echo \$this->Numeric->format(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n\t\t</dd>\n";
 
 		} else {
 			// Protection against js injection by using h() function)
