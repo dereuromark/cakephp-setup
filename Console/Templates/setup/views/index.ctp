@@ -23,6 +23,7 @@
 	if (App::import('Model', $plugin . '.' . $modelClass) || App::import('Model', $modelClass)) {
 		$relationModel = new $modelClass;
 	}
+
 	$skipFields = ['id', 'password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 	if (isset($relationModel) && property_exists($relationModel, 'scaffoldSkipFieldsIndex')) {
 		$skipFields = array_merge($skipFields, (array)$relationModel->scaffoldSkipFieldsIndex);
