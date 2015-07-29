@@ -22,7 +22,7 @@
 	 * @return void
 	 */
 	public function <?php echo $admin ?>index() {
-		$this-><?php echo $currentModelName ?>->recursive = 0;
+		//$this-><?php echo $currentModelName ?>->recursive = 0;
 		$<?php echo $pluralName ?> = $this->paginate();
 		$this->set(compact('<?php echo $pluralName ?>'));
 	}
@@ -35,9 +35,9 @@
 	 * @return void
 	 */
 	public function <?php echo $admin ?>view($id = null) {
-		$this-><?php echo $currentModelName ?>->recursive = 0;
+		//$this-><?php echo $currentModelName ?>->recursive = 0;
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.id' => $id))))) {
-			$this->Common->flashMessage(__('invalidRecord'), 'error');
+			$this->Flash->error(__('invalidRecord'));
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$this->set(compact('<?php echo $singularName; ?>'));
@@ -54,10 +54,10 @@
 			$this-><?php echo $currentModelName; ?>->create();
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
 				$var = $this->request->data['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
-				$this->Common->flashMessage(__('record add %s saved', h($var)), 'success');
+				$this->Flash->success(__('record add %s saved', h($var)));
 				return $this->Common->postRedirect(array('action' => 'index'));
 			}
-			$this->Common->flashMessage(__('formContainsErrors'), 'error');
+			$this->Flash->error(__('formContainsErrors'));
 <?php if (!empty($modelObj->scaffoldDefaultValues)): ?>
 		} else {
 <?php
@@ -111,16 +111,16 @@
 	 */
 	public function <?php echo $admin; ?>edit($id = null) {
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.id' => $id))))) {
-			$this->Common->flashMessage(__('invalidRecord'), 'error');
+			$this->Flash->error(__('invalidRecord'));
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		if ($this->Common->isPosted()) {
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
 				$var = $this->request->data['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
-				$this->Common->flashMessage(__('record edit %s saved', h($var)), 'success');
+				$this->Flash->success(__('record edit %s saved', h($var)));
 				return $this->Common->postRedirect(array('action' => 'index'));
 			}
-			$this->Common->flashMessage(__('formContainsErrors'), 'error');
+			$this->Flash->error(__('formContainsErrors'));
 		} else {
 			$this->request->data = $<?php echo $singularName; ?>;
 		}
@@ -165,16 +165,16 @@
 	public function <?php echo $admin; ?>delete($id = null) {
 		$this->request->allowMethod(array('post', 'delete'));
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>' => $id), 'fields' => array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
-			$this->Common->flashMessage(__('invalidRecord'), 'error');
+			$this->Flash->error(__('invalidRecord'));
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$var = $<?php echo $singularName; ?>['<?php echo $currentModelName; ?>']['<?php echo $displayField; ?>'];
 
 		if ($this-><?php echo $currentModelName; ?>->delete($id)) {
-			$this->Common->flashMessage(__('record del %s done', h($var)), 'success');
+			$this->Flash->success(__('record del %s done', h($var)));
 			return $this->Common->postRedirect(array('action' => 'index'));
 		}
-		$this->Common->flashMessage(__('record del %s not done exception', h($var)), 'error');
+		$this->Flash->error(__('record del %s not done exception', h($var)));
 		return $this->Common->autoRedirect(array('action' => 'index'));
 	}
 
@@ -187,7 +187,7 @@
 	 */
 	public function <?php echo $admin; ?>up($id = null) {
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields' => array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
-			$this->Common->flashMessage(__('invalidRecord'), 'error');
+			$this->Flash->error(__('invalidRecord'));
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$this-><?php echo $currentModelName; ?>->moveUp($id, 1);
@@ -202,7 +202,7 @@
 	 */
 	public function <?php echo $admin; ?>down($id = null) {
 		if (empty($id) || !($<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->find('first', array('conditions' => array('<?php echo $currentModelName; ?>.<?php echo $primaryKey; ?>'=>$id), 'fields' => array('<?php echo $primaryKey; ?>'<?php echo ($displayField!=$primaryKey?', \''.$displayField.'\'':'')?>))))) {
-			$this->Common->flashMessage(__('invalidRecord'), 'error');
+			$this->Flash->error(__('invalidRecord'));
 			return $this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$this-><?php echo $currentModelName; ?>->moveDown($id, 1);
