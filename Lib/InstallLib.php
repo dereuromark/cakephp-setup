@@ -1,5 +1,5 @@
 <?php
-App::uses('String', 'Utility');
+App::uses('CakeText', 'Utility');
 
 /**
  * Used in configurations controller + debug helper
@@ -72,7 +72,7 @@ class InstallLib {
 		}
 
 		$content = ltrim(implode(',' . PHP_EOL, $content));
-		$content = String::insert($file, ['fields' => $content, 'testFields' => $testContent]);
+		$content = CakeText::insert($file, ['fields' => $content, 'testFields' => $testContent]);
 
 		$target = InstallLib::configDir() . 'database.php';
 		return file_put_contents($target, $content);
