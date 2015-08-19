@@ -37,6 +37,15 @@ $fields = collection($fields)
             endif;
         endforeach;
     endforeach;
+
+    $skipFields = ['password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
+    if (property_exists($modelObject, 'scaffoldSkipFieldsIndex')) {
+        $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsIndex);
+    }
+    if (property_exists($modelObject, 'scaffoldSkipFields')) {
+        $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
+    }
+
 %>
     </ul>
 </div>
@@ -45,12 +54,16 @@ $fields = collection($fields)
     <thead>
         <tr>
     <% foreach ($fields as $field): %>
-		<%
-			$primaryKeys = $schema->primaryKey();
-			if (in_array($field, $primaryKeys)) {
-				continue;
-			}
-		%>
+        <%
+            $primaryKeys = $schema->primaryKey();
+            if (in_array($field, $primaryKeys)) {
+                continue;
+            }
+
+            if (in_array($field, $skipFields) || (false && $field === 'sort' && $upDown)) {
+                continue;
+            }
+        %>
         <th><?= $this->Paginator->sort('<%= $field %>') ?></th>
     <% endforeach; %>
         <th class="actions"><?= __('Actions') ?></th>
@@ -62,10 +75,10 @@ $fields = collection($fields)
 <%        foreach ($fields as $field) {
             $isKey = false;
 
-			$primaryKeys = $schema->primaryKey();
-			if (in_array($field, $primaryKeys)) {
-				continue;
-			}
+            $primaryKeys = $schema->primaryKey();
+            if (in_array($field, $primaryKeys)) {
+                continue;
+            }
 
             if (!empty($associations['BelongsTo'])) {
                 foreach ($associations['BelongsTo'] as $alias => $details) {
@@ -106,5 +119,5 @@ $fields = collection($fields)
     </tbody>
     </table>
 
-	<?php echo $this->element('Tools.pagination'); ?>
+    <?php echo $this->element('Tools.pagination'); ?>
 </div>
