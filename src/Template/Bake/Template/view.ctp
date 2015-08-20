@@ -129,6 +129,15 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% endif; %>
 </div>
 <%
+
+$skipFields = ['password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
+if (property_exists($modelObject, 'scaffoldSkipFieldsView')) {
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsView);
+}
+if (property_exists($modelObject, 'scaffoldSkipFields')) {
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
+}
+
 $relations = $associations['HasMany'] + $associations['BelongsToMany'];
 foreach ($relations as $alias => $details):
     $otherSingularVar = Inflector::variable($alias);
@@ -138,9 +147,19 @@ foreach ($relations as $alias => $details):
     <div class="column large-12">
     <h4 class="subheader"><?= __('Related <%= $otherPluralHumanName %>') ?></h4>
     <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
-    <table cellpadding="0" cellspacing="0">
+    <table class="table">
         <tr>
 <% foreach ($details['fields'] as $field): %>
+            <%
+            $primaryKeys = $schema->primaryKey();
+            if (in_array($field, $primaryKeys)) {
+                continue;
+            }
+
+            if (in_array($field, $skipFields)) {
+                continue;
+            }
+            %>
             <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
 <% endforeach; %>
             <th class="actions"><?= __('Actions') ?></th>

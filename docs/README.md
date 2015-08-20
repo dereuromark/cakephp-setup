@@ -16,6 +16,15 @@ This cake3 branch only works for **CakePHP3.x** - please use the master branch f
 * [Setup Component](Component/Setup.md)
 * [Useful Setup Shells](Console/Shells.md)
 
+## Useful debugging help
+The following are convenience wrappers to debug safely. They will only show output with debug true.
+
+* dd($data) = debug() + die()
+* prd($data) = pr() + die()
+* vd() = var_dump()
+* vdd($data) = var_dump() + die()
+
+They are available when you include the plugin's bootstrap at Plugin::load().
 
 ## Testing
 You can test using a local installation of phpunit or the phar version of it:

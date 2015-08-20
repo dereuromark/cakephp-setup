@@ -18,6 +18,15 @@ $fields = collection($fields)
     ->filter(function($field) use ($schema) {
         return $schema->columnType($field) !== 'binary';
     });
+
+$skipFields = ['password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
+if (property_exists($modelObject, 'scaffoldSkipFieldsForm')) {
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsForm);
+}
+if (property_exists($modelObject, 'scaffoldSkipFields')) {
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
+}
+
 %>
 <div class="actions columns large-2 medium-3">
     <h3><?= __('Actions') ?></h3>
@@ -57,6 +66,10 @@ $fields = collection($fields)
             if (in_array($field, $primaryKey)) {
                 continue;
             }
+            if (in_array($field, $skipFields)) {
+                continue;
+            }
+
             if (isset($keyFields[$field])) {
                 $fieldData = $schema->column($field);
                 if (!empty($fieldData['null'])) {
