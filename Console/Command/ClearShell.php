@@ -21,7 +21,7 @@ class ClearShell extends AppShell {
 	public function startup() {
 		parent::startup();
 		if (!empty($this->params['dry-run'])) {
-			$this->out(__d('cake_console', '<warning>Dry-run mode enabled!</warning>'), 1, Shell::QUIET);
+			$this->out('<warning>Dry-run mode enabled!</warning>', 1, Shell::QUIET);
 		}
 	}
 
@@ -303,12 +303,12 @@ TEXT;
 			'options' => [
 				'remove' => [
 					'short' => 'r',
-					'help' => __d('cake_console', 'Remove subfolders, as well'),
+					'help' => 'Remove subfolders, as well',
 					'boolean' => true
 				],
 				'dry-run' => [
 					'short' => 'd',
-					'help' => __d('cake_console', 'Dry run the clear command, no files will actually be deleted. Should be combined with verbose!'),
+					'help' => 'Dry run the clear command, no files will actually be deleted. Should be combined with verbose!',
 					'boolean' => true
 				]
 			]
@@ -317,39 +317,39 @@ TEXT;
 		return parent::getOptionParser()
 			->description(__d('cake_console', "The Clear Shell deletes all tmp files (cache, logs)"))
 			->addSubcommand('all', [
-				'help' => __d('cake_console', 'Clear all'),
+				'help' => 'Clear all',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('tmp', [
-				'help' => __d('cake_console', 'Clear tmp (except logs and cache)'),
+				'help' => 'Clear tmp (except logs and cache)',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('cache', [
-				'help' => __d('cake_console', 'Clear cache'),
+				'help' => 'Clear cache',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('engines', [
-				'help' => __d('cake_console', 'Clear cache engines'),
+				'help' => 'Clear cache engines',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('logs', [
-				'help' => __d('cake_console', 'Clear log files'),
+				'help' => 'Clear log files',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('webroot', [
-				'help' => __d('cake_console', 'Clear js/css files'),
+				'help' => 'Clear js/css files',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('js', [
-				'help' => __d('cake_console', 'Clear js files'),
+				'help' => 'Clear js files',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('css', [
-				'help' => __d('cake_console', 'Clear css files'),
+				'help' => 'Clear css files',
 				'parser' => $subcommandParser
 			])
 				->addSubcommand('custom', [
-				'help' => __d('cake_console', 'Clear custom dir'),
+				'help' => 'Clear custom dir',
 				'parser' => $subcommandParser
 			]);
 	}

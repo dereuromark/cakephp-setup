@@ -583,18 +583,18 @@ class All' . $name . 'Test extends PHPUnit_Framework_TestSuite {
 			'options' => [
 				'plugin' => [
 					'short' => 'p',
-					'help' => __d('cake_console', 'The plugin to bake group tests for. Only the specified plugin will be baked then.'),
+					'help' => 'The plugin to bake group tests for. Only the specified plugin will be baked then.',
 					'default' => ''
 				],
 				'remove' => [
 					'short' => 'r',
 					'boolean' => true,
-					'help' => __d('cake_console', 'Remove unnecessary group tests.')
+					'help' => 'Remove unnecessary group tests.'
 				],
 				'strict' => [
 					'short' => 's',
 					'boolean' => true,
-					'help' => __d('cake_console', 'Count tests with only testObject as empty, as well.')
+					'help' => 'Count tests with only testObject as empty, as well.'
 				],
 			]
 		];
@@ -602,26 +602,26 @@ class All' . $name . 'Test extends PHPUnit_Framework_TestSuite {
 		$subcommandParserAssert['options']['create'] = [
 			'short' => 'c',
 			'boolean' => true,
-			'help' => __d('cake_console', 'Create missing folder and files.')
+			'help' => 'Create missing folder and files.'
 		];
 		$subcommandParserAssert['options']['overwrite'] = [
 			'short' => 'o',
 			'boolean' => true,
-			'help' => __d('cake_console', 'Overwrite existing files.')
+			'help' => 'Overwrite existing files.'
 		];
 
 		return parent::getOptionParser()
 			->description(__d('cake_console', "A shell to help automate testing in 2.x"))
 			->addSubcommand('group', [
-				'help' => __d('cake_console', 'Bake GroupTest files'),
+				'help' => 'Bake GroupTest files',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('assert', [
-				'help' => __d('cake_console', 'Assert test files'),
+				'help' => 'Assert test files',
 				'parser' => $subcommandParserAssert
 			])
 			->addSubcommand('analyze', [
-				'help' => __d('cake_console', 'Analyse methods of a test file'),
+				'help' => 'Analyse methods of a test file',
 				'parser' => $subcommandParserAssert
 			]);
 	}

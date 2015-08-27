@@ -97,7 +97,7 @@ class MaintenanceShell extends AppShell {
 			'options' => [
 				'duration' => [
 					'short' => 'd',
-					'help' => __d('cake_console', 'Duration in minutes - optional.'),
+					'help' => 'Duration in minutes - optional.',
 					'default' => ''
 				],
 			]
@@ -106,28 +106,28 @@ class MaintenanceShell extends AppShell {
 			'options' => [
 				'remove' => [
 					'short' => 'r',
-					'help' => __d('cake_console', 'Remove either all or specific IPs.'),
+					'help' => 'Remove either all or specific IPs.',
 					'boolean' => true
 				],
 			]
 		];
 
 		return parent::getOptionParser()
-			->description(__d('cake_console', 'A shell to put the whole site into maintenance mode'))
+			->description('A shell to put the whole site into maintenance mode')
 			->addSubcommand('status', [
-				'help' => __d('cake_console', 'See the current status'),
+				'help' => 'See the current status',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('activate', [
-				'help' => __d('cake_console', 'Activate maintenance mode'),
+				'help' => 'Activate maintenance mode',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('deactivate', [
-				'help' => __d('cake_console', 'Deactivate maintenance mode'),
+				'help' => 'Deactivate maintenance mode',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('whitelist', [
-				'help' => __d('cake_console', 'Configure whitelisted IPs.'),
+				'help' => 'Configure whitelisted IPs.',
 				'parser' => $whitelistParser
 			]);
 	}

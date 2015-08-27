@@ -108,7 +108,7 @@ class DbDumpShell extends AppShell {
 
 		$this->out('Backup will be written to:');
 		$this->out(' - ' . $this->_path());
-		$looksGood = $this->in(__d('cake_console', 'Look okay?'), ['y', 'n'], 'y');
+		$looksGood = $this->in('Look okay?', ['y', 'n'], 'y');
 		if ($looksGood !== 'y') {
 			return $this->error('Aborted!');
 		}
@@ -195,7 +195,7 @@ class DbDumpShell extends AppShell {
 		$this->out();
 		$this->out('Restoring:');
 		$this->out($file);
-		$looksGood = $this->in(__d('cake_console', 'Look okay?'), ['y', 'n'], 'y');
+		$looksGood = $this->in('Look okay?', ['y', 'n'], 'y');
 		if ($looksGood !== 'y') {
 			return $this->error('Aborted!');
 		}
@@ -252,7 +252,7 @@ class DbDumpShell extends AppShell {
 		$this->out(count($files) . ' files found');
 		$this->out('Aborting');
 		return;
-		$looksGood = $this->in(__d('cake_console', 'Sure?'), ['y', 'n'], 'y');
+		$looksGood = $this->in('Sure?', ['y', 'n'], 'y');
 		if ($looksGood !== 'y') {
 			return $this->error('Aborted!');
 		}
@@ -294,21 +294,21 @@ class DbDumpShell extends AppShell {
 			'options' => [
 				'dry-run' => [
 					'short' => 'd',
-					'help' => __d('cake_console', 'Dry run the update, no files will actually be modified.'),
+					'help' => 'Dry run the update, no files will actually be modified.',
 					'boolean' => true
 				],
 				'tables' => [
 					'short' => 't',
-					'help' => __d('cake_console', 'custom tables to dump (separate using , and NO SPACES - use no prefix). Use -t only for prompting tables.'),
+					'help' => 'custom tables to dump (separate using , and NO SPACES - use no prefix). Use -t only for prompting tables.',
 				],
 				'compress' => [
 					'short' => 'c',
-					'help' => __d('cake_console', 'compress using gzip'),
+					'help' => 'compress using gzip',
 					'boolean' => true
 				],
 				'path' => [
 					'short' => 'p',
-					'help' => __d('cake_console', 'Use a custom backup directory'),
+					'help' => 'Use a custom backup directory',
 					'default' => ''
 				]
 			]
@@ -317,11 +317,11 @@ class DbDumpShell extends AppShell {
 		return parent::getOptionParser()
 			->description(__d('cake_console', "A Shell to dump and restore SQL databases. The advantage: It uses native cli commands which save a lot of resources and are very fast."))
 			->addSubcommand('create', [
-				'help' => __d('cake_console', 'Dump SQL to file'),
+				'help' => 'Dump SQL to file',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('restore', [
-				'help' => __d('cake_console', 'Restore SQL from file'),
+				'help' => 'Restore SQL from file',
 				'parser' => $subcommandParser
 			]);
 	}

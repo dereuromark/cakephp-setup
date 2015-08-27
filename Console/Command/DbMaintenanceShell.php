@@ -189,7 +189,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			'options' => [
 				'dry-run' => [
 					'short' => 'd',
-					'help' => __d('cake_console', 'Dry run the command, nothing will actually be modified.'),
+					'help' => 'Dry run the command, nothing will actually be modified.',
 					'boolean' => true
 				],
 			]
@@ -198,15 +198,15 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		return parent::getOptionParser()
 			->description(__d('cake_console', "A Shell to do some basic maintenance."))
 			->addSubcommand('encoding', [
-				'help' => __d('cake_console', 'Convert encoding.'),
+				'help' => 'Convert encoding.',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('engine', [
-				'help' => __d('cake_console', 'Convert engine.'),
+				'help' => 'Convert engine.',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('cleanup', [
-				'help' => __d('cake_console', 'Cleanup database.'),
+				'help' => 'Cleanup database.',
 				'parser' => $subcommandParser
 			]);
 	}
