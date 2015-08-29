@@ -14,6 +14,10 @@ This plugin provides useful tools for managing a CakePHP app.
 
 Tip: You can also use Packagist now @ https://packagist.org/packages/dereuromark/cakephp-setup
 
+The recommendation is to also include the bootstrap file to leverage the debug output functions:
+```php
+Plugin::load('Setup', ['bootstrap' => true]);
+```
 
 ## Documentation
 
