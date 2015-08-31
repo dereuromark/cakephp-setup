@@ -1,8 +1,11 @@
 <?php
 
-function dd($data) {
+function dd($data, $showHtml = null) {
 	if (Configure::read('debug')) {
-		debug($data);
+		debug($data, $showHtml, false);
+
+		$backtrace = debug_backtrace(false, 1);
+		pr('dd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
 		die();
 	}
 }
