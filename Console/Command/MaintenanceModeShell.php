@@ -5,7 +5,7 @@ App::uses('MaintenanceLib', 'Setup.Lib');
 App::uses('Validation', 'Utility');
 
 /**
- * Activate and deactivate "Maintenance Mode" for an application.
+ * Activate and deactivate "maintenance mode" for an application.
  * Also accepts a whitelist of IP addresses that should be excluded (sys admins etc).
  *
  * Use -d duration option to set a timeout. Otherwise the maintenance window has to
@@ -14,7 +14,7 @@ App::uses('Validation', 'Utility');
  * @author Mark Scherer
  * @licence MIT
  */
-class MaintenanceShell extends AppShell {
+class MaintenanceModeShell extends AppShell {
 
 	public $Maintenance;
 
