@@ -1,3 +1,10 @@
+<?php
+//PHP5.4 fix
+$import = str_replace(['array(', '(', ')'], ['[', '[', ']'], $import);
+$schema = str_replace(['array(', '(', ')'], ['[', '[', ']'], $schema);
+$records = str_replace(['array(', '(', ')'], ['[', '[', ']'], $records);
+
+?>
 <?php echo '<?php' . "\n"; ?>
 /**
  * <?php echo $model; ?>Fixture
