@@ -18,7 +18,7 @@ $fields = collection($fields)
     ->filter(function($field) use ($schema) {
         return !in_array($schema->columnType($field), ['binary', 'text']);
     })
-    ->take(7);
+    ;
 %>
 <div class="actions columns large-2 medium-3">
     <h3><?= __('Actions') ?></h3>
@@ -54,7 +54,7 @@ $fields = collection($fields)
     <thead>
         <tr>
     <% foreach ($fields as $field): %>
-        <%
+<%
             $primaryKeys = $schema->primaryKey();
             if (in_array($field, $primaryKeys)) {
                 continue;
@@ -113,9 +113,18 @@ $fields = collection($fields)
         $pk = '$' . $singularVar . '->' . $primaryKey[0];
 %>
             <td class="actions">
-                <?= $this->Html->link(__('View'), ['action' => 'view', <%= $pk %>]) ?>
-                <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $pk %>]) ?>
-                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?>
+<%
+                // Sortable Behavior buttons
+                if (!empty($upDown)) {
+%>
+                <?= $this->Html->link($this->Format->icon('up'), ['action' => 'up', <%= $pk %>], ['escape' => false]); ?>
+                <?= $this->Html->link($this->Format->icon('down'), ['action' => 'down', <%= $pk %>], ['escape' => false]); ?>
+<%
+                }
+%>
+                <?= $this->Html->link($this->Format->icon('view'), ['action' => 'view', <%= $pk %>], ['escape' => false]); ?>
+                <?= $this->Html->link($this->Format->icon('edit'), ['action' => 'edit', <%= $pk %>], ['escape' => false]); ?>
+                <?= $this->Form->postLink($this->Format->icon('delete'), ['action' => 'delete', <%= $pk %>], ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]); ?>
             </td>
         </tr>
 
