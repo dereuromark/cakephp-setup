@@ -80,6 +80,10 @@ $fields = collection($fields)
                 continue;
             }
 
+            if (in_array($field, $skipFields) || (false && $field === 'sort' && $upDown)) {
+                continue;
+            }
+
             if (!empty($associations['BelongsTo'])) {
                 foreach ($associations['BelongsTo'] as $alias => $details) {
                     if ($field === $details['foreignKey']) {
