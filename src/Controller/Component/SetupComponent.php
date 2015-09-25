@@ -139,7 +139,7 @@ class SetupComponent extends Component {
 	 */
 	public function startup(Event $event) {
 		if ($layout = $this->request->session()->read('Setup.layout')) {
-			$this->Controller->layout = $layout;
+			$this->Controller->viewBuilder()->layout($layout);
 		}
 	}
 
