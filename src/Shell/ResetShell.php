@@ -41,7 +41,7 @@ class ResetShell extends Shell {
 		$this->out('Resetting...');
 
 		if (empty($this->params['dry-run'])) {
-			$count = $this->Users->updateAll(array('email' => $email . ''), array('email !=' => $email));
+			$count = $this->Users->updateAll(['email' => $email . ''], ['email !=' => $email]);
 		} else {
 			$count = $this->Users->find('all', ['conditions' => [CLASS_USERS . '.email !=' => $email]])->count();
 		}
@@ -84,7 +84,7 @@ class ResetShell extends Shell {
 		}
 
 		if (empty($this->params['dry-run'])) {
-			$count = $this->Users->updateAll(array('password' => $pwd), array('password !=' => $pwd));
+			$count = $this->Users->updateAll(['password' => $pwd], ['password !=' => $pwd]);
 		} else {
 			$count = $this->Users->find('all', ['conditions' => [CLASS_USERS . '.password !=' => $pwd]])->count();
 		}
@@ -97,28 +97,28 @@ class ResetShell extends Shell {
 	 * @return ConsoleOptionParser
 	 */
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'dry-run' => array(
+		$subcommandParser = [
+			'options' => [
+				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the reset command, no data will actually be modified.',
 					'boolean' => true
-				),
-			)
-		);
+				],
+			]
+		];
 
 		return parent::getOptionParser()
 			->description('The Reset shell can reset local development data.
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.')
-			->addSubcommand('email', array(
+			->addSubcommand('email', [
 				'help' => 'Reset all user emails.',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('pwd', array(
+			])
+			->addSubcommand('pwd', [
 				'help' => 'Hash and Reset all user passwords via Hasher class. If you are not using Default hasher, make sure
  you provide the correct one via Configure \'Passwordable.passwordHasher\'.',
 				'parser' => $subcommandParser
-			));
+			]);
 	}
 
 }

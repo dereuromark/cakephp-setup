@@ -33,7 +33,7 @@ class SetupComponentTest extends TestCase {
 	public function testSetMaintenance() {
 		$request = new Request('/?maintenance=1');
 		$this->Controller->request = $request;
-		$this->Controller->request->params = array('action' => 'index');
+		$this->Controller->request->params = ['action' => 'index'];
 
 		$request = $request;
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
@@ -41,7 +41,7 @@ class SetupComponentTest extends TestCase {
 		$this->Setup->beforeFilter($event);
 
 		$result = $this->Controller->request->session()->read('FlashMessage');
-		$expected = array('success' => array(__d('setup', 'Maintenance mode {0}', __d('setup', 'activated'))));
+		$expected = ['success' => [__d('setup', 'Maintenance mode {0}', __d('setup', 'activated'))]];
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
@@ -55,7 +55,7 @@ class SetupComponentTest extends TestCase {
 		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
-		$this->Controller->request->params = array('action' => 'index');
+		$this->Controller->request->params = ['action' => 'index'];
 
 		$request = $request;
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
@@ -63,7 +63,7 @@ class SetupComponentTest extends TestCase {
 		$this->Setup->beforeFilter($event);
 
 		$result = $this->Controller->request->session()->read('FlashMessage');
-		$expected = array('success' => array(__d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated'))));
+		$expected = ['success' => [__d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated'))]];
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();

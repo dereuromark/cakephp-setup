@@ -7,10 +7,10 @@ use Tools\Model\Entity\Entity;
 class User extends Entity {
 
 	public static function statuses($value = null) {
-		$options = array(
+		$options = [
 			static::STATUS_INACTIVE => 'Inactive',
 			static::STATUS_ACTIVE => 'Active',
-		);
+		];
 
 		return parent::enum($value, $options);
 	}

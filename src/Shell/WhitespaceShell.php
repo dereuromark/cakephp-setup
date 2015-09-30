@@ -19,10 +19,10 @@ class WhitespaceShell extends Shell {
 	 *
 	 * @var array
 	 */
-	public $report = array(
-		'leading' => array(0, 0),
-		'trailing' => array(0, 0)
-	);
+	public $report = [
+		'leading' => [0, 0],
+		'trailing' => [0, 0]
+	];
 
 	/**
 	 * Whitespaces before or after <?php and ?>.
@@ -44,15 +44,15 @@ class WhitespaceShell extends Shell {
 		$files = $App->findRecursive('.*\.php');
 		$this->out('Found ' . count($files) . ' files.');
 
-		$action = $this->in('Continue? [y]/[n]', array('y', 'n'), 'n');
+		$action = $this->in('Continue? [y]/[n]', ['y', 'n'], 'n');
 		if ($action !== 'y') {
 			return $this->error('Aborted');
 		}
 
-		$folders = array();
+		$folders = [];
 
 		foreach ($files as $file) {
-			$errors = array();
+			$errors = [];
 			$action = '';
 			$this->out('Processing ' . $file, 1, Shell::VERBOSE);
 
@@ -79,7 +79,7 @@ class WhitespaceShell extends Shell {
 			}
 
 			while (empty($action)) {
-				$action = $this->in('Remove? [y]/[n], [a] for all in this folder, [r] for all below, [*] for all files(!), [q] to quit', array('y', 'n', 'r', 'a', 'q', '*'), 'q');
+				$action = $this->in('Remove? [y]/[n], [a] for all in this folder, [r] for all below, [*] for all files(!), [q] to quit', ['y', 'n', 'r', 'a', 'q', '*'], 'q');
 			}
 
 			if ($action === '*') {
@@ -136,7 +136,7 @@ class WhitespaceShell extends Shell {
 
 		$this->out('Found ' . count($files) . ' files.');
 
-		$action = $this->in('Continue? [y]/[n]', array('y', 'n'), 'n');
+		$action = $this->in('Continue? [y]/[n]', ['y', 'n'], 'n');
 		if ($action !== 'y') {
 			return $this->error('Aborted');
 		}
@@ -168,38 +168,38 @@ class WhitespaceShell extends Shell {
 	}
 
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'ext' => array(
+		$subcommandParser = [
+			'options' => [
+				'ext' => [
 					'short' => 'e',
 					'help' => 'Specify extensions [php|txt|...]',
 					'default' => '',
-				),
-				'dry-run' => array(
+				],
+				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the clear command, no files will actually be deleted. Should be combined with verbose!',
 					'boolean' => true
-				),
-				'plugin' => array(
+				],
+				'plugin' => [
 					'short' => 'p',
 					'help' => 'Plugin',
 					'default' => '',
-				),
-			)
-		);
+				],
+			]
+		];
 
 		return parent::getOptionParser()
 			->description('The Whitespace Shell removes uncessary/wrong whitespaces.
 Either provide a path as first argument, use -p PluginName or run it as it is for the complete APP dir.')
-			->addSubcommand('clean', array(
+			->addSubcommand('clean', [
 				'help' => 'Detect and remove any leading/trailing whitespaces',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('eof', array(
+			])
+			->addSubcommand('eof', [
 				'help' => 'Fix whitespace issues at the end of PHP files:
 A single newline as per coding standards and no closing ?> tag for PHP files.',
 				'parser' => $subcommandParser
-			));
+			]);
 	}
 
 }

@@ -26,7 +26,7 @@ class UserShellTest extends TestCase {
 
 	public $Shell;
 
-	public $fixtures = array('plugin.Setup.Users');
+	public $fixtures = ['plugin.Setup.Users'];
 
 	public function setUp() {
 		parent::setUp();

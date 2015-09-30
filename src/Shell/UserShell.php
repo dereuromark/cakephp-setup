@@ -18,7 +18,7 @@ if (!defined('CLASS_USER')) {
  */
 class UserShell extends Shell {
 
-	public $uses = array(CLASS_USERS);
+	public $uses = [CLASS_USERS];
 
 	/**
 	 * UserShell::create()
@@ -75,12 +75,12 @@ class UserShell extends Shell {
 		*/
 
 		$this->out('');
-		$this->Users->addBehavior('Tools.Passwordable', array('confirm' => false));
+		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
 		//$this->User->validate['pwd']
-		$data = array(
+		$data = [
 			'pwd' => $password,
 			'active' => 1
-		);
+		];
 
 		$usernameField = $this->Users->displayField();
 		if ($usernameField === $this->Users->primaryKey()) {
@@ -104,7 +104,7 @@ class UserShell extends Shell {
 		}
 
 		if ($schema->column('email') && $usernameField !== 'email') {
-			$provideEmail = $this->in('Provide Email?', array('y', 'n'), 'n');
+			$provideEmail = $this->in('Provide Email?', ['y', 'n'], 'n');
 			if ($provideEmail === 'y') {
 				$email = $this->in('Please insert an email');
 				$data['email'] = $email;
@@ -115,7 +115,7 @@ class UserShell extends Shell {
 		}
 
 		$this->out('');
-		$continue = $this->in('Continue?', array('y', 'n'), 'n');
+		$continue = $this->in('Continue?', ['y', 'n'], 'n');
 		if ($continue !== 'y') {
 			return $this->error('Aborted!');
 		}
@@ -140,24 +140,24 @@ class UserShell extends Shell {
 	 * @return ConsoleOptionParser
 	 */
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'dry-run' => array(
+		$subcommandParser = [
+			'options' => [
+				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the create command, no data will actually be inserted.',
 					'boolean' => true
-				),
-			)
-		);
+				],
+			]
+		];
 
 		return parent::getOptionParser()
 			->description('The User shell can create a user on the fly for local development.
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.
 Make sure you configured the Passwordable behavior accordingly as per docs.')
-			->addSubcommand('create', array(
+			->addSubcommand('create', [
 				'help' => 'Create a new user with email and password provided.',
 				'parser' => $subcommandParser
-			));
+			]);
 	}
 
 }

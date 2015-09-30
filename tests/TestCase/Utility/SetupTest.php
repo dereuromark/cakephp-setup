@@ -25,9 +25,9 @@ class SetupTest extends TestCase {
 	 * @return void
 	 */
 	public function testCleanedUrl() {
-		$url = array('controller' => 'ControllerName', 'action' => 'action_name', '?' => array('clearcache' => 1, 'foo' => 'bar'));
+		$url = ['controller' => 'ControllerName', 'action' => 'action_name', '?' => ['clearcache' => 1, 'foo' => 'bar']];
 		$result = Setup::cleanedUrl('clearcache', $url);
-		$expected = array('controller' => 'ControllerName', 'action' => 'action_name', '?' => array('foo' => 'bar'));
+		$expected = ['controller' => 'ControllerName', 'action' => 'action_name', '?' => ['foo' => 'bar']];
 		$this->assertSame($expected, $result);
 	}
 

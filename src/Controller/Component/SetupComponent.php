@@ -34,16 +34,16 @@ if (!defined('WINDOWS')) {
  */
 class SetupComponent extends Component {
 
-	public $components = array('Tools.Session');
+	public $components = ['Tools.Session'];
 
 	public $Controller;
 
-	public $notifications = array(
+	public $notifications = [
 		'404' => true,
 		'loops' => false, //TODO,
 		'memory' => false, //TODO,
 		'execTime' => false, //TODO,
-	);
+	];
 
 	/**
 	 * ::beforeFilter()
@@ -234,7 +234,7 @@ class SetupComponent extends Component {
 		if (!$Maintenance->setMaintenanceMode($maintenance ? $length : false)) {
 			return false;
 		}
-		if (!$Maintenance->whitelist(array($ip))) {
+		if (!$Maintenance->whitelist([$ip])) {
 			return false;
 		}
 
@@ -326,7 +326,7 @@ class SetupComponent extends Component {
 			$type[] = 'pwd';
 		}
 
-		return Setup::cleanedUrl($type, $this->Controller->request->params + array('?' => $this->Controller->request->query));
+		return Setup::cleanedUrl($type, $this->Controller->request->params + ['?' => $this->Controller->request->query]);
 	}
 
 	/**

@@ -40,7 +40,7 @@ class MaintenanceFilterTest extends TestCase {
 	public function testMaintenance() {
 		$filter = new MaintenanceFilter();
 
-		$response = $this->getMock('Cake\Network\Response', array('send'));
+		$response = $this->getMock('Cake\Network\Response', ['send']);
 		$request = new Request('/');
 
 		$event = new Event('DispatcherTest', $this, compact('request', 'response'));
@@ -61,7 +61,7 @@ class MaintenanceFilterTest extends TestCase {
 	public function testNoMaintenance() {
 		$filter = new MaintenanceFilter();
 
-		$response = $this->getMock('Response', array('_sendHeader'));
+		$response = $this->getMock('Response', ['_sendHeader']);
 		$request = new Request('/');
 		$event = new Event('Dispatcher.beforeRequest', $this, compact('request', 'response'));
 

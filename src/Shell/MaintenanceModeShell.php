@@ -104,47 +104,47 @@ class MaintenanceModeShell extends Shell {
 	 * @return ConsoleOptionParser
 	 */
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'duration' => array(
+		$subcommandParser = [
+			'options' => [
+				'duration' => [
 					'short' => 'd',
 					'help' => 'Duration in minutes - optional.',
 					'default' => ''
-				),
-			)
-		);
-		$whitelistParser = array(
-			'options' => array(
-				'remove' => array(
+				],
+			]
+		];
+		$whitelistParser = [
+			'options' => [
+				'remove' => [
 					'short' => 'r',
 					'help' => 'Remove either all or specific IPs.',
 					'boolean' => true
-				),
-			)
-		);
+				],
+			]
+		];
 
 		return parent::getOptionParser()
 			->description('A shell to put the whole site into maintenance mode')
-			->addSubcommand('status', array(
+			->addSubcommand('status', [
 				'help' => 'See the current status',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('activate', array(
+			])
+			->addSubcommand('activate', [
 				'help' => 'Activate maintenance mode',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('deactivate', array(
+			])
+			->addSubcommand('deactivate', [
 				'help' => 'Deactivate maintenance mode',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('reset', array(
+			])
+			->addSubcommand('reset', [
 				'help' => 'Reset maintenance mode',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('whitelist', array(
+			])
+			->addSubcommand('whitelist', [
 				'help' => 'Configure whitelisted IPs.',
 				'parser' => $whitelistParser
-			));
+			]);
 	}
 
 }

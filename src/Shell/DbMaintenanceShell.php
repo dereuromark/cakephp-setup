@@ -66,7 +66,7 @@ SQL;
 			$script .= $r['statement'];
 		}
 
-		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
+		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
 			return $this->error('Aborted!');
 		}
@@ -93,7 +93,7 @@ SQL;
 		$config = $db->config();
 		$database = $config['database'];
 		$prefix = ''; //$config['prefix'];
-		$engines = array('InnoDB', 'MyISAM');
+		$engines = ['InnoDB', 'MyISAM'];
 
 		while (!$engine) {
 			$engine = $this->in('Please select target engine', $engines);
@@ -121,7 +121,7 @@ SQL;
 			$script .= $r['statement'];
 		}
 
-		$continue = $this->in(count($res) . ' tables will be altered.', array('Y', 'N'), 'N');
+		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
 			return $this->error('Aborted!');
 		}
@@ -191,7 +191,7 @@ SQL;
 			$this->out($r['statement'], 1, Shell::VERBOSE);
 		}
 
-		$continue = $this->in($res->count() . ' tables will be altered.', array('Y', 'N'), 'N');
+		$continue = $this->in($res->count() . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
 			return $this->error('Aborted!');
 		}
@@ -238,7 +238,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		$this->out('Database ' . $database . ': ' . count($res) . ' tables found');
 		if (!$prefix) {
-			$in = $this->in('No prefix set! Careful, this will drop all tables in that database, continue?', array('Y', 'N'), 'N');
+			$in = $this->in('No prefix set! Careful, this will drop all tables in that database, continue?', ['Y', 'N'], 'N');
 			if ($in !== 'Y') {
 				$this->error('Aborted!');
 			}
@@ -354,15 +354,15 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	}
 
 	public function getOptionParser() {
-		$subcommandParser = array(
-			'options' => array(
-				'dry-run' => array(
+		$subcommandParser = [
+			'options' => [
+				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the command, nothing will actually be modified.',
 					'boolean' => true
-				),
-			)
-		);
+				],
+			]
+		];
 
 		$tablePrefixParser = $subcommandParser;
 		$tablePrefixParser['options']['database'] = [
@@ -377,26 +377,26 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		return parent::getOptionParser()
 			->description("A Shell to do some basic database maintenance for you.
 Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
-			->addSubcommand('encoding', array(
+			->addSubcommand('encoding', [
 				'help' => 'Convert encoding.',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('engine', array(
+			])
+			->addSubcommand('engine', [
 				'help' => 'Convert engine.',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('table_prefix', array(
+			])
+			->addSubcommand('table_prefix', [
 				'help' => 'Add or remove table prefixes.',
 				'parser' => $tablePrefixParser
-			))
-			->addSubcommand('dates', array(
+			])
+			->addSubcommand('dates', [
 				'help' => 'Correct date(time) fields.',
 				'parser' => $subcommandParser
-			))
-			->addSubcommand('cleanup', array(
+			])
+			->addSubcommand('cleanup', [
 				'help' => 'Cleanup database.',
 				'parser' => $subcommandParser
-			));
+			]);
 	}
 
 }

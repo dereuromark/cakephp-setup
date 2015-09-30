@@ -22,9 +22,9 @@ class Setup {
 			}
 		}
 
-		$pass = !empty($urlArray['pass']) ? $urlArray['pass'] : array();
+		$pass = !empty($urlArray['pass']) ? $urlArray['pass'] : [];
 
-		$returnArray = array();
+		$returnArray = [];
 		if (isset($urlArray['controller'])) {
 			$returnArray['controller'] = $urlArray['controller'];
 		}

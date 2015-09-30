@@ -23,13 +23,13 @@ class TestCliShell extends Shell {
 		$url = Router::url('/');
 		$this->out('Router::url(\'/\'): ' . PHP_EOL . "\t" . $url);
 
-		$url = Router::url(array('controller' => 'Test'));
+		$url = Router::url(['controller' => 'Test']);
 		$this->out('Router::url(array(\'controller\' => \'test\')): ' . PHP_EOL . "\t" . $url);
 
 		$url = Router::url('/', true);
 		$this->out('Router::url(\'/\', true): ' . PHP_EOL . "\t" . $url);
 
-		$url = Router::url(array('controller' => 'Test'), true);
+		$url = Router::url(['controller' => 'Test'], true);
 		$this->out('Router::url(array(\'controller\' => \'test\'), true): ' . PHP_EOL . "\t" . $url);
 	}
 
@@ -41,9 +41,9 @@ class TestCliShell extends Shell {
 	public function getOptionParser() {
 		return parent::getOptionParser()
 			->description('Test CLI')
-			->addSubcommand('router', array(
+			->addSubcommand('router', [
 				'help' => 'Test router environment',
-			));
+			]);
 	}
 
 }
