@@ -28,7 +28,7 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
 }
 
 %>
-<div class="actions columns large-2 medium-3">
+<div class="actions columns col-sm-12">
     <h3><?= __('Actions') ?></h3>
     <ul class="side-nav">
 <% if (strpos($action, 'add') === false): %>
@@ -56,7 +56,7 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
 %>
     </ul>
 </div>
-<div class="<%= $pluralVar %> form large-10 medium-9 columns">
+<div class="<%= $pluralVar %> form col-sm-12">
     <?= $this->Form->create($<%= $singularVar %>) ?>
     <fieldset>
         <legend><?= __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></legend>

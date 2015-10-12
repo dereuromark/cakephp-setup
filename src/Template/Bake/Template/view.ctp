@@ -51,7 +51,7 @@ $groupedFields = collection($fields)
 $groupedFields += ['number' => [], 'string' => [], 'boolean' => [], 'date' => [], 'text' => []];
 $pk = "\$$singularVar->{$primaryKey[0]}";
 %>
-<div class="actions columns large-2 medium-3">
+<div class="actions col-sm-4 col-xs-12">
     <h3><?= __('Actions') ?></h3>
     <ul class="side-nav">
         <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $pk %>]) ?> </li>
@@ -74,11 +74,11 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 %>
     </ul>
 </div>
-<div class="<%= $pluralVar %> view large-10 medium-9 columns">
+<div class="<%= $pluralVar %> view col-sm-8 col-xs-12">
     <h2><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h2>
     <div class="row">
 <% if ($groupedFields['string']) : %>
-        <div class="large-5 columns strings">
+        <div class="col-sm-12">
 <% foreach ($groupedFields['string'] as $field) : %>
 <% if (isset($associationFields[$field])) :
             $details = $associationFields[$field];
@@ -93,7 +93,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
         </div>
 <% endif; %>
 <% if ($groupedFields['number']) : %>
-        <div class="large-2 columns numbers end">
+        <div class="col-sm-12">
 <% foreach ($groupedFields['number'] as $field) : %>
             <h6 class="subheader"><?= __('<%= Inflector::humanize($field) %>') ?></h6>
             <p><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></p>
@@ -101,7 +101,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
         </div>
 <% endif; %>
 <% if ($groupedFields['date']) : %>
-        <div class="large-2 columns dates end">
+        <div class="col-sm-12">
 <% foreach ($groupedFields['date'] as $field) : %>
             <h6 class="subheader"><%= "<%= __('" . Inflector::humanize($field) . "') %>" %></h6>
             <p><?= h($<%= $singularVar %>-><%= $field %>) ?></p>
@@ -109,7 +109,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
         </div>
 <% endif; %>
 <% if ($groupedFields['boolean']) : %>
-        <div class="large-2 columns booleans end">
+        <div class="col-sm-12">
 <% foreach ($groupedFields['boolean'] as $field) : %>
             <h6 class="subheader"><?= __('<%= Inflector::humanize($field) %>') ?></h6>
             <p><?= $<%= $singularVar %>-><%= $field %> ? __('Yes') : __('No'); ?></p>
@@ -119,8 +119,8 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
     </div>
 <% if ($groupedFields['text']) : %>
 <% foreach ($groupedFields['text'] as $field) : %>
-    <div class="row texts">
-        <div class="columns large-9">
+    <div class="row">
+        <div class="col-sm-12">
             <h6 class="subheader"><?= __('<%= Inflector::humanize($field) %>') ?></h6>
             <?= $this->Text->autoParagraph(h($<%= $singularVar %>-><%= $field %>)) ?>
         </div>
@@ -144,7 +144,7 @@ foreach ($relations as $alias => $details):
     $otherPluralHumanName = Inflector::humanize(Inflector::underscore($details['controller']));
     %>
 <div class="related row">
-    <div class="column large-12">
+    <div class="col-sm-12">
     <h4 class="subheader"><?= __('Related <%= $otherPluralHumanName %>') ?></h4>
     <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
     <table class="table">
