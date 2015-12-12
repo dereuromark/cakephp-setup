@@ -5,6 +5,7 @@ if (!defined('CHMOD_PUBLIC')) {
 }
 App::uses('AppShell', 'Console/Command');
 App::uses('Folder', 'Utility');
+App::uses('ClearCacheLib', 'Setup.Lib');
 
 /**
  * @cakephp 2.0
@@ -159,7 +160,6 @@ TEXT;
 	 */
 	public function engines() {
 		if (!isset($this->_Cleaner)) {
-			App::uses('ClearCacheLib', 'Setup.Lib');
 			$this->_Cleaner = new ClearCacheLib();
 		}
 		$output = call_user_func_array([&$this->_Cleaner, 'engines'], $this->args);
