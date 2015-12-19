@@ -6,7 +6,7 @@ Warning: This tool should not be used if the DB connection or your application g
 There it would fail hard. It should only be used for soft maintenance work.
 
 
-## Maintenance Shell
+## MaintenanceMode Shell
 This should be the preferred way of enabling and disabling the maintenance mode for your website.
 
 Commands
@@ -18,11 +18,11 @@ Commands
 
 ### Example usage
 ```
-cake Setup.Maintenance activate
+cake Setup.MaintenanceMode activate
 // Optionally whitelist your IP:
-cake Setup.Maintenance whitelist YOURIP
+cake Setup.MaintenanceMode whitelist YOURIP
 // ... Do your work ...
-cake Setup.Maintenance deactivate
+cake Setup.MaintenanceMode deactivate
 ```
 
 ## Maintenance Dispatching Filter
@@ -98,5 +98,5 @@ You can shell alias the MaintenanceShell for less typing in your `bootstrap_cli.
 use Cake\Console\ShellDispatcher;
 
 // Custom shell aliases
-ShellDispatcher::alias('m', 'Setup.Maintenance'); // Or any other alias
+ShellDispatcher::alias('m', 'Setup.MaintenanceMode'); // Or any other alias
 ```
