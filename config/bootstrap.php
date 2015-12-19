@@ -1,5 +1,7 @@
 <?php
 
+use Cake\Core\Configure;
+
 function dd($data, $showHtml = null) {
 	if (Configure::read('debug')) {
 		debug($data, $showHtml, false);
