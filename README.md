@@ -1,10 +1,10 @@
 # CakePHP Setup Plugin
 
 [![Build Status](https://api.travis-ci.org/dereuromark/cakephp-setup.svg)](https://travis-ci.org/dereuromark/cakephp-setup)
-[![Coverage Status](https://coveralls.io/repos/dereuromark/cakephp-setup/badge.png)](https://coveralls.io/r/dereuromark/cakephp-setup)
+[![Coverage Status](https://coveralls.io/repos/dereuromark/cakephp-setup/badge.svg)](https://coveralls.io/r/dereuromark/cakephp-setup)
 [![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.4-8892BF.svg)](https://php.net/)
-[![License](https://poser.pugx.org/dereuromark/cakephp-setup/license.png)](https://packagist.org/packages/dereuromark/cakephp-setup)
-[![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-setup/d/total.png)](https://packagist.org/packages/dereuromark/cakephp-setup)
+[![License](https://poser.pugx.org/dereuromark/cakephp-setup/license.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
+[![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-setup/d/total.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--2--R-yellow.svg)](https://github.com/php-fig-rectified/fig-rectified-standards)
 
 This CakePHP 3.0 plugin provides useful development tools for managing a CakePHP app.
