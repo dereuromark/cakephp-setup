@@ -2,6 +2,7 @@
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
+use Cake\Utility\Inflector;
 
 if (!defined('CLASS_USERS')) {
 	define('CLASS_USERS', 'Users');
@@ -21,26 +22,27 @@ class UserShell extends Shell {
 	public $uses = [CLASS_USERS];
 
 	/**
-	 * UserShell::create()
-	 * //TODO: refactor (smaller sub-parts)
+	 * Creates a new user including a freshly hashed password.
 	 *
-	 * @param string|null $username
+	 * @param string|null $displayFieldValue
 	 * @param string|null $password
 	 * @return void
 	 */
-	public function create($username = null, $password = null) {
-		while (empty($username)) {
-			$username = $this->in('Username');
+	public function create($displayFieldValue = null, $password = null) {
+		$this->loadModel(CLASS_USERS);
+		$schema = $this->Users->schema();
+
+		$displayField = $this->Users->displayField();
+		$displayFieldName = Inflector::humanize($displayField);
+
+		while (empty($displayFieldValue)) {
+			$displayFieldValue = $this->in($displayFieldName);
 		}
 		while (empty($password)) {
 			$password = $this->in('Password');
 		}
 
-		$this->loadModel(CLASS_USERS);
-		$schema = $this->Users->schema();
-
-		$entity = $this->Users->newEntity();
-
+		//$entity = $this->Users->newEntity();
 		//TODO
 		/*
 		if (isset($this->User->Role) && is_object($this->User->Role)) {
@@ -76,17 +78,16 @@ class UserShell extends Shell {
 
 		$this->out('');
 		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
-		//$this->User->validate['pwd']
+
 		$data = [
 			'pwd' => $password,
 			'active' => 1
 		];
 
-		$usernameField = $this->Users->displayField();
-		if ($usernameField === $this->Users->primaryKey()) {
+		if ($displayField === $this->Users->primaryKey()) {
 			return $this->error('Cannot read a displayField from the Users table. You need to define one, e.g. "username".');
 		}
-		$data[$usernameField] = $username;
+		$data[$displayField] = $displayFieldValue;
 
 		if (!empty($email)) {
 			$data['email'] = $email;
@@ -103,7 +104,7 @@ class UserShell extends Shell {
 			$data['status'] = $status;
 		}
 
-		if ($schema->column('email') && $usernameField !== 'email') {
+		if ($schema->column('email') && $displayField !== 'email') {
 			$provideEmail = $this->in('Provide Email?', ['y', 'n'], 'n');
 			if ($provideEmail === 'y') {
 				$email = $this->in('Please insert an email');
