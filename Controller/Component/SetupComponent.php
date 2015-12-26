@@ -215,7 +215,7 @@ class SetupComponent extends Component {
 		$this->Session->write('Debug.Redirect', $stack);
 
 		if ($inStack) {
-			$urls = Set::extract('/url', $stack['stack']);
+			$urls = Hash::extract($stack['stack'], '{n}.url');
 
 			if (!empty($this->notifications['loops'])) {
 				$text = implode(PHP_EOL, $urls);
