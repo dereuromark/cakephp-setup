@@ -20,6 +20,8 @@ class CurrentConfigShell extends AppShell {
 	 * @return void
 	 */
 	public function main() {
+		$this->out('Salt: ' . Configure::read('Security.salt'));
+
 		$this->out('DB default:');
 		try {
 			$db = ConnectionManager::getDataSource('default');
