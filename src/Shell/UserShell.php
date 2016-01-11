@@ -45,8 +45,8 @@ class UserShell extends Shell {
 		//$entity = $this->Users->newEntity();
 		//TODO
 		/*
-		if (isset($this->User->Role) && is_object($this->User->Role)) {
-			$roles = $this->User->Role->find('list');
+		if (isset($this->Users->Roles) && is_object($this->Users->Roles)) {
+			$roles = $this->Users->Roles->find('list');
 
 			if (!empty($roles)) {
 				$this->out('');
