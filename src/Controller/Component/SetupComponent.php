@@ -8,7 +8,7 @@ use Cake\Event\Event;
 use Setup\Maintenance\Maintenance;
 use Setup\Utility\Setup;
 use Tools\Controller\Component\FlashComponent;
-use Tools\Network\Email\Email;
+use Tools\Mailer\Email;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {
@@ -220,7 +220,7 @@ class SetupComponent extends Component {
 	 * Alternatively, this can and should be done using the CLI shell.
 	 *
 	 * URL Options:
-	 * - ´duration` query string can be used to set a timeout maintenance window
+	 * - ï¿½duration` query string can be used to set a timeout maintenance window
 	 *
 	 * @param mixed $maintenance
 	 * @return bool Success
