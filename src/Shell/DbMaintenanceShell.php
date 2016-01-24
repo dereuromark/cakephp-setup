@@ -30,7 +30,7 @@ class DbMaintenanceShell extends Shell {
 	 * @return void
 	 */
 	public function encoding() {
-		$db = ConnectionManager::get('default');
+		$db = $this->_getConnection();
 		$config = $db->config();
 		$database = $config['database'];
 		$prefix = ''; //$config['prefix'];
@@ -89,7 +89,7 @@ SQL;
 	 * @return void
 	 */
 	public function engine($engine = null) {
-		$db = ConnectionManager::get('default');
+		$db = $this->_getConnection();
 		$config = $db->config();
 		$database = $config['database'];
 		$prefix = ''; //$config['prefix'];
@@ -145,7 +145,7 @@ SQL;
 	 * @return void
 	 */
 	public function tablePrefix($action = null, $prefix = null) {
-		$db = ConnectionManager::get('default');
+		$db = $this->_getConnection();
 		$config = $db->config();
 		$database = $config['database'];
 		if (!empty($this->params['database'])) {
@@ -215,7 +215,7 @@ SQL;
 	 * @return void
 	 */
 	public function cleanup($prefix = null) {
-		$db = ConnectionManager::get('test');
+		$db = $this->_getConnection();
 		$config = $db->config();
 		$database = $config['database'];
 
@@ -259,7 +259,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	 * @return void
 	 */
 	public function dates($prefix = null) {
-		$db = ConnectionManager::get('default');
+		$db = $this->_getConnection();
 		$config = $db->config();
 		$database = $config['database'];
 
@@ -361,6 +361,11 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 					'help' => 'Dry run the command, nothing will actually be modified.',
 					'boolean' => true
 				],
+				'connection' => [
+					'short' => 'c',
+					'help' => 'Use a different connection than `default`.',
+					'default' => ''
+				],
 			]
 		];
 
@@ -370,8 +375,8 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			'default' => ''
 		];
 		$tablePrefixParser['arguments'] = [
-			'action' => ['help' => __('[A]dd or [R]remove.'), 'required' => false],
-			'prefix' => ['help' => __('Prefix to work with.'), 'required' => false]
+			'action' => ['help' => '[A]dd or [R]remove.', 'required' => false],
+			'prefix' => ['help' => 'Prefix to work with.', 'required' => false]
 		];
 
 		return parent::getOptionParser()
@@ -397,6 +402,18 @@ Use -d -v (dry-run and verbose mode) to only display queries but not execute the
 				'help' => 'Cleanup database.',
 				'parser' => $subcommandParser
 			]);
+	}
+
+	/**
+	 * @return \Cake\Database\Connection|\Cake\Datasource\ConnectionInterface
+	 */
+	protected function _getConnection() {
+		$name = 'default';
+		if ($this->params['connection']) {
+			$name = $this->params['connection'];
+		}
+
+		return ConnectionManager::get($name);
 	}
 
 }
