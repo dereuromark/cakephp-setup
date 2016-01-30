@@ -65,10 +65,14 @@ class Maintenance {
 	 * If overwritable, it will set Configure value 'Maintenance.overwrite' with the
 	 * corresponding IP so the SetupComponent can trigger a warning message here.
 	 *
-	 * @param string $ipAdddres If passed it allows access when it matches whitelisted IPs.
+	 * @param string $ipAddress If passed it allows access when it matches whitelisted IPs.
 	 * @return bool Success
 	 */
 	public function isMaintenanceMode($ipAddress = null) {
+		if ($ipAddress) {
+			$this->enableDebugModeForWhitelist($ipAddress);
+		}
+
 		if (!file_exists($this->file)) {
 			return false;
 		}
@@ -84,13 +88,28 @@ class Maintenance {
 		}
 
 		if ($ipAddress) {
-			if (file_exists(TMP . 'maintenanceOverride-' . $this->_slugIp($ipAddress) . '.txt')) {
+			$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ipAddress) . '.txt';
+			if (file_exists($file)) {
 				Configure::write('Maintenance.overwrite', $ipAddress);
 				return false;
 			}
 		}
-
 		return true;
+	}
+
+	/**
+	 * @param string $ipAddress
+	 * @return void
+     */
+	public function enableDebugModeForWhitelist($ipAddress) {
+		if (!$ipAddress) {
+			return;
+		}
+		$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ipAddress) . '.txt';
+		if (!file_exists($file)) {
+			return;
+		}
+		Configure::write('debug', (bool)file_get_contents($file));
 	}
 
 	/**
@@ -122,12 +141,13 @@ class Maintenance {
 	 * Note: Expects IPs to be valid.
 	 *
 	 * @param array $newIps IP addressed to be added to the whitelist.
-	 * @return mixed boolean succes for adding, an array of all whitelisted IPs otherwise.
+	 * @param int $debugMode
+	 * @return array|bool Boolean Success for adding, an array of all whitelisted IPs otherwise.
 	 */
-	public function whitelist($newIps = []) {
+	public function whitelist($newIps = [], $debugMode = 0) {
 		if ($newIps) {
 			foreach ($newIps as $ip) {
-				$this->_addToWhitelist($ip);
+				$this->_addToWhitelist($ip, $debugMode);
 			}
 			return true;
 		}
@@ -166,11 +186,12 @@ class Maintenance {
 	 * MaintenanceLib::_addToWhitelist()
 	 *
 	 * @param string $ip Valid IP address.
+	 * @param int $debugMode
 	 * @return bool Success.
 	 */
-	protected function _addToWhitelist($ip) {
+	protected function _addToWhitelist($ip, $debugMode = 0) {
 		$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ip) . '.txt';
-		if (!file_put_contents($file, 1)) {
+		if (!file_put_contents($file, $debugMode)) {
 			return false;
 		}
 		return true;
@@ -179,7 +200,7 @@ class Maintenance {
 	/**
 	 * Handle special chars in IPv6.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	protected function _slugIp($ip) {
 		return str_replace(':', '#', $ip);
@@ -188,7 +209,7 @@ class Maintenance {
 	/**
 	 * Handle special chars in IPv6.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	protected function _unslugIp($ip) {
 		return str_replace('#', ':', $ip);

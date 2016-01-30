@@ -1,6 +1,7 @@
 <?php
 namespace Setup\Shell;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Validation\Validation;
 use Setup\Maintenance\Maintenance;
@@ -17,6 +18,9 @@ use Setup\Maintenance\Maintenance;
  */
 class MaintenanceModeShell extends Shell {
 
+	/**
+	 * @var Maintenance;
+	 */
 	public $Maintenance;
 
 	public function startup() {
@@ -26,7 +30,8 @@ class MaintenanceModeShell extends Shell {
 	}
 
 	public function status() {
-		if ($res = $this->Maintenance->isMaintenanceMode()) {
+		$isMaintenanceMode = $this->Maintenance->isMaintenanceMode();
+		if ($isMaintenanceMode) {
 			$this->out('Maintenance mode active!');
 		} else {
 			$this->out('Maintenance mode not active');
@@ -59,26 +64,27 @@ class MaintenanceModeShell extends Shell {
 	 * Whitelist specific IPs. Each argument is a single IP.
 	 * Not passing any argument will output the current whitelist.
 	 *
-	 * @return void
+	 * @return int|null|void
 	 */
 	public function whitelist() {
 		$ips = $this->args;
 		if (!empty($ips)) {
 			foreach ($ips as $ip) {
 				if (!Validation::ip($ip)) {
-					return $this->error($ip . ' is not a valid IP address.');
+					$this->abort($ip . ' is not a valid IP address.');
 				}
 			}
 			if ($this->params['remove']) {
 				$this->Maintenance->clearWhitelist($ips);
 			} else {
-				$this->Maintenance->whitelist($ips);
+				$this->Maintenance->whitelist($ips, $this->params['debug']);
 			}
 			$this->out('Done!', 2);
-		} else {
-			if ($this->params['remove']) {
-				$this->Maintenance->clearWhitelist();
-			}
+			return;
+		}
+
+		if ($this->params['remove']) {
+			$this->Maintenance->clearWhitelist();
 		}
 
 		$this->out('Current whitelist:');
@@ -120,6 +126,11 @@ class MaintenanceModeShell extends Shell {
 					'help' => 'Remove either all or specific IPs.',
 					'boolean' => true
 				],
+				'debug' => [
+					'short' => 'd',
+					'help' => 'Enable debug mode for whitelisted IPs.',
+					'boolean' => true
+				]
 			]
 		];
 

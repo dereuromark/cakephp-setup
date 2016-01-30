@@ -4,6 +4,7 @@ namespace Setup\Routing\Filter;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Routing\DispatcherFilter;
+use Cake\View\View;
 use Setup\Maintenance\Maintenance;
 
 /**
@@ -60,14 +61,15 @@ class MaintenanceFilter extends DispatcherFilter {
 	 * MaintenanceMode::beforeDispatch()
 	 *
 	 * @param \Cake\Event\Event $event
-	 * @return \Cake\Network\Response|void
+	 * @return \Cake\Network\Response|null
 	 */
 	public function beforeDispatch(Event $event) {
+		/** @var \Cake\Network\Request $request */
 		$request = $event->data['request'];
 		$ip = $request->clientIp();
 		$Maintenance = new Maintenance();
 		if (!$Maintenance->isMaintenanceMode($ip)) {
-			return;
+			return null;
 		}
 
 		$body = __d('setup', 'Maintenance work');
@@ -123,7 +125,7 @@ class MaintenanceFilter extends DispatcherFilter {
   /**
    * MaintenanceFilter::_getView()
    *
-   * @return View
+   * @return \Cake\View\View
    */
   protected function _getView() {
 		$helpers = (array)Configure::read('Maintenance.helpers');
