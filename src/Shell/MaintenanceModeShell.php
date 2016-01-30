@@ -67,6 +67,10 @@ class MaintenanceModeShell extends Shell {
 	 * @return int|null|void
 	 */
 	public function whitelist() {
+		if ($this->params['remove']) {
+			$this->Maintenance->clearWhitelist();
+		}
+
 		$ips = $this->args;
 		if (!empty($ips)) {
 			foreach ($ips as $ip) {
@@ -80,11 +84,6 @@ class MaintenanceModeShell extends Shell {
 				$this->Maintenance->whitelist($ips, $this->params['debug']);
 			}
 			$this->out('Done!', 2);
-			return;
-		}
-
-		if ($this->params['remove']) {
-			$this->Maintenance->clearWhitelist();
 		}
 
 		$this->out('Current whitelist:');
