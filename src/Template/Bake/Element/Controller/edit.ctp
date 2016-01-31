@@ -50,6 +50,7 @@ $compact = ["'" . $singularName . "'"];
             $compact[] = "'$otherPlural'";
         endforeach;
 %>
+
         $this->set(compact(<%= join(', ', $compact) %>));
         $this->set('_serialize', ['<%=$singularName%>']);
     }

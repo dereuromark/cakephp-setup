@@ -76,17 +76,20 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
                 }
                 continue;
             }
-            if (!in_array($field, ['created', 'modified', 'updated'])) {
-                $fieldData = $schema->column($field);
-                if (($fieldData['type'] === 'date') && (!empty($fieldData['null']))) {
+
+            if (in_array($field, ['created', 'modified', 'updated'])) {
+                continue;
+            }
+
+			$fieldData = $schema->column($field);
+			if (in_array($fieldData['type'], ['date', 'datetime', 'time']) && (!empty($fieldData['null']))) {
 %>
-            echo $this->Form->input('<%= $field %>', ['empty' => true]);
+		echo $this->Form->input('<%= $field %>', ['empty' => true]);
 <%
-                } else {
+			} else {
 %>
-            echo $this->Form->input('<%= $field %>');
+		echo $this->Form->input('<%= $field %>');
 <%
-                }
             }
         }
         if (!empty($associations['BelongsToMany'])) {

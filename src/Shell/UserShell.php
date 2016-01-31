@@ -2,6 +2,7 @@
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
+use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 
 if (!defined('CLASS_USERS')) {
@@ -42,39 +43,49 @@ class UserShell extends Shell {
 			$password = $this->in('Password');
 		}
 
-		//$entity = $this->Users->newEntity();
-		//TODO
-		/*
-		if (isset($this->Users->Roles) && is_object($this->Users->Roles)) {
-			$roles = $this->Users->Roles->find('list');
+		if ($schema->column('role_id')) {
+			//TODO
+			/*
+			if (isset($this->Users->Roles) && is_object($this->Users->Roles)) {
+				$roles = $this->Users->Roles->find('list');
 
-			if (!empty($roles)) {
-				$this->out('');
-				$this->out(print_r($roles, true));
+				if (!empty($roles)) {
+					$this->out('');
+					$this->out(print_r($roles, true));
+				}
+
+				$roleIds = array_keys($roles);
+				while (!empty($roles) && empty($role)) {
+					$role = $this->in('Role', $roleIds);
+				}
+			} elseif (method_exists($this->User, 'roles')) {
+				$roles = User::roles();
+
+				if (!empty($roles)) {
+					$this->out('');
+					$this->out(print_r($roles, true));
+				}
+
+				$roleIds = array_keys($roles);
+				while (!empty($roles) && empty($role)) {
+					$role = $this->in('Role', $roleIds);
+				}
 			}
+			*/
 
-			$roleIds = array_keys($roles);
+			$roles = Configure::read('Roles');
+			$roleIds = array_values($roles);
+
+			$this->out(print_r($roles, true));
 			while (!empty($roles) && empty($role)) {
 				$role = $this->in('Role', $roleIds);
 			}
-		} elseif (method_exists($this->User, 'roles')) {
-			$roles = User::roles();
 
-			if (!empty($roles)) {
-				$this->out('');
-				$this->out(print_r($roles, true));
-			}
-
-			$roleIds = array_keys($roles);
-			while (!empty($roles) && empty($role)) {
-				$role = $this->in('Role', $roleIds);
+			if (empty($roles)) {
+				$this->out('No Role found (either no table, or no data)');
+				$role = $this->in('Please insert a role id manually');
 			}
 		}
-		if (empty($roles)) {
-			$this->out('No Role found (either no table, or no data)');
-			$role = $this->in('Please insert a role manually');
-		}
-		*/
 
 		$this->out('');
 		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
