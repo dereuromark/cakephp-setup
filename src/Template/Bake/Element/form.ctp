@@ -25,6 +25,8 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
     });
 }
 
+$namespace = Configure::read('App.namespace');
+
 $skipFields = ['password', 'slug', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 if (property_exists($modelObject, 'scaffoldSkipFieldsForm')) {
 	$skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsForm);
@@ -93,8 +95,17 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
                 continue;
             }
 
-			$fieldData = $schema->column($field);
-			if (in_array($fieldData['type'], ['date', 'datetime', 'time']) && (!empty($fieldData['null']))) {
+            $fieldType = $schema->columnType($field);
+            $fieldData = $schema->column($field);
+            if ($fieldType === 'integer' && $fieldData['length'] === 2 && method_exists($namespace . '\Model\Entity\\' . ($entityClass = ucfirst($singularVar)), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))) {
+                $empty = '';
+                if (!empty($fieldData['null'])) {
+                    $empty = ", 'empty' => true";
+                }
+%>
+        echo $this->Form->input('<%= $field %>', ['options' => $<%= $singularVar %>::<%= $enumMethod %>()<%= $empty %>]);
+<%
+            } elseif (in_array($fieldData['type'], ['date', 'datetime', 'time']) && (!empty($fieldData['null']))) {
 %>
 		echo $this->Form->input('<%= $field %>', ['empty' => true]);
 <%
