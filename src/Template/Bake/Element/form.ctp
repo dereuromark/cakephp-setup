@@ -24,6 +24,14 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
         return $field === 'lft' || $field === 'rght';
     });
 }
+
+$skipFields = ['password', 'slug', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
+if (property_exists($modelObject, 'scaffoldSkipFieldsForm')) {
+	$skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsForm);
+}
+if (property_exists($modelObject, 'scaffoldSkipFields')) {
+	$skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
+}
 %>
 <nav class="col-sm-4 col-xs-12">
     <ul class="side-nav">
@@ -63,6 +71,10 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
             if (in_array($field, $primaryKey)) {
                 continue;
             }
+            if (in_array($field, $skipFields)) {
+                continue;
+            }
+
             if (isset($keyFields[$field])) {
                 $fieldData = $schema->column($field);
                 if (!empty($fieldData['null'])) {

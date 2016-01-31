@@ -51,6 +51,15 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
         $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
     }
 
+    // We want certain fields to be paginated DESC by default, also certain types
+    $paginationOrderReversedFields = ['published', 'rating', 'priority'];
+    if (property_exists($modelObject, 'paginationOrderReversedFields')) {
+        $paginationOrderReversedFields = array_merge($paginationOrderReversedFields, (array)$modelObject->paginationOrderReversedFields);
+    }
+    $paginationOrderReversedFieldTypes = ['datetime', 'date', 'time', 'bool'];
+    if (property_exists($modelObject, 'paginationOrderReversedFieldTypes')) {
+        $paginationOrderReversedFieldTypes = array_merge($paginationOrderReversedFieldTypes, (array)$modelObject->paginationOrderReversedFieldTypes);
+    }
 %>
     </ul>
 </nav>
@@ -61,16 +70,22 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
             <tr>
 <% foreach ($fields as $field): %>
 <%
-            $primaryKeys = $schema->primaryKey();
-            if (in_array($field, $primaryKeys)) {
-                continue;
-            }
+    $primaryKeys = $schema->primaryKey();
+    if (in_array($field, $primaryKeys)) {
+        continue;
+    }
 
-            if (in_array($field, $skipFields) || (false && $field === 'sort' && $upDown)) {
-                continue;
-            }
-        %>
-                <th><?= $this->Paginator->sort('<%= $field %>') ?></th>
+    if (in_array($field, $skipFields) || (false && $field === 'sort' && $upDown)) {
+        continue;
+    }
+
+    $options = '';
+    $fieldData = $schema->column($field);
+    if (in_array($field, $paginationOrderReversedFields) || in_array($fieldData['type'], $paginationOrderReversedFieldTypes)) {
+        $options = ", null, ['direction' => 'desc']";
+    }
+%>
+                <th><?= $this->Paginator->sort('<%= $field %>'<%= $options %>) ?></th>
 <% endforeach; %>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -78,53 +93,58 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
         <tbody>
             <?php foreach ($<%= $pluralVar %> as $<%= $singularVar %>): ?>
             <tr>
-<%        foreach ($fields as $field) {
-            $isKey = false;
+<%
+    foreach ($fields as $field) {
+        $fieldType = $schema->columnType($field);
+        $isKey = false;
 
-            $primaryKeys = $schema->primaryKey();
-            if (in_array($field, $primaryKeys)) {
-                continue;
-            }
+        $primaryKeys = $schema->primaryKey();
+        if (in_array($field, $primaryKeys)) {
+            continue;
+        }
 
-            if (in_array($field, $skipFields) || (false && $field === 'sort' && $upDown)) {
-                continue;
-            }
+        if (in_array($field, $skipFields) || (false && $field === 'sort' && $upDown)) {
+            continue;
+        }
 
-            if (!empty($associations['BelongsTo'])) {
-                foreach ($associations['BelongsTo'] as $alias => $details) {
-                    if ($field === $details['foreignKey']) {
-                        $isKey = true;
+        if (!empty($associations['BelongsTo'])) {
+            foreach ($associations['BelongsTo'] as $alias => $details) {
+                if ($field === $details['foreignKey']) {
+                    $isKey = true;
 %>
                 <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?></td>
 <%
-                        break;
-                    }
-                }
-            }
-            if ($isKey !== true) {
-                if (!in_array($schema->columnType($field), ['integer', 'biginteger', 'decimal', 'float'])) {
-%>
-                <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
-<%
-                } else {
-%>
-                <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
-<%
+                    break;
                 }
             }
         }
-
-        $pk = '$' . $singularVar . '->' . $primaryKey[0];
+        if ($isKey !== true) {
+%>
+<% if (in_array($fieldType, ['integer']) && method_exists($entityClass = ucfirst($singularVar), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
+                <td><?= $entityClass::$enumMethod($<%= $singularVar %>-><%= $field %>) ?></td>
+<% elseif (in_array($fieldType, ['integer', 'float', 'decimal', 'biginteger'])): %>
+                <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
+<% elseif (in_array($fieldType, ['date', 'time', 'datetime', 'timestamp'])): %>
+                <td><?= $this->Time->nice($<%= $singularVar %>-><%= $field %>) ?></td>
+<% elseif (in_array($fieldType, ['boolean'])): %>
+                <td><?= $this->Format->yesNo($<%= $singularVar %>-><%= $field %>) ?></td>
+<% else: %>
+                <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
+<% endif; %>
+<%
+        }
+    }
+    $pk = '$' . $singularVar . '->' . $primaryKey[0];
 %>
                 <td class="actions">
 <%
-                // Sortable Behavior buttons
-                if (!empty($upDown)) {
+    // Sortable Behavior buttons
+    if (!empty($upDown)) {
 %>
                 <?= $this->Html->link($this->Format->icon('up'), ['action' => 'up', <%= $pk %>], ['escape' => false]); ?>
                 <?= $this->Html->link($this->Format->icon('down'), ['action' => 'down', <%= $pk %>], ['escape' => false]); ?>
 <%
-                }
+    }
 %>
                 <?= $this->Html->link($this->Format->icon('view'), ['action' => 'view', <%= $pk %>], ['escape' => false]); ?>
                 <?= $this->Html->link($this->Format->icon('edit'), ['action' => 'edit', <%= $pk %>], ['escape' => false]); ?>

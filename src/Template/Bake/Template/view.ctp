@@ -29,22 +29,30 @@ $associationFields = collection($fields)
         return $fields + $value;
     }, []);
 
+$skipFields = ['password', 'slug', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
+if (property_exists($modelObject, 'scaffoldSkipFieldsView')) {
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsView);
+}
+if (property_exists($modelObject, 'scaffoldSkipFields')) {
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
+}
+
 $groupedFields = collection($fields)
-    ->filter(function($field) use ($schema) {
+    ->filter(function($field) use ($schema, $skipFields) {
+        $primaryKeys = $schema->primaryKey();
+        if (in_array($field, $primaryKeys)) {
+            return false;
+        }
+
+        if (in_array($field, $skipFields)) {
+            return false;
+        }
+
         return $schema->columnType($field) !== 'binary';
     })
     ->groupBy(function($field) use ($schema, $associationFields) {
         $type = $schema->columnType($field);
-        if (isset($associationFields[$field])) {
-            return 'string';
-        }
-        if (in_array($type, ['integer', 'float', 'decimal', 'biginteger'])) {
-            return 'number';
-        }
-        if (in_array($type, ['date', 'time', 'datetime', 'timestamp'])) {
-            return 'date';
-        }
-        return in_array($type, ['text', 'boolean']) ? $type : 'string';
+        return in_array($type, ['text']) ? $type : 'default';
     })
     ->toArray();
 
@@ -77,8 +85,9 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <div class="<%= $pluralVar %> view col-sm-8 col-xs-12">
     <h2><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h2>
     <table class="table vertical-table">
-<% if ($groupedFields['string']) : %>
-<% foreach ($groupedFields['string'] as $field) : %>
+<% if ($groupedFields['default']) : %>
+<% foreach ($groupedFields['default'] as $field) : %>
+<% $fieldType = $schema->columnType($field); %>
 <% if (isset($associationFields[$field])) :
             $details = $associationFields[$field];
 %>
@@ -89,33 +98,19 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% else : %>
         <tr>
             <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
-            <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
-        </tr>
-<% endif; %>
-<% endforeach; %>
-<% endif; %>
-<% if ($groupedFields['number']) : %>
-<% foreach ($groupedFields['number'] as $field) : %>
-        <tr>
-            <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
+<% if (in_array($fieldType, ['integer']) && method_exists($entityClass = ucfirst($singularVar), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
+            <td><?= $entityClass::$enumMethod($<%= $singularVar %>-><%= $field %>) ?></td>
+<% elseif (in_array($fieldType, ['integer', 'float', 'decimal', 'biginteger'])): %>
             <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
-        </tr>
-<% endforeach; %>
-<% endif; %>
-<% if ($groupedFields['date']) : %>
-<% foreach ($groupedFields['date'] as $field) : %>
-        <tr>
-            <th><%= "<%= __('" . Inflector::humanize($field) . "') %>" %></th>
+<% elseif (in_array($fieldType, ['date', 'time', 'datetime', 'timestamp'])): %>
+            <td><?= $this->Time->nice($<%= $singularVar %>-><%= $field %>) ?></td>
+<% elseif (in_array($fieldType, ['boolean'])): %>
+            <td><?= $this->Format->yesNo($<%= $singularVar %>-><%= $field %>) ?></td>
+<% else : %>
             <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
-        </tr>
-<% endforeach; %>
 <% endif; %>
-<% if ($groupedFields['boolean']) : %>
-<% foreach ($groupedFields['boolean'] as $field) : %>
-        <tr>
-            <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
-            <td><?= $<%= $singularVar %>-><%= $field %> ? __('Yes') : __('No'); ?></td>
-         </tr>
+        </tr>
+<% endif; %>
 <% endforeach; %>
 <% endif; %>
     </table>
@@ -129,15 +124,6 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% endif; %>
 
 <%
-
-$skipFields = ['password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
-if (property_exists($modelObject, 'scaffoldSkipFieldsView')) {
-    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsView);
-}
-if (property_exists($modelObject, 'scaffoldSkipFields')) {
-    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
-}
-
 $relations = $associations['HasMany'] + $associations['BelongsToMany'];
 foreach ($relations as $alias => $details):
     $otherSingularVar = Inflector::variable($alias);
@@ -147,7 +133,6 @@ foreach ($relations as $alias => $details):
         <h3><?= __('Related <%= $otherPluralHumanName %>') ?></h3>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
         <table class="table">
-            <tr>
 <% foreach ($details['fields'] as $field): %>
             <%
             $primaryKeys = $schema->primaryKey();
@@ -159,6 +144,7 @@ foreach ($relations as $alias => $details):
                 continue;
             }
             %>
+            <tr>
             <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
 <% endforeach; %>
                 <th class="actions"><?= __('Actions') ?></th>
