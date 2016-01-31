@@ -85,7 +85,7 @@ class UserShell extends Shell {
 		];
 
 		if ($displayField === $this->Users->primaryKey()) {
-			return $this->error('Cannot read a displayField from the Users table. You need to define one, e.g. "username".');
+			$this->abort('Cannot read a displayField from the Users table. You need to define one, e.g. "username".');
 		}
 		$data[$displayField] = $displayFieldValue;
 
@@ -96,8 +96,9 @@ class UserShell extends Shell {
 			$data['role_id'] = $role;
 		}
 
-		if ($schema->column('status') && method_exists(CLASS_USER, 'statuses')) {
-			$statuses = CLASS_USER::statuses();
+		$userEntity = CLASS_USER;
+		if ($schema->column('status') && method_exists($userEntity, 'statuses')) {
+			$statuses = $userEntity::statuses();
 			$this->out(print_r($statuses, true));
 			$status = $this->in('Please insert a status', array_keys($statuses));
 
@@ -118,7 +119,7 @@ class UserShell extends Shell {
 		$this->out('');
 		$continue = $this->in('Continue?', ['y', 'n'], 'n');
 		if ($continue !== 'y') {
-			return $this->error('Aborted!');
+			$this->abort('Aborted!');
 		}
 
 		$this->out('');
@@ -129,7 +130,7 @@ class UserShell extends Shell {
 			return;
 		}
 		if (!$this->Users->save($entity, ['checkRules' => false])) {
-			return $this->error('User could not be inserted (' . print_r($entity->errors(), true) . ')');
+			$this->abort('User could not be inserted (' . print_r($entity->errors(), true) . ')');
 		}
 
 		$this->out('User inserted! ID: ' . $entity['id'] . 'Data: ' . print_r($entity->toArray(), true));
