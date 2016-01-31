@@ -98,8 +98,8 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% else : %>
         <tr>
             <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
-<% if (in_array($fieldType, ['integer']) && method_exists($entityClass = ucfirst($singularVar), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
-            <td><?= $entityClass::$enumMethod($<%= $singularVar %>-><%= $field %>) ?></td>
+<% if (in_array($fieldType, ['integer']) && method_exists('App\Model\Entity\\' . ($entityClass = ucfirst($singularVar)), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
+            <td><?= $<%= $singularVar %>::<%= $enumMethod%>($<%= $singularVar %>-><%= $field %>) ?></td>
 <% elseif (in_array($fieldType, ['integer', 'float', 'decimal', 'biginteger'])): %>
             <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
 <% elseif (in_array($fieldType, ['date', 'time', 'datetime', 'timestamp'])): %>
