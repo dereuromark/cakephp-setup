@@ -75,8 +75,8 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
     </ul>
 </nav>
 <div class="<%= $pluralVar %> view col-sm-8 col-xs-12">
-    <h3><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h3>
-    <table class="vertical-table">
+    <h2><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h2>
+    <table class="table vertical-table">
 <% if ($groupedFields['string']) : %>
 <% foreach ($groupedFields['string'] as $field) : %>
 <% if (isset($associationFields[$field])) :
@@ -122,7 +122,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% if ($groupedFields['text']) : %>
 <% foreach ($groupedFields['text'] as $field) : %>
     <div class="row">
-        <h4><?= __('<%= Inflector::humanize($field) %>') ?></h4>
+        <h3><?= __('<%= Inflector::humanize($field) %>') ?></h3>
         <?= $this->Text->autoParagraph(h($<%= $singularVar %>-><%= $field %>)); ?>
     </div>
 <% endforeach; %>
@@ -144,9 +144,9 @@ foreach ($relations as $alias => $details):
     $otherPluralHumanName = Inflector::humanize(Inflector::underscore($details['controller']));
     %>
     <div class="related">
-        <h4><?= __('Related <%= $otherPluralHumanName %>') ?></h4>
+        <h3><?= __('Related <%= $otherPluralHumanName %>') ?></h3>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
-        <table cellpadding="0" cellspacing="0">
+        <table class="table">
             <tr>
 <% foreach ($details['fields'] as $field): %>
             <%
