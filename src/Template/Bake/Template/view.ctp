@@ -51,7 +51,7 @@ $groupedFields = collection($fields)
 $groupedFields += ['number' => [], 'string' => [], 'boolean' => [], 'date' => [], 'text' => []];
 $pk = "\$$singularVar->{$primaryKey[0]}";
 %>
-<div class="actions col-sm-4 col-xs-12">
+<nav class="actions col-sm-4 col-xs-12">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $pk %>]) ?> </li>
@@ -73,7 +73,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
     }
 %>
     </ul>
-</div>
+</nav>
 <div class="<%= $pluralVar %> view col-sm-8 col-xs-12">
     <h3><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h3>
     <table class="vertical-table">

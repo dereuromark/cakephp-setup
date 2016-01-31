@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 %>
-<div class="<%= $pluralVar %> form">
+<div class="<%= $pluralVar %> form col-xs-12">
 <?= $this->Flash->render('auth') ?>
     <?= $this->Form->create() ?>
     <fieldset>

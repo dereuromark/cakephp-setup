@@ -25,7 +25,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
     });
 }
 %>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="col-sm-4 col-xs-12">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
 <% if (strpos($action, 'add') === false): %>
@@ -53,7 +53,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 %>
     </ul>
 </nav>
-<div class="<%= $pluralVar %> form large-9 medium-8 columns content">
+<div class="<%= $pluralVar %> form col-sm-8 col-xs-12">
     <?= $this->Form->create($<%= $singularVar %>) ?>
     <fieldset>
         <legend><?= __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></legend>
