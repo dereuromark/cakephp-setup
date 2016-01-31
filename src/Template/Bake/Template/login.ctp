@@ -13,22 +13,14 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 %>
-
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function index()
-    {
-<% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
-<% if ($belongsTo): %>
-        $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-        ];
-<% endif; %>
-        $<%= $pluralName %> = $this->paginate($this-><%= $currentModelName %>);
-
-        $this->set(compact('<%= $pluralName %>'));
-        $this->set('_serialize', ['<%= $pluralName %>']);
-    }
+<div class="<%= $pluralVar %> form">
+<?= $this->Flash->render('auth') ?>
+    <?= $this->Form->create() ?>
+    <fieldset>
+        <legend><?= __('Please enter your username and password') ?></legend>
+        <?= $this->Form->input('username') ?>
+        <?= $this->Form->input('password') ?>
+    </fieldset>
+    <?= $this->Form->button(__('Login')); ?>
+    <?= $this->Form->end() ?>
+</div>

@@ -13,22 +13,21 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 %>
+<?php
+namespace <%= $namespace %>\Mailer;
+
+use Cake\Mailer\Mailer;
+
+/**
+ * <%= $name %> mailer.
+ */
+class <%= $name %>Mailer extends Mailer
+{
 
     /**
-     * Index method
+     * Mailer's name.
      *
-     * @return \Cake\Network\Response|null
+     * @var string
      */
-    public function index()
-    {
-<% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
-<% if ($belongsTo): %>
-        $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-        ];
-<% endif; %>
-        $<%= $pluralName %> = $this->paginate($this-><%= $currentModelName %>);
-
-        $this->set(compact('<%= $pluralName %>'));
-        $this->set('_serialize', ['<%= $pluralName %>']);
-    }
+    static public $name = '<%= $name %>';
+}

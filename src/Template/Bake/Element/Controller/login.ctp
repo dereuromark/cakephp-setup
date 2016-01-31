@@ -15,20 +15,18 @@
 %>
 
     /**
-     * Index method
+     * Login method
      *
      * @return \Cake\Network\Response|null
      */
-    public function index()
+    public function login()
     {
-<% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
-<% if ($belongsTo): %>
-        $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-        ];
-<% endif; %>
-        $<%= $pluralName %> = $this->paginate($this-><%= $currentModelName %>);
-
-        $this->set(compact('<%= $pluralName %>'));
-        $this->set('_serialize', ['<%= $pluralName %>']);
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error(__('Invalid credentials, try again'));
+        }
     }

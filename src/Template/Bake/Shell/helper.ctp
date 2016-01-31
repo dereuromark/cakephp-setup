@@ -9,26 +9,29 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         0.1.0
+ * @since         1.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 %>
+<?php
+namespace <%= $namespace %>\Shell\Helper;
+
+use Cake\Console\Helper;
+
+/**
+ * <%= $name %> shell helper.
+ */
+class <%= $name %>Helper extends Helper
+{
 
     /**
-     * Index method
+     * Output method.
      *
-     * @return \Cake\Network\Response|null
+     * Generate the output for this shell helper.
+     *
+     * @return void
      */
-    public function index()
+    public function output($args)
     {
-<% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
-<% if ($belongsTo): %>
-        $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-        ];
-<% endif; %>
-        $<%= $pluralName %> = $this->paginate($this-><%= $currentModelName %>);
-
-        $this->set(compact('<%= $pluralName %>'));
-        $this->set('_serialize', ['<%= $pluralName %>']);
     }
+}

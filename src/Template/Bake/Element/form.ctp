@@ -19,18 +19,15 @@ $fields = collection($fields)
         return $schema->columnType($field) !== 'binary';
     });
 
-$skipFields = ['password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
-if (property_exists($modelObject, 'scaffoldSkipFieldsForm')) {
-    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsForm);
+if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
+    $fields = $fields->reject(function ($field) {
+        return $field === 'lft' || $field === 'rght';
+    });
 }
-if (property_exists($modelObject, 'scaffoldSkipFields')) {
-    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
-}
-
 %>
-<div class="actions columns col-sm-12">
-    <h3><?= __('Actions') ?></h3>
+<nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
+        <li class="heading"><?= __('Actions') ?></li>
 <% if (strpos($action, 'add') === false): %>
         <li><?= $this->Form->postLink(
                 __('Delete'),
@@ -55,8 +52,8 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
         }
 %>
     </ul>
-</div>
-<div class="<%= $pluralVar %> form col-sm-12">
+</nav>
+<div class="<%= $pluralVar %> form large-9 medium-8 columns content">
     <?= $this->Form->create($<%= $singularVar %>) ?>
     <fieldset>
         <legend><?= __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></legend>
@@ -66,10 +63,6 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
             if (in_array($field, $primaryKey)) {
                 continue;
             }
-            if (in_array($field, $skipFields)) {
-                continue;
-            }
-
             if (isset($keyFields[$field])) {
                 $fieldData = $schema->column($field);
                 if (!empty($fieldData['null'])) {
@@ -87,7 +80,7 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
                 $fieldData = $schema->column($field);
                 if (($fieldData['type'] === 'date') && (!empty($fieldData['null']))) {
 %>
-            echo $this->Form->input('<%= $field %>', ['empty' => true, 'default' => '']);
+            echo $this->Form->input('<%= $field %>', ['empty' => true]);
 <%
                 } else {
 %>

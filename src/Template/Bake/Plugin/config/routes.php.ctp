@@ -16,6 +16,10 @@
 <?php
 use Cake\Routing\Router;
 
-Router::plugin('<%= $plugin %>', function ($routes) {
-    $routes->fallbacks('InflectedRoute');
-});
+Router::plugin(
+    '<%= $plugin %>',
+    ['path' => '/<%= $routePath %>'],
+    function ($routes) {
+        $routes->fallbacks('DashedRoute');
+    }
+);

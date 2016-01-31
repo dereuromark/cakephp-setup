@@ -15,20 +15,11 @@
 %>
 
     /**
-     * Index method
+     * Logout method
      *
-     * @return \Cake\Network\Response|null
+     * @return \Cake\Network\Response
      */
-    public function index()
+    public function logout()
     {
-<% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
-<% if ($belongsTo): %>
-        $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-        ];
-<% endif; %>
-        $<%= $pluralName %> = $this->paginate($this-><%= $currentModelName %>);
-
-        $this->set(compact('<%= $pluralName %>'));
-        $this->set('_serialize', ['<%= $pluralName %>']);
+        return $this->redirect($this->Auth->logout());
     }

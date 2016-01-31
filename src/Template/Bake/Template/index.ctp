@@ -17,12 +17,17 @@ use Cake\Utility\Inflector;
 $fields = collection($fields)
     ->filter(function($field) use ($schema) {
         return !in_array($schema->columnType($field), ['binary', 'text']);
-    })
-    ;
+    });
+
+if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
+    $fields = $fields->reject(function ($field) {
+        return $field === 'lft' || $field === 'rght';
+    });
+}
 %>
 <div class="actions col-sm-4 col-xs-12">
-    <h3><?= __('Actions') ?></h3>
     <ul class="side-nav">
+        <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
 <%
     $done = [];
@@ -50,10 +55,11 @@ $fields = collection($fields)
     </ul>
 </div>
 <div class="<%= $pluralVar %> index col-sm-8 col-xs-12">
+    <h3><?= __('<%= $pluralHumanName %>') ?></h3>
     <table class="table">
-    <thead>
-        <tr>
-    <% foreach ($fields as $field): %>
+        <thead>
+            <tr>
+<% foreach ($fields as $field): %>
 <%
             $primaryKeys = $schema->primaryKey();
             if (in_array($field, $primaryKeys)) {
@@ -64,14 +70,14 @@ $fields = collection($fields)
                 continue;
             }
         %>
-        <th><?= $this->Paginator->sort('<%= $field %>') ?></th>
-    <% endforeach; %>
-        <th class="actions"><?= __('Actions') ?></th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($<%= $pluralVar %> as $<%= $singularVar %>): ?>
-        <tr>
+                <th><?= $this->Paginator->sort('<%= $field %>') ?></th>
+<% endforeach; %>
+                <th class="actions"><?= __('Actions') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($<%= $pluralVar %> as $<%= $singularVar %>): ?>
+            <tr>
 <%        foreach ($fields as $field) {
             $isKey = false;
 
@@ -89,9 +95,7 @@ $fields = collection($fields)
                     if ($field === $details['foreignKey']) {
                         $isKey = true;
 %>
-            <td>
-                <?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?>
-            </td>
+                <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?></td>
 <%
                         break;
                     }
@@ -100,11 +104,11 @@ $fields = collection($fields)
             if ($isKey !== true) {
                 if (!in_array($schema->columnType($field), ['integer', 'biginteger', 'decimal', 'float'])) {
 %>
-            <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
+                <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
 <%
                 } else {
 %>
-            <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
+                <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
 <%
                 }
             }
@@ -112,7 +116,7 @@ $fields = collection($fields)
 
         $pk = '$' . $singularVar . '->' . $primaryKey[0];
 %>
-            <td class="actions">
+                <td class="actions">
 <%
                 // Sortable Behavior buttons
                 if (!empty($upDown)) {
@@ -125,11 +129,10 @@ $fields = collection($fields)
                 <?= $this->Html->link($this->Format->icon('view'), ['action' => 'view', <%= $pk %>], ['escape' => false]); ?>
                 <?= $this->Html->link($this->Format->icon('edit'), ['action' => 'edit', <%= $pk %>], ['escape' => false]); ?>
                 <?= $this->Form->postLink($this->Format->icon('delete'), ['action' => 'delete', <%= $pk %>], ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]); ?>
-            </td>
-        </tr>
-
-    <?php endforeach; ?>
-    </tbody>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
 
     <?php echo $this->element('Tools.pagination'); ?>

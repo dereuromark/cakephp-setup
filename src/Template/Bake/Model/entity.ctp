@@ -12,6 +12,25 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
+$propertyHintMap = null;
+if (!empty($propertySchema)) {
+    $propertyHintMap = $this->DocBlock->buildEntityPropertyHintTypeMap($propertySchema);
+}
+
+$accessible = [];
+if (!isset($fields) || $fields !== false) {
+    if (!empty($fields)) {
+        foreach ($fields as $field) {
+            $accessible[$field] = 'true';
+        }
+    } elseif (!empty($primaryKey)) {
+        $accessible['*'] = 'true';
+        foreach ($primaryKey as $field) {
+            $accessible[$field] = 'false';
+        }
+    }
+}
 %>
 <?php
 namespace <%= $namespace %>\Model\Entity;
@@ -20,23 +39,33 @@ use Cake\ORM\Entity;
 
 /**
  * <%= $name %> Entity.
+<% if ($propertyHintMap): %>
+ *
+<% foreach ($propertyHintMap as $property => $type): %>
+<% if ($type): %>
+ * @property <%= $type %> $<%= $property %>
+<% else: %>
+ * @property $<%= $property %>
+<% endif; %>
+<% endforeach; %>
+<% endif; %>
  */
 class <%= $name %> extends Entity
 {
-<% if (!empty($primaryKey)): %>
+<% if (!empty($accessible)): %>
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
-     * Note that '*' is set to true, which allows all unspecified fields to be
-     * mass assigned. For security purposes, it is advised to set '*' to false
-     * (or remove), and explicitly make individual fields accessible as needed.
+     *
+     * Note that when '*' is set to true, this allows all unspecified fields to
+     * be mass assigned. For security purposes, it is advised to set '*' to false
+     * (or remove it), and explicitly make individual fields accessible as needed.
      *
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
-<% foreach ($primaryKey as $field): %>
-        '<%= $field %>' => false,
+<% foreach ($accessible as $field => $value): %>
+        '<%= $field %>' => <%= $value %>,
 <% endforeach; %>
     ];
 <% endif %>
@@ -49,7 +78,7 @@ class <%= $name %> extends Entity
      */
     protected $_hidden = [<%= $this->Bake->stringifyList($hidden) %>];
 <% endif %>
-<% if (empty($primaryKey) && empty($hidden)): %>
+<% if (empty($accessible) && empty($hidden)): %>
 
 <% endif %>
 }
