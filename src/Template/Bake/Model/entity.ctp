@@ -31,11 +31,18 @@ if (!isset($fields) || $fields !== false) {
         }
     }
 }
+
+$entityNamespace = $namespace . '\Model\Entity';
+
+$entityClass = 'Tools\Model\Entity\Entity';
+if (class_exists($entityNamespace . 'Entity')) {
+    $tableClass = $entityNamespace . 'Entity';
+}
 %>
 <?php
 namespace <%= $namespace %>\Model\Entity;
 
-use Cake\ORM\Entity;
+use <%= $entityClass %>;
 
 /**
  * <%= $name %> Entity.

@@ -43,6 +43,8 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
         endforeach;
     endforeach;
 
+    $namespace = Configure::read('App.namespace');
+
     $skipFields = ['password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
     if (property_exists($modelObject, 'scaffoldSkipFieldsIndex')) {
         $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsIndex);
@@ -120,7 +122,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
         }
         if ($isKey !== true) {
 %>
-<% if (in_array($fieldType, ['integer']) && method_exists('App\Model\Entity\\' . ($entityClass = ucfirst($singularVar)), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
+<% if (in_array($fieldType, ['integer']) && method_exists($namespace . '\Model\Entity\\' . ($entityClass = ucfirst($singularVar)), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
                 <td><?= $<%= $singularVar %>::<%= $enumMethod%>($<%= $singularVar %>-><%= $field %>) ?></td>
 <% elseif (in_array($fieldType, ['integer', 'float', 'decimal', 'biginteger'])): %>
                 <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>

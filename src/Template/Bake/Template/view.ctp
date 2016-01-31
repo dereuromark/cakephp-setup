@@ -29,6 +29,8 @@ $associationFields = collection($fields)
         return $fields + $value;
     }, []);
 
+$namespace = Configure::read('App.namespace');
+
 $skipFields = ['password', 'slug', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 if (property_exists($modelObject, 'scaffoldSkipFieldsView')) {
     $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsView);
@@ -98,7 +100,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% else : %>
         <tr>
             <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
-<% if (in_array($fieldType, ['integer']) && method_exists('App\Model\Entity\\' . ($entityClass = ucfirst($singularVar)), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
+<% if (in_array($fieldType, ['integer']) && method_exists($namespace . '\Model\Entity\\' . ($entityClass = ucfirst($singularVar)), $enumMethod = lcfirst(Inflector::camelize(Inflector::pluralize($field))))): %>
             <td><?= $<%= $singularVar %>::<%= $enumMethod%>($<%= $singularVar %>-><%= $field %>) ?></td>
 <% elseif (in_array($fieldType, ['integer', 'float', 'decimal', 'biginteger'])): %>
             <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>

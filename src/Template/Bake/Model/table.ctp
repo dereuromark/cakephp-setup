@@ -18,11 +18,19 @@ use Cake\Utility\Inflector;
 namespace <%= $namespace %>\Model\Table;
 
 <%
+
+$tableNamespace = $namespace . '\Model\Table';
+
+$tableClass = 'Tools\Model\Table\Table';
+if (class_exists($tableNamespace . 'Table')) {
+    $tableClass = $tableNamespace . 'Table';
+}
+
 $uses = [
     "use $namespace\\Model\\Entity\\$entity;",
     'use Cake\ORM\Query;',
     'use Cake\ORM\RulesChecker;',
-    'use Cake\ORM\Table;',
+    'use ' . $tableClass . ';',
     'use Cake\Validation\Validator;'
 ];
 sort($uses);
