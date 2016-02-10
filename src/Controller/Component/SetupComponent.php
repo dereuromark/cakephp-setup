@@ -60,7 +60,8 @@ class SetupComponent extends Component {
 		}
 
 		// maintenance mode?
-		if ($overwrite = Configure::read('Maintenance.overwrite')) {
+		$overwrite = Configure::read('Maintenance.overwrite');
+		if ($overwrite) {
 			// if this is reachable, the whitelisting is enabled and active
 			$message = __d('setup', 'Maintenance mode active - your IP %s is in the whitelist.', $overwrite);
 			FlashComponent::transientMessage($message, 'warning');
