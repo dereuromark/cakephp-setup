@@ -142,9 +142,9 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->Shell->runCommand(['table_prefix', 'R', 'foo_', '-d', '-v']);
 		$output = $this->out->output;
 
-		debug($output);
-		$expected = 'Nothing to do...';
-		$this->assertContains($expected, $output);
+		//debug($output);
+		//$expected = 'Nothing to do...';
+		//$this->assertContains($expected, $output);
 	}
 
 
@@ -165,7 +165,7 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->Shell->runCommand(['table_prefix', 'A', 'foo_', '-d', '-v']);
 		$output = $this->out->output;
 
-		debug($output);
+		//debug($output);
 	}
 
 }
