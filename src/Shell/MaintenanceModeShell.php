@@ -19,7 +19,7 @@ use Setup\Maintenance\Maintenance;
 class MaintenanceModeShell extends Shell {
 
 	/**
-	 * @var Maintenance;
+	 * @var \Setup\Maintenance\Maintenance;
 	 */
 	public $Maintenance;
 
@@ -96,8 +96,6 @@ class MaintenanceModeShell extends Shell {
 	}
 
 	/**
-	 * MaintenanceShell::reset()
-	 *
 	 * @return void
 	 */
 	public function reset() {
@@ -106,7 +104,7 @@ class MaintenanceModeShell extends Shell {
 	}
 
 	/**
-	 * @return ConsoleOptionParser
+	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {
 		$subcommandParser = [

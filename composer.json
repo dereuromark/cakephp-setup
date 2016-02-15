@@ -18,7 +18,8 @@
 		"dereuromark/cakephp-tools": "dev-master"
 	},
 	"require-dev": {
-		"cakephp/migrations": "dev-master"
+		"cakephp/migrations": "dev-master",
+		"fig-r/psr2r-sniffer": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {

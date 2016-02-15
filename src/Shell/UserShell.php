@@ -150,7 +150,7 @@ class UserShell extends Shell {
 	/**
 	 * UserShell
 	 *
-	 * @return ConsoleOptionParser
+	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {
 		$subcommandParser = [

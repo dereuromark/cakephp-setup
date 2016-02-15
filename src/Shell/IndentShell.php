@@ -17,7 +17,7 @@ if (!defined('CR')) {
 /**
  * Indent Shell
  *
- * Correct indentation of files in a folder recursivly.
+ * Correct indentation of files in a folder recursively.
  * Useful if files contain either only spaces or even a mixture of spaces and tabs.
  * It can be a bitch to get this straightened out. Mix in a mixture of different space
  * lengths and it is a nightmare.
@@ -29,7 +29,7 @@ if (!defined('CR')) {
  * of a line.
  * Single "accidental" spaces will be filtered out automatically.
  *
- * Tip: For different space lenghts use multiple times from largest to smallest length.
+ * Tip: For different space lengths use multiple times from largest to smallest length.
  * E.g "-s 8", then "-s 4" and maybe even "-s 2".
  *
  * Oh, and: Use TABS for indentation of code - ALWAYS.
@@ -55,7 +55,7 @@ class IndentShell extends Shell {
 	/**
 	 * Main execution function to indent a folder recursivly
 	 *
-	 * @return void
+	 * @return int|null
 	 */
 	public function folder() {
 		if (!empty($this->params['extensions'])) {
@@ -256,6 +256,9 @@ class IndentShell extends Shell {
 		}
 	}
 
+	/**
+	 * @return \Cake\Console\ConsoleOptionParser
+	 */
 	public function getOptionParser() {
 		$subcommandParser = [
 			'options' => [

@@ -9,7 +9,6 @@ use Setup\Shell\CurrentConfigShell;
 
 /**
  * Class TestCompletionStringOutput
- *
  */
 class TestCurrentConfigOutput extends ConsoleOutput {
 
@@ -52,5 +51,4 @@ class CurrentConfigShellTest extends TestCase {
 }
 
 class TestCurrentConfigShell extends CurrentConfigShell {
-
 }

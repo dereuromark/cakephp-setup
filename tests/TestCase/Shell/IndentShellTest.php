@@ -9,7 +9,6 @@ use Setup\Shell\IndentShell;
 
 /**
  * Class TestCompletionStringOutput
- *
  */
 class TestIndentOutput extends ConsoleOutput {
 

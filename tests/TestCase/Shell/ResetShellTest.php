@@ -105,5 +105,4 @@ class ResetShellTest extends TestCase {
 }
 
 class TestResetShell extends ResetShell {
-
 }

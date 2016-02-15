@@ -10,7 +10,6 @@ use Setup\Shell\DbMaintenanceShell;
 
 /**
  * Class TestCompletionStringOutput
- *
  */
 class TestDbMaintenanceOutput extends ConsoleOutput {
 

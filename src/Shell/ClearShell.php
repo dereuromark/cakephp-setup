@@ -239,7 +239,7 @@ TEXT;
 	/**
 	 * Get the option parser
 	 *
-	 * @return ConsoleOptionParser
+	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {
 		$subcommandParser = [

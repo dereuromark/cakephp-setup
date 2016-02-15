@@ -9,7 +9,6 @@ use Setup\Shell\TestCliShell;
 
 /**
  * Class TestCompletionStringOutput
- *
  */
 class TestCliOutput extends ConsoleOutput {
 

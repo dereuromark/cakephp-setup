@@ -46,10 +46,9 @@ class SetupComponent extends Component {
 	];
 
 	/**
-	 * ::beforeFilter()
-	 *
-	 * @param Event $event
-	 * @return void
+	 * @param \Cake\Event\Event $event
+	 * @throws \Exception
+	 * @return \Cake\Network\Response|null
 	 */
 	public function beforeFilter(Event $event) {
 		$this->Controller = $event->subject();
@@ -135,7 +134,7 @@ class SetupComponent extends Component {
 	 *
 	 * - Sets the layout based on session value 'Setup.layout'.
 	 *
-	 * @param Controller $this->Controller
+	 * @param \Cake\Event\Event $event
 	 * @return void
 	 */
 	public function startup(Event $event) {
@@ -176,10 +175,10 @@ class SetupComponent extends Component {
 	/**
 	 * SetupComponent::log404()
 	 *
-	 * @param bool $notifyAdminOnInteralErrors
+	 * @param bool $notifyAdminOnInternalErrors
 	 * @return void
 	 */
-	public function log404($notifyAdminOnInteralErrors = false) {
+	public function log404($notifyAdminOnInternalErrors = false) {
 		if ($this->Controller->name === 'CakeError') {
 			$referer = $this->Controller->referer();
 			$this->Controller->log('REF: ' . $referer . ' - URL: ' . $this->Controller->request->url, '404');
@@ -195,7 +194,8 @@ class SetupComponent extends Component {
 		if (!Configure::read('Config.productive')) {
 			return true;
 		}
-		if (($pwd = $this->Controller->request->query('pwd')) && $pwd === Configure::read('Config.pwd')) {
+		$pwd = $this->Controller->request->query('pwd');
+		if ($pwd && $pwd === Configure::read('Config.pwd')) {
 			return true;
 		}
 		return false;
@@ -297,10 +297,11 @@ class SetupComponent extends Component {
 	/**
 	 * Clear cache of tmp folders
 	 *
+	 * @param string|null $type
 	 * @return bool Success
 	 */
-	public function clearCache($type) {
-		$config = 'default';
+	public function clearCache($type = 'default') {
+		$config = $type;
 		Cache::clear(false, $config);
 
 		return true;
@@ -319,7 +320,7 @@ class SetupComponent extends Component {
 	/**
 	 * Remove specific named param from parsed url array
 	 *
-	 * @return array url
+	 * @return array URL
 	 */
 	protected function _cleanedUrl($type) {
 		$type = (array)$type;
@@ -335,7 +336,7 @@ class SetupComponent extends Component {
 	 * Note: right now only via email
 	 *
 	 * @param string $title
-	 * @param string $message
+	 * @param string $text
 	 * @return bool Success
 	 */
 	protected function _notification($title, $text) {

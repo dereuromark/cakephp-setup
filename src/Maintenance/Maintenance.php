@@ -100,7 +100,7 @@ class Maintenance {
 	/**
 	 * @param string $ipAddress
 	 * @return void
-     */
+	 */
 	public function enableDebugModeForWhitelist($ipAddress) {
 		if (!$ipAddress) {
 			return;

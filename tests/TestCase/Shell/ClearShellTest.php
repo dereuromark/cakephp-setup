@@ -10,7 +10,6 @@ use Setup\Shell\ClearShell;
 
 /**
  * Class TestCompletionStringOutput
- *
  */
 class TestClearOutput extends ConsoleOutput {
 

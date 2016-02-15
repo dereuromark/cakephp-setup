@@ -92,9 +92,7 @@ class ResetShell extends Shell {
 	}
 
 	/**
-	 * ResetShell::help()
-	 *
-	 * @return ConsoleOptionParser
+	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {
 		$subcommandParser = [

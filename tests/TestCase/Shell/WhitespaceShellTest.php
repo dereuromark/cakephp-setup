@@ -9,7 +9,6 @@ use Setup\Shell\WhitespaceShell;
 
 /**
  * Class TestCompletionStringOutput
- *
  */
 class TestWhitespaceOutput extends ConsoleOutput {
 
