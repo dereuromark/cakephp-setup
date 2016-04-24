@@ -26,7 +26,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 }
 %>
 <nav class="actions col-sm-4 col-xs-12">
-    <ul class="side-nav">
+    <ul class="side-nav nav nav-pills nav-stacked">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
 <%

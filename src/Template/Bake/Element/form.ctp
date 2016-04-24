@@ -36,7 +36,7 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
 }
 %>
 <nav class="col-sm-4 col-xs-12">
-    <ul class="side-nav">
+    <ul class="side-nav nav nav-pills nav-stacked">
         <li class="heading"><?= __('Actions') ?></li>
 <% if (strpos($action, 'add') === false): %>
         <li><?= $this->Form->postLink(
