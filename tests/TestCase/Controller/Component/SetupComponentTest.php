@@ -6,7 +6,6 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\Network\Request;
-use Cake\Network\Response;
 use Setup\Controller\Component\SetupComponent;
 use Tools\TestSuite\TestCase;
 

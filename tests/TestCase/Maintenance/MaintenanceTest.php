@@ -6,14 +6,23 @@ use Tools\TestSuite\TestCase;
 
 class MaintenanceTest extends TestCase {
 
+	/**
+	 * @var \Setup\Maintenance\Maintenance
+	 */
 	public $Maintenance;
 
+	/**
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 
 		$this->Maintenance = new Maintenance();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function tearDown() {
 		parent::tearDown();
 

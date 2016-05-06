@@ -20,6 +20,9 @@ if (!defined('CLASS_USER')) {
  */
 class UserShell extends Shell {
 
+	/**
+	 * @var array
+	 */
 	public $uses = [CLASS_USERS];
 
 	/**

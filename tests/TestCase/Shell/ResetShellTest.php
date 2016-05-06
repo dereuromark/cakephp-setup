@@ -5,7 +5,6 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\ResetShell;
 
@@ -14,6 +13,9 @@ use Setup\Shell\ResetShell;
  */
 class TestResetOutput extends ConsoleOutput {
 
+	/**
+	 * @var string
+	 */
 	public $output = '';
 
 	protected function _write($message) {
@@ -24,8 +26,14 @@ class TestResetOutput extends ConsoleOutput {
 
 class ResetShellTest extends TestCase {
 
+	/**
+	 * @var \Setup\Shell\ResetShell
+	 */
 	public $Shell;
 
+	/**
+	 * @var array
+	 */
 	public $fixtures = ['plugin.Setup.Users'];
 
 	public function setUp() {

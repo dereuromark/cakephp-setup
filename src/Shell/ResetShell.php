@@ -19,11 +19,10 @@ if (!defined('CLASS_USERS')) {
  */
 class ResetShell extends Shell {
 
-	public $Auth = null;
-
 	/**
 	 * Resets all emails - e.g. to your admin email (for local development).
 	 *
+	 * @param string|null $email
 	 * @return void
 	 */
 	public function email($email = null) {
@@ -34,7 +33,7 @@ class ResetShell extends Shell {
 
 		$this->Users = TableRegistry::get(CLASS_USERS);
 		if (!$this->Users->hasField('email')) {
-			return $this->error(CLASS_USERS . ' table doesnt have an email field!');
+			$this->abort(CLASS_USERS . ' table doesnt have an email field!');
 		}
 
 		$this->hr();
@@ -51,6 +50,7 @@ class ResetShell extends Shell {
 	/**
 	 * Resets all pwds to a simple pwd (for local development).
 	 *
+	 * @param string|null $pwd
 	 * @return void
 	 */
 	public function pwd($pwd = null) {
@@ -65,7 +65,8 @@ class ResetShell extends Shell {
 		$this->out($pwdToHash);
 
 		$hasher = 'Default';
-		if ($hashType = Configure::read('Passwordable.passwordHasher')) {
+		$hashType = Configure::read('Passwordable.passwordHasher');
+		if ($hashType) {
 			$hasher = $hashType;
 		}
 		$passwordHasher = PasswordHasherFactory::build($hasher);
@@ -80,7 +81,7 @@ class ResetShell extends Shell {
 
 		$this->Users = TableRegistry::get(CLASS_USERS);
 		if (!$this->Users->hasField('password')) {
-			return $this->error(CLASS_USERS . ' table doesnt have a password field!');
+			$this->abort(CLASS_USERS . ' table doesnt have a password field!');
 		}
 
 		if (empty($this->params['dry-run'])) {

@@ -34,6 +34,9 @@ class MaintenanceFilter extends DispatcherFilter {
 	 */
 	protected $_priority = 1;
 
+	/**
+	 * @var string
+	 */
 	protected $_staticTemplate = 'maintenance';
 
 	/**

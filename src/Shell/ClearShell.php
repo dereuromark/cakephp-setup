@@ -1,16 +1,15 @@
 <?php
 namespace Setup\Shell;
 
-use Cake\Cache\Cache;
 use Cake\Console\Shell;
-use Cake\Filesystem\Folder;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 if (!defined('CHMOD_PUBLIC')) {
 	define('CHMOD_PUBLIC', 0775);
 }
 
 /**
- * @cakephp 2.0
  * @author Mark Scherer
  * @license MIT
  */
@@ -30,6 +29,8 @@ class ClearShell extends Shell {
 
 	/**
 	 * Predefined shorthands
+	 *
+	 * @var array
 	 */
 	public $caches = [
 		'm' => 'models', 'p' => 'persistent', 'v' => 'views',
@@ -37,6 +38,7 @@ class ClearShell extends Shell {
 
 	/**
 	 * @deprecated with new command parser help?
+	 * @return void
 	 */
 	public function help() {
 		$help = <<<TEXT
@@ -189,8 +191,8 @@ TEXT;
 	 * @return void
 	 */
 	public function _empty($dir, $excludes = []) {
-		$Iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir),
-			\RecursiveIteratorIterator::CHILD_FIRST);
+		$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
+			RecursiveIteratorIterator::CHILD_FIRST);
 		foreach ($Iterator as $path) {
 			$fullPath = $path->__toString();
 			$continue = false;
@@ -258,7 +260,7 @@ TEXT;
 		];
 
 		return parent::getOptionParser()
-			->description("The Clear Shell easily deletes all tmp files (cache, logs, ...)")
+			->description('The Clear Shell easily deletes all tmp files (cache, logs, ...)')
 			->addSubcommand('all', [
 				'help' => 'Clear all',
 				'parser' => $subcommandParser

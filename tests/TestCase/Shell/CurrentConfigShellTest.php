@@ -12,6 +12,9 @@ use Setup\Shell\CurrentConfigShell;
  */
 class TestCurrentConfigOutput extends ConsoleOutput {
 
+	/**
+	 * @var string
+	 */
 	public $output = '';
 
 	protected function _write($message) {
@@ -25,6 +28,9 @@ class TestCurrentConfigOutput extends ConsoleOutput {
  */
 class CurrentConfigShellTest extends TestCase {
 
+	/**
+	 * @var \Setup\Shell\CurrentConfigShell
+	 */
 	public $Shell;
 
 	public function setUp() {

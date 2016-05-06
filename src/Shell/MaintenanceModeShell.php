@@ -1,7 +1,6 @@
 <?php
 namespace Setup\Shell;
 
-use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Validation\Validation;
 use Setup\Maintenance\Maintenance;
@@ -14,7 +13,7 @@ use Setup\Maintenance\Maintenance;
  * be closed manually.
  *
  * @author Mark Scherer
- * @licence MIT
+ * @license MIT
  */
 class MaintenanceModeShell extends Shell {
 

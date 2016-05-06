@@ -10,7 +10,7 @@ class Setup {
 	/**
 	 * Removes specific query strings from parsed URL array.
 	 *
-	 * @param string type Type to remove
+	 * @param string $type Type to remove
 	 * @param array $urlArray Array containing the current URL
 	 * @return array Cleaned URL array
 	 */

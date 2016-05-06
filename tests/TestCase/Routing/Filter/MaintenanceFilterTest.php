@@ -4,7 +4,6 @@ namespace Setup\Test\TestCase\Routing\Filter;
 
 use Cake\Event\Event;
 use Cake\Network\Request;
-use Cake\Network\Response;
 use Setup\Routing\Filter\MaintenanceFilter;
 use Tools\TestSuite\TestCase;
 

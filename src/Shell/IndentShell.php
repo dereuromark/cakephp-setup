@@ -39,6 +39,9 @@ if (!defined('CR')) {
  */
 class IndentShell extends Shell {
 
+	/**
+	 * @var array
+	 */
 	public $settings = [
 		'files' => ['php', 'ctp', 'inc', 'tpl'],
 		'againWithHalf' => false, # if 4, go again with 2 afterwards
@@ -46,10 +49,19 @@ class IndentShell extends Shell {
 		'debug' => false # add debug info after each line
 	];
 
+	/**
+	 * @var bool|null
+	 */
 	protected $_changes = null;
 
+	/**
+	 * @var array
+	 */
 	protected $_paths = [];
 
+	/**
+	 * @var array
+	 */
 	protected $_files = [];
 
 	/**
@@ -178,8 +190,8 @@ class IndentShell extends Shell {
 	}
 
 	/**
-	 * @param string
-	 * @param int
+	 * @param string $piece
+	 * @param int $spacesPerTab
 	 * @return string
 	 */
 	protected function _process($piece, $spacesPerTab) {
@@ -215,7 +227,8 @@ class IndentShell extends Shell {
 	 * NEW TRY!
 	 * idea: hardcoded replaceing
 	 *
-	 * @param string
+	 * @param string $piece
+	 * @param int $space
 	 * @return string
 	 */
 	protected function _processSpaceErrors($piece, $space = 1) {
@@ -296,7 +309,7 @@ class IndentShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description("Correct indentation of files")
+			->description('Correct indentation of files')
 			->addSubcommand('folder', [
 				'help' => 'Indent all files in a folder',
 				'parser' => $subcommandParser

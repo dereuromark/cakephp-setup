@@ -12,8 +12,14 @@ use Cake\Network\Response;
  */
 class Maintenance {
 
+	/**
+	 * @var string
+	 */
 	public $file;
 
+	/**
+	 * @var string
+	 */
 	public $template = 'maintenance.ctp';
 
 	public function __construct() {
@@ -32,6 +38,7 @@ class Maintenance {
 	 *    $Maintenance->checkMaintenance();
 	 *  }
 	 *
+	 * @param string|null $ipAddress
 	 * @param bool $exit If Response should be sent and exited.
 	 * @return void
 	 * @deprecated Use Maintenance DispatcherFilter
@@ -65,7 +72,7 @@ class Maintenance {
 	 * If overwritable, it will set Configure value 'Maintenance.overwrite' with the
 	 * corresponding IP so the SetupComponent can trigger a warning message here.
 	 *
-	 * @param string $ipAddress If passed it allows access when it matches whitelisted IPs.
+	 * @param string|null $ipAddress If passed it allows access when it matches whitelisted IPs.
 	 * @return bool Success
 	 */
 	public function isMaintenanceMode($ipAddress = null) {
@@ -152,7 +159,7 @@ class Maintenance {
 			return true;
 		}
 
-		$files = glob(TMP . "maintenanceOverride-*.txt");
+		$files = glob(TMP . 'maintenanceOverride-*.txt');
 		$ips = [];
 		foreach ($files as $file) {
 			$ip = pathinfo($file, PATHINFO_FILENAME);
@@ -169,7 +176,7 @@ class Maintenance {
 	 * @return bool Success
 	 */
 	public function clearWhitelist($ips = []) {
-		$files = glob(TMP . "maintenanceOverride-*.txt");
+		$files = glob(TMP . 'maintenanceOverride-*.txt');
 		foreach ($files as $file) {
 			$ip = pathinfo($file, PATHINFO_FILENAME);
 			$ip = substr($ip, strpos($ip, '-') + 1);
@@ -200,6 +207,7 @@ class Maintenance {
 	/**
 	 * Handle special chars in IPv6.
 	 *
+	 * @param string $ip
 	 * @return string
 	 */
 	protected function _slugIp($ip) {
@@ -209,6 +217,7 @@ class Maintenance {
 	/**
 	 * Handle special chars in IPv6.
 	 *
+	 * @param string $ip
 	 * @return string
 	 */
 	protected function _unslugIp($ip) {

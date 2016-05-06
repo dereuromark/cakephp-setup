@@ -5,15 +5,16 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\UserShell;
 
 /**
  * Class TestCompletionStringOutput
  */
 class TestUserOutput extends ConsoleOutput {
 
+	/**
+	 * @var string
+	 */
 	public $output = '';
 
 	protected function _write($message) {
@@ -24,8 +25,14 @@ class TestUserOutput extends ConsoleOutput {
 
 class UserShellTest extends TestCase {
 
+	/**
+	 * @var \Setup\Shell\UserShell
+	 */
 	public $Shell;
 
+	/**
+	 * @var array
+	 */
 	public $fixtures = ['plugin.Setup.Users'];
 
 	public function setUp() {

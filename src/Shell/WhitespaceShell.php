@@ -39,7 +39,7 @@ class WhitespaceShell extends Shell {
 			$folder = APP;
 		}
 		$App = new Folder($folder);
-		$this->out("Checking *.php in " . $folder);
+		$this->out('Checking *.php in ' . $folder);
 
 		$files = $App->findRecursive('.*\.php');
 		$this->out('Found ' . count($files) . ' files.');
@@ -130,7 +130,7 @@ class WhitespaceShell extends Shell {
 			$folder = APP;
 		}
 		$App = new Folder($folder);
-		$this->out("Checking *.php in " . $folder);
+		$this->out('Checking *.php in ' . $folder);
 
 		$files = $App->findRecursive('.*\.php');
 

@@ -22,7 +22,7 @@ class CopyrightRemovalShell extends Shell {
 			$folder = APP;
 		}
 		$App = new Folder($folder);
-		$this->out("Cleaning copyright notices in " . $folder);
+		$this->out('Cleaning copyright notices in ' . $folder);
 
 		$ext = '.*';
 		if (!empty($this->params['ext'])) {

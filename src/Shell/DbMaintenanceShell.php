@@ -20,7 +20,7 @@ if (!defined('WINDOWS')) {
  * - Cleanup utility
  *
  * @author Mark Scherer
- * @licence MIT
+ * @license MIT
  */
 class DbMaintenanceShell extends Shell {
 
@@ -256,6 +256,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	 * Fixes 0000-00-00 00:00:00 dates to NULL.
 	 * Also alerts about wrong "DEFAULT NOT NULL" etc.
 	 *
+	 * @param string|null $prefix
 	 * @return void
 	 */
 	public function dates($prefix = null) {
@@ -283,7 +284,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			}
 
 			// Structure
-			$sql = "DESCRIBE " . $table['table_name'] . ";";
+			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
 			$this->out('Checking for tables that need updating:', 1, static::VERBOSE);
 			$this->out('- ' . $sql, 1, static::VERBOSE);
 			$res = $db->query($sql);
@@ -314,7 +315,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			$z = '0000-00-00 00:00:00';
 			$conditions = [];
 			foreach ($fieldList as $fieldName) {
-				$conditions[] = "`" . $fieldName . "` = '" . $z . "'";
+				$conditions[] = '`' . $fieldName . "` = '" . $z . "'";
 			}
 			$conditions = implode(' OR ', $conditions);
 

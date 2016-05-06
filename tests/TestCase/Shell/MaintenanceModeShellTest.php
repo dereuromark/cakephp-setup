@@ -8,8 +8,14 @@ use Tools\TestSuite\TestCase;
 
 class MaintenanceModeShellTest extends TestCase {
 
+	/**
+	 * @var \Setup\Shell\MaintenanceModeShell
+	 */
 	public $Shell;
 
+	/**
+	 * @return void
+	 */
 	public function setUp() {
 
 		$this->out = new ConsoleOutput();

@@ -5,15 +5,21 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\WhitespaceShell;
 
 /**
  * Class TestCompletionStringOutput
  */
 class TestWhitespaceOutput extends ConsoleOutput {
 
+	/**
+	 * @var string
+	 */
 	public $output = '';
 
+	/**
+	 * @param string $message
+	 * @return void
+	 */
 	protected function _write($message) {
 		$this->output .= $message;
 	}

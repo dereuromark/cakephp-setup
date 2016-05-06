@@ -5,13 +5,15 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\IndentShell;
 
 /**
  * Class TestCompletionStringOutput
  */
 class TestIndentOutput extends ConsoleOutput {
 
+	/**
+	 * @var string
+	 */
 	public $output = '';
 
 	protected function _write($message) {

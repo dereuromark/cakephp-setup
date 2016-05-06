@@ -13,4 +13,5 @@ class Foo {
 	public function twoSpaces() {
 	$onlyFourHereThen;
 	}
+
 }

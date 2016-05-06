@@ -5,6 +5,8 @@ use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Network\Exception\InternalErrorException;
+use Exception;
 use Setup\Maintenance\Maintenance;
 use Setup\Utility\Setup;
 use Tools\Controller\Component\FlashComponent;
@@ -34,10 +36,19 @@ if (!defined('WINDOWS')) {
  */
 class SetupComponent extends Component {
 
+	/**
+	 * @var array
+	 */
 	public $components = ['Tools.Session'];
 
+	/**
+	 * @var \App\Controller\AppController
+	 */
 	public $Controller;
 
+	/**
+	 * @var array
+	 */
 	public $notifications = [
 		'404' => true,
 		'loops' => false, //TODO,
@@ -68,11 +79,11 @@ class SetupComponent extends Component {
 
 		// The following is only allowed with proper clearance
 		if (!$this->isAuthorized()) {
-			return;
+			return null;
 		}
 
 		if (!isset($this->Controller->Flash)) {
-			throw new \Exception('Flash component missing in AppController setup.');
+			throw new Exception('Flash component missing in AppController setup.');
 		}
 
 		// maintenance mode
@@ -118,11 +129,8 @@ class SetupComponent extends Component {
 
 		// layout switch
 		if ($this->Controller->request->query('layout') !== null) {
-			if (($x = $this->setLayout($this->Controller->request->query('layout'))) !== false) {
-				$this->Controller->Flash->message(__('layout %s activated', $this->Controller->request->query('layout')), 'success');
-			} else {
-				$this->Controller->Flash->message(__('layout not activated'), 'error');
-			}
+			$this->setLayout($this->Controller->request->query('layout'));
+			$this->Controller->Flash->message(__('layout %s activated', $this->Controller->request->query('layout')), 'success');
 			return $this->Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
@@ -138,7 +146,8 @@ class SetupComponent extends Component {
 	 * @return void
 	 */
 	public function startup(Event $event) {
-		if ($layout = $this->request->session()->read('Setup.layout')) {
+		$layout = $this->request->session()->read('Setup.layout');
+		if ($layout) {
 			$this->Controller->viewBuilder()->layout($layout);
 		}
 	}
@@ -161,12 +170,13 @@ class SetupComponent extends Component {
 			NL . 'Referer:' . TB . '' . $referer .
 			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .
 			NL . 'IP: ' . env('REMOTE_ADDR');
-			if ($uid = $this->request->session()->read('Auth.User.id')) {
+			$uid = $this->request->session()->read('Auth.User.id');
+			if ($uid) {
 				$text .= NL . NL . 'UID: ' . $uid;
 			}
 
 			if (!$this->_notification('404!', $text)) {
-				throw new \InternalErrorException('Cannot send admin notification email');
+				throw new InternalErrorException('Cannot send admin notification email');
 			}
 			$this->request->session()->write('Report.404', time());
 		}
@@ -205,13 +215,14 @@ class SetupComponent extends Component {
 	 * Set layout for this session.
 	 *
 	 * @param string $layout
-	 * @return bool Success
+	 * @return void
 	 */
 	public function setLayout($layout) {
 		if (!$layout) {
-			return $this->request->session()->delete('Setup.layout');
+			$this->request->session()->delete('Setup.layout');
+			return;
 		}
-		return $this->request->session()->write('Setup.layout', $layout);
+		$this->request->session()->write('Setup.layout', $layout);
 	}
 
 	/**
@@ -259,15 +270,8 @@ class SetupComponent extends Component {
 				$this->request->session()->delete('Setup.debug');
 				return false;
 			}
-			return $this->request->session()->write('Setup.debug', $level);
-		}
-
-		$file = TMP . 'debugOverride-' . $id . '.txt';
-		if ($level < 0) {
-			if (file_exists($file)) {
-				unlink($file);
-			}
-			return false;
+			$this->request->session()->write('Setup.debug', $level);
+			return true;
 		}
 
 		$cookieName = Configure::read('Session.cookie');
@@ -285,6 +289,15 @@ class SetupComponent extends Component {
 			}
 			$id = $ip . '-' . $host;
 		}
+
+		$file = TMP . 'debugOverride-' . $id . '.txt';
+		if ($level < 0) {
+			if (file_exists($file)) {
+				unlink($file);
+			}
+			return false;
+		}
+
 		if (!empty($id)) {
 			if (file_put_contents($file, $level)) {
 				return $level;
@@ -320,6 +333,7 @@ class SetupComponent extends Component {
 	/**
 	 * Remove specific named param from parsed url array
 	 *
+	 * @param string|array $type
 	 * @return array URL
 	 */
 	protected function _cleanedUrl($type) {

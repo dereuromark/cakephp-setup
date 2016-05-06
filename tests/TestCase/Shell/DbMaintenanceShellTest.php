@@ -6,13 +6,15 @@ use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\DbMaintenanceShell;
 
 /**
  * Class TestCompletionStringOutput
  */
 class TestDbMaintenanceOutput extends ConsoleOutput {
 
+	/**
+	 * @var string
+	 */
 	public $output = '';
 
 	protected function _write($message) {
