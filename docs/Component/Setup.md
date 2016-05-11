@@ -1,7 +1,7 @@
 # Setup Component
 
 Attach this to your AppController to power up debugging:
-- Quick-Switch: layout, maintenance, debug, clearcache (password protected in productive mode)
+- Quick-Switch: layout, maintenance, debug, clearcache (password protected in production mode)
 - Notify Admin via Email about self-inflicted 404s or loops (configurable)
 
 TODO:
