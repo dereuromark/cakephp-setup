@@ -7,22 +7,6 @@ use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 
 /**
- * Class TestCompletionStringOutput
- */
-class TestClearOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
-
-/**
  */
 class ClearShellTest extends TestCase {
 
@@ -71,6 +55,22 @@ class ClearShellTest extends TestCase {
 		$output = $this->out->output;
 
 		$this->assertContains('logs' . DS . 'fooo.log', $output);
+	}
+
+}
+
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestClearOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
 	}
 
 }

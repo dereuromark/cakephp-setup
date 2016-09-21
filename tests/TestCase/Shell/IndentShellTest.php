@@ -7,22 +7,6 @@ use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 
 /**
- * Class TestCompletionStringOutput
- */
-class TestIndentOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
-
-/**
  */
 class IndentShellTest extends TestCase {
 
@@ -100,6 +84,22 @@ class IndentShellTest extends TestCase {
 
 		$expected = file_get_contents($this->testFilePath . 'indent_again.php');
 		$this->assertTextEquals($expected, $result);
+	}
+
+}
+
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestIndentOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
 	}
 
 }

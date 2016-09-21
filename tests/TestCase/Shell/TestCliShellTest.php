@@ -7,22 +7,6 @@ use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 
 /**
- * Class TestCompletionStringOutput
- */
-class TestCliOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
-
-/**
  */
 class TestCliShellTest extends TestCase {
 
@@ -65,6 +49,22 @@ class TestCliShellTest extends TestCase {
 
 		$this->assertTextContains('Router::url(\'/\')', $output);
 		$this->assertTextContains('/test', $output);
+	}
+
+}
+
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestCliOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
 	}
 
 }

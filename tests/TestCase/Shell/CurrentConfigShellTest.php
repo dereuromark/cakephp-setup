@@ -3,25 +3,7 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
-use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\CurrentConfigShell;
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestCurrentConfigOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
 
 /**
  * CurrentConfig shell test
@@ -56,5 +38,18 @@ class CurrentConfigShellTest extends TestCase {
 
 }
 
-class TestCurrentConfigShell extends CurrentConfigShell {
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestCurrentConfigOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
+	}
+
 }

@@ -3,26 +3,8 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
-use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\ResetShell;
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestResetOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
 
 class ResetShellTest extends TestCase {
 
@@ -112,5 +94,18 @@ class ResetShellTest extends TestCase {
 
 }
 
-class TestResetShell extends ResetShell {
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestResetOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
+	}
+
 }

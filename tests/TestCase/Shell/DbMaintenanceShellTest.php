@@ -8,22 +8,6 @@ use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 
 /**
- * Class TestCompletionStringOutput
- */
-class TestDbMaintenanceOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
-
-/**
  */
 class DbMaintenanceShellTest extends TestCase {
 
@@ -168,6 +152,22 @@ class DbMaintenanceShellTest extends TestCase {
 		$output = $this->out->output;
 
 		//debug($output);
+	}
+
+}
+
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestDbMaintenanceOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
 	}
 
 }

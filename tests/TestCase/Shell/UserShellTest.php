@@ -7,22 +7,6 @@ use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
-/**
- * Class TestCompletionStringOutput
- */
-class TestUserOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
-
 class UserShellTest extends TestCase {
 
 	/**
@@ -93,6 +77,22 @@ class UserShellTest extends TestCase {
 			->will($this->returnValue('example@example.de'));
 
 		$this->Shell->runCommand(['create']);
+	}
+
+}
+
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestUserOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	protected function _write($message) {
+		$this->output .= $message;
 	}
 
 }

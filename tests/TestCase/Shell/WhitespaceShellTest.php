@@ -7,26 +7,6 @@ use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 
 /**
- * Class TestCompletionStringOutput
- */
-class TestWhitespaceOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	/**
-	 * @param string $message
-	 * @return void
-	 */
-	protected function _write($message) {
-		$this->output .= $message;
-	}
-
-}
-
-/**
  */
 class WhitespaceShellTest extends TestCase {
 
@@ -108,6 +88,26 @@ class WhitespaceShellTest extends TestCase {
 
 		unlink(TMP . 'whitespace' . DS . 'Foo.php');
 		$this->assertEquals($expected, $output);
+	}
+
+}
+
+/**
+ * Class TestCompletionStringOutput
+ */
+class TestWhitespaceOutput extends ConsoleOutput {
+
+	/**
+	 * @var string
+	 */
+	public $output = '';
+
+	/**
+	 * @param string $message
+	 * @return void
+	 */
+	protected function _write($message) {
+		$this->output .= $message;
 	}
 
 }
