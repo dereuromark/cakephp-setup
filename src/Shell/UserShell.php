@@ -161,7 +161,7 @@ class UserShell extends Shell {
 		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
 
 		$entity = $this->Users->newEntity([
-			'password' => $password,
+			'pwd' => $password,
 		], ['validate' => false]);
 		$this->Users->behaviors()->Passwordable->beforeSave(new Event('beforeSave'), $entity);
 
