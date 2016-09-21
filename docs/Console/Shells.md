@@ -18,6 +18,8 @@ Let's you test certain features like Routing and how/if they work in CLI.
 Let's you quickly add a new user to your "users" table, including a properly hashed password, so
 you can log in.
 
+Alternatively, you can also just print out the hash for a given plain-text password and then manually insert that into the database.
+
 ### ResetShell
 Let's you reset all emails or passwords, this is very useful when copying live data dumps to your local dev
 environment. Afterwards you can login with `123` for any user, when resetting the passwords to this value, for example.

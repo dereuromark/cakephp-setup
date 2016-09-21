@@ -3,6 +3,7 @@ namespace Setup\Shell;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Utility\Inflector;
 
 if (!defined('CLASS_USERS')) {
@@ -19,11 +20,6 @@ if (!defined('CLASS_USER')) {
  * @license MIT
  */
 class UserShell extends Shell {
-
-	/**
-	 * @var array
-	 */
-	public $uses = [CLASS_USERS];
 
 	/**
 	 * Creates a new user including a freshly hashed password.
@@ -151,6 +147,31 @@ class UserShell extends Shell {
 	}
 
 	/**
+	 * Creates a new user including a freshly hashed password.
+	 *
+	 * @param string|null $password
+	 * @return void
+	 */
+	public function password($password = null) {
+		while (empty($password)) {
+			$password = $this->in('Password');
+		}
+
+		$this->loadModel(CLASS_USERS);
+		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
+
+		$entity = $this->Users->newEntity([
+			'password' => $password,
+		], ['validate' => false]);
+		$this->Users->behaviors()->Passwordable->beforeSave(new Event('beforeSave'), $entity);
+
+		$this->out('Generating hash...');
+		$this->hr();
+		$this->out($entity->password);
+		$this->hr();
+	}
+
+	/**
 	 * UserShell
 	 *
 	 * @return \Cake\Console\ConsoleOptionParser
@@ -172,6 +193,10 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 Make sure you configured the Passwordable behavior accordingly as per docs.')
 			->addSubcommand('create', [
 				'help' => 'Create a new user with email and password provided.',
+				'parser' => $subcommandParser
+			])
+			->addSubcommand('password', [
+				'help' => 'Generate a hash from a given password.',
 				'parser' => $subcommandParser
 			]);
 	}
