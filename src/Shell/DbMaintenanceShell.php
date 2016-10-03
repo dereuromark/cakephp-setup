@@ -34,8 +34,8 @@ class DbMaintenanceShell extends Shell {
 		$config = $db->config();
 		$database = $config['database'];
 		$prefix = ''; //$config['prefix'];
-		$encoding = 'utf8';
-		$collate = 'utf8_unicode_ci';
+		$encoding = 'utf8mb4';
+		$collate = 'utf8mb4_unicode_ci';
 
 		try {
 			$script = "ALTER DATABASE $database CHARACTER SET $encoding COLLATE $collate;";
@@ -57,24 +57,32 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		$res = $db->query($script);
 		if (!$res) {
-			return $this->error('Nothing to do...');
+			$this->abort('Nothing to do...');
 		}
 
-		$script = '';
+		$script = [];
 		foreach ($res as $r) {
-			$this->out($r['statement'], 1, Shell::VERBOSE);
-			$script .= $r['statement'];
+			$script[] = $r['statement'];
 		}
 
 		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
-			return $this->error('Aborted!');
+			$this->abort('Aborted!');
 		}
 
-		if (!$this->params['dry-run']) {
-			$db->query($script);
-		} else {
-			$this->out($script);
+		foreach ($script as $row) {
+			preg_match('/`(.+)`/', $row, $matches);
+			$table = $matches[1];
+			$sql= "ALTER TABLE `$table` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+
+			if (!$this->params['dry-run']) {
+				$this->out(' - fixing table '. $table, 1, Shell::VERBOSE);
+				$db->query($row);
+				$db->query($sql);
+			} else {
+				$this->out($row);
+				$this->out($sql);
+			}
 		}
 		$this->out('Done :)');
 	}
@@ -99,7 +107,7 @@ SQL;
 			$engine = $this->in('Please select target engine', $engines);
 		}
 		if (!in_array($engine, $engines)) {
-			return $this->error('Please provide a valid target format/engine.');
+			$this->abort('Please provide a valid target format/engine.');
 		}
 
 		$script = <<<SQL
@@ -112,7 +120,7 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		$res = $db->query($script);
 		if (!$res) {
-			return $this->error('Nothing to do...');
+			$this->abort('Nothing to do...');
 		}
 
 		$script = '';
@@ -123,7 +131,7 @@ SQL;
 
 		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
-			return $this->error('Aborted!');
+			$this->abort('Aborted!');
 		}
 
 		if (!$this->params['dry-run']) {
@@ -182,7 +190,7 @@ SQL;
 
 		$res = $db->query($script);
 		if (!$res->count()) {
-			return $this->error('Nothing to do...');
+			$this->abort('Nothing to do...');
 		}
 
 		$script = '';
@@ -193,7 +201,7 @@ SQL;
 
 		$continue = $this->in($res->count() . ' tables will be altered.', ['Y', 'N'], 'N');
 		if (strtoupper($continue) !== 'Y') {
-			return $this->error('Aborted!');
+			$this->abort('Aborted!');
 		}
 
 		if (!$this->params['dry-run']) {
@@ -341,7 +349,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$this->out(count($todo) . ' tables/fields need updating.');
 		$continue = $this->in('Continue?', ['y', 'n'], 'y');
 		if ($continue !== 'y') {
-			return $this->error('Aborted!');
+			$this->abort('Aborted!');
 		}
 		$sql = implode(PHP_EOL, $todo);
 		if (!empty($this->params['dry-run'])) {
