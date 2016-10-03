@@ -4,6 +4,7 @@ namespace Setup\Shell;
 use Cake\Collection\Collection;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
+use Exception;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {
@@ -74,6 +75,14 @@ SQL;
 			preg_match('/`(.+)`/', $row, $matches);
 			$table = $matches[1];
 			$sql= "ALTER TABLE `$table` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+
+			if ($this->params['interactive']) {
+				$in = $this->in('Fix table ' . $table . '?', ['y', 'n'], 'y');
+				if ($in !== 'y') {
+					$this->out(' - skipping ' . $table);
+					continue;
+				}
+			}
 
 			if (!$this->params['dry-run']) {
 				$this->out(' - fixing table '. $table, 1, Shell::VERBOSE);
@@ -374,6 +383,11 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 					'short' => 'c',
 					'help' => 'Use a different connection than `default`.',
 					'default' => ''
+				],
+				'interactive' => [
+					'short' => 'i',
+					'help' => 'Interactive mode.',
+					'boolean' => true
 				],
 			]
 		];
