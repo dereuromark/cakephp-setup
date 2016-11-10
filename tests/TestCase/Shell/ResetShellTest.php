@@ -2,10 +2,10 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Tools\TestSuite\ConsoleOutput;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\ResetShell;
+use Tools\TestSuite\ConsoleOutput;
 
 class ResetShellTest extends TestCase {
 

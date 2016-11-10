@@ -15,6 +15,9 @@ class MailmapShellTest extends TestCase {
 	 */
 	public $Shell;
 
+	/**
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 
@@ -37,6 +40,9 @@ class MailmapShellTest extends TestCase {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function testGenerate() {
 		$this->Shell->runCommand(['generate', TMP]);
 		$output = $this->out->output();

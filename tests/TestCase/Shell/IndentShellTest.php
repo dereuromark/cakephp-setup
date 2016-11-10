@@ -2,10 +2,10 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Tools\TestSuite\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\IndentShell;
+use Tools\TestSuite\ConsoleOutput;
 
 /**
  */
