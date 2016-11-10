@@ -5,11 +5,12 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\ResetShell;
 
 class ResetShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\ResetShell
+	 * @var \Setup\Shell\ResetShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	public $Shell;
 
@@ -27,11 +28,10 @@ class ResetShellTest extends TestCase {
 		$this->err = new TestResetOutput();
 		$io = new ConsoleIo($this->out, $this->err);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\ResetShell',
-			['in', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(ResetShell::class)
+			->setMethods(['in', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 	}
 
 	/**

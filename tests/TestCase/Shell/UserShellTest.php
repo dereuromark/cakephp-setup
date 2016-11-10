@@ -6,11 +6,12 @@ use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\UserShell;
 
 class UserShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\UserShell
+	 * @var \Setup\Shell\UserShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	public $Shell;
 
@@ -28,12 +29,10 @@ class UserShellTest extends TestCase {
 		$this->err = new TestUserOutput();
 		$io = new ConsoleIo($this->out, $this->err);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\UserShell',
-			['in', '_stop'],
-			[$io]
-		);
-
+		$this->Shell = $this->getMockBuilder(UserShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 	}
 
 	public function tearDown() {

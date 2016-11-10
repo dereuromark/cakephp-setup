@@ -5,6 +5,7 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\TestCliShell;
 
 /**
  */
@@ -21,11 +22,10 @@ class TestCliShellTest extends TestCase {
 		$this->out = new TestCliOutput();
 		$io = new ConsoleIo($this->out);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\TestCliShell',
-			['in', 'err', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(TestCliShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 	}
 
 	/**

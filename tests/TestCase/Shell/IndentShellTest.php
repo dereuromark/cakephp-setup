@@ -5,10 +5,16 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\IndentShell;
 
 /**
  */
 class IndentShellTest extends TestCase {
+
+	/**
+	 * @var \Setup\Shell\IndentShell|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	public $Shell;
 
 	/**
 	 * setUp method
@@ -21,11 +27,10 @@ class IndentShellTest extends TestCase {
 		$this->out = new TestIndentOutput();
 		$io = new ConsoleIo($this->out);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\IndentShell',
-			['in', 'err', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(IndentShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 
 		$this->testFilePath = dirname(dirname(dirname(__FILE__))) . DS . 'test_files' . DS;
 		if (!is_dir(TMP . 'indent')) {

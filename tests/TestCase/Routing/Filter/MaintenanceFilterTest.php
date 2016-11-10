@@ -4,6 +4,7 @@ namespace Setup\Test\TestCase\Routing\Filter;
 
 use Cake\Event\Event;
 use Cake\Network\Request;
+use Cake\Network\Response;
 use Setup\Routing\Filter\MaintenanceFilter;
 use Tools\TestSuite\TestCase;
 
@@ -39,7 +40,7 @@ class MaintenanceFilterTest extends TestCase {
 	public function testMaintenance() {
 		$filter = new MaintenanceFilter();
 
-		$response = $this->getMock('Cake\Network\Response', ['send']);
+		$response = $this->getMockBuilder('Cake\Network\Response')->setMethods(['send'])->getMock();
 		$request = new Request('/');
 
 		$event = new Event('DispatcherTest', $this, compact('request', 'response'));
@@ -60,7 +61,7 @@ class MaintenanceFilterTest extends TestCase {
 	public function testNoMaintenance() {
 		$filter = new MaintenanceFilter();
 
-		$response = $this->getMock('Response', ['_sendHeader']);
+		$response = $this->getMockBuilder(Response::class)->setMethods(['_sendHeader'])->getMock();
 		$request = new Request('/');
 		$event = new Event('Dispatcher.beforeRequest', $this, compact('request', 'response'));
 

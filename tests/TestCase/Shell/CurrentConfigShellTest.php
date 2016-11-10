@@ -4,6 +4,7 @@ namespace Setup\Test\TestCase\Shell;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\CurrentConfigShell;
 
 /**
  * CurrentConfig shell test
@@ -21,11 +22,10 @@ class CurrentConfigShellTest extends TestCase {
 		$this->out = new TestCurrentConfigOutput();
 		$io = new ConsoleIo($this->out);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\CurrentConfigShell',
-			['in', 'err', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(CurrentConfigShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 	}
 
 	public function testMain() {

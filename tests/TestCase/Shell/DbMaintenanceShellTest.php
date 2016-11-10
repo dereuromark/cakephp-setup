@@ -6,10 +6,16 @@ use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\DbMaintenanceShell;
 
 /**
  */
 class DbMaintenanceShellTest extends TestCase {
+
+	/**
+	 * @var \Setup\Shell\DbMaintenanceShell|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	public $Shell;
 
 	/**
 	 * setUp method
@@ -22,11 +28,10 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->out = new TestDbMaintenanceOutput();
 		$io = new ConsoleIo($this->out);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\DbMaintenanceShell',
-			['in', 'err', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(DbMaintenanceShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 
 		if (!is_dir(TMP . 'DbMaintenance')) {
 			mkdir(TMP . 'DbMaintenance', 0770, true);

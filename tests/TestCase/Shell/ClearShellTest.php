@@ -5,10 +5,16 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\ClearShell;
 
 /**
  */
 class ClearShellTest extends TestCase {
+
+	/**
+	 * @var \Setup\Shell\ClearShell|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	public $Shell;
 
 	/**
 	 * setUp method
@@ -21,11 +27,10 @@ class ClearShellTest extends TestCase {
 		$this->out = new TestClearOutput();
 		$io = new ConsoleIo($this->out);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\ClearShell',
-			['in', 'err', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(ClearShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 	}
 
 	/**

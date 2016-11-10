@@ -5,10 +5,16 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
+use Setup\Shell\WhitespaceShell;
 
 /**
  */
 class WhitespaceShellTest extends TestCase {
+
+	/**
+	 * @var \Setup\Shell\WhitespaceShell|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected $Shell;
 
 	/**
 	 * setUp method
@@ -21,11 +27,10 @@ class WhitespaceShellTest extends TestCase {
 		$this->out = new TestWhitespaceOutput();
 		$io = new ConsoleIo($this->out);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\WhitespaceShell',
-			['in', 'err', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(WhitespaceShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 
 		if (!is_dir(TMP . 'whitespace')) {
 			mkdir(TMP . 'whitespace', 0770, true);

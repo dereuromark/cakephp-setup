@@ -3,6 +3,7 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
+use Setup\Shell\MaintenanceModeShell;
 use Tools\TestSuite\ConsoleOutput;
 use Tools\TestSuite\TestCase;
 
@@ -22,11 +23,10 @@ class MaintenanceModeShellTest extends TestCase {
 		$this->err = new ConsoleOutput();
 		$io = new ConsoleIo($this->out, $this->err);
 
-		$this->Shell = $this->getMock(
-			'Setup\Shell\MaintenanceModeShell',
-			['in', '_stop'],
-			[$io]
-		);
+		$this->Shell = $this->getMockBuilder(MaintenanceModeShell::class)
+			->setMethods(['in', 'err', '_stop'])
+			->setConstructorArgs([$io])
+			->getMock();
 		$this->Shell->startup();
 		$this->Shell->reset();
 	}
