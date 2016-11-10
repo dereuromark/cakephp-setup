@@ -26,7 +26,8 @@ class DbMaintenanceShellTest extends TestCase {
 		parent::setUp();
 
 		$this->out = new ConsoleOutput();
-		$io = new ConsoleIo($this->out);
+		$this->err = new ConsoleOutput();
+		$io = new ConsoleIo($this->out, $this->err);
 
 		$this->Shell = $this->getMockBuilder(DbMaintenanceShell::class)
 			->setMethods(['in', 'err', '_stop'])
@@ -122,11 +123,10 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['table_prefix', 'R', 'foo_', '-d', '-v']);
-		$output = $this->out->output();
+		$output = $this->err->output();
 
-		//debug($output);
-		//$expected = 'Nothing to do...';
-		//$this->assertContains($expected, $output);
+		$expected = 'Nothing to do...';
+		$this->assertContains($expected, $output);
 	}
 
 	/**
@@ -142,9 +142,10 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['table_prefix', 'A', 'foo_', '-d', '-v']);
-		$output = $this->out->output();
+		$output = $this->err->output();
 
-		//debug($output);
+		$expected = 'Nothing to do...';
+		$this->assertContains($expected, $output);
 	}
 
 }
