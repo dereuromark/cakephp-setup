@@ -74,7 +74,7 @@ SQL;
 		foreach ($script as $row) {
 			preg_match('/`(.+)`/', $row, $matches);
 			$table = $matches[1];
-			$sql= "ALTER TABLE `$table` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+			$sql = "ALTER TABLE `$table` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
 
 			if ($this->params['interactive']) {
 				$in = $this->in('Fix table ' . $table . '?', ['y', 'n'], 'y');
@@ -85,7 +85,7 @@ SQL;
 			}
 
 			if (!$this->params['dry-run']) {
-				$this->out(' - fixing table '. $table, 1, Shell::VERBOSE);
+				$this->out(' - fixing table ' . $table, 1, Shell::VERBOSE);
 				$db->query($row);
 				$db->query($sql);
 			} else {

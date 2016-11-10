@@ -3,6 +3,7 @@ namespace Setup\Shell;
 
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
+use Exception;
 
 /**
  * @author Mark Scherer
@@ -28,7 +29,7 @@ class MailmapShell extends Shell {
 
 		$existingMap = $this->parseMailmap($path);
 
-		$this->out('Found ' . count($this->map) . ' existing entries');
+		$this->out('Found ' . count($this->map) . ' existing entries in .mailmap file');
 
 		$rows = $this->parseHistory($path, $existingMap);
 
@@ -101,7 +102,7 @@ class MailmapShell extends Shell {
 
 			preg_match('/^.+?\<(.+?)\>/', $row, $matches);
 			if (!$matches) {
-				throw new \Exception($row);
+				throw new Exception($row);
 			}
 
 			$key = strtolower($matches[1]);
@@ -121,17 +122,19 @@ class MailmapShell extends Shell {
 	protected function parseHistory($folder, array $existingMap) {
 		exec('cd ' . $folder . ' && git shortlog -sne', $output);
 
+		$this->out('Found ' . count($output) . ' shortlog history lines');
+
 		$array = [];
 		foreach ($output as $row) {
 			preg_match('/^\s*[0-9]+\s+(.+)$/', $row, $matches);
 			if (!$matches) {
-				throw new \Exception($row);
+				throw new Exception($row);
 			}
 			$content = $matches[1];
 
 			preg_match('/^(.+) \<(.+)\>$/', $content, $matches);
 			if (!$matches) {
-				throw new \Exception($content);
+				throw new Exception($content);
 			}
 			$name = $matches[1];
 			$email = $matches[2];
@@ -142,7 +145,7 @@ class MailmapShell extends Shell {
 			}
 
 			$array[] = [
-				'content' =>  $content,
+				'content' => $content,
 				'name' => $name,
 				'email' => $email
 			];

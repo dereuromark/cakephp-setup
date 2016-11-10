@@ -133,7 +133,6 @@ class DbMaintenanceShellTest extends TestCase {
 		//$this->assertContains($expected, $output);
 	}
 
-
 	/**
 	 * Test table_prefix command
 	 *

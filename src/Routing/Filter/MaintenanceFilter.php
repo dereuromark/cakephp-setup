@@ -67,7 +67,7 @@ class MaintenanceFilter extends DispatcherFilter {
 	 * @return \Cake\Network\Response|null
 	 */
 	public function beforeDispatch(Event $event) {
-		/** @var \Cake\Http\ServerRequest $request */
+		/* @var \Cake\Http\ServerRequest $request */
 		$request = $event->data['request'];
 		$ip = $request->clientIp();
 		$Maintenance = new Maintenance();
