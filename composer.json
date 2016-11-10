@@ -14,11 +14,11 @@
 	],
 	"require": {
 		"php": ">=5.5",
-		"cakephp/cakephp": "~3.2",
-		"dereuromark/cakephp-tools": "~1.1"
+		"cakephp/cakephp": "~3.2"
 	},
 	"require-dev": {
 		"cakephp/migrations": "dev-master",
+		"dereuromark/cakephp-tools": "~1.1",
 		"fig-r/psr2r-sniffer": "dev-master"
 	},
 	"autoload": {

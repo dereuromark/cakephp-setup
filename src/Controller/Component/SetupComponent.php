@@ -9,7 +9,6 @@ use Cake\Network\Exception\InternalErrorException;
 use Exception;
 use Setup\Maintenance\Maintenance;
 use Setup\Utility\Setup;
-use Tools\Controller\Component\FlashComponent;
 use Tools\Mailer\Email;
 
 if (!defined('WINDOWS')) {
@@ -37,12 +36,7 @@ if (!defined('WINDOWS')) {
 class SetupComponent extends Component {
 
 	/**
-	 * @var array
-	 */
-	public $components = ['Tools.Session'];
-
-	/**
-	 * @var \App\Controller\AppController
+	 * @var \Cake\Controller\Controller
 	 */
 	public $Controller;
 
@@ -69,12 +63,16 @@ class SetupComponent extends Component {
 			Configure::write('debug', $debug);
 		}
 
+		if (!isset($this->Controller->Flash)) {
+			throw new Exception('Flash component missing in AppController setup.');
+		}
+
 		// maintenance mode?
 		$overwrite = Configure::read('Maintenance.overwrite');
 		if ($overwrite) {
 			// if this is reachable, the whitelisting is enabled and active
 			$message = __d('setup', 'Maintenance mode active - your IP %s is in the whitelist.', $overwrite);
-			FlashComponent::transientMessage($message, 'warning');
+			$this->Controller->Flash->warning($message);
 		}
 
 		// The following is only allowed with proper clearance
@@ -82,37 +80,36 @@ class SetupComponent extends Component {
 			return null;
 		}
 
-		if (!isset($this->Controller->Flash)) {
-			throw new Exception('Flash component missing in AppController setup.');
-		}
-
 		// maintenance mode
 		if ($this->Controller->request->query('maintenance') !== null) {
-			if (($x = $this->setMaintenance($this->Controller->request->query('maintenance'))) !== false) {
-				$mode = $this->Controller->request->query('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
-				$this->Controller->Flash->message(__d('setup', 'Maintenance mode {0}', $mode), 'success');
+			$mode = $this->Controller->request->query('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
+			$result = $this->setMaintenance($this->Controller->request->query('maintenance'));
+			if ($result !== false) {
+				$this->Controller->Flash->success(__d('setup', 'Maintenance mode {0}', $mode));
 			} else {
-				$this->Controller->Flash->message(__d('setup', 'Maintenance mode not {0}', $mode), 'error');
+				$this->Controller->Flash->error(__d('setup', 'Maintenance mode not {0}', $mode));
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('maintenance'));
 		}
 
 		// debug mode
 		if ($this->Controller->request->query('debug') !== null) {
-			if (($x = $this->setDebug($this->Controller->request->query('debug'))) !== false) {
-				$this->Controller->Flash->message(__('debug set to %s', $this->Controller->request->query('debug')), 'success');
+			$result = $this->setDebug($this->Controller->request->query('debug'));
+			if ($result !== false) {
+				$this->Controller->Flash->success(__('debug set to %s', $this->Controller->request->query('debug')));
 			} else {
-				$this->Controller->Flash->message(__('debug not set'), 'error');
+				$this->Controller->Flash->error(__('debug not set'));
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('debug'));
 		}
 
 		// clear cache
 		if ($this->Controller->request->query('clearcache') !== null) {
-			if (($x = $this->clearCache($this->Controller->request->query('clearcache'))) !== false) {
-				$this->Controller->Flash->message(__('cache cleared'), 'success');
+			$result = $this->clearCache($this->Controller->request->query('clearcache'));
+			if ($result !== false) {
+				$this->Controller->Flash->success(__('cache cleared'));
 			} else {
-				$this->Controller->Flash->message(__('cache not cleared'), 'error');
+				$this->Controller->Flash->error(__('cache not cleared'));
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('clearcache'));
 		}
@@ -120,9 +117,9 @@ class SetupComponent extends Component {
 		// clear session
 		if ($this->Controller->request->query('clearsession') !== null) {
 			if ($this->clearSession()) {
-				$this->Controller->Flash->message(__('session cleared'), 'success');
+				$this->Controller->Flash->success(__('session cleared'));
 			} else {
-				$this->Controller->Flash->message(__('session not cleared'), 'error');
+				$this->Controller->Flash->error(__('session not cleared'));
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('clearsession'));
 		}
@@ -130,7 +127,7 @@ class SetupComponent extends Component {
 		// layout switch
 		if ($this->Controller->request->query('layout') !== null) {
 			$this->setLayout($this->Controller->request->query('layout'));
-			$this->Controller->Flash->message(__('layout %s activated', $this->Controller->request->query('layout')), 'success');
+			$this->Controller->Flash->success(__('layout %s activated', $this->Controller->request->query('layout')));
 			return $this->Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
@@ -232,7 +229,7 @@ class SetupComponent extends Component {
 	 * Alternatively, this can and should be done using the CLI shell.
 	 *
 	 * URL Options:
-	 * - �duration` query string can be used to set a timeout maintenance window
+	 * - `duration` query string can be used to set a timeout maintenance window
 	 *
 	 * @param mixed $maintenance
 	 * @return bool Success
@@ -278,6 +275,8 @@ class SetupComponent extends Component {
 		if (empty($cookieName)) {
 			$cookieName = 'CAKEPHP';
 		}
+
+		$id = null;
 		if ($type === 'session') {
 			$id = isset($_COOKIE[$cookieName]) ? $_COOKIE[$cookieName] : '';
 
@@ -288,6 +287,9 @@ class SetupComponent extends Component {
 				$host = gethostbyaddr($ip);
 			}
 			$id = $ip . '-' . $host;
+		}
+		if ($id === null) {
+			throw new Exception('Invalid type');
 		}
 
 		$file = TMP . 'debugOverride-' . $id . '.txt';
@@ -367,6 +369,7 @@ class SetupComponent extends Component {
 		if ($this->Email->send()) {
 			return true;
 		}
+
 		return false;
 	}
 
