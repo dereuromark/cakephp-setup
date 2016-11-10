@@ -2,6 +2,7 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
+use Cake\Console\Exception\StopException;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
@@ -122,11 +123,10 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('Y'));
 
-		$this->Shell->runCommand(['table_prefix', 'R', 'foo_', '-d', '-v']);
-		$output = $this->err->output();
+		$this->expectException(StopException::class);
+		$this->expectExceptionMessage('Nothing to do...');
 
-		$expected = 'Nothing to do...';
-		$this->assertContains($expected, $output);
+		$this->Shell->runCommand(['table_prefix', 'R', 'foo_', '-d', '-v']);
 	}
 
 	/**
@@ -141,11 +141,10 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->Shell->expects($this->any())->method('in')
 			->will($this->returnValue('Y'));
 
-		$this->Shell->runCommand(['table_prefix', 'A', 'foo_', '-d', '-v']);
-		$output = $this->err->output();
+		$this->expectException(StopException::class);
+		$this->expectExceptionMessage('Nothing to do...');
 
-		$expected = 'Nothing to do...';
-		$this->assertContains($expected, $output);
+		$this->Shell->runCommand(['table_prefix', 'A', 'foo_', '-d', '-v']);
 	}
 
 }
