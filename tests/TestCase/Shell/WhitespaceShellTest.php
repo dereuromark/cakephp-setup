@@ -2,7 +2,7 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOutput;
+use Tools\TestSuite\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\WhitespaceShell;
@@ -24,7 +24,7 @@ class WhitespaceShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->out = new TestWhitespaceOutput();
+		$this->out = new ConsoleOutput();
 		$io = new ConsoleIo($this->out);
 
 		$this->Shell = $this->getMockBuilder(WhitespaceShell::class)
@@ -59,7 +59,7 @@ class WhitespaceShellTest extends TestCase {
 		$content = PHP_EOL . ' <?php echo $foo;' . PHP_EOL . '?> ' . PHP_EOL . PHP_EOL;
 		file_put_contents(TMP . 'whitespace' . DS . 'Foo.php', $content);
 		$this->Shell->runCommand(['clean', TMP . 'whitespace' . DS]);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		$this->assertTextContains('Found 1 files.', $output);
 		$this->assertTextContains('found 1 leading, 1 trailing ws', $output);
@@ -84,7 +84,7 @@ class WhitespaceShellTest extends TestCase {
 		$content = PHP_EOL . ' <?php echo $foo;' . PHP_EOL . '?> ' . PHP_EOL . PHP_EOL;
 		file_put_contents(TMP . 'whitespace' . DS . 'Foo.php', $content);
 		$this->Shell->runCommand(['eof', TMP . 'whitespace' . DS]);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		//debug($output);die();
 
@@ -93,26 +93,6 @@ class WhitespaceShellTest extends TestCase {
 
 		unlink(TMP . 'whitespace' . DS . 'Foo.php');
 		$this->assertEquals($expected, $output);
-	}
-
-}
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestWhitespaceOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	/**
-	 * @param string $message
-	 * @return void
-	 */
-	protected function _write($message) {
-		$this->output .= $message;
 	}
 
 }

@@ -2,7 +2,7 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOutput;
+use Tools\TestSuite\ConsoleOutput;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\ResetShell;
@@ -24,8 +24,8 @@ class ResetShellTest extends TestCase {
 
 		Configure::write('App.namespace', 'TestApp');
 
-		$this->out = new TestResetOutput();
-		$this->err = new TestResetOutput();
+		$this->out = new ConsoleOutput();
+		$this->err = new ConsoleOutput();
 		$io = new ConsoleIo($this->out, $this->err);
 
 		$this->Shell = $this->getMockBuilder(ResetShell::class)
@@ -44,7 +44,7 @@ class ResetShellTest extends TestCase {
 			->will($this->returnValue('example@example.de'));
 
 		$this->Shell->runCommand(['email']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		$expected = '1 emails resetted';
 		$this->assertTextContains($expected, (string)$output);
@@ -57,7 +57,7 @@ class ResetShellTest extends TestCase {
 	 */
 	public function testEmailQuick() {
 		$this->Shell->runCommand(['email', 'example@example.de']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		$expected = '1 emails resetted';
 		$this->assertTextContains($expected, (string)$output);
@@ -73,7 +73,7 @@ class ResetShellTest extends TestCase {
 			->will($this->returnValue('123'));
 
 		$this->Shell->runCommand(['pwd']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		$expected = '1 pwds resetted';
 		$this->assertTextContains($expected, (string)$output);
@@ -86,26 +86,10 @@ class ResetShellTest extends TestCase {
 	 */
 	public function testPwdQuick() {
 		$this->Shell->runCommand(['pwd', '123']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		$expected = '1 pwds resetted';
 		$this->assertTextContains($expected, (string)$output);
-	}
-
-}
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestResetOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
 	}
 
 }

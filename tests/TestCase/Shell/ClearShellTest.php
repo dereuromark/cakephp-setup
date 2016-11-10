@@ -2,10 +2,9 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOutput;
-use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\ClearShell;
+use Tools\TestSuite\ConsoleOutput;
 
 /**
  */
@@ -24,7 +23,7 @@ class ClearShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->out = new TestClearOutput();
+		$this->out = new ConsoleOutput();
 		$io = new ConsoleIo($this->out);
 
 		$this->Shell = $this->getMockBuilder(ClearShell::class)
@@ -57,25 +56,9 @@ class ClearShellTest extends TestCase {
 		$this->assertTrue(file_exists($file));
 
 		$this->Shell->runCommand(['logs', '-v']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		$this->assertContains('logs' . DS . 'fooo.log', $output);
-	}
-
-}
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestClearOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
 	}
 
 }

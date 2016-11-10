@@ -2,7 +2,7 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOutput;
+use Tools\TestSuite\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\IndentShell;
@@ -24,7 +24,7 @@ class IndentShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->out = new TestIndentOutput();
+		$this->out = new ConsoleOutput();
 		$io = new ConsoleIo($this->out);
 
 		$this->Shell = $this->getMockBuilder(IndentShell::class)
@@ -63,7 +63,7 @@ class IndentShellTest extends TestCase {
 			->will($this->returnValue('y'));
 
 		$this->Shell->runCommand(['folder', TMP . 'indent' . DS]);
-		$output = $this->out->output;
+		$output = $this->out->output();
 		$this->assertContains('found: 1', $output);
 
   	$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
@@ -82,29 +82,13 @@ class IndentShellTest extends TestCase {
 			->will($this->returnValue('y'));
 
 		$this->Shell->runCommand(['folder', TMP . 'indent' . DS, '-a']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 		$this->assertContains('found: 1', $output);
 
 		$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
 
 		$expected = file_get_contents($this->testFilePath . 'indent_again.php');
 		$this->assertTextEquals($expected, $result);
-	}
-
-}
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestIndentOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
 	}
 
 }

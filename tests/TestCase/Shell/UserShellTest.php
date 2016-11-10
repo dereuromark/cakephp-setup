@@ -2,7 +2,7 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOutput;
+use Tools\TestSuite\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
@@ -25,8 +25,8 @@ class UserShellTest extends TestCase {
 
 		Configure::write('App.namespace', 'TestApp');
 
-		$this->out = new TestUserOutput();
-		$this->err = new TestUserOutput();
+		$this->out = new ConsoleOutput();
+		$this->err = new ConsoleOutput();
 		$io = new ConsoleIo($this->out, $this->err);
 
 		$this->Shell = $this->getMockBuilder(UserShell::class)
@@ -57,7 +57,7 @@ class UserShellTest extends TestCase {
 		$output = $this->err->output;
 		$this->assertEmpty($output, $output);
 
-		$output = $this->out->output;
+		$output = $this->out->output();
 		$expected = '[username] => example';
 		$this->assertTextContains($expected, (string)$output);
 	}
@@ -76,22 +76,6 @@ class UserShellTest extends TestCase {
 			->will($this->returnValue('example@example.de'));
 
 		$this->Shell->runCommand(['create']);
-	}
-
-}
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestUserOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
 	}
 
 }

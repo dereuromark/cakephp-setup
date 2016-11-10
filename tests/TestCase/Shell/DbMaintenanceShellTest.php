@@ -2,11 +2,11 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOutput;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\DbMaintenanceShell;
+use Tools\TestSuite\ConsoleOutput;
 
 /**
  */
@@ -25,7 +25,7 @@ class DbMaintenanceShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->out = new TestDbMaintenanceOutput();
+		$this->out = new ConsoleOutput();
 		$io = new ConsoleIo($this->out);
 
 		$this->Shell = $this->getMockBuilder(DbMaintenanceShell::class)
@@ -49,8 +49,6 @@ class DbMaintenanceShellTest extends TestCase {
 	}
 
 	/**
-	 * Test clean command
-	 *
 	 * @return void
 	 */
 	public function testEncoding() {
@@ -63,16 +61,14 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['encoding', '-d', '-v']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
-		$expected = ' CHARACTER SET utf8 COLLATE utf8_unicode_ci;';
+		$expected = ' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
 		$this->assertContains($expected, $output, $output);
 		$this->assertContains('Done :)', $output);
 	}
 
 	/**
-	 * Test clean command
-	 *
 	 * @return void
 	 */
 	public function testEngine() {
@@ -85,7 +81,7 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['engine', 'InnoDB', '-d', '-v']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		//$expected = ' ENGINE=InnoDB;';
 		//$this->assertContains($expected, trim($output));
@@ -93,8 +89,6 @@ class DbMaintenanceShellTest extends TestCase {
 	}
 
 	/**
-	 * Test clean command
-	 *
 	 * @return void
 	 */
 	public function testClean() {
@@ -107,7 +101,7 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['cleanup', '-d', '-v']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		//debug($output);
 		$expected = ' tables found';
@@ -116,8 +110,6 @@ class DbMaintenanceShellTest extends TestCase {
 	}
 
 	/**
-	 * Test table_prefix command
-	 *
 	 * @return void
 	 */
 	public function testTablePrefix() {
@@ -130,7 +122,7 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['table_prefix', 'R', 'foo_', '-d', '-v']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		//debug($output);
 		//$expected = 'Nothing to do...';
@@ -138,8 +130,6 @@ class DbMaintenanceShellTest extends TestCase {
 	}
 
 	/**
-	 * Test table_prefix command
-	 *
 	 * @return void
 	 */
 	public function testTablePrefixAdd() {
@@ -152,25 +142,9 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['table_prefix', 'A', 'foo_', '-d', '-v']);
-		$output = $this->out->output;
+		$output = $this->out->output();
 
 		//debug($output);
-	}
-
-}
-
-/**
- * Class TestCompletionStringOutput
- */
-class TestDbMaintenanceOutput extends ConsoleOutput {
-
-	/**
-	 * @var string
-	 */
-	public $output = '';
-
-	protected function _write($message) {
-		$this->output .= $message;
 	}
 
 }

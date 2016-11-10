@@ -2,7 +2,6 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\Shell;
 use Setup\Shell\MaintenanceModeShell;
 use Tools\TestSuite\ConsoleOutput;
 use Tools\TestSuite\TestCase;
