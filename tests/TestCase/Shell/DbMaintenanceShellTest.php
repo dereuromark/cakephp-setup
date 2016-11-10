@@ -2,7 +2,6 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\Exception\StopException;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\DbMaintenanceShell;
