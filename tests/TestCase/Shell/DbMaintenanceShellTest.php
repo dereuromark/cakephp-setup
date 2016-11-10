@@ -3,7 +3,6 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Cake\Console\Exception\StopException;
-use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\DbMaintenanceShell;
@@ -112,7 +111,7 @@ class DbMaintenanceShellTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException StopException
+	 * @expectedException \Cake\Console\Exception\StopException
 	 * @return void
 	 */
 	public function testTablePrefix() {
@@ -131,7 +130,7 @@ class DbMaintenanceShellTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException StopException
+	 * @expectedException \Cake\Console\Exception\StopException
 	 * @return void
 	 */
 	public function testTablePrefixAdd() {
