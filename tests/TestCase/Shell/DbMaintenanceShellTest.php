@@ -65,9 +65,8 @@ class DbMaintenanceShellTest extends TestCase {
 		$this->Shell->runCommand(['encoding', '-d', '-v']);
 		$output = $this->out->output;
 
-		//debug($output);
 		$expected = ' CHARACTER SET utf8 COLLATE utf8_unicode_ci;';
-		$this->assertContains($expected, $output);
+		$this->assertContains($expected, $output, $output);
 		$this->assertContains('Done :)', $output);
 	}
 
