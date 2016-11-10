@@ -6,6 +6,9 @@ use Cake\Core\Plugin;
 use Exception;
 
 /**
+ * A shell to manage a .mailmap file for a Git project.
+ * It can work on any project via custom path, or a CakePHP app, plugin or core.
+ *
  * @author Mark Scherer
  * @license MIT
  */
@@ -80,12 +83,12 @@ class MailmapShell extends Shell {
 	}
 
 	/**
-	 * @param string $folder
+	 * @param string $path
 	 * @return array
 	 * @throws \Exception
 	 */
-	protected function parseMailmap($folder) {
-		$file = $folder . '.mailmap';
+	protected function parseMailmap($path) {
+		$file = $path . '.mailmap';
 		if (!file_exists($file)) {
 			return [];
 		}
@@ -114,13 +117,13 @@ class MailmapShell extends Shell {
 	}
 
 	/**
-	 * @param string $folder
+	 * @param string $path
 	 * @param array $existingMap
 	 * @return array
 	 * @throws \Exception
 	 */
-	protected function parseHistory($folder, array $existingMap) {
-		exec('cd ' . $folder . ' && git shortlog -sne', $output);
+	protected function parseHistory($path, array $existingMap) {
+		$output = $this->runGitCommand($path);
 
 		$this->out('Found ' . count($output) . ' shortlog history lines');
 
@@ -152,6 +155,16 @@ class MailmapShell extends Shell {
 		}
 
 		return $array;
+	}
+
+	/**
+	 * @param string $path
+	 * @return array
+	 */
+	protected function runGitCommand($path) {
+		exec('cd ' . $path . ' && git shortlog -sne', $output);
+
+		return $output;
 	}
 
 	/**
