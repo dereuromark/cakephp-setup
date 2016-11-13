@@ -244,7 +244,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		$res = $db->query($script);
 		if (!$res) {
-			$this->error('Nothing to do...');
+			$this->abort('Nothing to do...');
 		}
 
 		$script = '';
@@ -257,7 +257,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		if (!$prefix) {
 			$in = $this->in('No prefix set! Careful, this will drop all tables in that database, continue?', ['Y', 'N'], 'N');
 			if ($in !== 'Y') {
-				$this->error('Aborted!');
+				$this->abort('Aborted!');
 			}
 		}
 
@@ -270,6 +270,91 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	}
 
 	/**
+	 * Fixes 0 foreign keys to NULL.
+	 * Also alerts about wrong "DEFAULT NOT NULL" etc.
+	 *
+	 * @param string|null $prefix
+	 * @return void
+	 */
+	public function foreignKeys($prefix = null) {
+		$tables = $this->_getTables($prefix);
+
+		$todo = [];
+
+		$db = $this->_getConnection();
+		foreach ($tables as $table) {
+			// Structure
+			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
+			$this->out('- ' . $sql, 1, static::VERBOSE);
+			$res = $db->query($sql);
+			$fields = new Collection($res);
+
+			$fieldList = [];
+			foreach ($fields as $field) {
+				$name = $field['Field'];
+				$type = $field['Type'];
+				$null = $field['Null'];
+				if (!preg_match('/\w+\_id$/', $name) || !preg_match('/^int\(1[10]\)/', $type)) { //TODO: support uuid?
+					continue;
+				}
+				$fieldList[] = $field['Field'];
+
+				if ($null === 'YES' && empty($field['Default'])) {
+					continue;
+				}
+				// We need to migrate sth
+				$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NULL DEFAULT NULL;';
+			}
+
+			if (empty($fieldList)) {
+				continue;
+			}
+
+			// Data
+			$z = '0';
+			$conditions = [];
+			foreach ($fieldList as $fieldName) {
+				$conditions[] = '`' . $fieldName . "` = '" . $z . "'";
+			}
+			$conditions = implode(' OR ', $conditions);
+
+			$sql = 'SELECT COUNT(*) as count FROM ' . $table['table_name'] . ' WHERE ' . $conditions;
+			$this->out('Checking for records that need updating:', 1, static::VERBOSE);
+			$this->out(' - ' . $sql, 1, static::VERBOSE);
+			$res = $db->query($sql);
+			$res = (new Collection($res))->toArray();
+			if (empty($res[0]['count'])) {
+				continue;
+			}
+
+			$sets = [];
+			foreach ($fieldList as $fieldName) {
+				$todo[] = 'UPDATE ' . $table['table_name'] . ' SET ' . '`' . $fieldName . '` = NULL' . ' WHERE `' . $fieldName . '` = \'' . $z . '\';';
+			}
+		}
+
+		if (!$todo) {
+			$this->out('Nothing to do :)');
+			return;
+		}
+
+		$this->out(count($todo) . ' tables/fields need updating.');
+		$continue = $this->in('Continue?', ['y', 'n'], 'y');
+		if ($continue !== 'y') {
+			$this->abort('Aborted!');
+		}
+		$sql = implode(PHP_EOL, $todo);
+		if (!empty($this->params['dry-run'])) {
+			$this->out($sql);
+			return;
+		}
+
+		// Execute
+		$db->query($sql);
+		$this->out('Done :)');
+	}
+
+	/**
 	 * Fixes 0000-00-00 00:00:00 dates to NULL.
 	 * Also alerts about wrong "DEFAULT NOT NULL" etc.
 	 *
@@ -277,32 +362,16 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	 * @return void
 	 */
 	public function dates($prefix = null) {
-		$db = $this->_getConnection();
-		$config = $db->config();
-		$database = $config['database'];
-
-		$script = "
-SELECT table_name
-FROM information_schema.tables AS tb
-WHERE   table_schema = '$database'
-AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
-
-		$res = $db->query($script);
-		if (!$res) {
-			$this->error('Nothing to do...');
-		}
-		$tables = new Collection($res);
+		$tables = $this->_getTables($prefix);
 
 		$todo = [];
 
-		foreach ($tables as $table) {
-			if (substr($table['table_name'], 0, 1) === '_') {
-				continue;
-			}
+		$db = $this->_getConnection();
 
+		$this->out('Checking for tables that need updating:', 1, static::VERBOSE);
+		foreach ($tables as $table) {
 			// Structure
 			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
-			$this->out('Checking for tables that need updating:', 1, static::VERBOSE);
 			$this->out('- ' . $sql, 1, static::VERBOSE);
 			$res = $db->query($sql);
 			$fields = new Collection($res);
@@ -347,7 +416,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 			$sets = [];
 			foreach ($fieldList as $fieldName) {
-				$todo[] = 'UPDATE ' . $table['table_name'] . ' SET ' . '`' . $fieldName . '` = NULL' . ' WHERE ' . $conditions . ';';
+				$todo[] = 'UPDATE ' . $table['table_name'] . ' SET ' . '`' . $fieldName . '` = NULL' . ' WHERE `' . $fieldName . '` = \'' . $z . '\';';
 			}
 		}
 
@@ -355,6 +424,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			$this->out('Nothing to do :)');
 			return;
 		}
+
 		$this->out(count($todo) . ' tables/fields need updating.');
 		$continue = $this->in('Continue?', ['y', 'n'], 'y');
 		if ($continue !== 'y') {
@@ -406,11 +476,11 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			->description("A Shell to do some basic database maintenance for you.
 Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
 			->addSubcommand('encoding', [
-				'help' => 'Convert encoding.',
+				'help' => 'Convert encoding to `utf8mb4`.',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('engine', [
-				'help' => 'Convert engine.',
+				'help' => 'Convert engine (MyIsam, InnoDB).',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('table_prefix', [
@@ -418,7 +488,11 @@ Use -d -v (dry-run and verbose mode) to only display queries but not execute the
 				'parser' => $tablePrefixParser
 			])
 			->addSubcommand('dates', [
-				'help' => 'Correct date(time) fields.',
+				'help' => 'Correct date(time) fields and alerts of wrong field types.',
+				'parser' => $subcommandParser
+			])
+			->addSubcommand('foreign_keys', [
+				'help' => 'Correct foreign key fields and alerts of wrong field types.',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('cleanup', [
@@ -437,6 +511,37 @@ Use -d -v (dry-run and verbose mode) to only display queries but not execute the
 		}
 
 		return ConnectionManager::get($name);
+	}
+
+	/**
+	 * @param string $prefix
+	 * @return array
+	 */
+	protected function _getTables($prefix) {
+		$db = $this->_getConnection();
+		$config = $db->config();
+		$database = $config['database'];
+
+		$script = "
+SELECT table_name
+FROM information_schema.tables AS tb
+WHERE   table_schema = '$database'
+AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
+
+		$res = $db->query($script);
+		if (!$res) {
+			$this->abort('Nothing to do...');
+		}
+		$tables = new Collection($res);
+
+		$tables = $tables->toArray();
+		foreach ($tables as $key => $table) {
+			if (substr($table['table_name'], 0, 1) === '_') {
+				unset($tables[$key]);
+			}
+		}
+
+		return $tables;
 	}
 
 }
