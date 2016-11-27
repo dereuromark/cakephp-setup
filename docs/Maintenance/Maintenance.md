@@ -25,9 +25,38 @@ cake Setup.MaintenanceMode whitelist YOURIP
 cake Setup.MaintenanceMode deactivate
 ```
 
-## Maintenance Dispatching Filter
+## MaintenanceMiddleware (CakePHP 3.3+)
 This should then be the preferred way of triggering the maintenance mode display, as it can way cleaner
 short-circuit the dispatching.
+
+In your `src/Application.php`:
+```php
+	/**
+	 * @param \Cake\Http\MiddlewareQueue $middleware The middleware queue to setup.
+	 * @return \Cake\Http\MiddlewareQueue The updated middleware.
+	 */
+	public function middleware($middleware) {
+		$middleware
+			->add(MaintenanceMiddleware::class)
+			...
+	}
+```
+
+### Customizing
+Make sure you have a template file in `APP . 'Template' . DS . 'Error' . DS` named `maintenance.ctp`.
+
+Configs:
+- 'className' => View::class,
+- 'templatePath' => 'Error',
+- 'statusCode' => 503,
+- 'templateLayout' => false,
+- 'templateFileName' => 'maintenance',
+- 'templateExtension' => '.ctp',
+- 'contentType' => 'text/html'
+
+Those can be used to adjust the content of the maintenance mode page.
+
+## Maintenance Dispatching Filter (deprecated)
 
 Just add this in your bootstrap:
 ```php
@@ -42,14 +71,7 @@ if (php_sapi_name() !== 'cli') {}
 ```
 to only add this filter for non CLI requests.
 
-Alternativly, as low-level approach, you could still use the deprecated approach without any dispatching filter:
-```php
-if (php_sapi_name() !== 'cli') {
-    $Maintenance = new Setup\Maintenance\Maintenance();
-    $Maintenance->checkMaintenance();
-}
-```
-But this is not recommended anymore.
+This filter has a very limited customization way. You can only adjust the string `__d('setup', 'Maintenance work')`.
 
 
 ## Maintenance Component
@@ -57,19 +79,6 @@ This component adds functionality on top:
 - A flash message shows you if you are currently whitelisted in case maintenance mode is active (and you just
 don't see it due to the whitelisting).
 
-
-## Customizing
-If you want to customize the output (defaults to the translated string `__d('setup', 'Maintenance work')`) you can
-put a template in `APP . 'Template' . DS . 'Error' . DS` named `maintenance.ctp`. It needs to be pure HTML (no PHP or CakePHP
-functionality).
-
-There are also some Configure values in case you really want to render a complete maintenance view.
-In that case you can use complete PHP/CakePHP functionality:
-- template (true/false, defaults to false)
-- layout (true/false, defaults to false)
-
-It will then use the `APP . 'Template' . DS . 'Error' . DS` . 'maintenance.ctp'` template and if applicable,
-the `APP . 'Template' . DS . 'Layout' . DS . 'maintenance.ctp'` layout.
 
 ## Setup Component
 The Setup component adds some additional goddies on top:

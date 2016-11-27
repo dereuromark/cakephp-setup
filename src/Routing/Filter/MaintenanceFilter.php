@@ -21,6 +21,8 @@ use Setup\Maintenance\Maintenance;
  *   if (php_sapi_name() !== 'cli') {}
  *
  * to only add this filter for non CLI requests.
+ *
+ * @deprecated Since CakePHP 3.3. Use MaintenanceMiddleware instead.
  */
 class MaintenanceFilter extends DispatcherFilter {
 
@@ -76,12 +78,6 @@ class MaintenanceFilter extends DispatcherFilter {
 		}
 
 		$body = __d('setup', 'Maintenance work');
-		/*
-		$template = APP . 'Template' . DS . 'Error' . DS . $this->template;
-		if (file_exists($template)) {
-			$body = file_get_contents($template);
-		}
-		*/
 		$body = $this->_body();
 
 		$event->data['response']->header('Retry-After', HOUR);
