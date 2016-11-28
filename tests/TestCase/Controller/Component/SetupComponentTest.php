@@ -15,7 +15,7 @@ class SetupComponentTest extends TestCase {
 		parent::setUp();
 
 		$this->Controller = new Controller();
-		$this->Controller->loadComponent('Tools.Flash');
+		$this->Controller->loadComponent('Flash');
 		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 	}
@@ -39,8 +39,15 @@ class SetupComponentTest extends TestCase {
 
 		$this->Setup->beforeFilter($event);
 
-		$result = $this->Controller->request->session()->read('FlashMessage');
-		$expected = ['success' => [__d('setup', 'Maintenance mode {0}', __d('setup', 'activated'))]];
+		$result = $this->Controller->request->session()->read('Flash.flash');
+		$expected = [
+			[
+				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'activated')),
+				'key' => 'flash',
+				'element' => 'Flash/success',
+				'params' => []
+			]
+		];
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
@@ -50,7 +57,7 @@ class SetupComponentTest extends TestCase {
 		// Deactivate
 		$request = new Request('/?maintenance=0');
 		$this->Controller = new Controller($request);
-		$this->Controller->loadComponent('Tools.Flash');
+		$this->Controller->loadComponent('Flash');
 		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
@@ -61,8 +68,15 @@ class SetupComponentTest extends TestCase {
 
 		$this->Setup->beforeFilter($event);
 
-		$result = $this->Controller->request->session()->read('FlashMessage');
-		$expected = ['success' => [__d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated'))]];
+		$result = $this->Controller->request->session()->read('Flash.flash');
+		$expected = [
+			[
+				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated')),
+				'key' => 'flash',
+				'element' => 'Flash/success',
+				'params' => []
+			]
+		];
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
