@@ -2,10 +2,10 @@
 namespace Setup\Middleware;
 
 use Cake\Core\InstanceConfigTrait;
+use Cake\Network\Request;
 use Cake\Utility\Inflector;
 use Cake\View\View;
 use Cake\View\ViewBuilder;
-use Cake\Network\Request;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Setup\Maintenance\Maintenance;
@@ -40,8 +40,7 @@ class MaintenanceMiddleware {
 	 * @param callable $next The next middleware to call.
 	 * @return \Psr\Http\Message\ResponseInterface A response.
 	 */
-	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
-	{
+	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next) {
 		$ip = $request->clientIp();
 		$Maintenance = new Maintenance();
 		if (!$Maintenance->isMaintenanceMode($ip)) {
