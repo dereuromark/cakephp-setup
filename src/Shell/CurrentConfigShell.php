@@ -17,11 +17,16 @@ use Cake\Datasource\ConnectionManager;
 class CurrentConfigShell extends Shell {
 
 	/**
-	 * CurrentConfigShell::main()
-	 *
 	 * @return void
 	 */
-	public function main() {
+	public function phpinfo() {
+		phpinfo();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function display() {
 		$this->out('DB default:');
 		try {
 			$db = ConnectionManager::get('default');
@@ -42,6 +47,22 @@ class CurrentConfigShell extends Shell {
 		$this->out('');
 		$this->out('Cache:');
 		$this->out(print_r(Cache::config('_cake_core_'), true));
+	}
+
+	/**
+	 * @return \Cake\Console\ConsoleOptionParser
+	 */
+	public function getOptionParser() {
+		return parent::getOptionParser()
+			->description("A Shell to display current system and application configs.")
+			->addSubcommand('display', [
+				'help' => 'Displays application config for CLI (DB, Cache).',
+			])
+			->addSubcommand('phpinfo', [
+				'help' => 'Display phpinfo() for CLI. 
+Use `bin/cake Setup.CurrentConfig phpinfo | grep xdebug` for example to get all xdebug relevant info from it.
+Use the /admin/setup-extra/configuration/phpinfo backend to see phpinfo() for non-CLI (can differ!).',
+			]);
 	}
 
 }

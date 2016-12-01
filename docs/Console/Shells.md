@@ -8,6 +8,19 @@ You can run any shell from the ROOT dir as `/bin/cake [shell] [command]` (or `.\
 ### CurrentConfigShell
 This shell lets you quickly see what the current config is, both for DB and cache.
 
+- `bin/cake Setup.CurrentConfig display`
+
+You can also quickly see the phpinfo() output:
+
+- `bin/cake Setup.CurrentConfig phpinfo`
+
+Tip (for linux systems or any CakeBox env etc): Use `grep` to quickly filter the output.
+So if you are only interested in your `xdebug` settings for CLI:
+
+- `bin/cake Setup.CurrentConfig phpinfo | grep xdebug`
+
+Very useful and quicker than any other lookup on CLI.
+
 ### DbMaintenanceShell
 Easily convert table format or table encoding.
 

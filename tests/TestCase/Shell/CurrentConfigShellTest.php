@@ -28,12 +28,26 @@ class CurrentConfigShellTest extends TestCase {
 			->getMock();
 	}
 
-	public function testMain() {
-		$this->Shell->runCommand(['clean', TMP]);
+	/**
+	 * @return void
+	 */
+	public function testDisplay() {
+		$this->Shell->runCommand(['display']);
 		$output = $this->out->output();
 
 		$this->assertContains('[driver]', $output);
 		$this->assertContains('[className]', $output);
+	}
+
+
+	/**
+	 * @return void
+	 */
+	public function _testPhpinfo() {
+		$this->Shell->runCommand(['phpinfo']);
+		$output = $this->out->output();
+
+		$this->assertContains('session.auto_start', $output);
 	}
 
 }
