@@ -7,7 +7,7 @@
 [![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-setup/d/total.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--2--R-yellow.svg)](https://github.com/php-fig-rectified/fig-rectified-standards)
 
-This CakePHP 3.0 plugin provides useful development tools for managing a CakePHP app.
+This CakePHP 3 plugin provides useful development tools for managing a CakePHP app.
 
 ## Version notice
 
