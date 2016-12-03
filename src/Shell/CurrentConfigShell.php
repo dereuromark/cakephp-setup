@@ -20,7 +20,11 @@ class CurrentConfigShell extends Shell {
 	 * @return void
 	 */
 	public function phpinfo() {
+		ob_start();
 		phpinfo();
+		$phpinfo = ob_get_contents();
+
+		$this->out($phpinfo);
 	}
 
 	/**
@@ -54,7 +58,7 @@ class CurrentConfigShell extends Shell {
 	 */
 	public function getOptionParser() {
 		return parent::getOptionParser()
-			->description("A Shell to display current system and application configs.")
+			->description('A Shell to display current system and application configs.')
 			->addSubcommand('display', [
 				'help' => 'Displays application config for CLI (DB, Cache).',
 			])

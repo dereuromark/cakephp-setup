@@ -39,11 +39,10 @@ class CurrentConfigShellTest extends TestCase {
 		$this->assertContains('[className]', $output);
 	}
 
-
 	/**
 	 * @return void
 	 */
-	public function _testPhpinfo() {
+	public function testPhpinfo() {
 		$this->Shell->runCommand(['phpinfo']);
 		$output = $this->out->output();
 
