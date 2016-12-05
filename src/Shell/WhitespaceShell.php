@@ -46,7 +46,7 @@ class WhitespaceShell extends Shell {
 
 		$action = $this->in('Continue? [y]/[n]', ['y', 'n'], 'n');
 		if ($action !== 'y') {
-			return $this->error('Aborted');
+			$this->abort('Aborted');
 		}
 
 		$folders = [];
@@ -64,7 +64,7 @@ class WhitespaceShell extends Shell {
 				$errors[] = 'trailing';
 			}
 
-			if (empty($errors)) {
+			if (!$errors) {
 				continue;
 			}
 			foreach ($errors as $e) {
@@ -78,7 +78,7 @@ class WhitespaceShell extends Shell {
 				$action = 'y';
 			}
 
-			while (empty($action)) {
+			while (!$action) {
 				$action = $this->in('Remove? [y]/[n], [a] for all in this folder, [r] for all below, [*] for all files(!), [q] to quit', ['y', 'n', 'r', 'a', 'q', '*'], 'q');
 			}
 
@@ -92,7 +92,7 @@ class WhitespaceShell extends Shell {
 			}
 
 			if ($action === 'q') {
-				return $this->error('Abort... Done');
+				$this->abort('Abort... Done');
 			}
 
 			if ($action === 'y') {
@@ -138,7 +138,7 @@ class WhitespaceShell extends Shell {
 
 		$action = $this->in('Continue? [y]/[n]', ['y', 'n'], 'n');
 		if ($action !== 'y') {
-			return $this->error('Aborted');
+			$this->abort('Aborted');
 		}
 
 		foreach ($files as $file) {
@@ -150,7 +150,6 @@ class WhitespaceShell extends Shell {
 				$content = substr($content, 0, -2);
 			}
 
-			$newline = PHP_EOL;
 			$x = substr_count($content, "\r\n");
 			if ($x > 0) {
 				$newline = "\r\n";
@@ -167,6 +166,9 @@ class WhitespaceShell extends Shell {
 		$this->out('Done');
 	}
 
+	/**
+	 * @return \Cake\Console\ConsoleOptionParser
+	 */
 	public function getOptionParser() {
 		$subcommandParser = [
 			'options' => [
@@ -189,7 +191,7 @@ class WhitespaceShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('The Whitespace Shell removes uncessary/wrong whitespaces.
+			->description('The Whitespace Shell removes unnecessary/wrong whitespaces.
 Either provide a path as first argument, use -p PluginName or run it as it is for the complete APP dir.')
 			->addSubcommand('clean', [
 				'help' => 'Detect and remove any leading/trailing whitespaces',

@@ -60,9 +60,8 @@ $cache = [
 ];
 
 Cake\Cache\Cache::config($cache);
-
 Cake\Core\Plugin::load('Setup', ['path' => ROOT . DS]);
-Cake\Core\Plugin::load('Tools', ['path' => ROOT . DS . 'plugins' . DS . 'Tools' . DS]);
+Cake\Core\Plugin::load('Tools', ['path' => ROOT . DS . 'vendor' . DS . 'dereuromark' . DS . 'cakephp-tools' . DS, 'routes' => true]);
 
 // Ensure default test connection is defined
 if (!getenv('db_class')) {

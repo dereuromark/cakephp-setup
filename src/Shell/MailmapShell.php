@@ -175,20 +175,21 @@ class MailmapShell extends Shell {
 			'options' => [
 				'dry-run' => [
 					'short' => 'd',
-					'help' => 'Dry-runs the command, saves result into TMP/.mailmap file',
+					'help' => 'Dry-runs the command, saves result into TMP/.mailmap file.',
 					'boolean' => true
 				]
 			],
 			'arguments' => [
 				'path' => [
 					'name' => 'path',
-					'help' => 'Path, plugin name or "core" for CakePHP core, defaults to app root',
+					'help' => 'Path, plugin name or "core" for CakePHP core, defaults to app root.',
 				]
 			]
 		];
 
 		return parent::getOptionParser()
-			->description('The Mailmap Shell generates a mailmap file')
+			->description('The Mailmap Shell generates a .mailmap file.
+Check out the results with `git shortlog -sne`.')
 			->addSubcommand('generate', [
 				'help' => 'Generate',
 				'parser' => $subcommandParser

@@ -3,6 +3,7 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\TestCliShell;
 use Tools\TestSuite\ConsoleOutput;
@@ -24,6 +25,8 @@ class TestCliShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
+		Configure::write('App.fullBaseUrl', 'example.local');
+
 		$this->out = new ConsoleOutput();
 		$io = new ConsoleIo($this->out);
 
@@ -41,6 +44,8 @@ class TestCliShellTest extends TestCase {
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Shell);
+
+		Configure::delete('App.fullBaseUrl');
 	}
 
 	/**
@@ -48,12 +53,25 @@ class TestCliShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testClean() {
+	public function testRouter() {
 		$this->Shell->runCommand(['router']);
 		$output = $this->out->output();
 
 		$this->assertTextContains('Router::url(\'/\')', $output);
-		$this->assertTextContains('/test', $output);
+		$this->assertTextContains('example.local/test', $output);
+	}
+
+	/**
+	 * Test clean command
+	 *
+	 * @return void
+	 */
+	public function testRouterPrefix() {
+		$this->Shell->runCommand(['router', '-x', 'admin']);
+		$output = $this->out->output();
+
+		$this->assertTextContains('Router::url([\'controller\' => \'Test\', \'prefix\' => \'admin\'], true)', $output);
+		$this->assertTextContains('/admin/test', $output);
 	}
 
 }

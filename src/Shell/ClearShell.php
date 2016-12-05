@@ -234,7 +234,7 @@ TEXT;
 	 */
 	public function custom() {
 		if (empty($this->args)) {
-			return $this->error('No dir given', 'Please specify the dir relative to the APP dir or provide an absolute one.');
+			$this->abort('No dir given. Please specify the dir relative to the APP dir or provide an absolute one.');
 		}
 	}
 

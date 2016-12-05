@@ -3,6 +3,7 @@ namespace Setup\Shell;
 
 use Cake\Console\Shell;
 use Cake\Filesystem\Folder;
+use Cake\Utility\Text;
 
 if (!defined('TB')) {
 	define('TB', "\t");
@@ -71,7 +72,7 @@ class IndentShell extends Shell {
 	 */
 	public function folder() {
 		if (!empty($this->params['extensions'])) {
-			$this->settings['files'] = String::tokenize($this->params['extensions']);
+			$this->settings['files'] = Text::tokenize($this->params['extensions']);
 		}
 		if (!empty($this->params['again'])) {
 			$this->settings['againWithHalf'] = true;
@@ -86,7 +87,7 @@ class IndentShell extends Shell {
 
 				$folder = realpath($folder);
 				if (!file_exists($folder)) {
-					return $this->error('folder not exists: ' . $folder . '');
+					$this->abort('folder not exists: ' . $folder . '');
 				}
 				$this->_paths[] = $folder;
 			} elseif ($this->args[0] === 'app') {
@@ -107,7 +108,7 @@ class IndentShell extends Shell {
 			} else {
 				$continue = $this->in('Modifying files! Continue?', ['y', 'n'], 'n');
 				if (strtolower($continue) !== 'y' && strtolower($continue) !== 'yes') {
-					return $this->error('...aborted');
+					$this->abort('...aborted');
 				}
 
 				$this->_correctFiles();
@@ -138,7 +139,7 @@ class IndentShell extends Shell {
 		if ($this->settings['outputToTmp']) {
 			$filename = extractPathInfo('file', $file);
 			if (mb_substr($filename, -1, 1) === '_') {
-				return;
+				return false;
 			}
 			$file = extractPathInfo('dir', $file) . DS . $filename . '_.' . extractPathInfo('ext', $file);
 		}
