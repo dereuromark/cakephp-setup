@@ -37,10 +37,6 @@ class Setup {
 		if (isset($urlArray['prefix'])) {
 			$returnArray['prefix'] = $urlArray['prefix'];
 		}
-		//TODO: more generic (other prefixes!)
-		if (isset($urlArray['admin'])) {
-			$returnArray['admin'] = $urlArray['admin'];
-		}
 		foreach ($pass as $val) {
 			$returnArray[] = $val;
 		}
