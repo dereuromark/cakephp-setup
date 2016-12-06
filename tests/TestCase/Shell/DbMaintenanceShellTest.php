@@ -91,7 +91,7 @@ class DbMaintenanceShellTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testClean() {
+	public function testCleanup() {
 		$config = ConnectionManager::config('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');

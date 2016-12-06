@@ -57,8 +57,8 @@ class TestCliShellTest extends TestCase {
 		$this->Shell->runCommand(['router']);
 		$output = $this->out->output();
 
-		$this->assertTextContains('Router::url(\'/\')', $output);
-		$this->assertTextContains('example.local/test', $output);
+		$this->assertTextContains('Router::url(\'/\')', $output, print_r($output, true));
+		$this->assertTextContains('example.local/test', $output, print_r($output, true));
 	}
 
 	/**
@@ -70,8 +70,8 @@ class TestCliShellTest extends TestCase {
 		$this->Shell->runCommand(['router', '-x', 'admin']);
 		$output = $this->out->output();
 
-		$this->assertTextContains('Router::url([\'controller\' => \'Test\', \'prefix\' => \'admin\'], true)', $output);
-		$this->assertTextContains('/admin/test', $output);
+		$this->assertTextContains('Router::url([\'controller\' => \'Test\', \'prefix\' => \'admin\'], true)', $output, print_r($output, true));
+		$this->assertTextContains('/admin/test', $output, print_r($output, true));
 	}
 
 }
