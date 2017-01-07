@@ -2,30 +2,55 @@
 
 use Cake\Core\Configure;
 
-function dd($data, $showHtml = null) {
-	if (Configure::read('debug')) {
-		debug($data, $showHtml, false);
+if (!function_exists('dd')) {
+	/**
+	 * @param mixed $var
+	 * @param bool|null $showHtml
+	 * @return void
+	 */
+	function dd($var, $showHtml = null) {
+		if (!Configure::read('debug')) {
+			return;
+		}
+
+		debug($var, $showHtml, false);
 
 		$backtrace = debug_backtrace(false, 1);
 		pr('dd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
-		die();
+		die(1);
 	}
 }
 
-function prd($data) {
-	if (Configure::read('debug')) {
-		pr($data);
+if (!function_exists('prd')) {
+	/**
+	 * @param mixed $var
+	 * @return void
+	 */
+	function prd($var) {
+		if (!Configure::read('debug')) {
+			return;
+		}
+
+		pr($var);
 
 		$backtrace = debug_backtrace(false, 1);
 		pr('prd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
-		die();
+		die(1);
 	}
 }
 
-function vd($var) {
-	if (Configure::read('debug')) {
+if (!function_exists('vd')) {
+	/**
+	 * @param mixed $var
+	 * @return void
+	 */
+	function vd($var) {
+		if (!Configure::read('debug')) {
+			return;
+		}
+
 		echo '<pre>';
-		echo var_dump($var);
+		var_dump($var);
 		echo '</pre>';
 
 		$backtrace = debug_backtrace(false, 1);
@@ -33,10 +58,18 @@ function vd($var) {
 	}
 }
 
-function vdd($var) {
-	if (Configure::read('debug')) {
+if (!function_exists('vd')) {
+	/**
+	 * @param mixed $var
+	 * @return void
+	 */
+	function vdd($var) {
+		if (!Configure::read('debug')) {
+			return;
+		}
+
 		echo '<pre>';
-		echo var_dump($var);
+		var_dump($var);
 		echo '</pre>';
 
 		$backtrace = debug_backtrace(false, 1);
