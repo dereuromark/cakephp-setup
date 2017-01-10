@@ -86,15 +86,15 @@ or
 
 ## Code Cleanup Shells
 
-### WhitespaceShell
+### SuperfluousWhitespaceShell
 Removes trailing whitespace from files and asserts a single newline at the end of PHP files.
 It can also remove any trailing `?>` at the end.
 
-- `bin/cake Setup.Whitespace clean`
+- `bin/cake Setup.SuperfluousWhitespace clean`
 
 and
 
-- `bin/cake Setup.Whitespace eof`
+- `bin/cake Setup.SuperfluousWhitespace eof`
 
 ### IndentShell
 Corrects indentation (using PSR-2-R and a single tab, no spaces!) of (code) files.

@@ -4,15 +4,15 @@ namespace Setup\Test\TestCase\Shell;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\WhitespaceShell;
+use Setup\Shell\SuperfluousWhitespaceShell;
 use Tools\TestSuite\ConsoleOutput;
 
 /**
  */
-class WhitespaceShellTest extends TestCase {
+class SuperfluousWhitespaceShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\WhitespaceShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var \Setup\Shell\SuperfluousWhitespaceShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	protected $Shell;
 
@@ -27,7 +27,7 @@ class WhitespaceShellTest extends TestCase {
 		$this->out = new ConsoleOutput();
 		$io = new ConsoleIo($this->out);
 
-		$this->Shell = $this->getMockBuilder(WhitespaceShell::class)
+		$this->Shell = $this->getMockBuilder(SuperfluousWhitespaceShell::class)
 			->setMethods(['in', 'err', '_stop'])
 			->setConstructorArgs([$io])
 			->getMock();
@@ -85,8 +85,7 @@ class WhitespaceShellTest extends TestCase {
 		file_put_contents(TMP . 'whitespace' . DS . 'Foo.php', $content);
 		$this->Shell->runCommand(['eof', TMP . 'whitespace' . DS]);
 		$output = $this->out->output();
-
-		//debug($output);die();
+		$this->assertNotEmpty($output);
 
 		$output = file_get_contents(TMP . 'whitespace' . DS . 'Foo.php');
 		$expected = '<?php echo $foo;' . PHP_EOL;
