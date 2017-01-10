@@ -9,10 +9,6 @@
 
 This CakePHP 3 plugin provides useful development tools for managing a CakePHP app.
 
-## Version notice
-
-This branch only works for **CakePHP 3.x** - please use the corresponding branch for CakePHP 2.x!
-
 ## What is this plugin for?
 This plugin aims to be a help for development of CakePHP applications. It extends and leverages
 my Tools Plugin.
