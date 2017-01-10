@@ -2,14 +2,10 @@
 
 ## Version notice
 
-This cake3 branch only works for **CakePHP3.x** - please use the master branch for CakePHP 2.x!
-**It is still dev** (not even alpha), please be careful with using it.
+This branch only works for **CakePHP3.x**
 
 ## Installation
 * [Installation](Install.md)
-
-## Upgrade Guide
-* [Upgrade guide from 2.x to 3.x](Upgrade.md)
 
 ## Detailed Documentation - Quicklinks
 * [Maintenance Mode](Maintenance/Maintenance.md)
