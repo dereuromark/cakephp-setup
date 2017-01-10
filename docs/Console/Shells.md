@@ -1,6 +1,6 @@
 # Useful Setup shells
 
-You can run any shell from the ROOT dir as `/bin/cake [shell] [command]` (or `.\bin\cake [shell] [command]` for Windows).
+You can run any shell from the ROOT dir as `bin/cake [shell] [command]` (or `.\bin\cake [shell] [command]` for Windows).
 
 
 ## Application Maintenance Shells
