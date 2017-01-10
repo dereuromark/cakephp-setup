@@ -12,7 +12,7 @@ use Cake\Utility\Inflector;
  * @author Mark Scherer
  * @license MIT
  */
-class WhitespaceShell extends Shell {
+class SuperfluousWhitespaceShell extends Shell {
 
 	/**
 	 * Each report: [0] => found, [1] => corrected
