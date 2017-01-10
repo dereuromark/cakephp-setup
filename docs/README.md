@@ -25,7 +25,7 @@ You can also just steal ideas, of course ;)
 ## Useful debugging help
 The following are convenience wrappers to debug safely. They will only show output with debug true.
 
-* dd($data) = debug() + die()
+* dd($data) = debug() + die() // This is now also in CakePHP 3.3+ directly :-)
 * prd($data) = pr() + die()
 * vd() = var_dump()
 * vdd($data) = var_dump() + die()
