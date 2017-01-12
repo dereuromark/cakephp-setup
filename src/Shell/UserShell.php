@@ -200,7 +200,6 @@ class UserShell extends Shell {
 			],
 		];
 
-
 		return parent::getOptionParser()
 			->description('The User shell can create a user on the fly for local development.
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.
