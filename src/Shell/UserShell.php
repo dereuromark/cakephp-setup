@@ -72,7 +72,7 @@ class UserShell extends Shell {
 			}
 			*/
 
-			$roles = Configure::read('Roles');
+			$roles = (array)Configure::read('Roles');
 			$roleIds = array_values($roles);
 
 			$this->out(print_r($roles, true));
@@ -143,7 +143,8 @@ class UserShell extends Shell {
 			$this->abort('User could not be inserted (' . print_r($entity->errors(), true) . ')');
 		}
 
-		$this->out('User inserted! ID: ' . $entity['id'] . 'Data: ' . print_r($entity->toArray(), true));
+		$this->out('User inserted! ID: ' . $entity['id']);
+		$this->out('Data: ' . print_r($entity->toArray(), true), 1, Shell::VERBOSE);
 	}
 
 	/**
@@ -187,13 +188,26 @@ class UserShell extends Shell {
 			]
 		];
 
+		$createParser = $subcommandParser;
+		$createParser['arguments'] = [
+			'login' => [
+				'help' => 'Display field value',
+				'required' => false,
+			],
+			'password' => [
+				'help' => 'Password',
+				'required' => false,
+			],
+		];
+
+
 		return parent::getOptionParser()
 			->description('The User shell can create a user on the fly for local development.
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.
 Make sure you configured the Passwordable behavior accordingly as per docs.')
 			->addSubcommand('create', [
 				'help' => 'Create a new user with email and password provided.',
-				'parser' => $subcommandParser
+				'parser' => $createParser
 			])
 			->addSubcommand('password', [
 				'help' => 'Generate a hash from a given password.',
