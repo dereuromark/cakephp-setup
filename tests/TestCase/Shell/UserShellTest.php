@@ -52,14 +52,14 @@ class UserShellTest extends TestCase {
 		$this->Shell->expects($this->at(2))->method('in')
 			->will($this->returnValue('y'));
 
-		$this->Shell->runCommand(['create', 'example', '123']);
+		$this->Shell->runCommand(['create', 'example', '123', '-v']);
 
 		$output = $this->err->output;
 		$this->assertEmpty($output, $output);
 
 		$output = $this->out->output();
 		$expected = '[username] => example';
-		$this->assertTextContains($expected, (string)$output);
+		$this->assertTextContains($expected, $output, $output);
 	}
 
 	/**
