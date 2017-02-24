@@ -40,33 +40,25 @@ namespace <%= $namespace %>\Model\Table;
 $tableNamespace = $namespace . '\Model\Table';
 
 $tableClass = 'Tools\Model\Table\Table';
-if (class_exists($tableNamespace . 'Table')) {
-    $tableClass = $tableNamespace . 'Table';
+if (class_exists($tableNamespace . '\Table')) {
+    $tableClass = $tableNamespace . '\Table';
 }
 
 $uses = [
     "use $namespace\\Model\\Entity\\$entity;",
     'use Cake\ORM\Query;',
     'use Cake\ORM\RulesChecker;',
-    'use ' . $tableClass . ';',
     'use Cake\Validation\Validator;'
 ];
+if ($tableClass !== 'App\Model\Table\Table') {
+    $uses[] = 'use ' . $tableClass . ';';
+}
 sort($uses);
 echo implode("\n", $uses);
 %>
 
 
-/**
- * <%= $name %> Model
-<% if ($associations): %>
- *
-<% foreach ($associations as $type => $assocs): %>
-<% foreach ($assocs as $assoc): %>
- * @property \Cake\ORM\Association\<%= Inflector::camelize($type) %> $<%= $assoc['alias'] %>
-<% endforeach %>
-<% endforeach; %>
-<% endif; %>
- */
+<%= $this->DocBlock->classDescription($name, 'Model', $annotations) %>
 class <%= $name %>Table extends Table
 {
 

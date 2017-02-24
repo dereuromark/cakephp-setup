@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \<%= $namespace %>\View\AppView $this
+ */
+?>
 <%
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)

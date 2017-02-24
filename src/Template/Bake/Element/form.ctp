@@ -104,15 +104,15 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
                     $empty = ", 'empty' => true";
                 }
 %>
-        echo $this->Form->input('<%= $field %>', ['options' => $<%= $singularVar %>::<%= $enumMethod %>()<%= $empty %>]);
+            echo $this->Form->input('<%= $field %>', ['options' => $<%= $singularVar %>::<%= $enumMethod %>()<%= $empty %>]);
 <%
             } elseif (in_array($fieldData['type'], ['date', 'datetime', 'time']) && (!empty($fieldData['null']))) {
 %>
-		echo $this->Form->input('<%= $field %>', ['empty' => true]);
+		    echo $this->Form->input('<%= $field %>', ['empty' => true]);
 <%
 			} else {
 %>
-		echo $this->Form->input('<%= $field %>');
+		    echo $this->Form->input('<%= $field %>');
 <%
             }
         }
