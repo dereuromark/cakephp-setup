@@ -4,6 +4,7 @@ namespace Setup\Test\TestCase\Controller\Component;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Network\Request;
 use Setup\Controller\Component\SetupComponent;
@@ -57,6 +58,10 @@ class SetupComponentTest extends TestCase {
 			'Content-Type' => 'text/html; charset=UTF-8',
 			'Location' => '/'
 		];
+		if (version_compare(Configure::version(), '3.4.0') < 0) {
+			$expected = ['Location' => '/'];
+		}
+
 		$this->assertSame($expected, $result);
 
 		// Deactivate
@@ -88,6 +93,9 @@ class SetupComponentTest extends TestCase {
 			'Content-Type' => 'text/html; charset=UTF-8',
 			'Location' => '/'
 		];
+		if (version_compare(Configure::version(), '3.4.0') < 0) {
+			$expected = ['Location' => '/'];
+		}
 		$this->assertSame($expected, $result);
 	}
 
