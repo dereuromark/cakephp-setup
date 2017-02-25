@@ -11,6 +11,11 @@ use Tools\TestSuite\TestCase;
 
 class SetupComponentTest extends TestCase {
 
+	/**
+	 * @var \App\Controller\AppController
+	 */
+	public $Controller;
+
 	public function setUp() {
 		parent::setUp();
 
@@ -34,7 +39,6 @@ class SetupComponentTest extends TestCase {
 		$this->Controller->request = $request;
 		$this->Controller->request->params = ['action' => 'index'];
 
-		$request = $request;
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
 
 		$this->Setup->beforeFilter($event);
@@ -51,7 +55,10 @@ class SetupComponentTest extends TestCase {
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
-		$expected = ['Location' => '/'];
+		$expected = [
+			'Content-Type' => 'text/html; charset=UTF-8',
+			'Location' => '/'
+		];
 		$this->assertSame($expected, $result);
 
 		// Deactivate
@@ -63,7 +70,6 @@ class SetupComponentTest extends TestCase {
 
 		$this->Controller->request->params = ['action' => 'index'];
 
-		$request = $request;
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
 
 		$this->Setup->beforeFilter($event);
@@ -80,7 +86,10 @@ class SetupComponentTest extends TestCase {
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
-		$expected = ['Location' => '/'];
+		$expected = [
+			'Content-Type' => 'text/html; charset=UTF-8',
+			'Location' => '/'
+		];
 		$this->assertSame($expected, $result);
 	}
 
