@@ -1,5 +1,7 @@
 <?php
-define('DS', DIRECTORY_SEPARATOR);
+if (!defined('DS')) {
+	define('DS', DIRECTORY_SEPARATOR);
+}
 if (!defined('WINDOWS')) {
 	if (DS == '\\' || substr(PHP_OS, 0, 3) === 'WIN') {
 		define('WINDOWS', true);
