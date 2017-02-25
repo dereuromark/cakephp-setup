@@ -17,7 +17,6 @@ class MaintenanceModeShellTest extends TestCase {
 	 * @return void
 	 */
 	public function setUp() {
-
 		$this->out = new ConsoleOutput();
 		$this->err = new ConsoleOutput();
 		$io = new ConsoleIo($this->out, $this->err);
@@ -31,8 +30,6 @@ class MaintenanceModeShellTest extends TestCase {
 	}
 
 	/**
-	 * MaintenanceShellTest::testWhitelist()
-	 *
 	 * @return void
 	 */
 	public function testWhitelist() {
@@ -50,8 +47,6 @@ class MaintenanceModeShellTest extends TestCase {
 	}
 
 	/**
-	 * MaintenanceShellTest::testStatus()
-	 *
 	 * @return void
 	 */
 	public function testStatus() {

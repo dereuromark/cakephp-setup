@@ -30,8 +30,6 @@ class SetupComponentTest extends TestCase {
 	}
 
 	/**
-	 * SetupComponentTest::testSetMaintenance()
-	 *
 	 * @return void
 	 */
 	public function testSetMaintenance() {
