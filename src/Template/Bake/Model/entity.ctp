@@ -36,11 +36,11 @@ if (!isset($fields) || $fields !== false) {
     }
 }
 
-$entityNamespace = $namespace . '\Model\Entity';
+$entityNamespace = $namespace . '\Model\Entity\\';
 
 $entityClass = 'Tools\Model\Entity\Entity';
 if (class_exists($entityNamespace . 'Entity')) {
-    $tableClass = $entityNamespace . 'Entity';
+    $entityClass = $entityNamespace . 'Entity';
 }
 %>
 <?php
