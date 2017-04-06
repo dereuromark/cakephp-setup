@@ -18,8 +18,43 @@ if (!defined('CLASS_USER')) {
  *
  * @author Mark Scherer
  * @license MIT
+ * @property \App\Model\Table\UsersTable $Users
  */
 class UserShell extends Shell {
+
+	/**
+	 * Creates a new user including a freshly hashed password.
+	 *
+	 * @param string|null $role Role ID
+	 * @return void
+	 */
+	public function index($role = null) {
+		$this->loadModel(CLASS_USERS);
+
+		$query = $this->Users->find();
+		$count = $users = $query->count();
+		$users = $query->limit(200)->all();
+
+		$displayField = $this->Users->displayField();
+
+		if ($count < 1) {
+			$this->err($count . ' users found');
+		} else {
+			$this->success($count . ' users found');
+		}
+
+		$emailField = null;
+		if ($this->Users->schema()->column('email') && $displayField !== 'email') {
+			$emailField = 'email';
+		}
+
+		foreach ($users as $user) {
+			$this->out('* ' . $user->get($displayField) . ($emailField ? ' (' . $user->get($emailField) . ')' : ''));
+		}
+		if ($count > 200) {
+			$this->warn('(Only lists 200 users)');
+		}
+	}
 
 	/**
 	 * Creates a new user including a freshly hashed password.
@@ -201,9 +236,13 @@ class UserShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('The User shell can create a user on the fly for local development.
+			->setDescription('The User shell can create a user on the fly for local development.
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.
 Make sure you configured the Passwordable behavior accordingly as per docs.')
+			->addSubcommand('index', [
+				'help' => 'Lists current users.',
+				'parser' => $createParser
+			])
 			->addSubcommand('create', [
 				'help' => 'Create a new user with email and password provided.',
 				'parser' => $createParser

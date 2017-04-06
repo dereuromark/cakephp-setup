@@ -74,6 +74,9 @@ Alternatively, you can also just print out the hash for a given plain-text passw
 
 - `bin/cake Setup.User pwd [pwd]`
 
+To list currently available users (or check if there are any yet):
+- `bin/cake Setup.User index`
+
 ### ResetShell
 Let's you reset all emails or passwords, this is very useful when copying live data dumps to your local dev
 environment. Afterwards you can login with `123` for any user, when resetting the passwords to this value, for example.

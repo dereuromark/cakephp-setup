@@ -20,6 +20,9 @@ class UserShellTest extends TestCase {
 	 */
 	public $fixtures = ['plugin.Setup.Users'];
 
+	/**
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 
@@ -35,13 +38,21 @@ class UserShellTest extends TestCase {
 			->getMock();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	/**
+	 * @return void
+	 */
+	public function testIndex() {
+		$this->Shell->runCommand(['index']);
+
+		$output = $this->err->output;
+		$this->assertEmpty($output, $output);
+
+		$output = $this->out->output();
+		$expected = 'mariano';
+		$this->assertTextContains($expected, $output, $output);
 	}
 
 	/**
-	 * UserShellTest::testEmail()
-	 *
 	 * @return void
 	 */
 	public function testUser() {
@@ -63,8 +74,6 @@ class UserShellTest extends TestCase {
 	}
 
 	/**
-	 * UserShellTest::testUserInteractive()
-	 *
 	 * @return void
 	 */
 	public function _testUserInteractive() {
