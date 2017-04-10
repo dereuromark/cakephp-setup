@@ -63,7 +63,7 @@ class MaintenanceModeShell extends Shell {
 	 * Whitelist specific IPs. Each argument is a single IP.
 	 * Not passing any argument will output the current whitelist.
 	 *
-	 * @return int|null|void
+	 * @return int|null
 	 */
 	public function whitelist() {
 		if ($this->params['remove']) {
