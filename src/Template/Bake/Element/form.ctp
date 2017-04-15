@@ -26,7 +26,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
     });
 }
 
-$namespace = Configure::read('App.namespace');
+$namespace = $plugin ?: Configure::read('App.namespace');
 
 $skipFields = ['password', 'slug', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 if (property_exists($modelObject, 'scaffoldSkipFieldsForm')) {
