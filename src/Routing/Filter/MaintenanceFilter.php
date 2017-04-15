@@ -66,7 +66,7 @@ class MaintenanceFilter extends DispatcherFilter {
 	 * MaintenanceMode::beforeDispatch()
 	 *
 	 * @param \Cake\Event\Event $event
-	 * @return \Cake\Network\Response|null
+	 * @return \Cake\Http\Response|null
 	 */
 	public function beforeDispatch(Event $event) {
 		/* @var \Cake\Http\ServerRequest $request */

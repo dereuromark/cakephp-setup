@@ -53,7 +53,7 @@ class SetupComponent extends Component {
 	/**
 	 * @param \Cake\Event\Event $event
 	 * @throws \Exception
-	 * @return \Cake\Network\Response|null
+	 * @return \Cake\Http\Response|null
 	 */
 	public function beforeFilter(Event $event) {
 		$this->Controller = $event->subject();

@@ -36,7 +36,7 @@ class MaintenanceMiddleware {
 
 	/**
 	 * @param \Cake\Http\ServerRequest $request The request.
-	 * @param \Cake\Network\Response $response The response.
+	 * @param \Cake\Http\Response $response The response.
 	 * @param callable $next The next middleware to call.
 	 * @return \Psr\Http\Message\ResponseInterface A response.
 	 */
@@ -53,8 +53,8 @@ class MaintenanceMiddleware {
 	}
 
 	/**
-	 * @param \Cake\Network\Response $response The response.
-	 * @return \Cake\Network\Response
+	 * @param \Cake\Http\Response $response The response.
+	 * @return \Cake\Http\Response
 	 */
 	protected function build($response) {
 		$cakeRequest = Request::createFromGlobals();
