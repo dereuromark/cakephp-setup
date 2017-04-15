@@ -23,7 +23,7 @@ $defaultModel = $name;
 <?php
 namespace <%= $namespace %>\Controller<%= $prefix %>;
 
-use <%= $namespace %>\Controller\AppController;
+use App\Controller\AppController;
 
 /**
  * <%= $name %> Controller
