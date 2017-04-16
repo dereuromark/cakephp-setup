@@ -73,7 +73,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 </nav>
 <div class="<%= $pluralVar %> index col-sm-8 col-xs-12">
     <h3><?= __('<%= $pluralHumanName %>') ?></h3>
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
 <% foreach ($fields as $field): %>
