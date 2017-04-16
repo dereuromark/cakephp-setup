@@ -78,6 +78,7 @@ class IndentShell extends Shell {
 			$this->settings['againWithHalf'] = true;
 		}
 
+		$folder = null;
 		if (!empty($this->args)) {
 			if (!empty($this->args[0]) && $this->args[0] !== 'app') {
 				$folder = $this->args[0];
@@ -103,12 +104,12 @@ class IndentShell extends Shell {
 			$this->_searchFiles();
 
 			$this->out('found: ' . count($this->_files));
-			if (!empty($this->params['dry-run'])) {
-				$this->out('TEST DONE');
-			} else {
-				$continue = $this->in('Modifying files! Continue?', ['y', 'n'], 'n');
-				if (strtolower($continue) !== 'y' && strtolower($continue) !== 'yes') {
-					$this->abort('...aborted');
+			if (empty($this->params['dry-run'])) {
+				if (!$this->params['force']) {
+					$continue = $this->in('Modifying files! Continue?', ['y', 'n'], 'n');
+					if (strtolower($continue) !== 'y' && strtolower($continue) !== 'yes') {
+						$this->abort('...aborted');
+					}
 				}
 
 				$this->_correctFiles();
@@ -283,36 +284,36 @@ class IndentShell extends Shell {
 				],
 				'log' => [
 					'short' => 'l',
-					'help' => 'Log all ouput to file log.txt in TMP dir',
+					'help' => 'Log all ouput to file log.txt in TMP dir.',
 					'boolean' => true
 				],
-				'interactive' => [
-					'short' => 'i',
-					'help' => 'Interactive',
+				'force' => [
+					'short' => 'f',
+					'help' => 'Force without confirmation prompting.',
 					'boolean' => true
 				],
 				'spaces' => [
 					'short' => 's',
-					'help' => 'Spaces per Tab',
+					'help' => 'Spaces per Tab.',
 					'default' => '4',
 				],
 				'extensions' => [
 					'short' => 'e',
-					'help' => 'Extensions (comma-separated)',
+					'help' => 'Extensions (comma-separated).',
 					'default' => '',
 				],
 				'again' => [
 					'short' => 'a',
-					'help' => 'Again (with half) afterwards',
+					'help' => 'Again (with half) afterwards.',
 					'boolean' => true
 				],
 			]
 		];
 
 		return parent::getOptionParser()
-			->description('Correct indentation of files')
+			->description('Correct indentation of files.')
 			->addSubcommand('folder', [
-				'help' => 'Indent all files in a folder',
+				'help' => 'Indent all files in a folder.',
 				'parser' => $subcommandParser
 			]);
 	}
