@@ -14,7 +14,12 @@ class CurrentConfigShellTest extends TestCase {
 	/**
 	 * @var \Setup\Shell\CurrentConfigShell
 	 */
-	public $Shell;
+	protected $Shell;
+
+	/**
+	 * @var \Tools\TestSuite\ConsoleOutput
+	 */
+	protected $out;
 
 	public function setUp() {
 		parent::setUp();
@@ -35,8 +40,8 @@ class CurrentConfigShellTest extends TestCase {
 		$this->Shell->runCommand(['display']);
 		$output = $this->out->output();
 
-		$this->assertContains('[driver]', $output);
-		$this->assertContains('[className]', $output);
+		$this->assertContains('[App]', $output);
+		$this->assertContains('[namespace] =>', $output);
 	}
 
 	/**
@@ -47,6 +52,17 @@ class CurrentConfigShellTest extends TestCase {
 		$output = $this->out->output();
 
 		$this->assertContains('session.auto_start', $output);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testValidate() {
+		$this->Shell->runCommand(['validate']);
+		$output = $this->out->output();
+
+		$this->assertContains('[driver]', $output);
+		$this->assertContains('[className]', $output);
 	}
 
 }
