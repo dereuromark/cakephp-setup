@@ -37,40 +37,58 @@ class ClearShell extends Shell {
 	];
 
 	/**
-	 * @deprecated with new command parser help?
+	 * Clean out empty folders that only contain an "empty" placeholder file.
+	 *
+	 * @param string|null $path
+	 *
 	 * @return void
 	 */
-	public function help() {
-		$help = <<<TEXT
-The Clear Shell deletes all tmp files (cache, logs)
----------------------------------------------------------------
-Usage: cake Setup.Clear <command> (cache, logs, all) <args> (p, m, v, css, js, ...)
----------------------------------------------------------------
+	public function emptyFolders($path = null) {
+		if ($path) {
+			$path = realpath($path);
+		}
+		if (!$path) {
+			$path = ROOT . DS;
+		}
 
-Commands:
+		$this->out('Clearing empty folders in ' . $path);
 
-	clear help
-		shows this help message.
+		$this->_clearEmpty($path);
+	}
 
-	clear cache
-		delete tmp cache + www cache
+	/**
+	 * @param string $dir
+	 * @return void
+	 */
+	public function _clearEmpty($dir) {
+		$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
+			RecursiveIteratorIterator::CHILD_FIRST);
+		/* @var \SplFileInfo $path */
+		foreach ($Iterator as $path) {
+			$fullPath = $path->__toString();
 
-	clear logs
-		reset all log files
+			if (substr($path->getFilename(), 0, 1) === '.' || strpos($fullPath, DS . '.')) {
+				continue;
+			}
+			if (strpos($fullPath, DS . 'vendor' . DS) || strpos($fullPath, DS . 'tmp' . DS) || strpos($fullPath, DS . 'logs' . DS)) {
+				continue;
+			}
 
-	clear tmp
-		delete tmp folder (except cache and logs)
+			if ($path->isDir()) {
+				$this->_clearEmpty($fullPath);
+				continue;
+			}
 
-	clear all
-		delete tmp + cache + log files
+			if ($path->getFilename() !== 'empty' || trim(file_get_contents($fullPath)) !== '') {
+				continue;
+			}
 
-Params:
-	-r (remove subfolders as well)
-	-v (verbose)
-	-d (dry-run)
-
-TEXT;
-		$this->out($help);
+			$path = str_replace(ROOT . DS, '/', $fullPath);
+			$this->out('- ' . $path);
+			if (empty($this->params['dry-run'])) {
+				unlink($fullPath);
+			}
+		}
 	}
 
 	/**
@@ -184,8 +202,6 @@ TEXT;
 	}
 
 	/**
-	 * ClearShell::_empty()
-	 *
 	 * @param string $dir
 	 * @param array $excludes
 	 * @return void
@@ -283,6 +299,9 @@ TEXT;
 			])
 			->addSubcommand('custom', [
 				'help' => 'Clear custom dir',
+				'parser' => $subcommandParser
+			])->addSubcommand('empty_folders', [
+				'help' => 'Clear empty folders',
 				'parser' => $subcommandParser
 			]);
 	}
