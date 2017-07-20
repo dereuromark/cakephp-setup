@@ -17,7 +17,7 @@ if (!function_exists('dd')) {
 
 		$backtrace = debug_backtrace(false, 1);
 		pr('dd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
-		die(1);
+		exit(1);
 	}
 }
 
@@ -35,7 +35,7 @@ if (!function_exists('prd')) {
 
 		$backtrace = debug_backtrace(false, 1);
 		pr('prd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
-		die(1);
+		exit(1);
 	}
 }
 
@@ -74,6 +74,6 @@ if (!function_exists('vd')) {
 
 		$backtrace = debug_backtrace(false, 1);
 		pr('vdd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
-		die();
+		exit();
 	}
 }

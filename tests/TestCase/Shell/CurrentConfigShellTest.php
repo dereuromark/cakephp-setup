@@ -21,6 +21,9 @@ class CurrentConfigShellTest extends TestCase {
 	 */
 	protected $out;
 
+	/**
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 

@@ -19,6 +19,9 @@ class ResetShellTest extends TestCase {
 	 */
 	public $fixtures = ['plugin.Setup.Users'];
 
+	/**
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 
@@ -35,8 +38,6 @@ class ResetShellTest extends TestCase {
 	}
 
 	/**
-	 * ResetShellTest::testEmail()
-	 *
 	 * @return void
 	 */
 	public function testEmail() {
@@ -51,8 +52,6 @@ class ResetShellTest extends TestCase {
 	}
 
 	/**
-	 * ResetShellTest::testEmailQuick()
-	 *
 	 * @return void
 	 */
 	public function testEmailQuick() {
@@ -64,8 +63,6 @@ class ResetShellTest extends TestCase {
 	}
 
 	/**
-	 * ResetShellTest::testPwd()
-	 *
 	 * @return void
 	 */
 	public function testPwd() {
@@ -80,8 +77,6 @@ class ResetShellTest extends TestCase {
 	}
 
 	/**
-	 * ResetShellTest::testPwd()
-	 *
 	 * @return void
 	 */
 	public function testPwdQuick() {

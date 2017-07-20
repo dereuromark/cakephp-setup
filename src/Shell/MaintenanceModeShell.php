@@ -18,16 +18,22 @@ use Setup\Maintenance\Maintenance;
 class MaintenanceModeShell extends Shell {
 
 	/**
-	 * @var \Setup\Maintenance\Maintenance;
+	 * @var \Setup\Maintenance\Maintenance
 	 */
 	public $Maintenance;
 
+	/**
+	 * @return void
+	 */
 	public function startup() {
 		parent::startup();
 
 		$this->Maintenance = new Maintenance();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function status() {
 		$isMaintenanceMode = $this->Maintenance->isMaintenanceMode();
 		if ($isMaintenanceMode) {

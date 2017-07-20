@@ -17,6 +17,9 @@ class SetupComponentTest extends TestCase {
 	 */
 	public $Controller;
 
+	/**
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 
@@ -24,10 +27,6 @@ class SetupComponentTest extends TestCase {
 		$this->Controller->loadComponent('Flash');
 		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
-	}
-
-	public function tearDown() {
-		parent::tearDown();
 	}
 
 	/**
