@@ -20,9 +20,6 @@ use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Validation\Validator;
 
-/**
- * <%= $name %> Form.
- */
 class <%= $name %>Form extends Form
 {
     /**

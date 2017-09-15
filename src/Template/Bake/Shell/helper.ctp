@@ -18,9 +18,6 @@ namespace <%= $namespace %>\Shell\Helper;
 
 use Cake\Console\Helper;
 
-/**
- * <%= $name %> shell helper.
- */
 class <%= $name %>Helper extends Helper
 {
 

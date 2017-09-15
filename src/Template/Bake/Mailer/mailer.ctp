@@ -18,9 +18,6 @@ namespace <%= $namespace %>\Mailer;
 
 use Cake\Mailer\Mailer;
 
-/**
- * <%= $name %> mailer.
- */
 class <%= $name %>Mailer extends Mailer
 {
 

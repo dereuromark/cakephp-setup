@@ -17,9 +17,8 @@
 
 namespace <%= $namespace %>\Controller;
 
-use App\Controller\AppController as BaseController;
+use <%= $namespace %>\Controller\AppController as BaseController;
 
 class AppController extends BaseController
 {
-
 }

@@ -19,9 +19,6 @@ namespace <%= $namespace %>\Model\Behavior;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 
-/**
- * <%= $name %> behavior
- */
 class <%= $name %>Behavior extends Behavior
 {
 

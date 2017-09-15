@@ -19,9 +19,6 @@ namespace <%= $namespace %>\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 
-/**
- * <%= $name %> component
- */
 class <%= $name %>Component extends Component
 {
 
