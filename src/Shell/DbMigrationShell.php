@@ -68,7 +68,11 @@ class DbMigrationShell extends Shell {
 				}
 
 				// We need to migrate sth
-				$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NOT NULL DEFAULT \'\';';
+				if (!in_array($type, ['longtext', 'mediumtext', 'text'])) {
+					$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NOT NULL DEFAULT \'\';';
+				} else {
+					$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' DEFAULT NULL;';
+				}
 			}
 		}
 
