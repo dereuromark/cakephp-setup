@@ -31,7 +31,7 @@ They are available when you include the plugin's bootstrap at Plugin::load().
 ## Testing
 You can test using a local installation of phpunit or the phar version of it:
 
-	cd plugins/Setup
+	cd .../cakephp-setup
 	composer install // or: php composer.phar install
 	composer test-setup
 	composer test
