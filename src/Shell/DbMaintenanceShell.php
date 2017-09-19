@@ -3,8 +3,8 @@ namespace Setup\Shell;
 
 use Cake\Collection\Collection;
 use Cake\Console\Shell;
-use Cake\Datasource\ConnectionManager;
 use Exception;
+use Setup\Shell\Traits\DbToolsTrait;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {
@@ -24,6 +24,8 @@ if (!defined('WINDOWS')) {
  * @license MIT
  */
 class DbMaintenanceShell extends Shell {
+
+	use DbToolsTrait;
 
 	/**
 	 * Assert proper (UTF8) encoding.
@@ -441,12 +443,15 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$this->out('Done :)');
 	}
 
+	/**
+	 * @return \Cake\Console\ConsoleOptionParser
+	 */
 	public function getOptionParser() {
 		$subcommandParser = [
 			'options' => [
 				'dry-run' => [
 					'short' => 'd',
-					'help' => 'Dry run the command, nothing will actually be modified.',
+					'help' => 'Dry run the command, nothing will actually be modified. It will output the SQL to copy-and-paste, e.g. into a Migrations file.',
 					'boolean' => true
 				],
 				'connection' => [
@@ -499,49 +504,6 @@ Use -d -v (dry-run and verbose mode) to only display queries but not execute the
 				'help' => 'Cleanup database.',
 				'parser' => $subcommandParser
 			]);
-	}
-
-	/**
-	 * @return \Cake\Database\Connection|\Cake\Datasource\ConnectionInterface
-	 */
-	protected function _getConnection() {
-		$name = 'default';
-		if ($this->params['connection']) {
-			$name = $this->params['connection'];
-		}
-
-		return ConnectionManager::get($name);
-	}
-
-	/**
-	 * @param string $prefix
-	 * @return array
-	 */
-	protected function _getTables($prefix) {
-		$db = $this->_getConnection();
-		$config = $db->config();
-		$database = $config['database'];
-
-		$script = "
-SELECT table_name
-FROM information_schema.tables AS tb
-WHERE   table_schema = '$database'
-AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
-
-		$res = $db->query($script);
-		if (!$res) {
-			$this->abort('Nothing to do...');
-		}
-		$tables = new Collection($res);
-
-		$tables = $tables->toArray();
-		foreach ($tables as $key => $table) {
-			if (substr($table['table_name'], 0, 1) === '_') {
-				unset($tables[$key]);
-			}
-		}
-
-		return $tables;
 	}
 
 }

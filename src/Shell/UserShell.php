@@ -208,8 +208,6 @@ class UserShell extends Shell {
 	}
 
 	/**
-	 * UserShell
-	 *
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {

@@ -255,8 +255,6 @@ class ClearShell extends Shell {
 	}
 
 	/**
-	 * Get the option parser
-	 *
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {

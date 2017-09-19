@@ -65,19 +65,10 @@ Cake\Cache\Cache::config($cache);
 Cake\Core\Plugin::load('Setup', ['path' => ROOT . DS]);
 Cake\Core\Plugin::load('Tools', ['path' => ROOT . DS . 'vendor' . DS . 'dereuromark' . DS . 'cakephp-tools' . DS, 'routes' => true]);
 
-// Ensure default test connection is defined
-if (!getenv('db_class')) {
-	putenv('db_class=Cake\Database\Driver\Sqlite');
-	putenv('db_dsn=sqlite::memory:');
-}
-
-if (false && WINDOWS) {
+if (getenv('db_dsn')) {
 	Cake\Datasource\ConnectionManager::config('test', [
 		'className' => 'Cake\Database\Connection',
-		'driver' => 'Cake\Database\Driver\Mysql',
-		'database' => 'cake_test',
-		'username' => 'root',
-		'password' => '',
+		'url' => getenv('db_dsn'),
 		'timezone' => 'UTC',
 		'quoteIdentifiers' => true,
 		'cacheMetadata' => true,
@@ -85,10 +76,16 @@ if (false && WINDOWS) {
 	return;
 }
 
+// Ensure default test connection is defined
+if (!getenv('db_class')) {
+	putenv('db_class=Cake\Database\Driver\Sqlite');
+	putenv('db_dsn=sqlite:///:memory:');
+}
+
 Cake\Datasource\ConnectionManager::config('test', [
 	'className' => 'Cake\Database\Connection',
+	'url' => getenv('db_dsn'),
 	'driver' => getenv('db_class'),
-	'dsn' => getenv('db_dsn'),
 	'database' => getenv('db_database'),
 	'username' => getenv('db_username'),
 	'password' => getenv('db_password'),

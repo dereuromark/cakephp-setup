@@ -32,10 +32,25 @@ They are available when you include the plugin's bootstrap at Plugin::load().
 You can test using a local installation of phpunit or the phar version of it:
 
 	cd plugins/Setup
-	composer update // or: php composer.phar update
-	phpunit // or: php phpunit.phar
+	composer install // or: php composer.phar install
+	composer test-setup
+	composer test
 
 To test a specific file:
 
-	phpunit /path/to/class.php
+	php phpunit.phar /path/to/MyClass.php
 
+To test MySQL specific tests, run this before:
+```
+export db_dsn="mysql://root:secret@127.0.0.1/cake_test"
+```
+
+## Tips
+
+Import Huge SQL file:
+
+	...\bin\mysql -u root dbname < dumpfilename.sql
+
+Same other direction:
+
+	...\bin\mysqldump -h host -u root -p dbname > dumpfilename.sql

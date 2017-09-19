@@ -53,6 +53,9 @@ class CopyrightRemovalShell extends Shell {
 		$this->out($count . ' files fixed.');
 	}
 
+	/**
+	 * @return \Cake\Console\ConsoleOptionParser
+	 */
 	public function getOptionParser() {
 		$subcommandParser = [
 			'options' => [

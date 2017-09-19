@@ -17,6 +17,11 @@ class DbMaintenanceShellTest extends TestCase {
 	public $Shell;
 
 	/**
+	 * @var \Tools\TestSuite\ConsoleOutput
+	 */
+	protected $out;
+
+	/**
 	 * setUp method
 	 *
 	 * @return void
