@@ -40,10 +40,11 @@ To test a specific file:
 
 	php phpunit.phar /path/to/MyClass.php
 
-To test MySQL specific tests, run this before:
+To test MySQL specific tests, run this before (you might have to adjust your connection details):
 ```
 export db_dsn="mysql://root:secret@127.0.0.1/cake_test"
 ```
+By default the tests use an SQLite DB.
 
 ## Tips
 
