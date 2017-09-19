@@ -57,6 +57,10 @@ class DbMigrationShell extends Shell {
 				if (!in_array($type, ['longtext', 'mediumtext', 'text']) && !preg_match('/^(varchar|char)\(/', $type)) {
 					continue;
 				}
+				if ($type === 'varchar(36)' || $type === 'char(36)') {
+					continue;
+				}
+
 				$fieldList[] = $field['Field'];
 
 				if ($null === 'YES' || $field['Default'] !== null) {
