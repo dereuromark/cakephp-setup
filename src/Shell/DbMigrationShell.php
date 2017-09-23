@@ -107,6 +107,11 @@ class DbMigrationShell extends Shell {
 					'help' => 'Dry run the command, nothing will actually be modified. It will output the SQL to copy-and-paste, e.g. into a Migrations file.',
 					'boolean' => true
 				],
+				'table' => [
+					'short' => 't',
+					'help' => 'Specific table (separate multiple with comma).',
+					'default' => ''
+				],
 				'connection' => [
 					'short' => 'c',
 					'help' => 'Use a different connection than `default`.',
