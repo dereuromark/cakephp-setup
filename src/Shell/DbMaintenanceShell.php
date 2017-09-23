@@ -296,14 +296,24 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 				$name = $field['Field'];
 				$type = $field['Type'];
 				$null = $field['Null'];
-				if (!preg_match('/\w+\_id$/', $name) || !preg_match('/^int\(1[10]\)/', $type)) { //TODO: support uuid?
+				if (!preg_match('/\w+\_id$/', $name) || !preg_match('/^int\(1[10]\)|char\(36\)|varchar\(36\)/', $type)) {
 					continue;
 				}
+
 				$fieldList[] = $field['Field'];
 
-				if ($null === 'YES' && empty($field['Default'])) {
+				$isUuid = $type === 'char(36)' || $type === 'varchar(36)';
+				if ($null === 'YES' && $field['Default'] === null) {
 					continue;
 				}
+
+				if (!empty($field['Key']) && $field['Key'] === 'PRI') {
+					continue;
+				}
+				if (!empty($field['Extra']) && $field['Extra'] === 'auto_increment') {
+					continue;
+				}
+
 				// We need to migrate sth
 				$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NULL DEFAULT NULL;';
 			}
@@ -457,6 +467,11 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 				'connection' => [
 					'short' => 'c',
 					'help' => 'Use a different connection than `default`.',
+					'default' => ''
+				],
+				'table' => [
+					'short' => 't',
+					'help' => 'Specific table (separate multiple with comma).',
 					'default' => ''
 				],
 				'interactive' => [
