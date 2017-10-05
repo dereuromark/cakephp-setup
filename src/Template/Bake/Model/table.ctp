@@ -1,24 +1,12 @@
 <%
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         0.1.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 use Cake\Utility\Inflector;
 
 $annotations = [];
 foreach ($associations as $type => $assocs) {
     foreach ($assocs as $assoc) {
         $typeStr = Inflector::camelize($type);
-        $annotations[] = "@property \Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+        $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
+        $annotations[] = "@property {$tableFqn}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
     }
 }
 $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
@@ -45,8 +33,6 @@ if (class_exists($tableNamespace . '\Table')) {
 }
 
 $uses = [
-    "use $namespace\\Model\\Entity\\$entity;",
-    'use Cake\ORM\Query;',
     'use Cake\ORM\RulesChecker;',
     'use Cake\Validation\Validator;'
 ];
@@ -73,16 +59,16 @@ class <%= $name %>Table extends Table
         parent::initialize($config);
 
 <% if (!empty($table)): %>
-        $this->table('<%= $table %>');
+        $this->setTable('<%= $table %>');
 <% endif %>
 <% if (!empty($displayField)): %>
-        $this->displayField('<%= $displayField %>');
+        $this->setDisplayField('<%= $displayField %>');
 <% endif %>
 <% if (!empty($primaryKey)): %>
 <% if (count($primaryKey) > 1): %>
-        $this->primaryKey([<%= $this->Bake->stringifyList((array)$primaryKey, ['indent' => false]) %>]);
+        $this->setPrimaryKey([<%= $this->Bake->stringifyList((array)$primaryKey, ['indent' => false]) %>]);
 <% else: %>
-        $this->primaryKey('<%= current((array)$primaryKey) %>');
+        $this->setPrimaryKey('<%= current((array)$primaryKey) %>');
 <% endif %>
 <% endif %>
 <% if (!empty($behaviors)): %>

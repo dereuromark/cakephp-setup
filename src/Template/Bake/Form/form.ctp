@@ -1,18 +1,3 @@
-<%
-/**
-* CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
-* Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
-*
-* Licensed under The MIT License
-* For full copyright and license information, please see the LICENSE.txt
-* Redistributions of files must retain the above copyright notice.
-*
-* @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
-* @link          http://cakephp.org CakePHP(tm) Project
-* @since         1.0.9
-* @license       http://www.opensource.org/licenses/mit-license.php MIT License
-*/
-%>
 <?php
 namespace <%= $namespace %>\Form;
 
@@ -25,8 +10,8 @@ class <%= $name %>Form extends Form
     /**
      * Builds the schema for the modelless form
      *
-     * @param Schema $schema From schema
-     * @return $this
+     * @param \Cake\Form\Schema $schema From schema
+     * @return \Cake\Form\Schema
      */
     protected function _buildSchema(Schema $schema)
     {
@@ -36,8 +21,8 @@ class <%= $name %>Form extends Form
     /**
      * Form validation builder
      *
-     * @param Validator $validator to use against the form
-     * @return Validator
+     * @param \Cake\Validation\Validator $validator to use against the form
+     * @return \Cake\Validation\Validator
      */
     protected function _buildValidator(Validator $validator)
     {
@@ -46,6 +31,8 @@ class <%= $name %>Form extends Form
 
     /**
      * Defines what to execute once the From is being processed
+     *
+     * @param array $data
      *
      * @return bool
      */
