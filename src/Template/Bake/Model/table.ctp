@@ -82,10 +82,10 @@ class <%= $name %>Table extends Table
 <% endif; %>
 <% foreach ($associations as $type => $assocs): %>
 <% foreach ($assocs as $assoc):
-	$alias = $assoc['alias'];
-	unset($assoc['alias']);
+    $alias = $assoc['alias'];
+    unset($assoc['alias']);
 %>
-        $this-><%= $type %>('<%= $alias %>', [<%= $this->Bake->stringifyList($assoc, ['indent' => 3]) %>]);
+        $this-><%= $type %>('<%= $alias %>', [<%= $this->Bake->stringifyList($assoc, ['indent' => 3, 'trailingComma' => true]) %>]);
 <% endforeach %>
 <% endforeach %>
     }

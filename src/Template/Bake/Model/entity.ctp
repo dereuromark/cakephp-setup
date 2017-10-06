@@ -61,7 +61,7 @@ class <%= $name %> extends Entity
      *
      * @var array
      */
-    protected $_hidden = [<%= $this->Bake->stringifyList($hidden) %>];
+    protected $_hidden = [<%= $this->Bake->stringifyList($hidden, ['trailingComma' => true]) %>];
 <% endif %>
 <% if (empty($accessible) && empty($hidden)): %>
 

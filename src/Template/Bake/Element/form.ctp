@@ -17,10 +17,10 @@ $namespace = $plugin ?: Configure::read('App.namespace');
 
 $skipFields = ['password', 'slug', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 if (property_exists($modelObject, 'scaffoldSkipFieldsForm')) {
-	$skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsForm);
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFieldsForm);
 }
 if (property_exists($modelObject, 'scaffoldSkipFields')) {
-	$skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
+    $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
 }
 %>
 <nav class="col-sm-4 col-xs-12">
@@ -95,11 +95,11 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
 <%
             } elseif (in_array($fieldData['type'], ['date', 'datetime', 'time']) && (!empty($fieldData['null']))) {
 %>
-		    echo $this->Form->input('<%= $field %>', ['empty' => true]);
+            echo $this->Form->input('<%= $field %>', ['empty' => true]);
 <%
-			} else {
+            } else {
 %>
-		    echo $this->Form->input('<%= $field %>');
+            echo $this->Form->input('<%= $field %>');
 <%
             }
         }

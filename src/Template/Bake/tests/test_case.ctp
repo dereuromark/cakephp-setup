@@ -45,7 +45,7 @@ class <%= $className %>Test extends TestCase
      *
      * @var array
      */
-    public $fixtures = [<%= $this->Bake->stringifyList(array_values($fixtures)) %>];
+    public $fixtures = [<%= $this->Bake->stringifyList(array_values($fixtures), ['trailingComma' => true]) %>];
 <% endif; %>
 <% if (!empty($construction)): %>
 
