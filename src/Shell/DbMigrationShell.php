@@ -43,7 +43,7 @@ class DbMigrationShell extends Shell {
 			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
 			$this->out('- ' . $sql, 1, static::VERBOSE);
 			$res = $db->query($sql);
-			$fields = new Collection($res);
+			$fields = (new Collection($res))->toArray();
 
 			$fieldList = [];
 			foreach ($fields as $field) {
@@ -54,6 +54,17 @@ class DbMigrationShell extends Shell {
 
 				$type = $field['Type'];
 				$null = $field['Null'];
+
+				if (preg_match('/^tinyint\([\d]\)/', $type)) {
+					if ($null === 'YES' || $field['Default'] !== null) {
+						continue;
+					}
+
+					$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NOT NULL DEFAULT \'0\';';
+
+					continue;
+				}
+
 				if (!in_array($type, ['longtext', 'mediumtext', 'text']) && !preg_match('/^(varchar|char)\(/', $type)) {
 					continue;
 				}
