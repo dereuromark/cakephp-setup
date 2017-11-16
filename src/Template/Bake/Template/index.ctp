@@ -19,7 +19,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
     });
 }
 %>
-<nav class="actions col-sm-4 col-xs-12">
+<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12">
     <ul class="side-nav nav nav-pills nav-stacked">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
@@ -59,7 +59,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 %>
     </ul>
 </nav>
-<div class="<%= $pluralVar %> index col-sm-8 col-xs-12">
+<div class="action-index large-9 medium-8 columns col-sm-8 col-xs-12">
     <h3><?= __('<%= $pluralHumanName %>') ?></h3>
     <table class="table table-striped">
         <thead>

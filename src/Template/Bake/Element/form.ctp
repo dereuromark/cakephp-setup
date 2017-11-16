@@ -23,7 +23,7 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
     $skipFields = array_merge($skipFields, (array)$modelObject->scaffoldSkipFields);
 }
 %>
-<nav class="col-sm-4 col-xs-12">
+<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12">
     <ul class="side-nav nav nav-pills nav-stacked">
         <li class="heading"><?= __('Actions') ?></li>
 <% if (strpos($action, 'add') === false): %>
@@ -51,7 +51,7 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
 %>
     </ul>
 </nav>
-<div class="<%= $pluralVar %> form col-sm-8 col-xs-12">
+<div class="action-form large-9 medium-8 columns col-sm-8 col-xs-12">
     <?= $this->Form->create($<%= $singularVar %>) ?>
     <fieldset>
         <legend><?= __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></legend>
