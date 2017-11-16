@@ -19,7 +19,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
     });
 }
 %>
-<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12">
+<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12" id="actions-sidebar">
     <ul class="side-nav nav nav-pills nav-stacked">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
@@ -59,8 +59,8 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 %>
     </ul>
 </nav>
-<div class="action-index large-9 medium-8 columns col-sm-8 col-xs-12">
-    <h3><?= __('<%= $pluralHumanName %>') ?></h3>
+<div class="content action-index index large-9 medium-8 columns col-sm-8 col-xs-12">
+    <h2><?= __('<%= $pluralHumanName %>') ?></h2>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -137,14 +137,14 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
     // Sortable Behavior buttons
     if (!empty($upDown)) {
 %>
-                <?= $this->Html->link($this->Format->icon('up'), ['action' => 'up', <%= $pk %>], ['escape' => false]); ?>
-                <?= $this->Html->link($this->Format->icon('down'), ['action' => 'down', <%= $pk %>], ['escape' => false]); ?>
+                <?= $this->Html->link($this->Format->icon('up'), ['action' => 'up', <%= $pk %>], ['escapeTitle' => false]); ?>
+                <?= $this->Html->link($this->Format->icon('down'), ['action' => 'down', <%= $pk %>], ['escapeTitle' => false]); ?>
 <%
     }
 %>
-                <?= $this->Html->link($this->Format->icon('view'), ['action' => 'view', <%= $pk %>], ['escape' => false]); ?>
-                <?= $this->Html->link($this->Format->icon('edit'), ['action' => 'edit', <%= $pk %>], ['escape' => false]); ?>
-                <?= $this->Form->postLink($this->Format->icon('delete'), ['action' => 'delete', <%= $pk %>], ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]); ?>
+                <?= $this->Html->link($this->Format->icon('view'), ['action' => 'view', <%= $pk %>], ['escapeTitle' => false]); ?>
+                <?= $this->Html->link($this->Format->icon('edit'), ['action' => 'edit', <%= $pk %>], ['escapeTitle' => false]); ?>
+                <?= $this->Form->postLink($this->Format->icon('delete'), ['action' => 'delete', <%= $pk %>], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]); ?>
                 </td>
             </tr>
             <?php endforeach; ?>

@@ -55,7 +55,7 @@ $groupedFields = collection($fields)
 $groupedFields += ['number' => [], 'string' => [], 'boolean' => [], 'date' => [], 'text' => []];
 $pk = "\$$singularVar->{$primaryKey[0]}";
 %>
-<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12">
+<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12" id="actions-sidebar">
     <ul class="side-nav nav nav-pills nav-stacked">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $pk %>]) ?> </li>
@@ -78,11 +78,12 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 %>
     </ul>
 </nav>
-<div class="action-view large-9 medium-8 columns col-sm-8 col-xs-12">
+<div class="content action-view view large-9 medium-8 columns col-sm-8 col-xs-12">
     <h2><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h2>
     <table class="table vertical-table">
 <% if ($groupedFields['default']) : %>
 <% foreach ($groupedFields['default'] as $field) : %>
+    <% if ($field === $displayField) { continue; } %>
 <% $fieldType = $schema->columnType($field); %>
 <% if (isset($associationFields[$field])) :
             $details = $associationFields[$field];
@@ -128,7 +129,7 @@ foreach ($relations as $alias => $details):
     <div class="related">
         <h3><?= __('Related <%= $otherPluralHumanName %>') ?></h3>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
-        <table class="table">
+        <table class="table table-striped">
             <tr>
 <% foreach ($details['fields'] as $field): %>
             <%
@@ -162,9 +163,9 @@ foreach ($relations as $alias => $details):
             <%- endforeach; %>
             <%- $otherPk = "\${$otherSingularVar}->{$details['primaryKey'][0]}"; %>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $otherPk %>]) %>
-                    <?= $this->Html->link(__('Edit'), ['controller' => '<%= $details['controller'] %>', 'action' => 'edit', <%= $otherPk %>]) %>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $otherPk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $otherPk %>)]) %>
+                    <?= $this->Html->link($this->Format->icon('view'), ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $otherPk %>], ['escapeTitle' => false]); ?>
+                    <?= $this->Html->link($this->Format->icon('edit'), ['controller' => '<%= $details['controller'] %>', 'action' => 'edit', <%= $otherPk %>], ['escapeTitle' => false]); ?>
+                    <?= $this->Form->postLink($this->Format->icon('delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $otherPk %>], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', <%= $otherPk %>)]); ?>
                 </td>
             </tr>
             <?php endforeach; ?>
