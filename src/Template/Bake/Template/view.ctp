@@ -129,6 +129,7 @@ foreach ($relations as $alias => $details):
         <h3><?= __('Related <%= $otherPluralHumanName %>') ?></h3>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
         <table class="table">
+            <tr>
 <% foreach ($details['fields'] as $field): %>
             <%
             $primaryKeys = $schema->primaryKey();
@@ -140,7 +141,6 @@ foreach ($relations as $alias => $details):
                 continue;
             }
             %>
-            <tr>
             <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
 <% endforeach; %>
                 <th class="actions"><?= __('Actions') ?></th>
@@ -148,6 +148,16 @@ foreach ($relations as $alias => $details):
             <?php foreach ($<%= $singularVar %>-><%= $details['property'] %> as $<%= $otherSingularVar %>): ?>
             <tr>
             <%- foreach ($details['fields'] as $field): %>
+                <%
+                $primaryKeys = $schema->primaryKey();
+                if (in_array($field, $primaryKeys)) {
+                    continue;
+                }
+
+                if (in_array($field, $skipFields)) {
+                    continue;
+                }
+                %>
                 <td><?= h($<%= $otherSingularVar %>-><%= $field %>) ?></td>
             <%- endforeach; %>
             <%- $otherPk = "\${$otherSingularVar}->{$details['primaryKey'][0]}"; %>
