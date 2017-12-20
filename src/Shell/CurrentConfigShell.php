@@ -5,6 +5,7 @@ use Cake\Cache\Cache;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use Cake\Error\Debugger;
 use Cake\Mailer\Email;
 use Cake\Utility\Security;
 use Exception;
@@ -37,22 +38,37 @@ class CurrentConfigShell extends Shell {
 	public function display() {
 		$this->info('Security Salt: ' . Security::getSalt());
 
+		$this->out();
+
 		$this->info('Email Config:');
 		$config = Email::getConfig('default');
 		foreach ($config as $key => $value) {
 			$this->out(' - ' . $key . ': ' . $value);
 		}
 
+		$this->out();
+
 		$this->info('ENV:');
 		foreach ($_ENV as $key => $value) {
 			$this->out(' - ' . $key . ': ' . $value);
 		}
+	}
 
-		$this->out();
-		$this->info('Config:');
-		$config = Configure::read();
-		ksort($config);
+	/**
+	 * @param string|null $key
+	 * @return void
+	 */
+	public function configure($key = null) {
+		$config = Configure::read($key);
+		if (is_array($config)) {
+			ksort($config);
+		}
+		$type = Debugger::getType($config);
+		if (is_array($config)) {
+			$type .= ' and size of ' . count($config);
+		}
 		$this->out(print_r($config, true));
+		$this->info('of type ' . $type);
 	}
 
 	/**
@@ -89,6 +105,9 @@ class CurrentConfigShell extends Shell {
 			->description('A Shell to display current system and application configs.')
 			->addSubcommand('display', [
 				'help' => 'Displays runtime configuration (config and environment).',
+			])
+			->addSubcommand('configure', [
+				'help' => 'Outputs configure values for given dot path.',
 			])
 			->addSubcommand('validate', [
 				'help' => 'Checks application config for CLI (DB, Cache).',
