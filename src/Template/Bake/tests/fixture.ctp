@@ -3,10 +3,6 @@ namespace <%= $namespace %>\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
-/**
- * <%= $name %>Fixture
- *
- */
 class <%= $name %>Fixture extends TestFixture
 {
 <% if ($table): %>

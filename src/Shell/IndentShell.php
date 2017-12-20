@@ -138,11 +138,11 @@ class IndentShell extends Shell {
 	protected function _write($file, $text) {
 		$text = implode(PHP_EOL, $text);
 		if ($this->settings['outputToTmp']) {
-			$filename = extractPathInfo('file', $file);
+			$filename = pathinfo($file, PATHINFO_FILENAME);
 			if (mb_substr($filename, -1, 1) === '_') {
 				return false;
 			}
-			$file = extractPathInfo('dir', $file) . DS . $filename . '_.' . extractPathInfo('ext', $file);
+			$file = pathinfo($file, PATHINFO_DIRNAME) . DS . $filename . '_.' . pathinfo($file, PATHINFO_EXTENSION);
 		}
 		return (bool)file_put_contents($file, $text);
 	}

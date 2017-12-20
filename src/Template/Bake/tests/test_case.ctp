@@ -9,6 +9,15 @@ if ($isController) {
     $uses[] = 'Cake\TestSuite\TestCase';
 }
 sort($uses);
+
+if (empty($fixtures)) {
+    if ($subNamespace === 'Model\\Table') {
+        $fixtures = [
+            'app.' . $subject
+        ];
+    }
+}
+
 %>
 <?php
 namespace <%= $baseNamespace; %>\Test\TestCase\<%= $subNamespace %>;
@@ -17,9 +26,6 @@ namespace <%= $baseNamespace; %>\Test\TestCase\<%= $subNamespace %>;
 use <%= $dependency; %>;
 <% endforeach; %>
 
-/**
- * <%= $fullClassName %> Test Case
- */
 <% if ($isController): %>
 class <%= $className %>Test extends IntegrationTestCase
 {
@@ -76,6 +82,23 @@ class <%= $className %>Test extends TestCase
         unset($this-><%= $subject %>);
 
         parent::tearDown();
+    }
+<% endif; %>
+<% if ($subNamespace === 'Model\\Table'): %>
+    /**
+     * @return void
+     */
+    public function testInstance() {
+        $this->assertInstanceOf(<%= $className %>::class, $this-><%= $subject %>);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFind() {
+        $result = $this-><%= $subject %>->find()->first();
+        $this->assertTrue(!empty($result));
+        $this->assertInstanceOf(\<%= $baseNamespace; %>\Model\Entity\<%= Inflector::singularize($subject); %>::class, $result);
     }
 <% endif; %>
 <% foreach ($methods as $method): %>

@@ -28,8 +28,8 @@
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="<%= $plugin %> Test Suite">
-            <directory>./tests/TestCase</directory>
+        <testsuite name="<%= $plugin %>">
+            <directory>./tests/TestCase/</directory>
         </testsuite>
     </testsuites>
 
@@ -46,13 +46,9 @@
 
     <!-- Prevent coverage reports from looking in tests and vendors -->
     <filter>
-        <blacklist>
-            <directory suffix=".php">./vendor/</directory>
-            <directory suffix=".ctp">./vendor/</directory>
-
-            <directory suffix=".php">./tests/</directory>
-            <directory suffix=".ctp">./tests/</directory>
-        </blacklist>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
     </filter>
 
 </phpunit>
