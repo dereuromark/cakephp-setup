@@ -5,6 +5,8 @@ use Cake\Cache\Cache;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use Cake\Mailer\Email;
+use Cake\Utility\Security;
 use Exception;
 
 /**
@@ -33,10 +35,17 @@ class CurrentConfigShell extends Shell {
 	 * @return void
 	 */
 	public function display() {
+		$this->info('Security Salt: ' . Security::getSalt());
+
+		$this->info('Email Config:');
+		$config = Email::getConfig('default');
+		foreach ($config as $key => $value) {
+			$this->out(' - ' . $key . ': ' . $value);
+		}
+
 		$this->info('ENV:');
 		foreach ($_ENV as $key => $value) {
-			$this->out(' - ' . $key . ':' . $value);
-
+			$this->out(' - ' . $key . ': ' . $value);
 		}
 
 		$this->out();
