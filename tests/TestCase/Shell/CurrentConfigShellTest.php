@@ -39,12 +39,22 @@ class CurrentConfigShellTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testDisplay() {
-		$this->Shell->runCommand(['display']);
+	public function testConfigure() {
+		$this->Shell->runCommand(['configure']);
 		$output = $this->out->output();
 
 		$this->assertContains('[App]', $output);
 		$this->assertContains('[namespace] =>', $output);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDisplay() {
+		$this->Shell->runCommand(['display']);
+		$output = $this->out->output();
+
+		$this->assertContains('Full Base URL:', $output);
 	}
 
 	/**

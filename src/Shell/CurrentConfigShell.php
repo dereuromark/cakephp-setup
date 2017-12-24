@@ -37,11 +37,12 @@ class CurrentConfigShell extends Shell {
 	 */
 	public function display() {
 		$this->info('Security Salt: ' . Security::getSalt());
+		$this->info('Full Base URL: ' . Configure::read('App.fullBaseUrl'));
 
 		$this->out();
 
 		$this->info('Email Config:');
-		$config = Email::getConfig('default');
+		$config = (array)Email::getConfig('default');
 		foreach ($config as $key => $value) {
 			$this->out(' - ' . $key . ': ' . $value);
 		}
