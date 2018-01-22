@@ -81,7 +81,7 @@ don't see it due to the whitelisting).
 
 
 ## Setup Component
-The Setup component adds some additional goddies on top:
+The Setup component adds some additional goodies on top:
 
 You can set the maintenance mode via URL, if you quickly need to jump into it again:
 ```
