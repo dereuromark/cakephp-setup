@@ -71,7 +71,7 @@ class SetupComponent extends Component {
 		$overwrite = Configure::read('Maintenance.overwrite');
 		if ($overwrite) {
 			// if this is reachable, the whitelisting is enabled and active
-			$message = __d('setup', 'Maintenance mode active - your IP %s is in the whitelist.', $overwrite);
+			$message = __d('setup', 'Maintenance mode active - your IP {0} is in the whitelist.', $overwrite);
 			$this->Controller->Flash->warning($message);
 		}
 
@@ -96,9 +96,9 @@ class SetupComponent extends Component {
 		if ($this->Controller->request->query('debug') !== null) {
 			$result = $this->setDebug($this->Controller->request->query('debug'));
 			if ($result !== false) {
-				$this->Controller->Flash->success(__('debug set to %s', $this->Controller->request->query('debug')));
+				$this->Controller->Flash->success(__d('setup', 'debug set to {0}', $this->Controller->request->query('debug')));
 			} else {
-				$this->Controller->Flash->error(__('debug not set'));
+				$this->Controller->Flash->error(__d('setup', 'debug not set'));
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('debug'));
 		}
@@ -107,9 +107,9 @@ class SetupComponent extends Component {
 		if ($this->Controller->request->query('clearcache') !== null) {
 			$result = $this->clearCache($this->Controller->request->query('clearcache'));
 			if ($result !== false) {
-				$this->Controller->Flash->success(__('cache cleared'));
+				$this->Controller->Flash->success(__d('setup', 'cache cleared'));
 			} else {
-				$this->Controller->Flash->error(__('cache not cleared'));
+				$this->Controller->Flash->error(__d('setup', 'cache not cleared'));
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('clearcache'));
 		}
@@ -117,9 +117,9 @@ class SetupComponent extends Component {
 		// clear session
 		if ($this->Controller->request->query('clearsession') !== null) {
 			if ($this->clearSession()) {
-				$this->Controller->Flash->success(__('session cleared'));
+				$this->Controller->Flash->success(__d('setup', 'session cleared'));
 			} else {
-				$this->Controller->Flash->error(__('session not cleared'));
+				$this->Controller->Flash->error(__d('setup', 'session not cleared'));
 			}
 			return $this->Controller->redirect($this->_cleanedUrl('clearsession'));
 		}
@@ -127,7 +127,7 @@ class SetupComponent extends Component {
 		// layout switch
 		if ($this->Controller->request->query('layout') !== null) {
 			$this->setLayout($this->Controller->request->query('layout'));
-			$this->Controller->Flash->success(__('layout %s activated', $this->Controller->request->query('layout')));
+			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->request->query('layout')));
 			return $this->Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
