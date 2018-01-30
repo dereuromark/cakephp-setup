@@ -315,8 +315,8 @@ class SetupComponent extends Component {
 	 * @param string|null $type
 	 * @return bool Success
 	 */
-	public function clearCache($type = 'default') {
-		$config = $type;
+	public function clearCache($type = null) {
+		$config = $type ?: 'default';
 		Cache::clear(false, $config);
 
 		return true;
