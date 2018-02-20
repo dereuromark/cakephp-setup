@@ -69,11 +69,11 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
                 $fieldData = $schema->column($field);
                 if (!empty($fieldData['null'])) {
 %>
-            echo $this->Form->input('<%= $field %>', ['options' => $<%= $keyFields[$field] %>, 'empty' => true]);
+            echo $this->Form->control('<%= $field %>', ['options' => $<%= $keyFields[$field] %>, 'empty' => true]);
 <%
                 } else {
 %>
-            echo $this->Form->input('<%= $field %>', ['options' => $<%= $keyFields[$field] %>]);
+            echo $this->Form->control('<%= $field %>', ['options' => $<%= $keyFields[$field] %>]);
 <%
                 }
                 continue;
@@ -91,22 +91,22 @@ if (property_exists($modelObject, 'scaffoldSkipFields')) {
                     $empty = ", 'empty' => true";
                 }
 %>
-            echo $this->Form->input('<%= $field %>', ['options' => $<%= $singularVar %>::<%= $enumMethod %>()<%= $empty %>]);
+            echo $this->Form->control('<%= $field %>', ['options' => $<%= $singularVar %>::<%= $enumMethod %>()<%= $empty %>]);
 <%
             } elseif (in_array($fieldData['type'], ['date', 'datetime', 'time']) && (!empty($fieldData['null']))) {
 %>
-            echo $this->Form->input('<%= $field %>', ['empty' => true]);
+            echo $this->Form->control('<%= $field %>', ['empty' => true]);
 <%
             } else {
 %>
-            echo $this->Form->input('<%= $field %>');
+            echo $this->Form->control('<%= $field %>');
 <%
             }
         }
         if (!empty($associations['BelongsToMany'])) {
             foreach ($associations['BelongsToMany'] as $assocName => $assocData) {
 %>
-            echo $this->Form->input('<%= $assocData['property'] %>._ids', ['options' => $<%= $assocData['variable'] %>]);
+            echo $this->Form->control('<%= $assocData['property'] %>._ids', ['options' => $<%= $assocData['variable'] %>]);
 <%
             }
         }
