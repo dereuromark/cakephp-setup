@@ -20,10 +20,11 @@ $namespace = str_replace('\\', '\\\\', $namespace);
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.6.0",
-        "cakephp/cakephp": "~3.0"
+        "cakephp/cakephp": "^3.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "fig-r/psr2r-sniffer": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -32,8 +33,13 @@ $namespace = str_replace('\\', '\\\\', $namespace);
     },
     "autoload-dev": {
         "psr-4": {
-            "<%= $namespace %>\\Test\\": "tests/",
-            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
+            "<%= $namespace %>\\Test\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "php phpunit.phar",
+        "test-setup": "[ ! -f phpunit.phar ] && wget https://phar.phpunit.de/phpunit-5.7.20.phar && mv phpunit-5.7.20.phar phpunit.phar || true",
+        "cs-check": "phpcs -p -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --extensions=php src tests",
+        "cs-fix": "phpcbf -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml src tests"
     }
 }
