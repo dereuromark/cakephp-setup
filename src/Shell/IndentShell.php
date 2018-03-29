@@ -311,7 +311,7 @@ class IndentShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('Correct indentation of files.')
+			->setDescription('Correct indentation of files.')
 			->addSubcommand('folder', [
 				'help' => 'Indent all files in a folder.',
 				'parser' => $subcommandParser

@@ -274,7 +274,7 @@ class ClearShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('The Clear Shell easily deletes all tmp files (cache, logs, ...)')
+			->setDescription('The Clear Shell easily deletes all tmp files (cache, logs, ...)')
 			->addSubcommand('all', [
 				'help' => 'Clear all',
 				'parser' => $subcommandParser

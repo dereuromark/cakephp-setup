@@ -73,7 +73,7 @@ class CopyrightRemovalShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('This Shell removes unnecessary CakePHP copyright notices (only allowed for your application skeleton code!).')
+			->setDescription('This Shell removes unnecessary CakePHP copyright notices (only allowed for your application skeleton code!).')
 			->addSubcommand('clean', [
 				'help' => 'Detect and remove any CakePHP copyright notices from APP files.',
 				'parser' => $subcommandParser

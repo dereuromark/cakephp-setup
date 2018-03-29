@@ -132,7 +132,7 @@ class DbMigrationShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description("A Shell to do some basic database migration for you.
+			->setDescription("A Shell to do some basic database migration for you.
 Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
 			->addSubcommand('nulls', [
 				'help' => 'Correct non-nulls of type string/text to have a default value.',

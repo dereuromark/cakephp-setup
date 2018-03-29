@@ -103,7 +103,7 @@ class CurrentConfigShell extends Shell {
 	 */
 	public function getOptionParser() {
 		return parent::getOptionParser()
-			->description('A Shell to display current system and application configs.')
+			->setDescription('A Shell to display current system and application configs.')
 			->addSubcommand('display', [
 				'help' => 'Displays runtime configuration (config and environment).',
 			])

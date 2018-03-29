@@ -191,7 +191,7 @@ class SuperfluousWhitespaceShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('The Whitespace Shell removes unnecessary/wrong whitespaces.
+			->setDescription('The Whitespace Shell removes unnecessary/wrong whitespaces.
 Either provide a path as first argument, use -p PluginName or run it as it is for the complete APP dir.')
 			->addSubcommand('clean', [
 				'help' => 'Detect and remove any leading/trailing whitespaces',

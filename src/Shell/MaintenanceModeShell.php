@@ -137,7 +137,7 @@ class MaintenanceModeShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('A shell to put the whole site into maintenance mode')
+			->setDescription('A shell to put the whole site into maintenance mode')
 			->addSubcommand('status', [
 				'help' => 'See the current status',
 				'parser' => $subcommandParser

@@ -188,7 +188,7 @@ class MailmapShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('The Mailmap Shell generates a .mailmap file.
+			->setDescription('The Mailmap Shell generates a .mailmap file.
 Check out the results with `git shortlog -sne`.')
 			->addSubcommand('generate', [
 				'help' => 'Generate',

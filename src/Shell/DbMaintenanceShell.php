@@ -493,7 +493,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		];
 
 		return parent::getOptionParser()
-			->description("A Shell to do some basic database maintenance for you.
+			->setDescription("A Shell to do some basic database maintenance for you.
 Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
 			->addSubcommand('encoding', [
 				'help' => 'Convert encoding to `utf8mb4`.',

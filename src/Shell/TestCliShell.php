@@ -62,7 +62,7 @@ class TestCliShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('Test CLI')
+			->setDescription('Test CLI')
 			->addSubcommand('router', [
 				'help' => 'Test router environment',
 				'parser' => $parser

@@ -107,7 +107,7 @@ class ResetShell extends Shell {
 		];
 
 		return parent::getOptionParser()
-			->description('The Reset shell can reset local development data.
+			->setDescription('The Reset shell can reset local development data.
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.')
 			->addSubcommand('email', [
 				'help' => 'Reset all user emails.',
