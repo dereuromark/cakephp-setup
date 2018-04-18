@@ -7,7 +7,10 @@
 [![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-setup/d/total.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--2--R-yellow.svg)](https://github.com/php-fig-rectified/fig-rectified-standards)
 
-This CakePHP 3 plugin provides useful development tools for managing a CakePHP app.
+Provides useful development tools for managing a CakePHP app.
+
+**This branch is for CakePHP 3.5+**
+
 
 ## What is this plugin for?
 This plugin aims to be a help for development of CakePHP applications. It extends and leverages
@@ -22,7 +25,7 @@ Currently this plugin contains only the parts I managed to migrate yet:
 
 - [Documentation](docs/README.md)
 
-Possible dependencies: Tools Plugin
+Possible dependencies: [Tools](https://github.com/dereuromark/cakephp-tools) Plugin
 
 ## Disclaimer
 Use at your own risk. Please provide any fixes or enhancements via issue or better pull request.

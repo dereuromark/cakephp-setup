@@ -23,14 +23,14 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Setup\\": "src"
+			"Setup\\": "src/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Setup\\Test\\": "tests",
-			"Cake\\Test\\": "vendor/cakephp/cakephp/tests",
-			"TestApp\\": "tests/TestApp"
+			"Setup\\Test\\": "tests/",
+			"Cake\\Test\\": "vendor/cakephp/cakephp/tests/",
+			"TestApp\\": "tests/test_app/src/"
 		}
 	},
 	"support":{
@@ -40,6 +40,7 @@
 	"scripts": {
 		"test": "php phpunit.phar",
 		"test-setup": "[ ! -f phpunit.phar ] && wget https://phar.phpunit.de/phpunit-5.7.20.phar && mv phpunit-5.7.20.phar phpunit.phar || true",
+		"test-coverage" : "php phpunit.phar --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
 		"cs-check": "phpcs -p -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --ignore=/cakephp-setup/vendor/,/tmp/,/logs/,/tests/test_files/ --extensions=php ./",
 		"cs-fix": "phpcbf -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --ignore=/cakephp-setup/vendor/,/tmp/,/logs/,/tests/test_files/ --extensions=php ./"
 	}
