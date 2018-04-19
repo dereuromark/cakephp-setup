@@ -12,6 +12,7 @@ if (!defined('CHMOD_PUBLIC')) {
 /**
  * @author Mark Scherer
  * @license MIT
+ * @deprecated Use core cache shell
  */
 class ClearShell extends Shell {
 
@@ -157,33 +158,9 @@ class ClearShell extends Shell {
 			$this->_empty(CACHE . $arg);
 			$this->out('Cache \'' . $arg . '\' deleted');
 		}
-
-		if (empty($this->args)) {
-			$this->engines();
-		}
 	}
 
 	/**
-	 * Clears content of cache engines
-	 *
-	 * @param mixed any amount of strings - keys of configure cache engines
-	 * @return void
-	 */
-	public function engines() {
-		if (!isset($this->_Cleaner)) {
-			//App::uses('ClearCacheLib', 'Setup.Lib');
-			$this->_Cleaner = new ClearCacheLib();
-		}
-		$output = call_user_func_array([&$this->_Cleaner, 'engines'], $this->args);
-
-		foreach ($output as $key => $result) {
-			$this->out($key . ': ' . ($result ? 'cleared' : 'error'));
-		}
-	}
-
-	/**
-	 * ClearShell::all()
-	 *
 	 * @return void
 	 */
 	public function all() {
@@ -285,10 +262,6 @@ class ClearShell extends Shell {
 			])
 			->addSubcommand('cache', [
 				'help' => 'Clear cache',
-				'parser' => $subcommandParser
-			])
-			->addSubcommand('engines', [
-				'help' => 'Clear cache engines',
 				'parser' => $subcommandParser
 			])
 			->addSubcommand('logs', [

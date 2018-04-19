@@ -2,7 +2,6 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\ResetShell;
 use Tools\TestSuite\ConsoleOutput;
@@ -24,8 +23,6 @@ class ResetShellTest extends TestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-
-		Configure::write('App.namespace', 'TestApp');
 
 		$this->out = new ConsoleOutput();
 		$this->err = new ConsoleOutput();

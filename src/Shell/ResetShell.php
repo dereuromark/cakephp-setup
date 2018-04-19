@@ -16,6 +16,8 @@ if (!defined('CLASS_USERS')) {
  *
  * @author Mark Scherer
  * @license MIT
+ *
+ * @property \App\Model\Table\UsersTable $Users
  */
 class ResetShell extends Shell {
 
@@ -31,7 +33,9 @@ class ResetShell extends Shell {
 			$email = $this->in('New email address (must have a valid form at least)');
 		}
 
-		$this->Users = TableRegistry::get(CLASS_USERS);
+		/** @var \App\Model\Table\UsersTable $Users */
+		$Users = TableRegistry::get(CLASS_USERS);
+		$this->Users = $Users;
 		if (!$this->Users->hasField('email')) {
 			$this->abort(CLASS_USERS . ' table doesnt have an email field!');
 		}
@@ -54,6 +58,7 @@ class ResetShell extends Shell {
 	 * @return void
 	 */
 	public function pwd($pwd = null) {
+		$pwdToHash = null;
 		if (!empty($pwd)) {
 			$pwdToHash = $pwd;
 		}
@@ -79,7 +84,9 @@ class ResetShell extends Shell {
 		$this->hr();
 		$this->out('resetting...');
 
-		$this->Users = TableRegistry::get(CLASS_USERS);
+		/** @var \App\Model\Table\UsersTable $Users */
+		$Users = TableRegistry::get(CLASS_USERS);
+		$this->Users = $Users;
 		if (!$this->Users->hasField('password')) {
 			$this->abort(CLASS_USERS . ' table doesnt have a password field!');
 		}

@@ -1,6 +1,7 @@
 <?php
 namespace Setup\Shell;
 
+use ArrayObject;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -196,10 +197,13 @@ class UserShell extends Shell {
 		$this->loadModel(CLASS_USERS);
 		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
 
+		/** @var \App\Model\Entity\User $entity */
 		$entity = $this->Users->newEntity([
 			'pwd' => $password,
 		], ['validate' => false]);
-		$this->Users->behaviors()->Passwordable->beforeSave(new Event('beforeSave'), $entity);
+		/** @var \Tools\Model\Behavior\PasswordableBehavior $Passwordable */
+		$Passwordable = $this->Users->behaviors()->get('Passwordable');
+		$Passwordable->beforeSave(new Event('beforeSave'), $entity, new ArrayObject());
 
 		$this->out('Generating hash...');
 		$this->hr();

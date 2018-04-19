@@ -23,6 +23,13 @@ define('CAKE', CORE_PATH . APP_DIR . DS);
 define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
 define('CONFIG', dirname(__FILE__) . DS . 'config' . DS);
 
+if (!defined('TB')) {
+	define('TB', "\t");
+}
+if (!defined('NL')) {
+	define('NL', PHP_EOL);
+}
+
 ini_set('intl.default_locale', 'de-DE');
 
 require ROOT . '/vendor/autoload.php';

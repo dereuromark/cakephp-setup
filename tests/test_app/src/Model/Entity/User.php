@@ -1,9 +1,12 @@
 <?php
 
-namespace TestApp\Model\Entity;
+namespace App\Model\Entity;
 
 use Tools\Model\Entity\Entity;
 
+/**
+ * @property string $password
+ */
 class User extends Entity {
 
 	public static function statuses($value = null) {

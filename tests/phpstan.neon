@@ -1,0 +1,7 @@
+parameters:
+	autoload_files:
+		- %rootDir%/../../../tests/bootstrap.php
+		- %rootDir%/../../../tests/shim.php
+	ignoreErrors:
+		- '#Access to protected property Cake\\Controller\\Controller::\$name.#'
+		- '#Access to protected property Cake\\Http\\ServerRequest::\$url.#'

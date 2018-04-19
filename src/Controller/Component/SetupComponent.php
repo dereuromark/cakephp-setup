@@ -41,6 +41,11 @@ class SetupComponent extends Component {
 	public $Controller;
 
 	/**
+	 * @var \Cake\Mailer\Email|null
+	 */
+	protected $Email;
+
+	/**
 	 * @var array
 	 */
 	public $notifications = [
@@ -56,10 +61,12 @@ class SetupComponent extends Component {
 	 * @return \Cake\Http\Response|null
 	 */
 	public function beforeFilter(Event $event) {
-		$this->Controller = $event->subject();
+		/** @var \Cake\Controller\Controller $Controller */
+		$Controller = $event->getSubject();
+		$this->Controller = $Controller;
 
 		// For debug overwrite
-		if (($debug = $this->request->session()->read('Setup.debug')) !== null) {
+		if (($debug = $this->request->getSession()->read('Setup.debug')) !== null) {
 			Configure::write('debug', $debug);
 		}
 
@@ -81,9 +88,9 @@ class SetupComponent extends Component {
 		}
 
 		// maintenance mode
-		if ($this->Controller->request->query('maintenance') !== null) {
-			$mode = $this->Controller->request->query('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
-			$result = $this->setMaintenance($this->Controller->request->query('maintenance'));
+		if ($this->Controller->request->getQuery('maintenance') !== null) {
+			$mode = $this->Controller->request->getQuery('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
+			$result = $this->setMaintenance($this->Controller->request->getQuery('maintenance'));
 			if ($result !== false) {
 				$this->Controller->Flash->success(__d('setup', 'Maintenance mode {0}', $mode));
 			} else {
@@ -93,10 +100,10 @@ class SetupComponent extends Component {
 		}
 
 		// debug mode
-		if ($this->Controller->request->query('debug') !== null) {
-			$result = $this->setDebug($this->Controller->request->query('debug'));
+		if ($this->Controller->request->getQuery('debug') !== null) {
+			$result = $this->setDebug((int)$this->Controller->request->getQuery('debug'));
 			if ($result !== false) {
-				$this->Controller->Flash->success(__d('setup', 'debug set to {0}', $this->Controller->request->query('debug')));
+				$this->Controller->Flash->success(__d('setup', 'debug set to {0}', $this->Controller->request->getQuery('debug')));
 			} else {
 				$this->Controller->Flash->error(__d('setup', 'debug not set'));
 			}
@@ -104,8 +111,8 @@ class SetupComponent extends Component {
 		}
 
 		// clear cache
-		if ($this->Controller->request->query('clearcache') !== null) {
-			$result = $this->clearCache($this->Controller->request->query('clearcache'));
+		if ($this->Controller->request->getQuery('clearcache') !== null) {
+			$result = $this->clearCache($this->Controller->request->getQuery('clearcache'));
 			if ($result !== false) {
 				$this->Controller->Flash->success(__d('setup', 'cache cleared'));
 			} else {
@@ -115,7 +122,7 @@ class SetupComponent extends Component {
 		}
 
 		// clear session
-		if ($this->Controller->request->query('clearsession') !== null) {
+		if ($this->Controller->request->getQuery('clearsession') !== null) {
 			if ($this->clearSession()) {
 				$this->Controller->Flash->success(__d('setup', 'session cleared'));
 			} else {
@@ -125,9 +132,9 @@ class SetupComponent extends Component {
 		}
 
 		// layout switch
-		if ($this->Controller->request->query('layout') !== null) {
-			$this->setLayout($this->Controller->request->query('layout'));
-			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->request->query('layout')));
+		if ($this->Controller->request->getQuery('layout') !== null) {
+			$this->setLayout($this->Controller->request->getQuery('layout'));
+			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->request->getQuery('layout')));
 			return $this->Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
@@ -143,9 +150,9 @@ class SetupComponent extends Component {
 	 * @return void
 	 */
 	public function startup(Event $event) {
-		$layout = $this->request->session()->read('Setup.layout');
+		$layout = $this->request->getSession()->read('Setup.layout');
 		if ($layout) {
-			$this->Controller->viewBuilder()->layout($layout);
+			$this->Controller->viewBuilder()->setLayout($layout);
 		}
 	}
 
@@ -167,7 +174,7 @@ class SetupComponent extends Component {
 			NL . 'Referer:' . TB . '' . $referer .
 			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .
 			NL . 'IP: ' . env('REMOTE_ADDR');
-			$uid = $this->request->session()->read('Auth.User.id');
+			$uid = $this->request->getSession()->read('Auth.User.id');
 			if ($uid) {
 				$text .= NL . NL . 'UID: ' . $uid;
 			}
@@ -175,7 +182,7 @@ class SetupComponent extends Component {
 			if (!$this->_notification('404!', $text)) {
 				throw new InternalErrorException('Cannot send admin notification email');
 			}
-			$this->request->session()->write('Report.404', time());
+			$this->request->getSession()->write('Report.404', time());
 		}
 	}
 
@@ -201,7 +208,7 @@ class SetupComponent extends Component {
 		if (!Configure::read('Config.productive')) {
 			return true;
 		}
-		$pwd = $this->Controller->request->query('pwd');
+		$pwd = $this->Controller->request->getQuery('pwd');
 		if ($pwd && $pwd === Configure::read('Config.pwd')) {
 			return true;
 		}
@@ -216,10 +223,10 @@ class SetupComponent extends Component {
 	 */
 	public function setLayout($layout) {
 		if (!$layout) {
-			$this->request->session()->delete('Setup.layout');
+			$this->request->getSession()->delete('Setup.layout');
 			return;
 		}
-		$this->request->session()->write('Setup.layout', $layout);
+		$this->request->getSession()->write('Setup.layout', $layout);
 	}
 
 	/**
@@ -237,7 +244,7 @@ class SetupComponent extends Component {
 	public function setMaintenance($maintenance) {
 		$ip = env('REMOTE_ADDR');
 		// optional length in minutes
-		$length = (int)$this->Controller->request->query('duration');
+		$length = (int)$this->Controller->request->getQuery('duration');
 
 		$Maintenance = new Maintenance();
 		if (!$Maintenance->setMaintenanceMode($maintenance ? $length : false)) {
@@ -255,7 +262,7 @@ class SetupComponent extends Component {
 	 *
 	 * 0/1 to set, or -1 to unset.
 	 *
-	 * @param bool|int $level Debug level
+	 * @param int $level Debug level
 	 * @param string $type Type - session/ip [optional] (defaults to session)
 	 * @return bool Success
 	 */
@@ -264,10 +271,10 @@ class SetupComponent extends Component {
 
 		if ($type === 'session') {
 			if ($level < 0) {
-				$this->request->session()->delete('Setup.debug');
+				$this->request->getSession()->delete('Setup.debug');
 				return false;
 			}
-			$this->request->session()->write('Setup.debug', $level);
+			$this->request->getSession()->write('Setup.debug', $level);
 			return true;
 		}
 
@@ -302,7 +309,7 @@ class SetupComponent extends Component {
 
 		if (!empty($id)) {
 			if (file_put_contents($file, $level)) {
-				return $level;
+				return (bool)$level;
 			}
 		}
 
@@ -328,7 +335,7 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	public function clearSession() {
-		$this->request->session()->destroy();
+		$this->request->getSession()->destroy();
 		return true;
 	}
 
@@ -344,7 +351,7 @@ class SetupComponent extends Component {
 			$type[] = 'pwd';
 		}
 
-		return Setup::cleanedUrl($type, $this->Controller->request->params + ['?' => $this->Controller->request->query]);
+		return Setup::cleanedUrl($type, $this->Controller->request->getAttribute('params') + ['?' => $this->Controller->request->getQuery()]);
 	}
 
 	/**
