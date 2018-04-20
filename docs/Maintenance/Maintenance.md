@@ -25,6 +25,8 @@ cake Setup.MaintenanceMode whitelist YOURIP
 cake Setup.MaintenanceMode deactivate
 ```
 
+Tip: Your deploy script (e.g. sh script) can contain those commands. One at the beginning, the other at the end.
+
 ## MaintenanceMiddleware (CakePHP 3.3+)
 This should then be the preferred way of triggering the maintenance mode display, as it can way cleaner
 short-circuit the dispatching.
