@@ -21,6 +21,8 @@ Commands
 cake Setup.MaintenanceMode activate
 // Optionally whitelist your IP:
 cake Setup.MaintenanceMode whitelist YOURIP
+// Optionally whitelist your IP and activate the debug mode for when you access the application:
+cake Setup.MaintenanceMode whitelist YOURIP --debug
 // ... Do your work ...
 cake Setup.MaintenanceMode deactivate
 ```
