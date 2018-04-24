@@ -3,15 +3,9 @@
 ## How to include
 Installing the Plugin is pretty much as with every other CakePHP Plugin.
 
-Include the plugin using Packagist/Composer:
-```
-"require": {
-	"dereuromark/cakephp-setup": "dev-master"
-}
-```
-and
+Require the plugin using Packagist/Composer by running this in your application's folder:
 
-	composer update
+	composer require dereuromark/cakephp-setup
 
 Note that you can also use `require-dev` if you dont' need it for production environments and only use the dev tools.
 
