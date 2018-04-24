@@ -7,7 +7,7 @@ Require the plugin using Packagist/Composer by running this in your application'
 
 	composer require dereuromark/cakephp-setup
 
-Note that you can also use `require-dev` if you dont' need it for production environments and only use the dev tools.
+Note that you can also use `require-dev` if you don't need it for production environments and only use the dev tools.
 
 If you want, however, to use certain shells like "User" in the productive environment, as well, please
 use `require` then.
