@@ -9,7 +9,7 @@
 
 Provides useful development tools for managing a CakePHP app.
 
-**This branch is for CakePHP 3.5+**
+Note: This branch is for CakePHP 3.5+
 
 
 ## What is this plugin for?
