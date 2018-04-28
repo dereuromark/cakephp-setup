@@ -37,7 +37,7 @@ $namespace = str_replace('\\', '\\\\', $namespace);
     },
     "scripts": {
         "test": "php phpunit.phar",
-        "test-setup": "[ ! -f phpunit.phar ] && wget https://phar.phpunit.de/phpunit-5.7.20.phar && mv phpunit-5.7.20.phar phpunit.phar || true",
+        "test-setup": "[ ! -f phpunit.phar ] && wget https://phar.phpunit.de/phpunit-6.5.8.phar && mv phpunit-6.5.8.phar phpunit.phar || true",
         "cs-check": "phpcs -p -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --extensions=php src tests",
         "cs-fix": "phpcbf -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml src tests"
     }

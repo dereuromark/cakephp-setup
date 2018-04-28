@@ -16,24 +16,24 @@ matrix:
   fast_finish: true
 
   include:
-    - php: 7.1
+    - php: 7.2
       env: PHPCS=1 DEFAULT=0
 
-    - php: 7.1
+    - php: 7.2
       env: CODECOVERAGE=1 DEFAULT=0
 
 before_script:
   - composer install --prefer-source --no-interaction
 
-  - if [[ $PHPCS != 1 ]]; then composer require phpunit/phpunit:"^5.0|^6.0"; fi
+  - if [[ $PHPCS != 1 ]]; then composer require phpunit/phpunit:"^5.7.14|^6.0"; fi
 
   - phpenv rehash
   - set +H
   - cp phpunit.xml.dist phpunit.xml
 
 script:
-  - if [[ $DEFAULT == 1 ]]; then vendor/bin/phpunit ; fi
-  - if [[ $PHPCS == 1 ]]; then composer cs-check ; fi
+  - if [[ $DEFAULT == 1 ]]; then vendor/bin/phpunit; fi
+  - if [[ $PHPCS == 1 ]]; then composer cs-check; fi
 
   - if [[ $CODECOVERAGE == 1 ]]; then vendor/bin/phpunit --coverage-clover=clover.xml || true; fi
   - if [[ $CODECOVERAGE == 1 ]]; then wget -O codecov.sh https://codecov.io/bash; fi
