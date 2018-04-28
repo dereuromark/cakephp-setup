@@ -19,35 +19,33 @@
     processIsolation="false"
     stopOnFailure="false"
     syntaxCheck="false"
-    bootstrap="./tests/bootstrap.php"
-    >
+    bootstrap="tests/bootstrap.php"
+>
     <php>
-        <ini name="memory_limit" value="-1"/>
-        <ini name="apc.enable_cli" value="1"/>
+        <!-- E_ALL & ~E_USER_DEPRECATED (16383)-->
+        <!-- E_ALL (32767) -->
+        <ini name="error_reporting" value="16383"/>
     </php>
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
         <testsuite name="<%= $plugin %>">
-            <directory>./tests/TestCase/</directory>
+            <directory>tests/TestCase/</directory>
         </testsuite>
     </testsuites>
 
     <!-- Setup a listener for fixtures -->
     <listeners>
-        <listener
-        class="\Cake\TestSuite\Fixture\FixtureInjector"
-        file="./vendor/cakephp/cakephp/src/TestSuite/Fixture/FixtureInjector.php">
+        <listener class="\Cake\TestSuite\Fixture\FixtureInjector">
             <arguments>
-                <object class="\Cake\TestSuite\Fixture\FixtureManager" />
+                <object class="\Cake\TestSuite\Fixture\FixtureManager"/>
             </arguments>
         </listener>
     </listeners>
 
-    <!-- Prevent coverage reports from looking in tests and vendors -->
     <filter>
         <whitelist>
-            <directory suffix=".php">./src/</directory>
+            <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>
 
