@@ -22,6 +22,11 @@ class DbMigrationShellTest extends TestCase {
 	protected $out;
 
 	/**
+	 * @var \Tools\TestSuite\ConsoleOutput
+	 */
+	protected $err;
+
+	/**
 	 * setUp method
 	 *
 	 * @return void
@@ -57,7 +62,7 @@ class DbMigrationShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testNulls() {
-		$config = ConnectionManager::config('test');
+		$config = ConnectionManager::getConfig('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}

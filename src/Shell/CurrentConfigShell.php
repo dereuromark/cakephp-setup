@@ -95,7 +95,7 @@ class CurrentConfigShell extends Shell {
 
 		$this->out('');
 		$this->out('Cache:');
-		$this->out(print_r(Cache::config('_cake_core_'), true));
+		$this->out(print_r(Cache::getConfig('_cake_core_'), true));
 	}
 
 	/**

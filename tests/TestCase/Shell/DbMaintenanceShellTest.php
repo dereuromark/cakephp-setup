@@ -57,7 +57,7 @@ class DbMaintenanceShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testEncoding() {
-		$config = ConnectionManager::config('test');
+		$config = ConnectionManager::getConfig('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}
@@ -77,7 +77,7 @@ class DbMaintenanceShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testEngine() {
-		$config = ConnectionManager::config('test');
+		$config = ConnectionManager::getConfig('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}
@@ -97,7 +97,7 @@ class DbMaintenanceShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testCleanup() {
-		$config = ConnectionManager::config('test');
+		$config = ConnectionManager::getConfig('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}
@@ -119,7 +119,7 @@ class DbMaintenanceShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testTablePrefix() {
-		$config = ConnectionManager::config('test');
+		$config = ConnectionManager::getConfig('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}
@@ -138,7 +138,7 @@ class DbMaintenanceShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testTablePrefixAdd() {
-		$config = ConnectionManager::config('test');
+		$config = ConnectionManager::getConfig('test');
 		if ((strpos($config['driver'], 'Mysql') === false)) {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}
