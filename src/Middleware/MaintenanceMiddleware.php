@@ -31,7 +31,7 @@ class MaintenanceMiddleware {
 	 * @param array $config
 	 */
 	public function __construct(array $config = []) {
-		$this->config($config);
+		$this->setConfig($config);
 	}
 
 	/**
@@ -60,21 +60,21 @@ class MaintenanceMiddleware {
 		$cakeRequest = Request::createFromGlobals();
 		$builder = new ViewBuilder();
 
-		$templateName = $this->config('templateFileName');
-		$templatePath = $this->config('templatePath');
+		$templateName = $this->getConfig('templateFileName');
+		$templatePath = $this->getConfig('templatePath');
 
 		$view = $builder
-			->className($this->config('className'))
+			->className($this->getConfig('className'))
 			->templatePath(Inflector::camelize($templatePath))
-			->layout($this->config('templateLayout'))
+			->layout($this->getConfig('templateLayout'))
 			->build([], $cakeRequest);
-		$view->_ext = $this->config('templateExtension');
+		$view->_ext = $this->getConfig('templateExtension');
 
 		$bodyString = $view->render($templateName);
 
 		$response = $response->withHeader('Retry-After', (string)HOUR)
-			->withHeader('Content-Type', $this->config('contentType'))
-			->withStatus($this->config('statusCode'));
+			->withHeader('Content-Type', $this->getConfig('contentType'))
+			->withStatus($this->getConfig('statusCode'));
 
 		$body = $response->getBody();
 		$body->write($bodyString);
