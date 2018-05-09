@@ -18,7 +18,7 @@ foreach ($components as $component):
 <% endforeach; %>
 <% if (in_array('index', $actions)): %>
  *
- * @method \<%= $namespace %>\Model\Entity\<%= $entityClassName %>[] paginate($object = null, array $settings = [])
+ * @method \<%= $namespace %>\Model\Entity\<%= $entityClassName %>[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
 <% endif; %>
  */
 class <%= $name %>Controller extends AppController
