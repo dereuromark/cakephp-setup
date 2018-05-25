@@ -58,7 +58,7 @@ if (!function_exists('vd')) {
 	}
 }
 
-if (!function_exists('vd')) {
+if (!function_exists('vdd')) {
 	/**
 	 * @param mixed $var
 	 * @return void
