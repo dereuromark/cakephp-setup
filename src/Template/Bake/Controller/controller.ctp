@@ -4,7 +4,7 @@ use Cake\Utility\Inflector;
 <?php
 namespace <%= $namespace %>\Controller<%= $prefix %>;
 
-use <%= $namespace %>\Controller\AppController;
+use <%= ($namespace !== 'App' ? 'App' : $namespace) %>\Controller\AppController;
 
 /**
 <% if ($defaultModel): %>
