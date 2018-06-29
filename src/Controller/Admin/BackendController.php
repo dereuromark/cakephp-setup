@@ -2,6 +2,7 @@
 namespace Setup\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Cache\Cache;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\I18n\Time;
@@ -42,6 +43,20 @@ class BackendController extends AppController {
 		$this->set(compact('sessionData'));
 
 		$this->set(compact('time', 'sessionConfig'));
+	}
+
+	/**
+	 * @return \Cake\Http\Response|null
+	 */
+	public function cache() {
+		$configured = Cache::configured();
+
+		$caches = [];
+		foreach ($configured as $name) {
+			$caches[$name] = Cache::getConfig($name);
+		}
+
+		$this->set(compact('caches'));
 	}
 
 	/**
