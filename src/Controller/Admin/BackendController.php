@@ -49,6 +49,15 @@ class BackendController extends AppController {
 	 * @return \Cake\Http\Response|null
 	 */
 	public function cache() {
+
+		if ($this->request->is(['post', 'put'])) {
+			$cacheKey = $this->request->getQuery('key');
+			Cache::write('_setup_test_string_' . $cacheKey . '_', time(), $cacheKey);
+
+			$this->Flash->success('Cache written for config ' . $cacheKey);
+			return $this->redirect(['action' => 'cache']);
+		}
+
 		$configured = Cache::configured();
 
 		$caches = [];
@@ -56,7 +65,12 @@ class BackendController extends AppController {
 			$caches[$name] = Cache::getConfig($name);
 		}
 
-		$this->set(compact('caches'));
+		$data = [];
+		foreach ($configured as $name) {
+			$data[$name] = Cache::read('_setup_test_string_' . $name . '_', $name);
+		}
+
+		$this->set(compact('caches', 'data'));
 	}
 
 	/**
