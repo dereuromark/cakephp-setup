@@ -15,6 +15,7 @@ use SetupExtra\Lib\SystemLib;
 <ul>
 	<li><?php echo $this->Html->link(__('PHP Info (Full)'), ['action' => 'phpinfo']); ?></li>
 	<li><?php echo $this->Html->link(__('Session'), ['action' => 'session']);?></li>
+	<li><?php echo $this->Html->link(__('Cache'), ['action' => 'cache']);?></li>
 	<li><?php echo $this->Html->link(__('Database Size'), ['action' => 'database']);?></li>
 </ul>
 </div>
