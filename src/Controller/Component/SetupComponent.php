@@ -5,7 +5,7 @@ use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Exception;
 use Setup\Maintenance\Maintenance;
 use Setup\Utility\Setup;
