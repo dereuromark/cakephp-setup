@@ -254,7 +254,7 @@ class UserShell extends Shell {
 				'search' => [
 					'short' => 's',
 					'help' => 'Search in the display field.',
-					'default' => true
+					'default' => ''
 				],
 			]
 		];
