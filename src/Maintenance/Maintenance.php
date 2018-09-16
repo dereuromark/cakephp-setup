@@ -2,7 +2,7 @@
 namespace Setup\Maintenance;
 
 use Cake\Core\Configure;
-use Cake\Network\Response;
+use Cake\Http\Response;
 
 /**
  * Handle maintenance / down-time of the application.

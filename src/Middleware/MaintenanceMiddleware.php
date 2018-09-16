@@ -2,7 +2,7 @@
 namespace Setup\Middleware;
 
 use Cake\Core\InstanceConfigTrait;
-use Cake\Network\Request;
+use Cake\Http\ServerRequestFactory;
 use Cake\Utility\Inflector;
 use Cake\View\View;
 use Cake\View\ViewBuilder;
@@ -57,7 +57,7 @@ class MaintenanceMiddleware {
 	 * @return \Cake\Http\Response
 	 */
 	protected function build($response) {
-		$cakeRequest = Request::createFromGlobals();
+		$cakeRequest = ServerRequestFactory::fromGlobals();
 		$builder = new ViewBuilder();
 
 		$templateName = $this->getConfig('templateFileName');
