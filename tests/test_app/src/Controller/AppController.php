@@ -2,7 +2,5 @@
 
 namespace App\Controller;
 
-class AppController
-{
-
+class AppController {
 }
