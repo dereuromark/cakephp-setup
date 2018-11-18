@@ -169,7 +169,7 @@ class SetupComponent extends Component {
 			return;
 		}
 		$referer = $this->Controller->referer();
-		if (strlen($referer) > 2 && (int)$this->request->session()->read('Report.404') < time() - 5 * MINUTE) {
+		if (strlen($referer) > 2 && (int)$this->request->getSession()->read('Report.404') < time() - 5 * MINUTE) {
 			$text = '404:' . TB . TB . '/' . $this->Controller->request->url .
 			NL . 'Referer:' . TB . '' . $referer .
 			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .

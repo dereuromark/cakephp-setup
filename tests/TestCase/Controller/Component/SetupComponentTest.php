@@ -41,7 +41,7 @@ class SetupComponentTest extends TestCase {
 
 		$this->Setup->beforeFilter($event);
 
-		$result = $this->Controller->request->session()->read('Flash.flash');
+		$result = $this->Controller->request->getSession()->read('Flash.flash');
 		$expected = [
 			[
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'activated')),
@@ -76,7 +76,7 @@ class SetupComponentTest extends TestCase {
 
 		$this->Setup->beforeFilter($event);
 
-		$result = $this->Controller->request->session()->read('Flash.flash');
+		$result = $this->Controller->request->getSession()->read('Flash.flash');
 		$expected = [
 			[
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated')),

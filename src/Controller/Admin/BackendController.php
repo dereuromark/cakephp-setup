@@ -26,12 +26,12 @@ class BackendController extends AppController {
 	 * @return \Cake\Http\Response|null
 	 */
 	public function session() {
-		$timestamp = $this->request->session()->read('Config.time');
+		$timestamp = $this->request->getSession()->read('Config.time');
 
 		$time = new Time($timestamp);
 
 		$sessionConfig = Configure::read('Session');
-		$sessionId = $this->request->session()->id();
+		$sessionId = $this->request->getSession()->id();
 		if ($sessionConfig['defaults'] === 'database') {
 			$sessionData = TableRegistry::get('Sessions')->get($sessionId);
 		} else {
