@@ -5,8 +5,7 @@ sudo: false
 php:
   - 5.6
   - 7.0
-  - 7.1
-  - 7.2
+  - 7.3
 
 env:
   matrix:
@@ -18,7 +17,7 @@ matrix:
   fast_finish: true
 
   include:
-    - php: 7.1
+    - php: 7.2
       env: DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
 
     - php: 7.1
@@ -27,13 +26,13 @@ matrix:
     - php: 5.6
       env: PREFER_LOWEST=1
 
-    - php: 7.1
+    - php: 7.2
       env: PHPSTAN=1 DEFAULT=0
 
-    - php: 7.1
+    - php: 7.2
       env: PHPCS=1 DEFAULT=0
 
-    - php: 7.1
+    - php: 7.2
       env: CODECOVERAGE=1 DEFAULT=0 DB=mysql db_dsn='mysql://root@127.0.0.1/cakephp_test'
 
 before_script:
