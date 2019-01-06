@@ -2,6 +2,7 @@
 
 [![Build Status](https://api.travis-ci.org/dereuromark/cakephp-setup.svg)](https://travis-ci.org/dereuromark/cakephp-setup)
 [![Coverage](https://codecov.io/gh/dereuromark/cakephp-setup/branch/master/graph/badge.svg)](https://codecov.io/gh/dereuromark/cakephp-setup)
+[![Latest Stable Version](https://poser.pugx.org/dereuromark/cakephp-setup/v/stable.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg)](https://php.net/)
 [![License](https://poser.pugx.org/dereuromark/cakephp-setup/license.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-setup/d/total.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
