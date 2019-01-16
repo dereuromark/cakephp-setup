@@ -23,7 +23,6 @@ $compact = ["'" . $singularName . "'"];
      *
      * @param string|null $id <%= $singularHumanName %> id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
     {
@@ -52,5 +51,4 @@ $compact = ["'" . $singularName . "'"];
 %>
 
         $this->set(compact(<%= join(', ', $compact) %>));
-        $this->set('_serialize', ['<%=$singularName%>']);
     }

@@ -30,5 +30,4 @@
         $<%= $pluralName %> = $this->paginate();
 
         $this->set(compact('<%= $pluralName %>'));
-        $this->set('_serialize', ['<%= $pluralName %>']);
     }

@@ -25,7 +25,6 @@ $allAssociations = array_merge(
      *
      * @param string|null $id <%= $singularHumanName %> id.
      * @return \Cake\Http\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
@@ -34,5 +33,4 @@ $allAssociations = array_merge(
         ]);
 
         $this->set(compact('<%= $singularName %>'));
-        $this->set('_serialize', ['<%= $singularName %>']);
     }
