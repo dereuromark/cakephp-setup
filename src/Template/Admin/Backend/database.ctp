@@ -3,7 +3,7 @@
  * @var \App\View\AppView $this
  */
 ?>
-<div class="index col-md-12">
+<div class="columns col-md-12">
 
 <h2><?php echo count($dbTables); ?> <?php echo __('DB Tables');?></h2>
 

@@ -7,7 +7,7 @@ use SetupExtra\Lib\DebugLib;
 use SetupExtra\Lib\SystemLib;
 ?>
 
-<div class="index col-md-12">
+<div class="columns col-md-12">
 
 <h2>Backend</h2>
 

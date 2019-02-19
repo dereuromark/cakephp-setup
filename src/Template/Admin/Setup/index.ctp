@@ -3,7 +3,7 @@
  * @var \App\View\AppView $this
  */
 ?>
-<div class="col-md-12">
+<div class="columns col-md-12">
 
 <h2>Setup Backend Tools</h2>
 

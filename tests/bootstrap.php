@@ -69,7 +69,7 @@ $cache = [
 ];
 
 Cake\Cache\Cache::setConfig($cache);
-Cake\Core\Plugin::load('Setup', ['path' => ROOT . DS]);
+Cake\Core\Plugin::load('Setup', ['path' => ROOT . DS, 'routes' => true]);
 Cake\Core\Plugin::load('Tools', ['path' => ROOT . DS . 'vendor' . DS . 'dereuromark' . DS . 'cakephp-tools' . DS, 'routes' => true]);
 
 if (getenv('db_dsn')) {

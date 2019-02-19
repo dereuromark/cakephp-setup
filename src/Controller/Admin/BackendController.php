@@ -78,7 +78,7 @@ class BackendController extends AppController {
 	public function database() {
 		$Model = TableRegistry::get('Model');
 		/** @var \Cake\Database\Connection $db */
-		$db = $Model->connection();
+		$db = $Model->getConnection();
 
 		$dbTables = $db->query('SHOW TABLE STATUS');
 		$dbTables = (new Collection($dbTables))->toArray();
