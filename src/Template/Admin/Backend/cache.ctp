@@ -8,7 +8,7 @@ use Cake\I18n\FrozenTime;
 
 ?>
 
-<div class="index col-md-12">
+<div class="columns col-md-12">
 
 <h2>Cache Config</h2>
 

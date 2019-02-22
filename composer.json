@@ -14,11 +14,11 @@
 	],
 	"require": {
 		"php": ">=5.6",
-		"cakephp/cakephp": "^3.6"
+		"cakephp/cakephp": "^3.7"
 	},
 	"require-dev": {
 		"cakephp/chronos": "^1.0.1",
-		"dereuromark/cakephp-tools": "^1.1",
+		"dereuromark/cakephp-tools": "^1.9.1",
 		"fig-r/psr2r-sniffer": "dev-master"
 	},
 	"autoload": {
@@ -43,6 +43,8 @@
 		"test-coverage" : "php phpunit.phar --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
 		"phpstan": "phpstan analyse -c tests/phpstan.neon -l 3 src/",
 		"phpstan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan && mv composer.backup composer.json",
+		"lowest": " validate-prefer-lowest",
+		"lowest-setup": "composer update --prefer-lowest --prefer-stable --prefer-dist --no-interaction && cp composer.json composer.backup && composer require --dev dereuromark/composer-prefer-lowest && mv composer.backup composer.json",
 		"cs-check": "phpcs -p -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --ignore=/cakephp-setup/vendor/,/tmp/,/logs/,/tests/test_files/ --extensions=php ./",
 		"cs-fix": "phpcbf -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --ignore=/cakephp-setup/vendor/,/tmp/,/logs/,/tests/test_files/ --extensions=php ./"
 	}

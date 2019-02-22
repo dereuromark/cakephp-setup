@@ -16,10 +16,17 @@ class BackendController extends AppController {
 	public $modelClass = false;
 
 	/**
+	 * @var array
+	 */
+	public $helpers = [
+		'Tools.Time'
+	];
+
+	/**
 	 * @return \Cake\Http\Response|null
 	 */
 	public function phpinfo() {
-		$this->viewBuilder()->layout('ajax');
+		$this->viewBuilder()->setLayout('ajax');
 	}
 
 	/**
@@ -78,7 +85,7 @@ class BackendController extends AppController {
 	public function database() {
 		$Model = TableRegistry::get('Model');
 		/** @var \Cake\Database\Connection $db */
-		$db = $Model->connection();
+		$db = $Model->getConnection();
 
 		$dbTables = $db->query('SHOW TABLE STATUS');
 		$dbTables = (new Collection($dbTables))->toArray();

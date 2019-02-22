@@ -58,6 +58,7 @@ WHERE   table_schema = '$database'
 AND     table_name LIKE '$prefix%'
 AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
+		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
 		if (!$res) {
 			$this->abort('Nothing to do...');
@@ -68,9 +69,11 @@ SQL;
 			$script[] = $r['statement'];
 		}
 
-		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
-		if (strtoupper($continue) !== 'Y') {
-			$this->abort('Aborted!');
+		if (!$this->param('dry-run')) {
+			$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
+			if (strtoupper($continue) !== 'Y') {
+				$this->abort('Aborted!');
+			}
 		}
 
 		foreach ($script as $row) {
@@ -129,6 +132,7 @@ AND     table_name LIKE '$prefix%'
 AND     `ENGINE` != '$engine'
 AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
+		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
 		if (!$res) {
 			$this->abort('Nothing to do...');
@@ -140,9 +144,11 @@ SQL;
 			$script .= $r['statement'];
 		}
 
-		$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
-		if (strtoupper($continue) !== 'Y') {
-			$this->abort('Aborted!');
+		if (!$this->param('dry-run')) {
+			$continue = $this->in(count($res) . ' tables will be altered.', ['Y', 'N'], 'N');
+			if (strtoupper($continue) !== 'Y') {
+				$this->abort('Aborted!');
+			}
 		}
 
 		if (!$this->params['dry-run']) {
@@ -199,6 +205,7 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		}
 
+		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
 		if (!$res->count()) {
 			$this->abort('Nothing to do...');
@@ -210,9 +217,11 @@ SQL;
 			$this->out($r['statement'], 1, Shell::VERBOSE);
 		}
 
-		$continue = $this->in($res->count() . ' tables will be altered.', ['Y', 'N'], 'N');
-		if (strtoupper($continue) !== 'Y') {
-			$this->abort('Aborted!');
+		if (!$this->param('dry-run')) {
+			$continue = $this->in($res->count() . ' tables will be altered.', ['Y', 'N'], 'N');
+			if (strtoupper($continue) !== 'Y') {
+				$this->abort('Aborted!');
+			}
 		}
 
 		if (!$this->params['dry-run']) {
@@ -244,6 +253,7 @@ FROM information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
+		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
 		if (!$res) {
 			$this->abort('Nothing to do...');
@@ -288,6 +298,8 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			// Structure
 			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
 			$this->out('- ' . $sql, 1, static::VERBOSE);
+
+			/** @var \Cake\Database\Statement\StatementDecorator $res */
 			$res = $db->query($sql);
 			$fields = new Collection($res);
 
@@ -333,6 +345,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			$sql = 'SELECT COUNT(*) as count FROM ' . $table['table_name'] . ' WHERE ' . $conditions;
 			$this->out('Checking for records that need updating:', 1, static::VERBOSE);
 			$this->out(' - ' . $sql, 1, static::VERBOSE);
+			/** @var \Cake\Database\Statement\StatementDecorator $res */
 			$res = $db->query($sql);
 			$res = (new Collection($res))->toArray();
 			if (empty($res[0]['count'])) {
@@ -351,10 +364,14 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		}
 
 		$this->out(count($todo) . ' tables/fields need updating.');
-		$continue = $this->in('Continue?', ['y', 'n'], 'y');
-		if ($continue !== 'y') {
-			$this->abort('Aborted!');
+
+		if (!$this->param('dry-run')) {
+			$continue = $this->in('Continue?', ['Y', 'N'], 'Y');
+			if ($continue !== 'Y') {
+				$this->abort('Aborted!');
+			}
 		}
+
 		$sql = implode(PHP_EOL, $todo);
 		if (!empty($this->params['dry-run'])) {
 			$this->out($sql);
@@ -385,6 +402,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			// Structure
 			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
 			$this->out('- ' . $sql, 1, static::VERBOSE);
+			/** @var \Cake\Database\Statement\StatementDecorator $res */
 			$res = $db->query($sql);
 			$fields = new Collection($res);
 
@@ -438,10 +456,13 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		}
 
 		$this->out(count($todo) . ' tables/fields need updating.');
-		$continue = $this->in('Continue?', ['y', 'n'], 'y');
-		if ($continue !== 'y') {
-			$this->abort('Aborted!');
+		if (!$this->param('dry-run')) {
+			$continue = $this->in('Continue?', ['y', 'n'], 'y');
+			if ($continue !== 'y') {
+				$this->abort('Aborted!');
+			}
 		}
+
 		$sql = implode(PHP_EOL, $todo);
 		if (!empty($this->params['dry-run'])) {
 			$this->out($sql);

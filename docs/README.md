@@ -10,6 +10,7 @@ This branch only works for **CakePHP3.x**
 ## Detailed Documentation - Quicklinks
 * [Maintenance Mode](Maintenance/Maintenance.md)
 * [Setup Component](Component/Setup.md)
+* [Setup Web Backend](Controller/Setup.md)
 * [Useful Setup Shells](Console/Shells.md)
 
 ## Bake Templates Deluxe

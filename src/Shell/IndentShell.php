@@ -107,7 +107,7 @@ class IndentShell extends Shell {
 			if (empty($this->params['dry-run'])) {
 				if (!$this->params['force']) {
 					$continue = $this->in('Modifying files! Continue?', ['y', 'n'], 'n');
-					if (strtolower($continue) !== 'y' && strtolower($continue) !== 'yes') {
+					if (mb_strtolower($continue) !== 'y' && mb_strtolower($continue) !== 'yes') {
 						$this->abort('...aborted');
 					}
 				}

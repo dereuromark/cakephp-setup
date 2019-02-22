@@ -2,5 +2,7 @@
 
 namespace App\Controller;
 
-class AppController {
+use Tools\Controller\Controller;
+
+class AppController extends Controller {
 }

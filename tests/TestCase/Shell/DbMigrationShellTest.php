@@ -2,14 +2,16 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\DbMigrationShell;
+use Setup\TestSuite\DriverSkipTrait;
 use Tools\TestSuite\ConsoleOutput;
 
 /**
  */
 class DbMigrationShellTest extends TestCase {
+
+	use DriverSkipTrait;
 
 	/**
 	 * @var \Setup\Shell\DbMigrationShell|\PHPUnit_Framework_MockObject_MockObject
@@ -39,7 +41,7 @@ class DbMigrationShellTest extends TestCase {
 		$io = new ConsoleIo($this->out, $this->err);
 
 		$this->Shell = $this->getMockBuilder(DbMigrationShell::class)
-			->setMethods(['in', 'err', '_stop'])
+			->setMethods(['in', '_stop'])
 			->setConstructorArgs([$io])
 			->getMock();
 
@@ -62,13 +64,7 @@ class DbMigrationShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testNulls() {
-		$config = ConnectionManager::getConfig('test');
-		if ((strpos($config['driver'], 'Mysql') === false)) {
-			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
-		}
-
-		$this->Shell->expects($this->any())->method('in')
-			->will($this->returnValue('Y'));
+		$this->skipIfNotDriver('Mysql', 'Only for MySQL (with MyISAM/InnoDB)');
 
 		$this->Shell->runCommand(['nulls', '-d', '-v']);
 		$output = $this->out->output();
