@@ -2,6 +2,9 @@
 
 Useful tooling via `/admin/setup` route.
 
+**Important**: Make sure this is properly ACL protected (e.g. [TinyAuth](https://github.com/dereuromark/cakephp-tinyauth) and 3 lines of config) if you enable the routing here.
+Those actions should never be exposed to the public or non-admins.
+
 ## Setup
 For this you need to make sure the plugin is loaded with `['routes' => true]` or you provide them manually.
 Also make sure that the optional Tools dependency is in this case available.
