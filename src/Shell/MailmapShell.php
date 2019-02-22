@@ -75,7 +75,7 @@ class MailmapShell extends Shell {
 			$path = ROOT . DS;
 		} elseif ($path === 'core') {
 			$path = CORE_PATH;
-		} elseif (Plugin::loaded($path)) {
+		} elseif (Plugin::isLoaded($path)) {
 			$path = Plugin::path($path);
 		}
 

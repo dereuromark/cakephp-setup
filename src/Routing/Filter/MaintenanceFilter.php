@@ -77,14 +77,17 @@ class MaintenanceFilter extends DispatcherFilter {
 			return null;
 		}
 
-		$body = __d('setup', 'Maintenance work');
 		$body = $this->_body();
 
-		$event->data['response']->header('Retry-After', HOUR);
-		$event->data['response']->statusCode(503);
-		$event->data['response']->body($body);
+		/** @var \Cake\Http\Response $response */
+		$response = $event->data['response'];
+
+		$response->header('Retry-After', HOUR);
+		$response->statusCode(503);
+		$response->body($body);
 		$event->stopPropagation();
-		return $event->data['response'];
+
+		return $response;
 	}
 
 	/**

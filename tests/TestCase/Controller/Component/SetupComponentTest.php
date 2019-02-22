@@ -18,6 +18,11 @@ class SetupComponentTest extends TestCase {
 	public $Controller;
 
 	/**
+	 * @var \Setup\Controller\Component\SetupComponent
+	 */
+	protected $Setup;
+
+	/**
 	 * @return void
 	 */
 	public function setUp() {

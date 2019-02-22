@@ -19,7 +19,10 @@ trait DbToolsTrait {
 			$name = $this->params['connection'];
 		}
 
-		return ConnectionManager::get($name);
+		/** @var \Cake\Database\Connection $connection */
+		$connection = ConnectionManager::get($name);
+
+		return $connection;
 	}
 
 	/**
