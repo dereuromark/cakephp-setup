@@ -42,7 +42,7 @@ class UserShell extends Shell {
 			$query = $query->where(['role_id' => (int)$role]);
 		}
 
-		/** @var \App\Model\Entity\User $users */
+		/** @var \App\Model\Entity\User[] $users */
 		$users = $query->orderDesc($this->Users->getPrimaryKey())->limit(100)->all()->toArray();
 
 		$count = count($users);
@@ -174,10 +174,12 @@ class UserShell extends Shell {
 			}
 		}
 
-		$this->out('');
-		$continue = $this->in('Continue?', ['y', 'n'], 'n');
-		if ($continue !== 'y') {
-			$this->abort('Aborted!');
+		if (!$this->param('dry-run')) {
+			$this->out('');
+			$continue = $this->in('Continue?', ['y', 'n'], 'n');
+			if ($continue !== 'y') {
+				$this->abort('Aborted!');
+			}
 		}
 
 		$this->out('');

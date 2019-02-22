@@ -11,7 +11,7 @@ use Cake\Utility\Text;
 trait DbToolsTrait {
 
 	/**
-	 * @return \Cake\Database\Connection|\Cake\Datasource\ConnectionInterface
+	 * @return \Cake\Database\Connection
 	 */
 	protected function _getConnection() {
 		$name = 'default';
@@ -37,6 +37,7 @@ FROM information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
+		/** @var \Traversable $res */
 		$res = $db->query($script);
 		if (!$res) {
 			$this->abort('Nothing to do...');

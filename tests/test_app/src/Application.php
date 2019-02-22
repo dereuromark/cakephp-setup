@@ -8,7 +8,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 class Application extends BaseApplication {
 
 	/**
-	 * {@inheritDoc}
+	 * @inheritDoc
 	 */
 	public function bootstrap() {
 		// Call parent to load bootstrap from files.

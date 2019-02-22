@@ -2,7 +2,6 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\TestCliShell;
@@ -16,6 +15,11 @@ class TestCliShellTest extends TestCase {
 	 * @var \Setup\Shell\TestCliShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	public $Shell;
+
+	/**
+	 * @var \Tools\TestSuite\ConsoleOutput
+	 */
+	protected $out;
 
 	/**
 	 * setUp method

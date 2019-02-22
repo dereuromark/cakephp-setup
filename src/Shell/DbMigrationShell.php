@@ -42,6 +42,7 @@ class DbMigrationShell extends Shell {
 			// Structure
 			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
 			$this->out('- ' . $sql, 1, static::VERBOSE);
+			/** @var \Traversable $res */
 			$res = $db->query($sql);
 			$fields = (new Collection($res))->toArray();
 
@@ -93,12 +94,14 @@ class DbMigrationShell extends Shell {
 		}
 
 		$this->out(count($todo) . ' tables/fields need updating.');
-		$continue = $this->in('Continue?', ['y', 'n'], 'y');
-		if ($continue !== 'y') {
-			$this->abort('Aborted!');
+		if (!$this->param('dry-run')) {
+			$continue = $this->in('Continue?', ['y', 'n'], 'y');
+			if ($continue !== 'y') {
+				$this->abort('Aborted!');
+			}
 		}
 		$sql = implode(PHP_EOL, $todo);
-		if (!empty($this->params['dry-run'])) {
+		if (!$this->param('dry-run')) {
 			$this->out($sql);
 			return;
 		}
