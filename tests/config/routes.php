@@ -1,11 +1,8 @@
 <?php
-use Cake\Routing\RouteBuilder;
+
 use Cake\Routing\Router;
+use Cake\Routing\Route\DashedRoute;
 
-Router::prefix('admin', function (RouteBuilder $routes) {
-	$routes->plugin('Setup', ['path' => '/setup'], function (RouteBuilder $routes) {
-		$routes->connect('/', ['controller' => 'Setup', 'action' => 'index']);
+Router::defaultRouteClass(DashedRoute::class);
 
-		$routes->fallbacks();
-	});
-});
+include ROOT . '/config/routes.php';

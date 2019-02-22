@@ -1,0 +1,45 @@
+# Setup Web Backend
+
+Useful tooling via `/admin/setup` route.
+
+## Setup
+For this you need to make sure the plugin is loaded with `['routes' => true]` or you provide them manually.
+Also make sure that the optional Tools dependency is in this case available.
+
+## Useful tools
+
+### PHPInfo
+Lists the phpinfo() page as you know it.
+
+See `/admin/setup/backend/phpinfo`.
+
+### Cache
+Details about the current cache config.
+
+See `/admin/setup/backend/cache`.
+
+### Database
+Overview about the current DB tables and size.
+
+See `/admin/setup/backend/database`.
+
+### Foreign Keys
+
+Many applications for sure forgot to add proper constraints/handling around foreign keys:
+
+- NOT NULL foreign keys: Parent removes child if deleted
+- NULL: FK (parent_table_id) is set to NULL if parent gets deleted
+
+The first can be done both on DB level as constraint or Cake app level (using `depending true` config).
+The backend here now focuses on the 2nd part.
+
+See `/admin/setup/database/foreign-keys`
+for an overview of all possible foreign keys and get a list of possible issues and checks to run.
+
+#### FK nullable
+Make sure you apply the foreign key "NULL"able part to all existing rows in your DB.
+The script contains a check to make sure your DB is clean here before you apply those. 
+The migration will otherwise fail to apply them.
+
+This is especially important when you want to find all childs that do not have some belongsTo relation (anymore) using
+`fk IS NULL`. You can only trust the results here if you have the sanity constraints here for cleanup of those fields on delete.

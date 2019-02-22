@@ -21,7 +21,7 @@ define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . APP_DIR . DS);
 
 define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
-define('CONFIG', dirname(__FILE__) . DS . 'config' . DS);
+define('CONFIG', __DIR__ . DS . 'config' . DS);
 
 if (!defined('TB')) {
 	define('TB', "\t");
@@ -36,8 +36,12 @@ require ROOT . '/vendor/autoload.php';
 require CORE_PATH . 'config/bootstrap.php';
 
 Cake\Core\Configure::write('App', [
-		'namespace' => 'App',
-		'encoding' => 'UTF-8']);
+	'namespace' => 'App',
+	'encoding' => 'UTF-8',
+	'paths' => [
+		'templates' => [ROOT . DS . 'tests' . DS . 'test_app' . DS . 'src' . DS . 'Template' . DS],
+	],
+]);
 Cake\Core\Configure::write('debug', true);
 
 mb_internal_encoding('UTF-8');
@@ -69,8 +73,10 @@ $cache = [
 ];
 
 Cake\Cache\Cache::setConfig($cache);
-Cake\Core\Plugin::load('Setup', ['path' => ROOT . DS, 'routes' => true]);
-Cake\Core\Plugin::load('Tools', ['path' => ROOT . DS . 'vendor' . DS . 'dereuromark' . DS . 'cakephp-tools' . DS, 'routes' => true]);
+
+Cake\Routing\Router::reload();
+
+Cake\Core\Plugin::getCollection()->add(new Setup\Plugin());
 
 if (getenv('db_dsn')) {
 	Cake\Datasource\ConnectionManager::setConfig('test', [

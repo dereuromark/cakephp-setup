@@ -16,10 +16,17 @@ class BackendController extends AppController {
 	public $modelClass = false;
 
 	/**
+	 * @var array
+	 */
+	public $helpers = [
+		'Tools.Time'
+	];
+
+	/**
 	 * @return \Cake\Http\Response|null
 	 */
 	public function phpinfo() {
-		$this->viewBuilder()->layout('ajax');
+		$this->viewBuilder()->setLayout('ajax');
 	}
 
 	/**
