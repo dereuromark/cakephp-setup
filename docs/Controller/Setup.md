@@ -33,13 +33,23 @@ Many applications for sure forgot to add proper constraints/handling around fore
 The first can be done both on DB level as constraint or Cake app level (using `depending true` config).
 The backend here now focuses on the 2nd part.
 
+#### FK nullable
 See `/admin/setup/database/foreign-keys`
 for an overview of all possible foreign keys and get a list of possible issues and checks to run.
 
-#### FK nullable
 Make sure you apply the foreign key "NULL"able part to all existing rows in your DB.
 The script contains a check to make sure your DB is clean here before you apply those. 
 The migration will otherwise fail to apply them.
 
 This is especially important when you want to find all childs that do not have some belongsTo relation (anymore) using
 `fk IS NULL`. You can only trust the results here if you have the sanity constraints here for cleanup of those fields on delete.
+
+A migration that could be proposed to you could look like this:
+```
+	$this->table('repositories')
+		->addForeignKey('module_id', 'modules', ['id'], ['delete' => 'SET_NULL'])
+		->update();
+```
+The `module_id` is `DEFAULT NULL` and as such, deleting now the module will auto-set this to false rather than keeping the old id (that cannot be joined in anymore).
+
+You can test the SQL issue on nullable and deleting live [here](http://sqlfiddle.com/#!9/816f16c/1).
