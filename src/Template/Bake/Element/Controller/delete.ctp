@@ -17,7 +17,7 @@
     /**
      * Delete method
      *
-     * @param string|null $id <%= $singularHumanName %> id.
+     * @param int|string|null $id <%= $singularHumanName %> id.
      * @return \Cake\Http\Response|null Redirects to index.
      */
     public function delete($id = null)

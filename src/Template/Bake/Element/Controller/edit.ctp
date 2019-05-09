@@ -21,7 +21,7 @@ $compact = ["'" . $singularName . "'"];
     /**
      * Edit method
      *
-     * @param string|null $id <%= $singularHumanName %> id.
+     * @param int|string|null $id <%= $singularHumanName %> id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      */
     public function edit($id = null)
