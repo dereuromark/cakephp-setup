@@ -83,7 +83,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
     <table class="table vertical-table">
 <% if ($groupedFields['default']) : %>
 <% foreach ($groupedFields['default'] as $field) : %>
-    <% if ($field === $displayField) { continue; } %>
+<% if ($field === $displayField) { continue; } %>
 <% $fieldType = $schema->columnType($field); %>
 <% if (isset($associationFields[$field])) :
             $details = $associationFields[$field];
@@ -142,7 +142,7 @@ foreach ($relations as $alias => $details):
                 continue;
             }
             %>
-            <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
+                <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
 <% endforeach; %>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
