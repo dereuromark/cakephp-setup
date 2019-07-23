@@ -162,7 +162,7 @@ class SetupComponent extends Component {
 	 * @return void
 	 */
 	public function issueMailing() {
-		if ($this->Controller->name !== 'CakeError' || empty($this->notifications['404'])) {
+		if ($this->Controller->getName() !== 'CakeError' || empty($this->notifications['404'])) {
 			return;
 		}
 		if (env('REMOTE_ADDR') === '127.0.0.1' || Configure::read('debug') > 0) {
@@ -193,7 +193,7 @@ class SetupComponent extends Component {
 	 * @return void
 	 */
 	public function log404($notifyAdminOnInternalErrors = false) {
-		if ($this->Controller->name === 'CakeError') {
+		if ($this->Controller->getName() === 'CakeError') {
 			$referer = $this->Controller->referer();
 			$this->Controller->log('REF: ' . $referer . ' - URL: ' . $this->Controller->request->url, '404');
 		}
