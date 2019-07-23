@@ -4,7 +4,6 @@ parameters:
 		- %rootDir%/../../../tests/shim.php
 	ignoreErrors:
 		- '#Call to an undefined method .+FlashComponent::warning\(\)#'
-		- '#Access to protected property Cake\\Controller\\Controller::\$name#'
 		- '#Access to protected property Cake\\Http\\ServerRequest::\$url#'
 		- '#Access to protected property Cake\\View\\View::\$helpers#'
 		- '#Access to protected property Cake\\View\\View::\$_ext#'
