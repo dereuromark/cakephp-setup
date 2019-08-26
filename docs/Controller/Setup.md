@@ -48,10 +48,10 @@ This is especially important when you want to find all childs that do not have s
 `fk IS NULL`. You can only trust the results here if you have the sanity constraints here for cleanup of those fields on delete.
 
 A migration that could be proposed to you could look like this:
-```
-	$this->table('repositories')
-		->addForeignKey('module_id', 'modules', ['id'], ['delete' => 'SET_NULL'])
-		->update();
+```php
+    $this->table('repositories')
+        ->addForeignKey('module_id', 'modules', ['id'], ['delete' => 'SET_NULL'])
+        ->update();
 ```
 The `module_id` is `DEFAULT NULL` and as such, deleting now the module will auto-set this to false rather than keeping the old id (that cannot be joined in anymore).
 

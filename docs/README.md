@@ -32,14 +32,14 @@ They are available when you include the plugin's bootstrap at Plugin::load().
 ## Testing
 You can test using a local installation of phpunit or the phar version of it:
 
-	cd .../cakephp-setup
-	composer install // or: php composer.phar install
-	composer test-setup
-	composer test
+    cd .../cakephp-setup
+    composer install // or: php composer.phar install
+    composer test-setup
+    composer test
 
 To test a specific file:
 
-	php phpunit.phar /path/to/MyClass.php
+    php phpunit.phar /path/to/MyClass.php
 
 To test MySQL specific tests, run this before (you might have to adjust your connection details):
 ```
@@ -51,8 +51,8 @@ By default the tests use an SQLite DB.
 
 Import Huge SQL file:
 
-	...\bin\mysql -u root dbname < dumpfilename.sql
+    ...\bin\mysql -u root dbname < dumpfilename.sql
 
 Same other direction:
 
-	...\bin\mysqldump -h host -u root -p dbname > dumpfilename.sql
+    ...\bin\mysqldump -h host -u root -p dbname > dumpfilename.sql

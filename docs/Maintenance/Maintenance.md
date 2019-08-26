@@ -37,15 +37,15 @@ In your `src/Application.php`:
 ```php
 use Setup\Middleware\MaintenanceMiddleware;
 
-	/**
-	 * @param \Cake\Http\MiddlewareQueue $middleware The middleware queue to setup.
-	 * @return \Cake\Http\MiddlewareQueue The updated middleware.
-	 */
-	public function middleware($middleware) {
-		$middleware
-			->add(MaintenanceMiddleware::class)
-			...
-	}
+    /**
+     * @param \Cake\Http\MiddlewareQueue $middleware The middleware queue to setup.
+     * @return \Cake\Http\MiddlewareQueue The updated middleware.
+     */
+    public function middleware($middleware) {
+        $middleware
+            ->add(MaintenanceMiddleware::class)
+            ...
+    }
 ```
 
 ### Customizing

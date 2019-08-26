@@ -19,6 +19,6 @@ Tip: Use the CLI and the Setup plugin shells for normal execution.
 ```php
 // In your (App) controller
 public function initialize() {
-	$this->loadComponent('Setup.Setup');
+    $this->loadComponent('Setup.Setup');
 }
 ```

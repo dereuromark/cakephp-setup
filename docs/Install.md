@@ -5,7 +5,7 @@ Installing the Plugin is pretty much as with every other CakePHP Plugin.
 
 Require the plugin using Packagist/Composer by running this in your application's folder:
 
-	composer require dereuromark/cakephp-setup
+    composer require dereuromark/cakephp-setup
 
 Note that you can also use `require-dev` if you don't need it for production environments and only use the dev tools.
 

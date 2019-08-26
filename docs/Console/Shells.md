@@ -55,13 +55,13 @@ Let's you test certain features like Routing and how/if they work in CLI.
 Depending on your domain it will output something like:
 ```
 Router::url('/'):
-	/
+    /
 Router::url(['controller' => 'test']):
-	/test
+    /test
 Router::url('/', true):
-	http://example.local/
+    http://example.local/
 Router::url(['controller' => 'test'], true):
-	http://example.local/test
+    http://example.local/test
 ```
 
 ### UserShell
