@@ -9,6 +9,10 @@ use Tools\Model\Entity\Entity;
  */
 class User extends Entity {
 
+	/**
+	 * @param int|array|null $value
+	 * @return string|array
+	 */
 	public static function statuses($value = null) {
 		$options = [
 			static::STATUS_INACTIVE => 'Inactive',
@@ -19,7 +23,6 @@ class User extends Entity {
 	}
 
 	const STATUS_INACTIVE = 0;
-
 	const STATUS_ACTIVE = 1;
 
 }
