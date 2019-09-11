@@ -129,14 +129,12 @@ class IndentShell extends Shell {
 	}
 
 	/**
-	 * IndentShell::_write()
-	 *
 	 * @param string $file
-	 * @param string $text
+	 * @param string[] $texts
 	 * @return bool Success
 	 */
-	protected function _write($file, $text) {
-		$text = implode(PHP_EOL, $text);
+	protected function _write($file, $texts) {
+		$text = implode(PHP_EOL, $texts);
 		if ($this->settings['outputToTmp']) {
 			$filename = pathinfo($file, PATHINFO_FILENAME);
 			if (mb_substr($filename, -1, 1) === '_') {
@@ -242,7 +240,7 @@ class IndentShell extends Shell {
 			$newPiece = mb_substr($newPiece, $space);
 		}
 		// In the middle
-		if (($pos = mb_strpos($newPiece, $space)) > 0 && mb_substr($newPiece, $pos - 1, 1) === TB
+		if (($pos = mb_strpos($newPiece, $spaceChar)) > 0 && mb_substr($newPiece, $pos - 1, 1) === TB
 			&& mb_substr($newPiece, $pos + 1, 1) === TB) {
 			$newPiece = mb_substr($newPiece, $pos) . mb_substr($newPiece, $pos + 2);
 		}

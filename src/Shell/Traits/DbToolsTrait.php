@@ -40,9 +40,9 @@ FROM information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
-		/** @var \Traversable $res */
+		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 		$tables = new Collection($res);

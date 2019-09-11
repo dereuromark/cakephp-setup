@@ -60,7 +60,7 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 
@@ -134,7 +134,7 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 
@@ -255,7 +255,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 
