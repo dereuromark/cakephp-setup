@@ -69,6 +69,10 @@ class DbMaintenanceShellTest extends TestCase {
 			$this->skipIf(true, 'Only for MySQL (with MyISAM/InnoDB)');
 		}
 
+		$connection = $this->_getConnection('test');
+		$script = 'DROP TABLE IF EXISTS `foo`; CREATE TABLE `foo` (title VARCHAR(255) NOT NULL);';
+		$connection->execute($script);
+
 		$this->Shell->expects($this->any())->method('in')
 			->willReturn('Y');
 
@@ -78,6 +82,9 @@ class DbMaintenanceShellTest extends TestCase {
 		$expected = ' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
 		$this->assertContains($expected, $output, $output);
 		$this->assertContains('Done :)', $output);
+
+		$script = 'DROP TABLE IF EXISTS `foo`;';
+		$connection->execute($script);
 	}
 
 	/**
@@ -102,6 +109,9 @@ class DbMaintenanceShellTest extends TestCase {
 		//$expected = ' ENGINE=InnoDB;';
 		//$this->assertContains($expected, trim($output));
 		$this->assertContains('Done :)', trim($output));
+
+		$script = 'DROP TABLE IF EXISTS `foo`;';
+		$connection->execute($script);
 	}
 
 	/**
@@ -163,6 +173,9 @@ class DbMaintenanceShellTest extends TestCase {
 			->will($this->returnValue('Y'));
 
 		$this->Shell->runCommand(['table_prefix', 'A', 'foo_', '-d', '-v']);
+
+		$script = 'DROP TABLE IF EXISTS `foo_bars`;';
+		$connection->execute($script);
 	}
 
 }
