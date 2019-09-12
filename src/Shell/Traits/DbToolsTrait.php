@@ -11,11 +11,12 @@ use Cake\Utility\Text;
 trait DbToolsTrait {
 
 	/**
+	 * @param string $name
+	 *
 	 * @return \Cake\Database\Connection
 	 */
-	protected function _getConnection() {
-		$name = 'default';
-		if ($this->params['connection']) {
+	protected function _getConnection($name = 'default') {
+		if (!empty($this->params['connection'])) {
 			$name = $this->params['connection'];
 		}
 

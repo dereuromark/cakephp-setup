@@ -6,14 +6,12 @@ use Cake\TestSuite\TestCase;
 use Setup\Shell\MailmapShell;
 use Tools\TestSuite\ConsoleOutput;
 
-/**
- */
 class MailmapShellTest extends TestCase {
 
 	/**
 	 * @var \Setup\Shell\MailmapShell
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @return void

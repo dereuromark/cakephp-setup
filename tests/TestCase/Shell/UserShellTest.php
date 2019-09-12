@@ -11,7 +11,7 @@ class UserShellTest extends TestCase {
 	/**
 	 * @var \Setup\Shell\UserShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @var array

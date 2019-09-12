@@ -11,7 +11,7 @@ class MaintenanceModeShellTest extends TestCase {
 	/**
 	 * @var \Setup\Shell\MaintenanceModeShell
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @return void
