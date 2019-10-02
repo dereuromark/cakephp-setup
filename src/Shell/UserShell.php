@@ -214,11 +214,12 @@ class UserShell extends Shell {
 		while (empty($displayFieldValue)) {
 			$displayFieldValue = $this->in($displayFieldName);
 		}
+
+		$user = $this->Users->find()->where([$displayField => $displayFieldValue])->firstOrFail();
+
 		while (empty($password)) {
 			$password = $this->in('Password');
 		}
-
-		$user = $this->Users->find()->where([$displayField => $displayFieldValue])->firstOrFail();
 
 		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
 		$this->Users->patchEntity($user, ['pwd' => $password]);
