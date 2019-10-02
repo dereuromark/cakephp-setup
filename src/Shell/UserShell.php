@@ -198,6 +198,37 @@ class UserShell extends Shell {
 	}
 
 	/**
+	 * Updates existing user with a freshly hashed password.
+	 *
+	 * @param string|null $displayFieldValue
+	 * @param string|null $password
+	 * @return void
+	 */
+	public function update($displayFieldValue = null, $password = null) {
+		$this->loadModel(CLASS_USERS);
+		$schema = $this->Users->getSchema();
+
+		$displayField = $this->Users->getDisplayField();
+		$displayFieldName = Inflector::humanize($displayField);
+
+		while (empty($displayFieldValue)) {
+			$displayFieldValue = $this->in($displayFieldName);
+		}
+		while (empty($password)) {
+			$password = $this->in('Password');
+		}
+
+		$user = $this->Users->find()->where([$displayField => $displayFieldValue])->firstOrFail();
+
+		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
+		$this->Users->patchEntity($user, ['pwd' => $password]);
+
+		$this->Users->saveOrFail($user);
+
+		$this->success('Password updated for user ' . $displayFieldValue);
+	}
+
+	/**
 	 * Creates a new user including a freshly hashed password.
 	 *
 	 * @param string|null $password
@@ -272,6 +303,10 @@ Make sure you configured the Passwordable behavior accordingly as per docs.')
 			->addSubcommand('create', [
 				'help' => 'Create a new user with email and password provided.',
 				'parser' => $createParser
+			])
+			->addSubcommand('update', [
+				'help' => 'Update a specific user with a new password.',
+				'parser' => $subcommandParser
 			])
 			->addSubcommand('password', [
 				'help' => 'Generate a hash from a given password.',
