@@ -150,7 +150,7 @@ class MailmapShell extends Shell {
 			$array[] = [
 				'content' => $content,
 				'name' => $name,
-				'email' => $email
+				'email' => $email,
 			];
 		}
 
@@ -176,15 +176,15 @@ class MailmapShell extends Shell {
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry-runs the command, saves result into TMP/.mailmap file.',
-					'boolean' => true
-				]
+					'boolean' => true,
+				],
 			],
 			'arguments' => [
 				'path' => [
 					'name' => 'path',
 					'help' => 'Path, plugin name or "core" for CakePHP core, defaults to app root.',
-				]
-			]
+				],
+			],
 		];
 
 		return parent::getOptionParser()
@@ -192,7 +192,7 @@ class MailmapShell extends Shell {
 Check out the results with `git shortlog -sne`.')
 			->addSubcommand('generate', [
 				'help' => 'Generate',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 

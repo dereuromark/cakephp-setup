@@ -119,19 +119,19 @@ class DbMigrationShell extends Shell {
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the command, nothing will actually be modified. It will output the SQL to copy-and-paste, e.g. into a Migrations file.',
-					'boolean' => true
+					'boolean' => true,
 				],
 				'table' => [
 					'short' => 't',
 					'help' => 'Specific table (separate multiple with comma).',
-					'default' => ''
+					'default' => '',
 				],
 				'connection' => [
 					'short' => 'c',
 					'help' => 'Use a different connection than `default`.',
-					'default' => ''
+					'default' => '',
 				],
-			]
+			],
 		];
 
 		return parent::getOptionParser()
@@ -139,7 +139,7 @@ class DbMigrationShell extends Shell {
 Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
 			->addSubcommand('nulls', [
 				'help' => 'Correct non-nulls of type string/text to have a default value.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 

@@ -29,7 +29,7 @@ class DatabaseController extends AppController {
 			$dbTables = [
 				[
 					'Name' => $table,
-				]
+				],
 			];
 		}
 

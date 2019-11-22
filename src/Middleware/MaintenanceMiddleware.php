@@ -24,7 +24,7 @@ class MaintenanceMiddleware {
 		'templateLayout' => false,
 		'templateFileName' => 'maintenance',
 		'templateExtension' => '.ctp',
-		'contentType' => 'text/html'
+		'contentType' => 'text/html',
 	];
 
 	/**

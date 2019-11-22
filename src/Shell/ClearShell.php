@@ -240,40 +240,40 @@ class ClearShell extends Shell {
 				'remove' => [
 					'short' => 'r',
 					'help' => 'Remove (sub)folders, as well',
-					'boolean' => true
+					'boolean' => true,
 				],
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the command, no files will actually be deleted. Should be combined with verbose!',
-					'boolean' => true
-				]
-			]
+					'boolean' => true,
+				],
+			],
 		];
 
 		return parent::getOptionParser()
 			->setDescription('The Clear Shell easily deletes all tmp files (cache, logs, ...)')
 			->addSubcommand('all', [
 				'help' => 'Clear all',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('tmp', [
 				'help' => 'Clear tmp (except cache)',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('cache', [
 				'help' => 'Clear cache',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('logs', [
 				'help' => 'Clear log files',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('custom', [
 				'help' => 'Clear custom dir',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])->addSubcommand('empty_folders', [
 				'help' => 'Clear empty folders',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 

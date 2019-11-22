@@ -29,7 +29,7 @@ class MailmapShellTest extends TestCase {
 
 		$array = [
 			'11 foo <foo@bar.de>',
-			' 2 fooo <fOo@BaR.dE>'
+			' 2 fooo <fOo@BaR.dE>',
 		];
 		$this->Shell->expects($this->any())->method('runGitCommand')->willReturn($array);
 

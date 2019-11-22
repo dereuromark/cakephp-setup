@@ -19,7 +19,7 @@ class BackendController extends AppController {
 	 * @var array
 	 */
 	public $helpers = [
-		'Tools.Time'
+		'Tools.Time',
 	];
 
 	/**

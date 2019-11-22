@@ -108,9 +108,9 @@ class ResetShell extends Shell {
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the reset command, no data will actually be modified.',
-					'boolean' => true
+					'boolean' => true,
 				],
-			]
+			],
 		];
 
 		return parent::getOptionParser()
@@ -118,12 +118,12 @@ class ResetShell extends Shell {
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.')
 			->addSubcommand('email', [
 				'help' => 'Reset all user emails.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('pwd', [
 				'help' => 'Hash and Reset all user passwords via Hasher class. If you are not using Default hasher, make sure
  you provide the correct one via Configure \'Passwordable.passwordHasher\'.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 
