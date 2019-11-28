@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Utility;
 
 use Setup\Utility\Setup;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Controller\Admin;
 
 use App\Controller\AppController;

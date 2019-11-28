@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Routing\Filter;
 
 use Cake\Core\Configure;

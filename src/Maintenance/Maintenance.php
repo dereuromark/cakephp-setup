@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Maintenance;
 
 use Cake\Core\Configure;

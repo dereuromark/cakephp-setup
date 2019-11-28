@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Maintenance;
 
 use Setup\Maintenance\Maintenance;

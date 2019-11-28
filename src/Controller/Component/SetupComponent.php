@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Controller\Component;
 
 use Cake\Cache\Cache;

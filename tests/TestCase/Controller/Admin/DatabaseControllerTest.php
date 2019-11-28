@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Test\TestCase\Controller\Admin;
 
 use Cake\TestSuite\IntegrationTestTrait;
