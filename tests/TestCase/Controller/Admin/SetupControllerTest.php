@@ -19,7 +19,7 @@ class SetupControllerTest extends TestCase {
 
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
 
-		$this->get(['prefix' => 'admin', 'plugin' => 'Setup', 'controller' => 'Setup', 'action' => 'index']);
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Setup', 'action' => 'index']);
 
 		$this->assertResponseCode(200);
 	}

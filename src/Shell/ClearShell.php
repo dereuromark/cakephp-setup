@@ -22,7 +22,7 @@ class ClearShell extends Shell {
 	 *
 	 * @return void
 	 */
-	public function startup() {
+	public function startup(): void {
 		parent::startup();
 		if (!empty($this->params['dry-run'])) {
 			$this->out('<warning>Dry-run mode enabled!</warning>', 1, Shell::QUIET);
@@ -235,7 +235,7 @@ class ClearShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser() {
+	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'remove' => [

@@ -39,7 +39,7 @@ Cake\Core\Configure::write('App', [
 	'namespace' => 'App',
 	'encoding' => 'UTF-8',
 	'paths' => [
-		'templates' => [ROOT . DS . 'tests' . DS . 'test_app' . DS . 'src' . DS . 'Template' . DS],
+		'templates' => [ROOT . DS . 'tests' . DS . 'test_app' . DS . 'templates' . DS],
 	],
 ]);
 Cake\Core\Configure::write('debug', true);
@@ -77,6 +77,8 @@ Cake\Cache\Cache::setConfig($cache);
 Cake\Routing\Router::reload();
 
 Cake\Core\Plugin::getCollection()->add(new Setup\Plugin());
+
+Cake\Utility\Security::setSalt('YJfIxfs2guVoUubWDYhG93b0qyJfIxfs2guwvniR2G0FgaC9mi');
 
 if (getenv('db_dsn')) {
 	Cake\Datasource\ConnectionManager::setConfig('test', [

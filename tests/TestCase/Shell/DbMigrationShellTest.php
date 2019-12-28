@@ -32,7 +32,7 @@ class DbMigrationShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->out = new ConsoleOutput();
@@ -54,7 +54,7 @@ class DbMigrationShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 		unset($this->Shell);
 	}
@@ -69,7 +69,7 @@ class DbMigrationShellTest extends TestCase {
 		$output = $this->out->output();
 
 		$expected = 'Nothing to do :)';
-		$this->assertContains($expected, $output, $output);
+		$this->assertStringContainsString($expected, $output, $output);
 	}
 
 }

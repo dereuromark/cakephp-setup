@@ -34,7 +34,7 @@ class DbMaintenanceShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->out = new ConsoleOutput();
@@ -56,7 +56,7 @@ class DbMaintenanceShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 		unset($this->Shell);
 	}
@@ -81,8 +81,8 @@ class DbMaintenanceShellTest extends TestCase {
 		$output = $this->out->output();
 
 		$expected = ' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
-		$this->assertContains($expected, $output, $output);
-		$this->assertContains('Done :)', $output);
+		$this->assertStringContainsString($expected, $output, $output);
+		$this->assertStringContainsString('Done :)', $output);
 
 		$script = 'DROP TABLE IF EXISTS `foo`;';
 		$connection->execute($script);
@@ -108,8 +108,8 @@ class DbMaintenanceShellTest extends TestCase {
 		$output = $this->out->output();
 
 		//$expected = ' ENGINE=InnoDB;';
-		//$this->assertContains($expected, trim($output));
-		$this->assertContains('Done :)', trim($output));
+		//$this->assertStringContainsString($expected, trim($output));
+		$this->assertStringContainsString('Done :)', trim($output));
 
 		$script = 'DROP TABLE IF EXISTS `foo`;';
 		$connection->execute($script);
@@ -135,8 +135,8 @@ class DbMaintenanceShellTest extends TestCase {
 		$output = $this->out->output();
 
 		$expected = ' tables found';
-		$this->assertContains($expected, $output);
-		$this->assertContains('Done :)', $output);
+		$this->assertStringContainsString($expected, $output);
+		$this->assertStringContainsString('Done :)', $output);
 	}
 
 	/**

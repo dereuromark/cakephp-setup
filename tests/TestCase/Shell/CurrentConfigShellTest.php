@@ -25,7 +25,7 @@ class CurrentConfigShellTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->out = new ConsoleOutput();
@@ -44,8 +44,8 @@ class CurrentConfigShellTest extends TestCase {
 		$this->Shell->runCommand(['configure']);
 		$output = $this->out->output();
 
-		$this->assertContains('[App]', $output);
-		$this->assertContains('[namespace] =>', $output);
+		$this->assertStringContainsString('[App]', $output);
+		$this->assertStringContainsString('[namespace] =>', $output);
 	}
 
 	/**
@@ -55,7 +55,7 @@ class CurrentConfigShellTest extends TestCase {
 		$this->Shell->runCommand(['display']);
 		$output = $this->out->output();
 
-		$this->assertContains('Full Base URL:', $output);
+		$this->assertStringContainsString('Full Base URL:', $output);
 	}
 
 	/**
@@ -65,7 +65,7 @@ class CurrentConfigShellTest extends TestCase {
 		$this->Shell->runCommand(['phpinfo']);
 		$output = $this->out->output();
 
-		$this->assertContains('session.auto_start', $output);
+		$this->assertStringContainsString('session.auto_start', $output);
 	}
 
 	/**
@@ -75,8 +75,8 @@ class CurrentConfigShellTest extends TestCase {
 		$this->Shell->runCommand(['validate']);
 		$output = $this->out->output();
 
-		$this->assertContains('[driver]', $output);
-		$this->assertContains('[className]', $output);
+		$this->assertStringContainsString('[driver]', $output);
+		$this->assertStringContainsString('[className]', $output);
 	}
 
 }

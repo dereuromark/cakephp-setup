@@ -17,7 +17,7 @@ class MaintenanceModeShellTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		$this->out = new ConsoleOutput();
 		$this->err = new ConsoleOutput();
 		$io = new ConsoleIo($this->out, $this->err);

@@ -19,7 +19,7 @@ class BackendControllerTest extends TestCase {
 
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
 
-		$this->get(['prefix' => 'admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'phpinfo']);
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'phpinfo']);
 
 		$this->assertResponseCode(200);
 	}
@@ -32,7 +32,7 @@ class BackendControllerTest extends TestCase {
 
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
 
-		$this->get(['prefix' => 'admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'session']);
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'session']);
 
 		$this->assertResponseCode(200);
 	}
@@ -45,7 +45,7 @@ class BackendControllerTest extends TestCase {
 
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
 
-		$this->get(['prefix' => 'admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'cache']);
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'cache']);
 
 		$this->assertResponseCode(200);
 	}
@@ -60,7 +60,7 @@ class BackendControllerTest extends TestCase {
 
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
 
-		$this->get(['prefix' => 'admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'database']);
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'database']);
 
 		$this->assertResponseCode(200);
 	}

@@ -261,7 +261,7 @@ class UserShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser() {
+	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'dry-run' => [

@@ -25,7 +25,7 @@ class TestCliShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		Configure::write('App.fullBaseUrl', 'example.local');
@@ -44,7 +44,7 @@ class TestCliShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 		unset($this->Shell);
 
@@ -70,10 +70,10 @@ class TestCliShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testRouterPrefix() {
-		$this->Shell->runCommand(['router', '-x', 'admin']);
+		$this->Shell->runCommand(['router', '-x', 'Admin']);
 		$output = $this->out->output();
 
-		$this->assertTextContains('Router::url([\'controller\' => \'Test\', \'prefix\' => \'admin\'], true)', $output, print_r($output, true));
+		$this->assertTextContains('Router::url([\'controller\' => \'Test\', \'prefix\' => \'Admin\'], true)', $output, print_r($output, true));
 		$this->assertTextContains('/admin/test', $output, print_r($output, true));
 	}
 

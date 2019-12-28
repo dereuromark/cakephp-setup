@@ -19,7 +19,7 @@ class ClearShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->out = new ConsoleOutput();
@@ -36,7 +36,7 @@ class ClearShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 		unset($this->Shell);
 	}
@@ -57,7 +57,7 @@ class ClearShellTest extends TestCase {
 		$this->Shell->runCommand(['logs', '-v']);
 		$output = $this->out->output();
 
-		$this->assertContains('logs' . DS . 'fooo.log', $output);
+		$this->assertStringContainsString('logs' . DS . 'fooo.log', $output);
 	}
 
 }

@@ -10,7 +10,7 @@ class UsersTable extends Table {
 	 * @param array $config
 	 * @return void
 	 */
-	public function initialize(array $config) {
+	public function initialize(array $config): void {
 		$this->setDisplayField('username');
 	}
 

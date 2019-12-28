@@ -20,7 +20,7 @@ class IndentShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->out = new ConsoleOutput();
@@ -43,7 +43,7 @@ class IndentShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function tearDown() {
+	public function tearDown(): void {
 		if (file_exists(TMP . 'indent' . DS . 'indent.php')) {
 			unlink(TMP . 'indent' . DS . 'indent.php');
 		}
@@ -63,7 +63,7 @@ class IndentShellTest extends TestCase {
 
 		$this->Shell->runCommand(['folder', TMP . 'indent' . DS]);
 		$output = $this->out->output();
-		$this->assertContains('found: 1', $output);
+		$this->assertStringContainsString('found: 1', $output);
 
   	$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
 
@@ -82,7 +82,7 @@ class IndentShellTest extends TestCase {
 
 		$this->Shell->runCommand(['folder', TMP . 'indent' . DS, '-a']);
 		$output = $this->out->output();
-		$this->assertContains('found: 1', $output);
+		$this->assertStringContainsString('found: 1', $output);
 
 		$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
 

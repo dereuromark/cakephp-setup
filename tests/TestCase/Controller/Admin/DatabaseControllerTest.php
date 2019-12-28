@@ -21,7 +21,7 @@ class DatabaseControllerTest extends TestCase {
 
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
 
-		$this->get(['prefix' => 'admin', 'plugin' => 'Setup', 'controller' => 'Database', 'action' => 'foreignKeys']);
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Database', 'action' => 'foreignKeys']);
 
 		$this->assertResponseCode(200);
 	}

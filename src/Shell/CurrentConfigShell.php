@@ -29,6 +29,7 @@ class CurrentConfigShell extends Shell {
 		ob_start();
 		phpinfo();
 		$phpinfo = ob_get_contents();
+		ob_end_clean();
 
 		$this->out($phpinfo);
 	}
@@ -102,7 +103,7 @@ class CurrentConfigShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser() {
+	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
 		return parent::getOptionParser()
 			->setDescription('A Shell to display current system and application configs.')
 			->addSubcommand('display', [
@@ -115,7 +116,7 @@ class CurrentConfigShell extends Shell {
 				'help' => 'Checks application config for CLI (DB, Cache).',
 			])
 			->addSubcommand('phpinfo', [
-				'help' => 'Display phpinfo() for CLI. 
+				'help' => 'Display phpinfo() for CLI.
 Use `bin/cake current_config phpinfo | grep xdebug` for example to get all xdebug relevant info from it.
 Use the /admin/setup-extra/configuration/phpinfo backend to see phpinfo() for non-CLI (can differ!).',
 			]);

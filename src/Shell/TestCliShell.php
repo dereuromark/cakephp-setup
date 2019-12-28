@@ -46,7 +46,7 @@ class TestCliShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser() {
+	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
 		$parser = [
 			'options' => [
 				'plugin' => [

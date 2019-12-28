@@ -29,7 +29,7 @@ cake Setup.MaintenanceMode deactivate
 
 Tip: Your deploy script (e.g. sh script) can contain those commands. One at the beginning, the other at the end.
 
-## MaintenanceMiddleware (CakePHP 3.3+)
+## MaintenanceMiddleware
 This should then be the preferred way of triggering the maintenance mode display, as it can way cleaner
 short-circuit the dispatching.
 
@@ -39,17 +39,17 @@ use Setup\Middleware\MaintenanceMiddleware;
 
     /**
      * @param \Cake\Http\MiddlewareQueue $middleware The middleware queue to setup.
-     * @return \Cake\Http\MiddlewareQueue The updated middleware.
+     * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
      */
-    public function middleware($middleware) {
-        $middleware
+    public function middleware($middlewareQueue) {
+        $middlewareQueue
             ->add(MaintenanceMiddleware::class)
             ...
     }
 ```
 
 ### Customizing
-Make sure you have a template file in `APP . 'Template' . DS . 'Error' . DS` named `maintenance.ctp`.
+Make sure you have a template file in `'templates' . DS . 'Error' . DS` named `maintenance.php`.
 
 Configs:
 - 'className' => View::class,
@@ -57,27 +57,10 @@ Configs:
 - 'statusCode' => 503,
 - 'templateLayout' => false,
 - 'templateFileName' => 'maintenance',
-- 'templateExtension' => '.ctp',
+- 'templateExtension' => '.php',
 - 'contentType' => 'text/html'
 
 Those can be used to adjust the content of the maintenance mode page.
-
-## Maintenance Dispatching Filter (deprecated)
-
-Just add this in your bootstrap:
-```php
-use Setup\Routing\Filter\MaintenanceFilter;
-
-DispatcherFactory::add(new MaintenanceFilter());
-```
-
-You might want to wrap it with
-```php
-if (php_sapi_name() !== 'cli') {}
-```
-to only add this filter for non CLI requests.
-
-This filter has a very limited customization way. You can only adjust the string `__d('setup', 'Maintenance work')`.
 
 
 ## Maintenance Component

@@ -10,7 +10,7 @@ class Application extends BaseApplication {
 	/**
 	 * @inheritDoc
 	 */
-	public function bootstrap() {
+	public function bootstrap(): void {
 		// Call parent to load bootstrap from files.
 		parent::bootstrap();
 
@@ -21,7 +21,7 @@ class Application extends BaseApplication {
 	 * @param \Cake\Http\MiddlewareQueue $middleware The middleware queue to set in your App Class
 	 * @return \Cake\Http\MiddlewareQueue
 	 */
-	public function middleware($middleware) {
+	public function middleware(\Cake\Http\MiddlewareQueue $middleware): \Cake\Http\MiddlewareQueue {
 		$middleware->add(new RoutingMiddleware($this));
 
 		return $middleware;

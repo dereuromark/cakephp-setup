@@ -6,7 +6,7 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Request;
+use Cake\Http\ServerRequest;
 use Setup\Controller\Component\SetupComponent;
 use Tools\TestSuite\TestCase;
 
@@ -25,7 +25,7 @@ class SetupComponentTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->Controller = new Controller();
@@ -38,15 +38,15 @@ class SetupComponentTest extends TestCase {
 	 * @return void
 	 */
 	public function testSetMaintenance() {
-		$request = new Request('/?maintenance=1');
-		$this->Controller->request = $request;
-		$this->Controller->request->params = ['action' => 'index'];
+		$request = (new ServerRequest(['url' => '/?maintenance=1']))
+			->withParam('action', 'index');
+		$this->Controller->setRequest($request);
 
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
 
 		$this->Setup->beforeFilter($event);
 
-		$result = $this->Controller->request->getSession()->read('Flash.flash');
+		$result = $this->Controller->getRequest()->getSession()->read('Flash.flash');
 		$expected = [
 			[
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'activated')),
@@ -69,19 +69,18 @@ class SetupComponentTest extends TestCase {
 		$this->assertSame($expected, $result);
 
 		// Deactivate
-		$request = new Request('/?maintenance=0');
+		$request = (new ServerRequest(['url' => '/?maintenance=0']))
+			->withParam('action', 'index');
 		$this->Controller = new Controller($request);
 		$this->Controller->loadComponent('Flash');
 		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
-		$this->Controller->request->params = ['action' => 'index'];
-
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
 
 		$this->Setup->beforeFilter($event);
 
-		$result = $this->Controller->request->getSession()->read('Flash.flash');
+		$result = $this->Controller->getRequest()->getSession()->read('Flash.flash');
 		$expected = [
 			[
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated')),
@@ -92,7 +91,7 @@ class SetupComponentTest extends TestCase {
 		];
 		$this->assertSame($expected, $result);
 
-		$result = $this->Controller->response->header();
+		$result = $this->Controller->getResponse()->getHeaders();
 		$expected = [
 			'Content-Type' => 'text/html; charset=UTF-8',
 			'Location' => '/',

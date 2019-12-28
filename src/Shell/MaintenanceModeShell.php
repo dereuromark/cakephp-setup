@@ -26,7 +26,7 @@ class MaintenanceModeShell extends Shell {
 	/**
 	 * @return void
 	 */
-	public function startup() {
+	public function startup(): void {
 		parent::startup();
 
 		$this->Maintenance = new Maintenance();
@@ -112,7 +112,7 @@ class MaintenanceModeShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser() {
+	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'duration' => [
