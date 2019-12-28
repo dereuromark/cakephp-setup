@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Controller\Admin;
 
 use App\Controller\AppController;
@@ -29,7 +30,7 @@ class DatabaseController extends AppController {
 			$dbTables = [
 				[
 					'Name' => $table,
-				]
+				],
 			];
 		}
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
@@ -67,16 +68,16 @@ class CopyrightRemovalShell extends Shell {
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the clear command, no files will actually be modified. Should be combined with verbose!',
-					'boolean' => true
+					'boolean' => true,
 				],
-			]
+			],
 		];
 
 		return parent::getOptionParser()
 			->setDescription('This Shell removes unnecessary CakePHP copyright notices (only allowed for your application skeleton code!).')
 			->addSubcommand('clean', [
 				'help' => 'Detect and remove any CakePHP copyright notices from APP files.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 

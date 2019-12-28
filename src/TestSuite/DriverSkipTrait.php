@@ -8,6 +8,7 @@ use Cake\Datasource\ConnectionManager;
  * @mixin \Cake\TestSuite\TestCase
  */
 trait DriverSkipTrait {
+
 	/**
 	 * @param string $type
 	 * @param string $message

@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
@@ -7,8 +8,6 @@ use Cake\TestSuite\TestCase;
 use Setup\Shell\SuperfluousWhitespaceShell;
 use Tools\TestSuite\ConsoleOutput;
 
-/**
- */
 class SuperfluousWhitespaceShellTest extends TestCase {
 
 	/**

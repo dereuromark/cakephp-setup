@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
@@ -11,7 +12,7 @@ class MaintenanceModeShellTest extends TestCase {
 	/**
 	 * @var \Setup\Shell\MaintenanceModeShell
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @return void

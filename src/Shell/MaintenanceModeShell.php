@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
@@ -117,46 +118,46 @@ class MaintenanceModeShell extends Shell {
 				'duration' => [
 					'short' => 'd',
 					'help' => 'Duration in minutes - optional.',
-					'default' => ''
+					'default' => '',
 				],
-			]
+			],
 		];
 		$whitelistParser = [
 			'options' => [
 				'remove' => [
 					'short' => 'r',
 					'help' => 'Remove either all or specific IPs.',
-					'boolean' => true
+					'boolean' => true,
 				],
 				'debug' => [
 					'short' => 'd',
 					'help' => 'Enable debug mode for whitelisted IPs.',
-					'boolean' => true
-				]
-			]
+					'boolean' => true,
+				],
+			],
 		];
 
 		return parent::getOptionParser()
 			->setDescription('A shell to put the whole site into maintenance mode')
 			->addSubcommand('status', [
 				'help' => 'See the current status',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('activate', [
 				'help' => 'Activate maintenance mode',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('deactivate', [
 				'help' => 'Deactivate maintenance mode',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('reset', [
 				'help' => 'Reset maintenance mode',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('whitelist', [
 				'help' => 'Configure whitelisted IPs.',
-				'parser' => $whitelistParser
+				'parser' => $whitelistParser,
 			]);
 	}
 

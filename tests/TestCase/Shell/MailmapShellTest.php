@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
@@ -6,14 +7,12 @@ use Cake\TestSuite\TestCase;
 use Setup\Shell\MailmapShell;
 use Tools\TestSuite\ConsoleOutput;
 
-/**
- */
 class MailmapShellTest extends TestCase {
 
 	/**
 	 * @var \Setup\Shell\MailmapShell
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @return void
@@ -31,7 +30,7 @@ class MailmapShellTest extends TestCase {
 
 		$array = [
 			'11 foo <foo@bar.de>',
-			' 2 fooo <fOo@BaR.dE>'
+			' 2 fooo <fOo@BaR.dE>',
 		];
 		$this->Shell->expects($this->any())->method('runGitCommand')->willReturn($array);
 

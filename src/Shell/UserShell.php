@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Shell;
 
 use ArrayObject;
@@ -139,7 +140,7 @@ class UserShell extends Shell {
 
 		$data = [
 			'pwd' => $password,
-			'active' => 1
+			'active' => 1,
 		];
 
 		if ($displayField === $this->Users->getPrimaryKey()) {
@@ -198,6 +199,38 @@ class UserShell extends Shell {
 	}
 
 	/**
+	 * Updates existing user with a freshly hashed password.
+	 *
+	 * @param string|null $displayFieldValue
+	 * @param string|null $password
+	 * @return void
+	 */
+	public function update($displayFieldValue = null, $password = null) {
+		$this->loadModel(CLASS_USERS);
+		$schema = $this->Users->getSchema();
+
+		$displayField = $this->Users->getDisplayField();
+		$displayFieldName = Inflector::humanize($displayField);
+
+		while (empty($displayFieldValue)) {
+			$displayFieldValue = $this->in($displayFieldName);
+		}
+
+		$user = $this->Users->find()->where([$displayField => $displayFieldValue])->firstOrFail();
+
+		while (empty($password)) {
+			$password = $this->in('Password');
+		}
+
+		$this->Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
+		$this->Users->patchEntity($user, ['pwd' => $password]);
+
+		$this->Users->saveOrFail($user);
+
+		$this->success('Password updated for user ' . $displayFieldValue);
+	}
+
+	/**
 	 * Creates a new user including a freshly hashed password.
 	 *
 	 * @param string|null $password
@@ -234,9 +267,9 @@ class UserShell extends Shell {
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the create command, no data will actually be inserted.',
-					'boolean' => true
+					'boolean' => true,
 				],
-			]
+			],
 		];
 
 		$createParser = $subcommandParser;
@@ -256,9 +289,9 @@ class UserShell extends Shell {
 				'search' => [
 					'short' => 's',
 					'help' => 'Search in the display field.',
-					'default' => ''
+					'default' => '',
 				],
-			]
+			],
 		];
 
 		return parent::getOptionParser()
@@ -267,15 +300,19 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 Make sure you configured the Passwordable behavior accordingly as per docs.')
 			->addSubcommand('index', [
 				'help' => 'Lists current users.',
-				'parser' => $listParser
+				'parser' => $listParser,
 			])
 			->addSubcommand('create', [
 				'help' => 'Create a new user with email and password provided.',
-				'parser' => $createParser
+				'parser' => $createParser,
+			])
+			->addSubcommand('update', [
+				'help' => 'Update a specific user with a new password.',
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('password', [
 				'help' => 'Generate a hash from a given password.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 

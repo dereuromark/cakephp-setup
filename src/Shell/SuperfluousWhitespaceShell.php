@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
@@ -21,7 +22,7 @@ class SuperfluousWhitespaceShell extends Shell {
 	 */
 	public $report = [
 		'leading' => [0, 0],
-		'trailing' => [0, 0]
+		'trailing' => [0, 0],
 	];
 
 	/**
@@ -180,14 +181,14 @@ class SuperfluousWhitespaceShell extends Shell {
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the clear command, no files will actually be deleted. Should be combined with verbose!',
-					'boolean' => true
+					'boolean' => true,
 				],
 				'plugin' => [
 					'short' => 'p',
 					'help' => 'Plugin',
 					'default' => '',
 				],
-			]
+			],
 		];
 
 		return parent::getOptionParser()
@@ -195,12 +196,12 @@ class SuperfluousWhitespaceShell extends Shell {
 Either provide a path as first argument, use -p PluginName or run it as it is for the complete APP dir.')
 			->addSubcommand('clean', [
 				'help' => 'Detect and remove any leading/trailing whitespaces',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('eof', [
 				'help' => 'Fix whitespace issues at the end of PHP files:
 A single newline as per coding standards and no closing ?> tag for PHP files.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 

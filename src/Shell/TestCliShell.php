@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Shell;
 
 use Cake\Console\Shell;
@@ -51,21 +52,21 @@ class TestCliShell extends Shell {
 				'plugin' => [
 					'short' => 'p',
 					'help' => 'Plugin (optional)',
-					'default' => ''
+					'default' => '',
 				],
 				'prefix' => [
 					'short' => 'x',
 					'help' => 'Prefix (optional)',
-					'default' => ''
+					'default' => '',
 				],
-			]
+			],
 		];
 
 		return parent::getOptionParser()
 			->setDescription('Test CLI')
 			->addSubcommand('router', [
 				'help' => 'Test router environment',
-				'parser' => $parser
+				'parser' => $parser,
 			]);
 	}
 

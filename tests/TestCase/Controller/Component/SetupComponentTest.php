@@ -52,15 +52,15 @@ class SetupComponentTest extends TestCase {
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'activated')),
 				'key' => 'flash',
 				'element' => 'Flash/success',
-				'params' => []
-			]
+				'params' => [],
+			],
 		];
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
 		$expected = [
 			'Content-Type' => 'text/html; charset=UTF-8',
-			'Location' => '/'
+			'Location' => '/',
 		];
 		if (version_compare(Configure::version(), '3.4.0') < 0) {
 			$expected = ['Location' => '/'];
@@ -87,15 +87,15 @@ class SetupComponentTest extends TestCase {
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated')),
 				'key' => 'flash',
 				'element' => 'Flash/success',
-				'params' => []
-			]
+				'params' => [],
+			],
 		];
 		$this->assertSame($expected, $result);
 
 		$result = $this->Controller->response->header();
 		$expected = [
 			'Content-Type' => 'text/html; charset=UTF-8',
-			'Location' => '/'
+			'Location' => '/',
 		];
 		if (version_compare(Configure::version(), '3.4.0') < 0) {
 			$expected = ['Location' => '/'];

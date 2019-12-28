@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
@@ -7,14 +8,12 @@ use Cake\TestSuite\TestCase;
 use Setup\Shell\TestCliShell;
 use Tools\TestSuite\ConsoleOutput;
 
-/**
- */
 class TestCliShellTest extends TestCase {
 
 	/**
 	 * @var \Setup\Shell\TestCliShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @var \Tools\TestSuite\ConsoleOutput

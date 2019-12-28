@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Shell\Traits;
 
 use Cake\Collection\Collection;
@@ -11,11 +12,12 @@ use Cake\Utility\Text;
 trait DbToolsTrait {
 
 	/**
+	 * @param string $name
+	 *
 	 * @return \Cake\Database\Connection
 	 */
-	protected function _getConnection() {
-		$name = 'default';
-		if ($this->params['connection']) {
+	protected function _getConnection($name = 'default') {
+		if (!empty($this->params['connection'])) {
 			$name = $this->params['connection'];
 		}
 
@@ -40,9 +42,9 @@ FROM information_schema.tables AS tb
 WHERE   table_schema = '$database'
 AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
-		/** @var \Traversable $res */
+		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 		$tables = new Collection($res);

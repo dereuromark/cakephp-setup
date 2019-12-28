@@ -7,3 +7,7 @@ parameters:
 		- '#Access to protected property Cake\\Http\\ServerRequest::\$url#'
 		- '#Access to protected property Cake\\View\\View::\$helpers#'
 		- '#Access to protected property Cake\\View\\View::\$_ext#'
+		- '#Call to function method_exists\(\) with .+Entity.+ and .+ will always evaluate to false.#'
+		-
+			message: '#If condition is always false.#'
+			path: 'src/Shell/IndentShell.php'

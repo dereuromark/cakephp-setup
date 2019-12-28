@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
@@ -7,8 +8,6 @@ use Setup\Shell\DbMigrationShell;
 use Setup\TestSuite\DriverSkipTrait;
 use Tools\TestSuite\ConsoleOutput;
 
-/**
- */
 class DbMigrationShellTest extends TestCase {
 
 	use DriverSkipTrait;
@@ -16,7 +15,7 @@ class DbMigrationShellTest extends TestCase {
 	/**
 	 * @var \Setup\Shell\DbMigrationShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @var \Tools\TestSuite\ConsoleOutput

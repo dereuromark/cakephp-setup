@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
@@ -6,14 +7,12 @@ use Cake\TestSuite\TestCase;
 use Setup\Shell\ClearShell;
 use Tools\TestSuite\ConsoleOutput;
 
-/**
- */
 class ClearShellTest extends TestCase {
 
 	/**
 	 * @var \Setup\Shell\ClearShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * setUp method

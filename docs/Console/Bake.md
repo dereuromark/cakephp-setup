@@ -1,5 +1,10 @@
 # Setup plugin Bake templates
 
+You can use these templates by using the `--theme`/`-t` option:
+```
+bin/cake bake -t Setup ...
+```
+
 See [CakePHP docs](http://book.cakephp.org/3.0/en/bake/development.html#extending-bake) on how to further customize.
 
 ## Model level

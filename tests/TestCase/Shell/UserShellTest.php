@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
@@ -11,7 +12,7 @@ class UserShellTest extends TestCase {
 	/**
 	 * @var \Setup\Shell\UserShell|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	public $Shell;
+	protected $Shell;
 
 	/**
 	 * @var array

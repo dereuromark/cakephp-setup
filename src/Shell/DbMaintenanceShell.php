@@ -1,4 +1,5 @@
 <?php
+
 namespace Setup\Shell;
 
 use Cake\Collection\Collection;
@@ -60,7 +61,7 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 
@@ -134,7 +135,7 @@ AND     `TABLE_TYPE` = 'BASE TABLE';
 SQL;
 		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 
@@ -255,7 +256,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		/** @var \Cake\Database\Statement\StatementDecorator $res */
 		$res = $db->query($script);
-		if (!$res) {
+		if (!$res->count()) {
 			$this->abort('Nothing to do...');
 		}
 
@@ -483,34 +484,34 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 				'dry-run' => [
 					'short' => 'd',
 					'help' => 'Dry run the command, nothing will actually be modified. It will output the SQL to copy-and-paste, e.g. into a Migrations file.',
-					'boolean' => true
+					'boolean' => true,
 				],
 				'connection' => [
 					'short' => 'c',
 					'help' => 'Use a different connection than `default`.',
-					'default' => ''
+					'default' => '',
 				],
 				'table' => [
 					'short' => 't',
 					'help' => 'Specific table (separate multiple with comma).',
-					'default' => ''
+					'default' => '',
 				],
 				'interactive' => [
 					'short' => 'i',
 					'help' => 'Interactive mode.',
-					'boolean' => true
+					'boolean' => true,
 				],
-			]
+			],
 		];
 
 		$tablePrefixParser = $subcommandParser;
 		$tablePrefixParser['options']['database'] = [
 			'help' => 'Database name, defaults to the currently configured one',
-			'default' => ''
+			'default' => '',
 		];
 		$tablePrefixParser['arguments'] = [
 			'action' => ['help' => '[A]dd or [R]remove.', 'required' => false],
-			'prefix' => ['help' => 'Prefix to work with.', 'required' => false]
+			'prefix' => ['help' => 'Prefix to work with.', 'required' => false],
 		];
 
 		return parent::getOptionParser()
@@ -518,27 +519,27 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 Use -d -v (dry-run and verbose mode) to only display queries but not execute them.")
 			->addSubcommand('encoding', [
 				'help' => 'Convert encoding to `utf8mb4`.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('engine', [
 				'help' => 'Convert engine (MyIsam, InnoDB).',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('table_prefix', [
 				'help' => 'Add or remove table prefixes.',
-				'parser' => $tablePrefixParser
+				'parser' => $tablePrefixParser,
 			])
 			->addSubcommand('dates', [
 				'help' => 'Correct date(time) fields and alerts of wrong field types.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('foreign_keys', [
 				'help' => 'Correct foreign key fields and alerts of wrong field types.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			])
 			->addSubcommand('cleanup', [
 				'help' => 'Cleanup database.',
-				'parser' => $subcommandParser
+				'parser' => $subcommandParser,
 			]);
 	}
 
