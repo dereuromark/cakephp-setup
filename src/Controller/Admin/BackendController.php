@@ -40,7 +40,7 @@ class BackendController extends AppController {
 
 		$sessionConfig = Configure::read('Session');
 		$sessionId = $this->request->getSession()->id();
-		if ($sessionConfig['defaults'] === 'database') {
+		if ($sessionConfig && $sessionConfig['defaults'] === 'database') {
 			$sessionData = TableRegistry::get('Sessions')->get($sessionId);
 		} else {
 			$sessionData = [
