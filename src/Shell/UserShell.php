@@ -3,6 +3,7 @@
 namespace Setup\Shell;
 
 use ArrayObject;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -191,7 +192,7 @@ class UserShell extends Shell {
 			return;
 		}
 		if (!$this->Users->save($entity, ['checkRules' => false])) {
-			$this->abort('User could not be inserted (' . print_r($entity->errors(), true) . ')');
+			$this->abort('User could not be inserted (' . print_r($entity->getErrors(), true) . ')');
 		}
 
 		$this->out('User inserted! ID: ' . $entity['id']);
@@ -261,7 +262,7 @@ class UserShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'dry-run' => [

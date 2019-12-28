@@ -3,11 +3,13 @@
 namespace Setup\Shell;
 
 use Cake\Cache\Cache;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
 use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\Utility\Security;
 use Exception;
 
@@ -41,15 +43,15 @@ class CurrentConfigShell extends Shell {
 		$this->info('Security Salt: ' . Security::getSalt());
 		$this->info('Full Base URL: ' . Configure::read('App.fullBaseUrl'));
 
-		$this->out();
+		$this->out('');
 
 		$this->info('Email Config:');
-		$config = (array)Email::getConfig('default');
+		$config = (array)Mailer::getConfig('default');
 		foreach ($config as $key => $value) {
 			$this->out(' - ' . $key . ': ' . $value);
 		}
 
-		$this->out();
+		$this->out('');
 
 		$this->info('ENV:');
 		foreach ($_ENV as $key => $value) {
@@ -103,7 +105,7 @@ class CurrentConfigShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		return parent::getOptionParser()
 			->setDescription('A Shell to display current system and application configs.')
 			->addSubcommand('display', [

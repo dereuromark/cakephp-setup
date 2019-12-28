@@ -3,6 +3,7 @@
 namespace Setup\Shell;
 
 use Cake\Auth\PasswordHasherFactory;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -103,7 +104,7 @@ class ResetShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'dry-run' => [

@@ -2,6 +2,7 @@
 
 namespace Setup\Shell;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -235,7 +236,7 @@ class ClearShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'remove' => [

@@ -3,4 +3,4 @@
  * @var \App\View\AppView $this
  */
 ?>
-<?= $this->fetch('content') ?>
+<?= $this->fetch('content')

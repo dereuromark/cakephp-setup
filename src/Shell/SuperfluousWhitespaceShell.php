@@ -2,6 +2,7 @@
 
 namespace Setup\Shell;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
@@ -170,7 +171,7 @@ class SuperfluousWhitespaceShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'ext' => [

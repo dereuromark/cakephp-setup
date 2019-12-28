@@ -4,10 +4,8 @@ parameters:
 		- %rootDir%/../../../tests/shim.php
 	ignoreErrors:
 		- '#Call to an undefined method .+FlashComponent::warning\(\)#'
-		- '#Access to protected property Cake\\Http\\ServerRequest::\$url#'
-		- '#Access to protected property Cake\\View\\View::\$helpers#'
-		- '#Access to protected property Cake\\View\\View::\$_ext#'
 		- '#Call to function method_exists\(\) with .+Entity.+ and .+ will always evaluate to false.#'
+		- '#Parameter \#1 \$items of class .+Collection constructor expects iterable, .+StatementInterface given.#'
 		-
 			message: '#If condition is always false.#'
 			path: 'src/Shell/IndentShell.php'

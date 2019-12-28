@@ -3,6 +3,7 @@
 namespace Setup\Shell;
 
 use Cake\Collection\Collection;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Exception;
 use Setup\Shell\Traits\DbToolsTrait;
@@ -478,7 +479,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'dry-run' => [

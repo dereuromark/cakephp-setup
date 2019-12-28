@@ -2,6 +2,7 @@
 
 namespace Setup\Shell;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Text;
@@ -273,7 +274,7 @@ class IndentShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
 				'dry-run' => [

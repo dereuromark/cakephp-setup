@@ -2,6 +2,7 @@
 
 namespace Setup\Shell;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Routing\Router;
 
@@ -46,7 +47,7 @@ class TestCliShell extends Shell {
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
-	public function getOptionParser(): \Cake\Console\ConsoleOptionParser {
+	public function getOptionParser(): ConsoleOptionParser {
 		$parser = [
 			'options' => [
 				'plugin' => [

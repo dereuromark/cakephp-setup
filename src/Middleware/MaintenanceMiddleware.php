@@ -24,7 +24,7 @@ class MaintenanceMiddleware {
 		'statusCode' => 503,
 		'templateLayout' => false,
 		'templateFileName' => 'maintenance',
-		'templateExtension' => '.ctp',
+		'templateExtension' => '.php',
 		'contentType' => 'text/html',
 	];
 
@@ -65,11 +65,12 @@ class MaintenanceMiddleware {
 		$templatePath = $this->getConfig('templatePath');
 
 		$view = $builder
-			->className($this->getConfig('className'))
-			->templatePath(Inflector::camelize($templatePath))
-			->layout($this->getConfig('templateLayout'))
-			->build([], $cakeRequest);
-		$view->_ext = $this->getConfig('templateExtension');
+			->setClassName($this->getConfig('className'))
+			->setTemplatePath(Inflector::camelize($templatePath))
+			->setLayout($this->getConfig('templateLayout'))
+			->build([], $cakeRequest)
+			->setConfig('_ext', $this->getConfig('templateExtension'));
+		//$view->_ext = $this->getConfig('templateExtension');
 
 		$bodyString = $view->render($templateName);
 

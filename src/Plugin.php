@@ -23,4 +23,5 @@ class Plugin extends BasePlugin {
 			});
 		});
 	}
+
 }

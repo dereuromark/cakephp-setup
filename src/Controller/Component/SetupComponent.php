@@ -10,7 +10,7 @@ use Cake\Http\Exception\InternalErrorException;
 use Exception;
 use Setup\Maintenance\Maintenance;
 use Setup\Utility\Setup;
-use Tools\Mailer\Email;
+use Tools\Mailer\Mailer;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {
@@ -42,9 +42,9 @@ class SetupComponent extends Component {
 	public $Controller;
 
 	/**
-	 * @var \Cake\Mailer\Email|null
+	 * @var \Cake\Mailer\Mailer|null
 	 */
-	protected $Email;
+	protected $Mailer;
 
 	/**
 	 * @var array
@@ -67,7 +67,7 @@ class SetupComponent extends Component {
 		$this->Controller = $Controller;
 
 		// For debug overwrite
-		if (($debug = $this->request->getSession()->read('Setup.debug')) !== null) {
+		if (($debug = $this->getController()->getRequest()->getSession()->read('Setup.debug')) !== null) {
 			Configure::write('debug', $debug);
 		}
 
@@ -89,9 +89,9 @@ class SetupComponent extends Component {
 		}
 
 		// maintenance mode
-		if ($this->Controller->request->getQuery('maintenance') !== null) {
-			$mode = $this->Controller->request->getQuery('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
-			$result = $this->setMaintenance($this->Controller->request->getQuery('maintenance'));
+		if ($this->Controller->getRequest()->getQuery('maintenance') !== null) {
+			$mode = $this->Controller->getRequest()->getQuery('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
+			$result = $this->setMaintenance($this->Controller->getRequest()->getQuery('maintenance'));
 			if ($result !== false) {
 				$this->Controller->Flash->success(__d('setup', 'Maintenance mode {0}', $mode));
 			} else {
@@ -101,10 +101,10 @@ class SetupComponent extends Component {
 		}
 
 		// debug mode
-		if ($this->Controller->request->getQuery('debug') !== null) {
-			$result = $this->setDebug((int)$this->Controller->request->getQuery('debug'));
+		if ($this->Controller->getRequest()->getQuery('debug') !== null) {
+			$result = $this->setDebug((int)$this->Controller->getRequest()->getQuery('debug'));
 			if ($result !== false) {
-				$this->Controller->Flash->success(__d('setup', 'debug set to {0}', $this->Controller->request->getQuery('debug')));
+				$this->Controller->Flash->success(__d('setup', 'debug set to {0}', $this->Controller->getRequest()->getQuery('debug')));
 			} else {
 				$this->Controller->Flash->error(__d('setup', 'debug not set'));
 			}
@@ -112,8 +112,8 @@ class SetupComponent extends Component {
 		}
 
 		// clear cache
-		if ($this->Controller->request->getQuery('clearcache') !== null) {
-			$result = $this->clearCache($this->Controller->request->getQuery('clearcache'));
+		if ($this->Controller->getRequest()->getQuery('clearcache') !== null) {
+			$result = $this->clearCache($this->Controller->getRequest()->getQuery('clearcache'));
 			if ($result !== false) {
 				$this->Controller->Flash->success(__d('setup', 'cache cleared'));
 			} else {
@@ -123,7 +123,7 @@ class SetupComponent extends Component {
 		}
 
 		// clear session
-		if ($this->Controller->request->getQuery('clearsession') !== null) {
+		if ($this->Controller->getRequest()->getQuery('clearsession') !== null) {
 			if ($this->clearSession()) {
 				$this->Controller->Flash->success(__d('setup', 'session cleared'));
 			} else {
@@ -133,9 +133,9 @@ class SetupComponent extends Component {
 		}
 
 		// layout switch
-		if ($this->Controller->request->getQuery('layout') !== null) {
-			$this->setLayout($this->Controller->request->getQuery('layout'));
-			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->request->getQuery('layout')));
+		if ($this->Controller->getRequest()->getQuery('layout') !== null) {
+			$this->setLayout($this->Controller->getRequest()->getQuery('layout'));
+			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->getRequest()->getQuery('layout')));
 			return $this->Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
@@ -151,7 +151,7 @@ class SetupComponent extends Component {
 	 * @return void
 	 */
 	public function startup(Event $event) {
-		$layout = $this->request->getSession()->read('Setup.layout');
+		$layout = $this->getController()->getRequest()->getSession()->read('Setup.layout');
 		if ($layout) {
 			$this->Controller->viewBuilder()->setLayout($layout);
 		}
@@ -170,12 +170,12 @@ class SetupComponent extends Component {
 			return;
 		}
 		$referer = $this->Controller->referer();
-		if (strlen($referer) > 2 && (int)$this->request->getSession()->read('Report.404') < time() - 5 * MINUTE) {
-			$text = '404:' . TB . TB . '/' . $this->Controller->request->url .
+		if (strlen($referer) > 2 && (int)$this->getController()->getRequest()->getSession()->read('Report.404') < time() - 5 * MINUTE) {
+			$text = '404:' . TB . TB . $this->Controller->getRequest()->getRequestTarget() .
 			NL . 'Referer:' . TB . '' . $referer .
 			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .
 			NL . 'IP: ' . env('REMOTE_ADDR');
-			$uid = $this->request->getSession()->read('Auth.User.id');
+			$uid = $this->getController()->getRequest()->getSession()->read('Auth.User.id');
 			if ($uid) {
 				$text .= NL . NL . 'UID: ' . $uid;
 			}
@@ -183,7 +183,7 @@ class SetupComponent extends Component {
 			if (!$this->_notification('404!', $text)) {
 				throw new InternalErrorException('Cannot send admin notification email');
 			}
-			$this->request->getSession()->write('Report.404', time());
+			$this->getController()->getRequest()->getSession()->write('Report.404', time());
 		}
 	}
 
@@ -196,7 +196,7 @@ class SetupComponent extends Component {
 	public function log404($notifyAdminOnInternalErrors = false) {
 		if ($this->Controller->getName() === 'CakeError') {
 			$referer = $this->Controller->referer();
-			$this->Controller->log('REF: ' . $referer . ' - URL: ' . $this->Controller->request->url, '404');
+			$this->Controller->log('REF: ' . $referer . ' - URL: ' . $this->Controller->getRequest()->getRequestTarget(), '404');
 		}
 	}
 
@@ -209,7 +209,7 @@ class SetupComponent extends Component {
 		if (!Configure::read('Config.productive')) {
 			return true;
 		}
-		$pwd = $this->Controller->request->getQuery('pwd');
+		$pwd = $this->Controller->getRequest()->getQuery('pwd');
 		if ($pwd && $pwd === Configure::read('Config.pwd')) {
 			return true;
 		}
@@ -224,10 +224,10 @@ class SetupComponent extends Component {
 	 */
 	public function setLayout($layout) {
 		if (!$layout) {
-			$this->request->getSession()->delete('Setup.layout');
+			$this->getController()->getRequest()->getSession()->delete('Setup.layout');
 			return;
 		}
-		$this->request->getSession()->write('Setup.layout', $layout);
+		$this->getController()->getRequest()->getSession()->write('Setup.layout', $layout);
 	}
 
 	/**
@@ -245,7 +245,7 @@ class SetupComponent extends Component {
 	public function setMaintenance($maintenance) {
 		$ip = env('REMOTE_ADDR');
 		// optional length in minutes
-		$length = (int)$this->Controller->request->getQuery('duration');
+		$length = (int)$this->Controller->getRequest()->getQuery('duration');
 
 		$Maintenance = new Maintenance();
 		if (!$Maintenance->setMaintenanceMode($maintenance ? $length : false)) {
@@ -272,10 +272,10 @@ class SetupComponent extends Component {
 
 		if ($type === 'session') {
 			if ($level < 0) {
-				$this->request->getSession()->delete('Setup.debug');
+				$this->getController()->getRequest()->getSession()->delete('Setup.debug');
 				return false;
 			}
-			$this->request->getSession()->write('Setup.debug', $level);
+			$this->getController()->getRequest()->getSession()->write('Setup.debug', $level);
 			return true;
 		}
 
@@ -325,7 +325,7 @@ class SetupComponent extends Component {
 	 */
 	public function clearCache($type = null) {
 		$config = $type ?: 'default';
-		Cache::clear(false, $config);
+		Cache::clear($config);
 
 		return true;
 	}
@@ -336,7 +336,7 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	public function clearSession() {
-		$this->request->getSession()->destroy();
+		$this->getController()->getRequest()->getSession()->destroy();
 		return true;
 	}
 
@@ -352,7 +352,7 @@ class SetupComponent extends Component {
 			$type[] = 'pwd';
 		}
 
-		return Setup::cleanedUrl($type, $this->Controller->request->getAttribute('params') + ['?' => $this->Controller->request->getQuery()]);
+		return Setup::cleanedUrl($type, $this->Controller->getRequest()->getAttribute('params') + ['?' => $this->Controller->getRequest()->getQuery()]);
 	}
 
 	/**
@@ -364,17 +364,18 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	protected function _notification($title, $text) {
-		if (!isset($this->Email)) {
-			$this->Email = new Email();
+		if (!isset($this->Mailer)) {
+			$this->Mailer = new Mailer();
 		} else {
-			$this->Email->reset();
+			$this->Mailer->reset();
 		}
 
-		$this->Email->to(Configure::read('Config.adminEmail'), Configure::read('Config.adminName'));
-		$this->Email->subject($title);
-		$this->Email->template('simple_email');
-		$this->Email->viewVars(compact('text'));
-		if ($this->Email->send()) {
+		$this->Mailer->setTo(Configure::read('Config.adminEmail'), Configure::read('Config.adminName'));
+		$this->Mailer->setSubject($title);
+		//FIXME
+		//$this->Mailer->setTemplate('simple_email');
+		$this->Mailer->setViewVars(compact('text'));
+		if ($this->Mailer->send()) {
 			return true;
 		}
 

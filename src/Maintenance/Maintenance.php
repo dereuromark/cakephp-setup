@@ -28,46 +28,6 @@ class Maintenance {
 	}
 
 	/**
-	 * Main functionality to trigger maintenance mode.
-	 * Will automatically set the appropriate headers.
-	 *
-	 * Tip: Check for non CLI first
-	 *
-	 *  if (php_sapi_name() !== 'cli') {
-	 *    App::uses('MaintenanceLib', 'Setup.Lib');
-	 *    $Maintenance = new MaintenanceLib();
-	 *    $Maintenance->checkMaintenance();
-	 *  }
-	 *
-	 * @param string|null $ipAddress
-	 * @param bool $exit If Response should be sent and exited.
-	 * @return void
-	 * @deprecated Use Maintenance DispatcherFilter
-	 */
-	public function checkMaintenance($ipAddress = null, $exit = true) {
-		if ($ipAddress === null) {
-			$ipAddress = env('REMOTE_ADDRESS');
-		}
-		if (!$this->isMaintenanceMode($ipAddress)) {
-			return;
-		}
-		$Response = new Response();
-		$Response->statusCode(503);
-		$Response->header('Retry-After', DAY);
-		$body = __d('setup', 'Maintenance work');
-		$template = APP . 'Template' . DS . 'Error' . DS . $this->template;
-		if (file_exists($template)) {
-			$body = file_get_contents($template);
-		}
-
-		$Response->body($body);
-		if ($exit) {
-			$Response->send();
-			exit;
-		}
-	}
-
-	/**
 	 * Check if maintenance mode is on.
 	 *
 	 * If overwritable, it will set Configure value 'Maintenance.overwrite' with the
