@@ -34,7 +34,7 @@ matrix:
       env: CODECOVERAGE=1 DEFAULT=0 DB=mysql db_dsn='mysql://root@127.0.0.1/cakephp_test'
 
 before_install:
-  - if [[ $CODECOVERAGE != 1 ]]; then phpenv config-rm xdebug.ini ; fi
+  - phpenv config-rm xdebug.ini
 
 before_script:
   - if [[ $DB == 'mysql' ]]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi
@@ -54,9 +54,10 @@ script:
   - if [[ $CHECKS == 1 ]]; then composer phpstan; fi
   - if [[ $CHECKS == 1 ]]; then composer cs-check; fi
 
-  - if [[ $CODECOVERAGE == 1 ]]; then vendor/bin/phpunit --coverage-clover=clover.xml || true; fi
-  - if [[ $CODECOVERAGE == 1 ]]; then wget -O codecov.sh https://codecov.io/bash; fi
-  - if [[ $CODECOVERAGE == 1 ]]; then bash codecov.sh; fi
+  - if [[ $CODECOVERAGE == 1 ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml; fi
+
+after_success:
+  - if [[ $CODECOVERAGE == 1 ]]; then bash <(curl -s https://codecov.io/bash); fi
 
 cache:
   directories:
