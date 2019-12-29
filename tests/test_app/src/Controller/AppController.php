@@ -2,7 +2,7 @@
 
 namespace TestApp\Controller;
 
-use Tools\Controller\Controller;
+use Cake\Controller\Controller;
 
 class AppController extends Controller {
 }

@@ -44,6 +44,8 @@ Cake\Core\Configure::write('App', [
 ]);
 Cake\Core\Configure::write('debug', true);
 
+class_alias(\TestApp\Controller\AppController::class, 'App\Controller\AppController');
+
 mb_internal_encoding('UTF-8');
 
 $Tmp = new \Cake\Filesystem\Folder(TMP);
@@ -106,5 +108,3 @@ Cake\Datasource\ConnectionManager::setConfig('test', [
 	'quoteIdentifiers' => true,
 	'cacheMetadata' => true,
 ]);
-
-class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
