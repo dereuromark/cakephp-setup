@@ -3,8 +3,8 @@
 namespace Setup\Test\TestCase\Routing\Filter;
 
 use Cake\Event\Event;
-use Cake\Network\Request;
-use Cake\Network\Response;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
 use Setup\Routing\Filter\MaintenanceFilter;
 use Tools\TestSuite\TestCase;
 
@@ -40,8 +40,8 @@ class MaintenanceFilterTest extends TestCase {
 	public function testMaintenance() {
 		$filter = new MaintenanceFilter();
 
-		$response = $this->getMockBuilder('Cake\Network\Response')->setMethods(['send'])->getMock();
-		$request = new Request('/');
+		$response = $this->getMockBuilder(Response::class)->setMethods(['send'])->getMock();
+		$request = new ServerRequest(['url' => '/']);
 
 		$event = new Event('DispatcherTest', $this, compact('request', 'response'));
 
@@ -62,7 +62,7 @@ class MaintenanceFilterTest extends TestCase {
 		$filter = new MaintenanceFilter();
 
 		$response = $this->getMockBuilder(Response::class)->setMethods(['_sendHeader'])->getMock();
-		$request = new Request('/');
+		$request = new ServerRequest(['url' => '/']);
 		$event = new Event('Dispatcher.beforeRequest', $this, compact('request', 'response'));
 
 		$this->assertNull($filter->beforeDispatch($event));

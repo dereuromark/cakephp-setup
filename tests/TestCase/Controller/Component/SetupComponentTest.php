@@ -4,9 +4,7 @@ namespace Setup\Test\TestCase\Controller\Component;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
-use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Request;
 use Setup\Controller\Component\SetupComponent;
 use Tools\TestSuite\TestCase;
 
@@ -30,17 +28,17 @@ class SetupComponentTest extends TestCase {
 
 		$this->Controller = new Controller();
 		$this->Controller->loadComponent('Flash');
-		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 	}
 
 	/**
 	 * @return void
 	 */
-	public function testSetMaintenance() {
-		$request = new Request('/?maintenance=1');
-		$this->Controller->request = $request;
-		$this->Controller->request->params = ['action' => 'index'];
+	public function testSetMaintenanceOn() {
+		$request = $this->Controller->getRequest()
+			->withAttribute('params', ['controller' => 'MyController', 'action' => 'myAction'])
+			->withQueryParams(['maintenance' => 1]);
+		$this->Controller->setRequest($request);
 
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
 
@@ -60,22 +58,25 @@ class SetupComponentTest extends TestCase {
 		$result = $this->Controller->response->header();
 		$expected = [
 			'Content-Type' => 'text/html; charset=UTF-8',
-			'Location' => '/',
+			'Location' => '/my-controller/my-action',
 		];
-		if (version_compare(Configure::version(), '3.4.0') < 0) {
-			$expected = ['Location' => '/'];
-		}
 
 		$this->assertSame($expected, $result);
 
-		// Deactivate
-		$request = new Request('/?maintenance=0');
-		$this->Controller = new Controller($request);
-		$this->Controller->loadComponent('Flash');
-		$this->Controller->Flash->Controller = $this->Controller;
-		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
-		$this->Controller->request->params = ['action' => 'index'];
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSetMaintenanceOff() {
+		$request = $this->Controller->getRequest()
+			->withAttribute('params', ['controller' => 'MyController', 'action' => 'myAction'])
+			->withQueryParams(['maintenance' => 0]);
+		$this->Controller->setRequest($request);
+
+		$this->Controller->loadComponent('Flash');
+		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
 
@@ -95,11 +96,8 @@ class SetupComponentTest extends TestCase {
 		$result = $this->Controller->response->header();
 		$expected = [
 			'Content-Type' => 'text/html; charset=UTF-8',
-			'Location' => '/',
+			'Location' => '/my-controller/my-action',
 		];
-		if (version_compare(Configure::version(), '3.4.0') < 0) {
-			$expected = ['Location' => '/'];
-		}
 		$this->assertSame($expected, $result);
 	}
 
