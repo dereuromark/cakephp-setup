@@ -62,8 +62,6 @@ class SetupComponentTest extends TestCase {
 		];
 
 		$this->assertSame($expected, $result);
-
-
 	}
 
 	/**
