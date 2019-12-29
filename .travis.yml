@@ -34,7 +34,7 @@ matrix:
       env: CODECOVERAGE=1 DEFAULT=0 DB=mysql db_dsn='mysql://root@127.0.0.1/cakephp_test'
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - if [[ $CODECOVERAGE != 1 ]]; phpenv config-rm xdebug.ini ; fi
 
 before_script:
   - if [[ $DB == 'mysql' ]]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi
