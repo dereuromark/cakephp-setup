@@ -4,9 +4,9 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
-use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Cake\Routing\Route\DashedRoute;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\TestCliShell;
 use Tools\TestSuite\ConsoleOutput;

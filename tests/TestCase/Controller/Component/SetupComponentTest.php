@@ -5,9 +5,9 @@ namespace Setup\Test\TestCase\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
-use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Cake\Routing\Route\DashedRoute;
 use Setup\Controller\Component\SetupComponent;
 use Tools\TestSuite\TestCase;
 

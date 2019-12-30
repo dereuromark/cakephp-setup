@@ -8,7 +8,6 @@ use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
-use Cake\Mailer\Email;
 use Cake\Mailer\Mailer;
 use Cake\Utility\Security;
 use Exception;
