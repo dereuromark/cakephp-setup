@@ -15,7 +15,7 @@ class DbMaintenanceShellTest extends TestCase {
 	use DbToolsTrait;
 
 	/**
-	 * @var \Setup\Shell\DbMaintenanceShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var \Setup\Shell\DbMaintenanceShell|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 

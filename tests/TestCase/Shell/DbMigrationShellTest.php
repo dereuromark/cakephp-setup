@@ -13,7 +13,7 @@ class DbMigrationShellTest extends TestCase {
 	use DriverSkipTrait;
 
 	/**
-	 * @var \Setup\Shell\DbMigrationShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var \Setup\Shell\DbMigrationShell|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 

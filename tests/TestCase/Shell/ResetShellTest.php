@@ -10,7 +10,7 @@ use Tools\TestSuite\ConsoleOutput;
 class ResetShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\ResetShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var \Setup\Shell\ResetShell|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 

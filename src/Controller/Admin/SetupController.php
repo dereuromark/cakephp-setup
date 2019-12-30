@@ -7,9 +7,9 @@ use App\Controller\AppController;
 class SetupController extends AppController {
 
 	/**
-	 * @var string|bool
+	 * @var string|null
 	 */
-	public $modelClass = false;
+	protected $modelClass = '';
 
 	/**
 	 * @return \Cake\Http\Response|null

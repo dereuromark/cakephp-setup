@@ -21,7 +21,9 @@ define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . APP_DIR . DS);
 
 define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
-define('CONFIG', __DIR__ . DS . 'config' . DS);
+define('TESTS', ROOT . DS . 'tests' . DS);
+
+define('CONFIG', TESTS . 'config' . DS);
 
 if (!defined('TB')) {
 	define('TB', "\t");
@@ -36,7 +38,7 @@ require ROOT . '/vendor/autoload.php';
 require CORE_PATH . 'config/bootstrap.php';
 
 Cake\Core\Configure::write('App', [
-	'namespace' => 'App',
+	'namespace' => 'TestApp',
 	'encoding' => 'UTF-8',
 	'paths' => [
 		'templates' => [ROOT . DS . 'tests' . DS . 'test_app' . DS . 'templates' . DS],
@@ -45,6 +47,10 @@ Cake\Core\Configure::write('App', [
 Cake\Core\Configure::write('debug', true);
 
 mb_internal_encoding('UTF-8');
+
+class_alias(TestApp\Application::class, 'App\Application');
+class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
+class_alias(Cake\View\View::class, 'App\View\AppView');
 
 $Tmp = new \Cake\Filesystem\Folder(TMP);
 $Tmp->create(TMP . 'cache/models', 0770);
@@ -74,8 +80,6 @@ $cache = [
 
 Cake\Cache\Cache::setConfig($cache);
 
-Cake\Routing\Router::reload();
-
 Cake\Core\Plugin::getCollection()->add(new Setup\Plugin());
 
 Cake\Utility\Security::setSalt('YJfIxfs2guVoUubWDYhG93b0qyJfIxfs2guwvniR2G0FgaC9mi');
@@ -99,11 +103,8 @@ if (!getenv('db_class')) {
 
 Cake\Datasource\ConnectionManager::setConfig('test', [
 	'className' => 'Cake\Database\Connection',
-	'url' => getenv('db_dsn'),
-	'driver' => getenv('db_class'),
-	'database' => getenv('db_database'),
-	'username' => getenv('db_username'),
-	'password' => getenv('db_password'),
+	'url' => getenv('db_dsn') ?: null,
+	'driver' => getenv('db_class') ?: null,
 	'timezone' => 'UTC',
 	'quoteIdentifiers' => true,
 	'cacheMetadata' => true,

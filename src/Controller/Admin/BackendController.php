@@ -12,16 +12,16 @@ use Cake\ORM\TableRegistry;
 class BackendController extends AppController {
 
 	/**
-	 * @var string|bool
+	 * @var string|null
 	 */
-	public $modelClass = false;
+	protected $modelClass = '';
 
 	/**
-	 * @var array
+	 * @return void
 	 */
-	public $helpers = [
-		'Tools.Time',
-	];
+	public function initialize(): void {
+		$this->viewBuilder()->setHelpers(['Tools.Time']);
+	}
 
 	/**
 	 * @return \Cake\Http\Response|null

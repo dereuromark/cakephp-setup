@@ -4,9 +4,10 @@ namespace Setup\Test\TestCase\Controller\Component;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
-use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Http\ServerRequest;
+use Cake\Routing\Route\DashedRoute;
+use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
 use Setup\Controller\Component\SetupComponent;
 use Tools\TestSuite\TestCase;
 
@@ -30,16 +31,21 @@ class SetupComponentTest extends TestCase {
 
 		$this->Controller = new Controller();
 		$this->Controller->loadComponent('Flash');
-		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
+
+		Router::defaultRouteClass(DashedRoute::class);
+		Router::scope('/', function (RouteBuilder $routes) {
+			$routes->fallbacks();
+		});
 	}
 
 	/**
 	 * @return void
 	 */
-	public function testSetMaintenance() {
-		$request = (new ServerRequest(['url' => '/?maintenance=1']))
-			->withParam('action', 'index');
+	public function testSetMaintenanceOn() {
+		$request = $this->Controller->getRequest()
+			->withAttribute('params', ['controller' => 'MyController', 'action' => 'myAction'])
+			->withQueryParams(['maintenance' => 1]);
 		$this->Controller->setRequest($request);
 
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
@@ -51,29 +57,35 @@ class SetupComponentTest extends TestCase {
 			[
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'activated')),
 				'key' => 'flash',
-				'element' => 'Flash/success',
+				'element' => 'flash/success',
 				'params' => [],
 			],
 		];
 		$this->assertSame($expected, $result);
 
-		$result = $this->Controller->response->header();
+		$result = $this->Controller->getResponse()->getHeaders();
 		$expected = [
-			'Content-Type' => 'text/html; charset=UTF-8',
-			'Location' => '/',
+			'Content-Type' => [
+				'text/html; charset=UTF-8',
+			],
+			'Location' => [
+				'/my-controller/my-action',
+			],
 		];
-		if (version_compare(Configure::version(), '3.4.0') < 0) {
-			$expected = ['Location' => '/'];
-		}
 
 		$this->assertSame($expected, $result);
+	}
 
-		// Deactivate
-		$request = (new ServerRequest(['url' => '/?maintenance=0']))
-			->withParam('action', 'index');
-		$this->Controller = new Controller($request);
+	/**
+	 * @return void
+	 */
+	public function testSetMaintenanceOff() {
+		$request = $this->Controller->getRequest()
+			->withAttribute('params', ['controller' => 'MyController', 'action' => 'myAction'])
+			->withQueryParams(['maintenance' => 0]);
+		$this->Controller->setRequest($request);
+
 		$this->Controller->loadComponent('Flash');
-		$this->Controller->Flash->Controller = $this->Controller;
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
 		$event = new Event('Controller.startup', $this->Controller, compact('request'));
@@ -85,7 +97,7 @@ class SetupComponentTest extends TestCase {
 			[
 				'message' => __d('setup', 'Maintenance mode {0}', __d('setup', 'deactivated')),
 				'key' => 'flash',
-				'element' => 'Flash/success',
+				'element' => 'flash/success',
 				'params' => [],
 			],
 		];
@@ -93,12 +105,13 @@ class SetupComponentTest extends TestCase {
 
 		$result = $this->Controller->getResponse()->getHeaders();
 		$expected = [
-			'Content-Type' => 'text/html; charset=UTF-8',
-			'Location' => '/',
+			'Content-Type' => [
+				'text/html; charset=UTF-8',
+			],
+			'Location' => [
+				'/my-controller/my-action',
+			],
 		];
-		if (version_compare(Configure::version(), '3.4.0') < 0) {
-			$expected = ['Location' => '/'];
-		}
 		$this->assertSame($expected, $result);
 	}
 

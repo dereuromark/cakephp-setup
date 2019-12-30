@@ -10,14 +10,24 @@ use Tools\TestSuite\ConsoleOutput;
 class UserShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\UserShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var array
+	 */
+	public $fixtures = ['plugin.Setup.Users'];
+
+	/**
+	 * @var \Setup\Shell\UserShell|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 
 	/**
-	 * @var array
+	 * @var \Tools\TestSuite\ConsoleOutput
 	 */
-	public $fixtures = ['plugin.Setup.Users'];
+	protected $out;
+
+	/**
+	 * @var \Tools\TestSuite\ConsoleOutput
+	 */
+	protected $err;
 
 	/**
 	 * @return void
@@ -42,7 +52,7 @@ class UserShellTest extends TestCase {
 		$this->Shell->runCommand(['index']);
 
 		$output = $this->err->output;
-		$this->assertEmpty($output, $output);
+		$this->assertEmpty($output, $this->err->output());
 
 		$output = $this->out->output();
 		$expected = 'mariano';
@@ -63,7 +73,7 @@ class UserShellTest extends TestCase {
 		$this->Shell->runCommand(['create', 'example', '123', '-v']);
 
 		$output = $this->err->output;
-		$this->assertEmpty($output, $output);
+		$this->assertEmpty($output, $this->err->output());
 
 		$output = $this->out->output();
 		$expected = '[username] => example';

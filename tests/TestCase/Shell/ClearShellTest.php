@@ -10,7 +10,7 @@ use Tools\TestSuite\ConsoleOutput;
 class ClearShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\ClearShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var \Setup\Shell\ClearShell|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 

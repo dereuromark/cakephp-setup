@@ -9,6 +9,6 @@ Router::defaultRouteClass(DashedRoute::class);
 Router::scope('/', function (RouteBuilder $routes) {
 	$routes->fallbacks();
 });
-Router::prefix('admin', function (RouteBuilder $routes) {
+Router::prefix('Admin', function (RouteBuilder $routes) {
 	$routes->fallbacks();
 });

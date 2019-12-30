@@ -10,9 +10,9 @@ use Cake\ORM\TableRegistry;
 class DatabaseController extends AppController {
 
 	/**
-	 * @var string|bool
+	 * @var string|null
 	 */
-	public $modelClass = false;
+	protected $modelClass = '';
 
 	/**
 	 * @param string|null $table

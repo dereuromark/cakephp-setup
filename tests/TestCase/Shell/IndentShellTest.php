@@ -11,7 +11,7 @@ use Tools\TestSuite\ConsoleOutput;
 class IndentShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\IndentShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var \Setup\Shell\IndentShell|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 

@@ -11,7 +11,7 @@ use Tools\TestSuite\ConsoleOutput;
 class SuperfluousWhitespaceShellTest extends TestCase {
 
 	/**
-	 * @var \Setup\Shell\SuperfluousWhitespaceShell|\PHPUnit_Framework_MockObject_MockObject
+	 * @var \Setup\Shell\SuperfluousWhitespaceShell|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 
