@@ -46,6 +46,12 @@ Cake\Core\Configure::write('App', [
 ]);
 Cake\Core\Configure::write('debug', true);
 
+class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
+class_alias(Cake\View\View::class, 'App\View\AppView');
+
+class_alias(TestApp\Model\Table\UsersTable::class, 'App\Model\Table\UsersTable');
+class_alias(TestApp\Model\Entity\User::class, 'App\Model\Entity\User');
+
 mb_internal_encoding('UTF-8');
 
 class_alias(TestApp\Application::class, 'App\Application');
