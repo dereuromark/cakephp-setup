@@ -8,6 +8,7 @@ use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
+use Setup\Utility\Config;
 
 class BackendController extends AppController {
 
@@ -21,6 +22,7 @@ class BackendController extends AppController {
 	 */
 	public $helpers = [
 		'Tools.Time',
+		'Tools.Format',
 	];
 
 	/**
@@ -97,6 +99,17 @@ class BackendController extends AppController {
 		}
 
 		$this->set(compact('dbTables', 'dbSize'));
+	}
+
+	/**
+	 * @return \Cake\Http\Response|null
+	 */
+	public function env() {
+		$envVars = Config::getEnvVars();
+
+		$localConfig = Config::getLocal();
+
+		$this->set(compact('envVars', 'localConfig'));
 	}
 
 }

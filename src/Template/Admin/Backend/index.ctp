@@ -9,7 +9,7 @@ use SetupExtra\Lib\SystemLib;
 
 <div class="columns col-md-12">
 
-<h2>Backend</h2>
+<h1>Backend</h1>
 
 <div class="actions">
 <ul>

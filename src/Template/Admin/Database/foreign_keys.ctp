@@ -9,7 +9,7 @@ use Cake\Utility\Inflector;
 ?>
 <div class="columns col-md-12">
 
-<h2><?php echo count($tables); ?> <?php echo __('DB Tables');?></h2>
+<h1><?php echo count($tables); ?> <?php echo __('DB Tables');?></h1>
 
 <p>The following infos are just guesses based on CakePHP conventions.</p>
 
@@ -19,7 +19,7 @@ $snippets = [];
 $checks = [];
 
 foreach ($tables as $table => $data) {
-	echo '<h3>' . h($table) . '</h3>';
+	echo '<h2>' . h($table) . '</h2>';
 
 	/** @var \Cake\Database\Schema\TableSchema $schema */
 	$schema = $data['schema'];
@@ -156,12 +156,12 @@ TXT;
 
 
 	<?php if (!empty($snippets))
-		echo '<h3>Suggested snippets for migrations</h3>';
+		echo '<h2>Suggested snippets for migrations</h2>';
 		echo '<pre>' . implode(PHP_EOL, $snippets) . '</pre>';
 	?>
 
 	<?php if (!empty($checks))
-		echo '<h3>Suggested checks before applying these migrations</h3>';
+		echo '<h2>Suggested checks before applying these migrations</h2>';
 	echo '<p>You need to ensure existing rows are already clean of issues, these snippets will show you "invalid foreign keys":</p>';
 	echo '<pre>' . implode(PHP_EOL, $checks) . '</pre>';
 	?>

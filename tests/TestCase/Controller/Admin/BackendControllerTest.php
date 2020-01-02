@@ -65,4 +65,17 @@ class BackendControllerTest extends TestCase {
 		$this->assertResponseCode(200);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testEnv() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->get(['prefix' => 'admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'env']);
+
+		$this->assertResponseCode(200);
+	}
+
 }
