@@ -21,6 +21,7 @@ foreach ($behaviors as $behavior => $behaviorData) {
 }
 %>
 <?php
+
 namespace <%= $namespace %>\Model\Table;
 
 <%

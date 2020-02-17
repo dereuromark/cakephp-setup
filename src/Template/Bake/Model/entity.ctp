@@ -30,6 +30,7 @@ if (class_exists($entityNamespace . 'Entity')) {
 }
 %>
 <?php
+
 namespace <%= $namespace %>\Model\Entity;
 
 use <%= $entityClass %>;

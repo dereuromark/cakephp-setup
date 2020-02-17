@@ -14,6 +14,7 @@
  */
 %>
 <?php
+
 namespace <%= $namespace %>\View\Cell;
 
 use Cake\View\Cell;

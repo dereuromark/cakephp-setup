@@ -1,4 +1,5 @@
 <?php
+
 namespace <%= $namespace %>\Shell;
 
 use Cake\Console\Shell;

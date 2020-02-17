@@ -20,6 +20,7 @@ if (empty($fixtures)) {
 
 %>
 <?php
+
 namespace <%= $baseNamespace; %>\Test\TestCase\<%= $subNamespace %>;
 
 <% foreach ($uses as $dependency): %>

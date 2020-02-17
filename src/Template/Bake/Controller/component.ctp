@@ -1,4 +1,5 @@
 <?php
+
 namespace <%= $namespace %>\Controller\Component;
 
 use Cake\Controller\Component;
