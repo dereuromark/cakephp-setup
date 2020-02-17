@@ -24,7 +24,7 @@
 <% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
 <% if ($belongsTo): %>
         $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
+            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>],
         ];
 <% endif; %>
         $<%= $pluralName %> = $this->paginate();

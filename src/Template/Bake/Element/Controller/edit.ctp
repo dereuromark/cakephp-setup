@@ -27,16 +27,17 @@ $compact = ["'" . $singularName . "'"];
     public function edit($id = null)
     {
         $<%= $singularName %> = $this-><%= $currentModelName %>->get($id, [
-            'contain' => [<%= $this->Bake->stringifyList($belongsToMany, ['indent' => false]) %>]
+            'contain' => [<%= $this->Bake->stringifyList($belongsToMany, ['indent' => false]) %>],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $<%= $singularName %> = $this-><%= $currentModelName %>->patchEntity($<%= $singularName %>, $this->request->getData());
             if ($this-><%= $currentModelName; %>->save($<%= $singularName %>)) {
                 $this->Flash->success(__('The <%= strtolower($singularHumanName) %> has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The <%= strtolower($singularHumanName) %> could not be saved. Please, try again.'));
             }
+            
+            $this->Flash->error(__('The <%= strtolower($singularHumanName) %> could not be saved. Please, try again.'));
         }
 <%
         foreach (array_merge($belongsTo, $belongsToMany) as $assoc):

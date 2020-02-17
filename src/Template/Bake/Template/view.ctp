@@ -48,7 +48,7 @@ $groupedFields = collection($fields)
     })
     ->groupBy(function($field) use ($schema, $associationFields) {
         $type = $schema->columnType($field);
-        return in_array($type, ['text']) ? $type : 'default';
+        return in_array($type, ['text'], true) ? $type : 'default';
     })
     ->toArray();
 
