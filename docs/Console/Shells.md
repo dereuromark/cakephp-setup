@@ -21,6 +21,17 @@ So if you are only interested in your `xdebug` settings for CLI:
 
 Very useful and quicker than any other lookup on CLI.
 
+### DbConstraintsShell
+Alerts about possible constraints missing in terms of data integrity issues.
+
+- Optional relation with foreign key not being set back to null when related has* entity has removed been removed.
+  This is only relevant if relation is not "dependent => true", though.
+
+### DbMigrationShell
+A Shell to ease database migrations needed.
+
+- Convert null fields without a default value.
+
 ### DbMaintenanceShell
 Easily convert table format or table encoding. Those are mainly relevant for MySQL.
 
