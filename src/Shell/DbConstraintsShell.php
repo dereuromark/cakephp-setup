@@ -4,7 +4,9 @@ namespace Setup\Shell;
 
 use Cake\Console\Shell;
 use Cake\Core\App;
+use Cake\Database\Exception;
 use Cake\Filesystem\Folder;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use RuntimeException;
 
@@ -29,52 +31,71 @@ class DbConstraintsShell extends Shell {
 
 		$this->out('Checking ' . count($models) . ' models that need updating:', 1, static::VERBOSE);
 		foreach ($models as $model) {
-			$this->out('### ' . $model->getTable(), 1, static::VERBOSE);
-
-			$schema = $model->getSchema();
-
-			$associations = $model->associations();
-			$relationKeys = $associations->keys();
-			if (!$relationKeys) {
+			try {
+				$this->checkModel($model);
+			} catch (Exception $e) {
+				$this->err('Skipping due to errors: ' . $e->getMessage());
 				continue;
-			}
-
-			foreach ($relationKeys as $relationKey) {
-				$relation = $associations->get($relationKey);
-				if ($relation->type() !== $relation::MANY_TO_ONE) {
-					continue;
-				}
-
-				$this->out('Checking: ' . $model->getAlias() . '.' . $relation->getForeignKey() . ' => ' . $relation->getName() . '.' . $relation->getBindingKey());
-				$field = $schema->getColumn($relation->getForeignKey());
-				if ($field['null'] !== true || $field['default'] !== null) {
-					continue;
-				}
-				// We only care about AIIDs for now
-				if ($field['type'] !== 'integer') {
-					continue;
-				}
-
-				$constraints = $schema->constraints();
-				foreach ($constraints as $constraint) {
-					$constraintDetails = $schema->getConstraint($constraint);
-					if ($constraintDetails['type'] !== 'foreign') {
-						continue;
-					}
-					if ($constraintDetails['columns'] !== [$relation->getForeignKey()]) {
-						continue;
-					}
-
-					if (!empty($constraintDetails['delete']) && $constraintDetails['delete'] === 'setNull') {
-						continue;
-					}
-
-					$this->warn('- Possibly missing a [\'delete\' => \'SET_NULL\'] constraint.');
-				}
 			}
 		}
 
 		$this->out('Done :) Possible nullable foreign key constraints checks executed.');
+	}
+
+	/**
+	 * @param \Cake\ORM\Table $model
+	 *
+	 * @return void
+	 */
+	protected function checkModel(Table $model) {
+		$table = $model->getTable();
+		if (!$table) {
+			return;
+		}
+
+		$this->out('### ' . $table, 1, static::VERBOSE);
+
+		$schema = $model->getSchema();
+
+		$associations = $model->associations();
+		$relationKeys = $associations->keys();
+		if (!$relationKeys) {
+			return;
+		}
+
+		foreach ($relationKeys as $relationKey) {
+			$relation = $associations->get($relationKey);
+			if ($relation->type() !== $relation::MANY_TO_ONE) {
+				continue;
+			}
+
+			$this->out('Checking: ' . $model->getAlias() . '.' . $relation->getForeignKey() . ' => ' . $relation->getName() . '.' . $relation->getBindingKey());
+			$field = $schema->getColumn($relation->getForeignKey());
+			if ($field['null'] !== true || $field['default'] !== null) {
+				continue;
+			}
+			// We only care about AIIDs for now
+			if ($field['type'] !== 'integer') {
+				continue;
+			}
+
+			$constraints = $schema->constraints();
+			foreach ($constraints as $constraint) {
+				$constraintDetails = $schema->getConstraint($constraint);
+				if ($constraintDetails['type'] !== 'foreign') {
+					continue;
+				}
+				if ($constraintDetails['columns'] !== [$relation->getForeignKey()]) {
+					continue;
+				}
+
+				if (!empty($constraintDetails['delete']) && $constraintDetails['delete'] === 'setNull') {
+					continue;
+				}
+
+				$this->warn('- Possibly missing a [\'delete\' => \'SET_NULL\'] constraint.');
+			}
+		}
 	}
 
 	/**
@@ -112,6 +133,8 @@ class DbConstraintsShell extends Shell {
 	 * @param string|null $model
 	 * @param string|null $plugin
 	 *
+	 * @throws \RuntimeException
+	 *
 	 * @return \Cake\ORM\Table[]
 	 */
 	protected function _getModels($model, $plugin) {
@@ -142,12 +165,12 @@ class DbConstraintsShell extends Shell {
 
 				$model = $matches[1];
 
-				$className = App::className($plugin ? $plugin . '.' : $model, 'Model/Table', 'Table');
+				$className = App::className($plugin ? $plugin . '.' . $model : $model, 'Model/Table', 'Table');
 				if (!$className) {
 					continue;
 				}
 
-				$models[] = TableRegistry::getTableLocator()->get($plugin ? $plugin . '.' : $model);
+				$models[] = TableRegistry::getTableLocator()->get($plugin ? $plugin . '.' . $model : $model);
 			}
 		}
 
