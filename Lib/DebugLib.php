@@ -148,7 +148,7 @@ class DebugLib {
 		if (!is_resource($fh)) {
 			return $result;
 		}
-		$buffer = split(" ", fgets($fh, 4096));
+		$buffer = explode(" ", fgets($fh, 4096));
 		fclose($fh);
 
 		$sysTicks = trim($buffer[0]);
