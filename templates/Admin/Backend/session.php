@@ -1,6 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
+ * @var array $sessionConfig
  */
 
 use Cake\I18n\Time;
@@ -8,20 +9,20 @@ use Cake\I18n\Time;
 ?>
 <div class="columns col-md-12">
 
-<h2>Session</h2>
+<h1>Session</h1>
 
 Time: <?php echo $this->Time->niceDate($time); ?>
 
 
 <br />
-<h3>Session Config</h3>
+<h2>Session Config</h2>
 <pre>
 <?php
 echo print_r($sessionConfig);
 ?>
 </pre>
 
-<h3>Own Session Value</h3>
+<h2>Own Session Value</h2>
 
 	<p>ID: <code><?php echo h($sessionData['id']); ?></code></p>
 	<?php if (!empty($sessionData['expires'])) { ?>
@@ -32,7 +33,7 @@ echo print_r($sessionConfig);
 	<?php } ?>
 
 
-<h3>Server Timeout</h3>
+<h2>Server Timeout</h2>
 <?php
 $currentTimeoutInSecs = (int)ini_get('session.gc_maxlifetime');
 
@@ -41,7 +42,7 @@ echo $currentTimeoutInSecs . ' sec = ' . $this->Time->timeAgoInWords(new Time(ti
 ?>
 
 <br />
-<h3>Garbage Collector Settings</h3>
+<h2>Garbage Collector Settings</h2>
 <?php
 $currentProbability = ini_get('session.gc_probability');
 $currentDivisor = ini_get('session.gc_divisor');

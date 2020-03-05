@@ -6,7 +6,7 @@ use Cake\Console\ConsoleIo;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\DbMigrationShell;
 use Setup\TestSuite\DriverSkipTrait;
-use Tools\TestSuite\ConsoleOutput;
+use Shim\TestSuite\ConsoleOutput;
 
 class DbMigrationShellTest extends TestCase {
 
@@ -18,12 +18,12 @@ class DbMigrationShellTest extends TestCase {
 	protected $Shell;
 
 	/**
-	 * @var \Tools\TestSuite\ConsoleOutput
+	 * @var \Shim\TestSuite\ConsoleOutput
 	 */
 	protected $out;
 
 	/**
-	 * @var \Tools\TestSuite\ConsoleOutput
+	 * @var \Shim\TestSuite\ConsoleOutput
 	 */
 	protected $err;
 

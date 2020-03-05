@@ -70,7 +70,7 @@ class IndentShell extends Shell {
 	/**
 	 * Main execution function to indent a folder recursivly
 	 *
-	 * @return int|null
+	 * @return int|null|void
 	 */
 	public function folder() {
 		if (!empty($this->params['extensions'])) {
@@ -81,7 +81,7 @@ class IndentShell extends Shell {
 		}
 
 		$folder = null;
-		if (!empty($this->args)) {
+		if ($this->args) {
 			if (!empty($this->args[0]) && $this->args[0] !== 'app') {
 				$folder = $this->args[0];
 				if ($folder === '/') {

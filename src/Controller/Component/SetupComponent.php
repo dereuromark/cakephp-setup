@@ -59,7 +59,7 @@ class SetupComponent extends Component {
 	/**
 	 * @param \Cake\Event\Event $event
 	 * @throws \Exception
-	 * @return \Cake\Http\Response|null
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function beforeFilter(Event $event) {
 		/** @var \Cake\Controller\Controller $Controller */
@@ -375,11 +375,9 @@ class SetupComponent extends Component {
 		//FIXME
 		//$this->Mailer->setTemplate('simple_email');
 		$this->Mailer->setViewVars(compact('text'));
-		if ($this->Mailer->send()) {
-			return true;
-		}
+		$this->Mailer->send();
 
-		return false;
+		return true;
 	}
 
 }

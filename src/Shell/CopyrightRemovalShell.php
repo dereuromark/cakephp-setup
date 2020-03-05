@@ -15,7 +15,7 @@ use Cake\Filesystem\Folder;
 class CopyrightRemovalShell extends Shell {
 
 	/**
-	 * @return int|null
+	 * @return int|null|void
 	 */
 	public function clean() {
 		if (!empty($this->args[0])) {

@@ -8,6 +8,7 @@ use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
+use Setup\Utility\Config;
 
 class BackendController extends AppController {
 
@@ -20,18 +21,18 @@ class BackendController extends AppController {
 	 * @return void
 	 */
 	public function initialize(): void {
-		$this->viewBuilder()->setHelpers(['Tools.Time']);
+		$this->viewBuilder()->setHelpers(['Tools.Time', 'Tools.Format']);
 	}
 
 	/**
-	 * @return \Cake\Http\Response|null
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function phpinfo() {
 		$this->viewBuilder()->setLayout('ajax');
 	}
 
 	/**
-	 * @return \Cake\Http\Response|null
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function session() {
 		$timestamp = $this->request->getSession()->read('Config.time');
@@ -54,7 +55,7 @@ class BackendController extends AppController {
 	}
 
 	/**
-	 * @return \Cake\Http\Response|null
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function cache() {
 		if ($this->request->is(['post', 'put'])) {
@@ -81,7 +82,7 @@ class BackendController extends AppController {
 	}
 
 	/**
-	 * @return \Cake\Http\Response|null
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function database() {
 		$Model = TableRegistry::get('Model');
@@ -97,6 +98,17 @@ class BackendController extends AppController {
 		}
 
 		$this->set(compact('dbTables', 'dbSize'));
+	}
+
+	/**
+	 * @return \Cake\Http\Response|null|void
+	 */
+	public function env() {
+		$envVars = Config::getEnvVars();
+
+		$localConfig = Config::getLocal();
+
+		$this->set(compact('envVars', 'localConfig'));
 	}
 
 }

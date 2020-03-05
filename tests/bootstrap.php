@@ -55,8 +55,12 @@ class_alias(TestApp\Model\Entity\User::class, 'App\Model\Entity\User');
 mb_internal_encoding('UTF-8');
 
 class_alias(TestApp\Application::class, 'App\Application');
-class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
-class_alias(Cake\View\View::class, 'App\View\AppView');
+if (!class_exists('App\Controller\AppController')) {
+	class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
+}
+if (!class_exists('App\View\AppView')) {
+	class_alias(Cake\View\View::class, 'App\View\AppView');
+}
 
 $Tmp = new \Cake\Filesystem\Folder(TMP);
 $Tmp->create(TMP . 'cache/models', 0770);

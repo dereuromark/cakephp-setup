@@ -1,4 +1,5 @@
 <?php
+
 namespace <%= $namespace %>\Shell\Helper;
 
 use Cake\Console\Helper;

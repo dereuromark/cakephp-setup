@@ -100,6 +100,8 @@ class MaintenanceModeShell extends Shell {
 		} else {
 			$this->out($ips);
 		}
+
+		return null;
 	}
 
 	/**

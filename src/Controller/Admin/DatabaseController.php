@@ -16,7 +16,7 @@ class DatabaseController extends AppController {
 
 	/**
 	 * @param string|null $table
-	 * @return \Cake\Http\Response|null
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function foreignKeys($table = null) {
 		$Model = TableRegistry::get('Model');

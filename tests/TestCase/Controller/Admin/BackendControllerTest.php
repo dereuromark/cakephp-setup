@@ -4,7 +4,7 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use Cake\TestSuite\IntegrationTestTrait;
 use Setup\TestSuite\DriverSkipTrait;
-use Tools\TestSuite\TestCase;
+use Shim\TestSuite\TestCase;
 
 class BackendControllerTest extends TestCase {
 
@@ -61,6 +61,19 @@ class BackendControllerTest extends TestCase {
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
 
 		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'database']);
+
+		$this->assertResponseCode(200);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testEnv() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'env']);
 
 		$this->assertResponseCode(200);
 	}

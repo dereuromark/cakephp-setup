@@ -8,7 +8,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\DbMaintenanceShell;
 use Setup\Shell\Traits\DbToolsTrait;
-use Tools\TestSuite\ConsoleOutput;
+use Shim\TestSuite\ConsoleOutput;
 
 class DbMaintenanceShellTest extends TestCase {
 
@@ -20,12 +20,12 @@ class DbMaintenanceShellTest extends TestCase {
 	protected $Shell;
 
 	/**
-	 * @var \Tools\TestSuite\ConsoleOutput
+	 * @var \Shim\TestSuite\ConsoleOutput
 	 */
 	protected $out;
 
 	/**
-	 * @var \Tools\TestSuite\ConsoleOutput
+	 * @var \Shim\TestSuite\ConsoleOutput
 	 */
 	protected $err;
 

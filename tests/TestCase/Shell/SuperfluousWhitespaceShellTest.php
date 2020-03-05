@@ -6,7 +6,7 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\SuperfluousWhitespaceShell;
-use Tools\TestSuite\ConsoleOutput;
+use Shim\TestSuite\ConsoleOutput;
 
 class SuperfluousWhitespaceShellTest extends TestCase {
 

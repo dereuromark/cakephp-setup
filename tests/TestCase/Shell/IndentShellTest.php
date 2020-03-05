@@ -6,7 +6,7 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\IndentShell;
-use Tools\TestSuite\ConsoleOutput;
+use Shim\TestSuite\ConsoleOutput;
 
 class IndentShellTest extends TestCase {
 

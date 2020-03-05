@@ -4,8 +4,8 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Setup\Shell\MaintenanceModeShell;
-use Tools\TestSuite\ConsoleOutput;
-use Tools\TestSuite\TestCase;
+use Shim\TestSuite\ConsoleOutput;
+use Shim\TestSuite\TestCase;
 
 class MaintenanceModeShellTest extends TestCase {
 

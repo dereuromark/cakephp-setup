@@ -1,4 +1,5 @@
 <?php
+
 namespace <%= $namespace %>\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;

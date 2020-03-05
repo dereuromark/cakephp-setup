@@ -5,7 +5,7 @@ namespace Setup\Test\TestCase\Shell;
 use Cake\Console\ConsoleIo;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\CurrentConfigShell;
-use Tools\TestSuite\ConsoleOutput;
+use Shim\TestSuite\ConsoleOutput;
 
 /**
  * CurrentConfig shell test
@@ -18,7 +18,7 @@ class CurrentConfigShellTest extends TestCase {
 	protected $Shell;
 
 	/**
-	 * @var \Tools\TestSuite\ConsoleOutput
+	 * @var \Shim\TestSuite\ConsoleOutput
 	 */
 	protected $out;
 

@@ -3,7 +3,7 @@
 namespace Setup\Test\TestCase\Utility;
 
 use Setup\Utility\Setup;
-use Tools\TestSuite\TestCase;
+use Shim\TestSuite\TestCase;
 
 class SetupTest extends TestCase {
 

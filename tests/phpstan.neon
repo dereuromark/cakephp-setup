@@ -1,11 +1,10 @@
 parameters:
 	autoload_files:
-		- %rootDir%/../../../tests/bootstrap.php
-		- %rootDir%/../../../tests/shim.php
+		- bootstrap.php
+		- shim.php
 	ignoreErrors:
 		- '#Call to an undefined method .+FlashComponent::warning\(\)#'
-		- '#Call to function method_exists\(\) with .+Entity.+ and .+ will always evaluate to false.#'
 		- '#Parameter \#1 \$items of class .+Collection constructor expects iterable, .+StatementInterface given.#'
 		-
 			message: '#If condition is always false.#'
-			path: 'src/Shell/IndentShell.php'
+			path: '%currentWorkingDirectory%/src/Shell/IndentShell.php'

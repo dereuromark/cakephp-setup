@@ -1,11 +1,13 @@
 <?php
 /**
  * @var \App\View\AppView $this
+ * @var array $dbTables
+ * @var int $dbSize
  */
 ?>
 <div class="columns col-md-12">
 
-<h2><?php echo count($dbTables); ?> <?php echo __('DB Tables');?></h2>
+<h1><?php echo count($dbTables); ?> <?php echo __('DB Tables');?></h1>
 
 <p>Database size: <?php echo $this->Number->toReadableSize($dbSize); ?></p>
 

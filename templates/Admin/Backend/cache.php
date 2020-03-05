@@ -1,6 +1,8 @@
 <?php
 /**
  * @var \App\View\AppView $this
+ * @var array $caches
+ * @var array $data
  */
 
 use Cake\Error\Debugger;
@@ -10,13 +12,13 @@ use Cake\I18n\FrozenTime;
 
 <div class="columns col-md-12">
 
-<h2>Cache Config</h2>
+<h1>Cache Config</h1>
 
 <div class="actions">
 <ul>
 	<?php foreach ($caches as $key => $config) { ?>
 	<li>
-		<h3><?php echo h($key); ?></h3>
+		<h2><?php echo h($key); ?></h2>
 
 		<div>
 			Data: <?php echo Debugger::exportVar($data[$key]); ?>

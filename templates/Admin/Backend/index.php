@@ -9,7 +9,7 @@ use SetupExtra\Lib\SystemLib;
 
 <div class="columns col-md-12">
 
-<h2>Backend</h2>
+<h1>Backend</h1>
 
 <div class="actions">
 <ul>
@@ -17,6 +17,7 @@ use SetupExtra\Lib\SystemLib;
 	<li><?php echo $this->Html->link(__('Session'), ['action' => 'session']);?></li>
 	<li><?php echo $this->Html->link(__('Cache'), ['action' => 'cache']);?></li>
 	<li><?php echo $this->Html->link(__('Database Size'), ['action' => 'database']);?></li>
+	<li><?php echo $this->Html->link(__('ENV Config'), ['action' => 'env']);?></li>
 </ul>
 </div>
 

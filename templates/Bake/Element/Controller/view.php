@@ -29,7 +29,7 @@ $allAssociations = array_merge(
     public function view($id = null)
     {
         $<%= $singularName%> = $this-><%= $currentModelName %>->get($id, [
-            'contain' => [<%= $this->Bake->stringifyList($allAssociations, ['indent' => false]) %>]
+            'contain' => [<%= $this->Bake->stringifyList($allAssociations, ['indent' => false]) %>],
         ]);
 
         $this->set(compact('<%= $singularName %>'));

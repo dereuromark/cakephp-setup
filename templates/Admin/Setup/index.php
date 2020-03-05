@@ -5,7 +5,7 @@
 ?>
 <div class="columns col-md-12">
 
-<h2>Setup Backend Tools</h2>
+<h1>Setup Backend Tools</h1>
 
 <ul>
 	<li><?php echo $this->Html->link('PHP Info', ['controller' => 'Backend', 'action' => 'phpinfo']);?></li>

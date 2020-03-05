@@ -1,4 +1,5 @@
 <?php
+
 namespace <%= $namespace %>\Mailer;
 
 use Cake\Mailer\Mailer;

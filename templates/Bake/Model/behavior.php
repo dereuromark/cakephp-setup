@@ -1,4 +1,5 @@
 <?php
+
 namespace <%= $namespace %>\Model\Behavior;
 
 use Cake\ORM\Behavior;

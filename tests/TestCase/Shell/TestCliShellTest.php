@@ -9,7 +9,7 @@ use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\TestCliShell;
-use Tools\TestSuite\ConsoleOutput;
+use Shim\TestSuite\ConsoleOutput;
 
 class TestCliShellTest extends TestCase {
 
@@ -19,7 +19,7 @@ class TestCliShellTest extends TestCase {
 	protected $Shell;
 
 	/**
-	 * @var \Tools\TestSuite\ConsoleOutput
+	 * @var \Shim\TestSuite\ConsoleOutput
 	 */
 	protected $out;
 

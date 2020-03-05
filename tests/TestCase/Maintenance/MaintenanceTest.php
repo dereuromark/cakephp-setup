@@ -3,7 +3,7 @@
 namespace Setup\Test\TestCase\Maintenance;
 
 use Setup\Maintenance\Maintenance;
-use Tools\TestSuite\TestCase;
+use Shim\TestSuite\TestCase;
 
 class MaintenanceTest extends TestCase {
 

@@ -12,7 +12,7 @@ class SetupController extends AppController {
 	protected $modelClass = '';
 
 	/**
-	 * @return \Cake\Http\Response|null
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function index() {
 	}
