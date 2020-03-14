@@ -655,11 +655,6 @@ ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2) AS size FROM 
 
 	/** Database Infos **/
 
-	public function dbClientEncoding() {
-		$link = mysql_connect('localhost', 'mysql_user', 'mysql_password');
-		return mysql_client_encoding($link);
-	}
-
 	public function dbUptime() {
 		$uptime = $this->Configuration->query('show status like "Uptime"');
 		$value = $uptime[0]['STATUS']['Value'];
