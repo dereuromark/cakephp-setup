@@ -9,9 +9,11 @@ use Cake\View\View;
 use Cake\View\ViewBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Setup\Maintenance\Maintenance;
 
-class MaintenanceMiddleware {
+class MaintenanceMiddleware implements MiddlewareInterface {
 
 	use InstanceConfigTrait;
 
@@ -36,16 +38,18 @@ class MaintenanceMiddleware {
 	}
 
 	/**
-	 * @param \Cake\Http\ServerRequest $request The request.
-	 * @param \Cake\Http\Response $response The response.
-	 * @param callable $next The next middleware to call.
-	 * @return \Psr\Http\Message\ResponseInterface A response.
+	 * @param \Cake\Http\ServerRequest $request
+	 * @param \Psr\Http\Server\RequestHandlerInterface $handler
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next) {
+	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 		$ip = $request->clientIp();
-		$Maintenance = new Maintenance();
-		if (!$Maintenance->isMaintenanceMode($ip)) {
-			return $next($request, $response);
+		$maintenance = new Maintenance();
+
+		$response = $handler->handle($request);
+		if (!$maintenance->isMaintenanceMode($ip)) {
+			return $response;
 		}
 
 		$response = $this->build($response);
@@ -54,10 +58,10 @@ class MaintenanceMiddleware {
 	}
 
 	/**
-	 * @param \Cake\Http\Response $response The response.
-	 * @return \Cake\Http\Response
+	 * @param \Psr\Http\Message\ResponseInterface $response
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected function build($response) {
+	protected function build(ResponseInterface $response) {
 		$cakeRequest = ServerRequestFactory::fromGlobals();
 		$builder = new ViewBuilder();
 
