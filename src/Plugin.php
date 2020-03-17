@@ -11,6 +11,11 @@ use Cake\Routing\RouteBuilder;
 class Plugin extends BasePlugin {
 
 	/**
+	 * @var bool
+	 */
+	protected $middlewareEnabled = false;
+
+	/**
 	 * @param \Cake\Routing\RouteBuilder $routes The route builder to update.
 	 * @return void
 	 */
