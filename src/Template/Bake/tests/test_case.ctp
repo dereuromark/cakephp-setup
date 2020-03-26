@@ -34,31 +34,25 @@ class <%= $className %>Test extends IntegrationTestCase
 class <%= $className %>Test extends TestCase
 {
 <% endif; %>
+<% if (!empty($fixtures)): %>
+
+    /**
+     * @var string[]
+     */
+    public $fixtures = [<%= $this->Bake->stringifyList(array_values($fixtures), ['trailingComma' => true]) %>];
+<% endif; %>
 <% if (!empty($properties)): %>
 <% foreach ($properties as $propertyInfo): %>
 
     /**
-     * <%= $propertyInfo['description'] %>
-     *
      * @var <%= $propertyInfo['type'] %>
      */
-    public $<%= $propertyInfo['name'] %><% if (isset($propertyInfo['value'])): %> = <%= $propertyInfo['value'] %><% endif; %>;
+    protected $<%= $propertyInfo['name'] %><% if (isset($propertyInfo['value'])): %> = <%= $propertyInfo['value'] %><% endif; %>;
 <% endforeach; %>
-<% endif; %>
-<% if (!empty($fixtures)): %>
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [<%= $this->Bake->stringifyList(array_values($fixtures), ['trailingComma' => true]) %>];
 <% endif; %>
 <% if (!empty($construction)): %>
 
     /**
-     * setUp method
-     *
      * @return void
      */
     public function setUp()
@@ -74,8 +68,6 @@ class <%= $className %>Test extends TestCase
     }
 
     /**
-     * tearDown method
-     *
      * @return void
      */
     public function tearDown()
@@ -86,12 +78,6 @@ class <%= $className %>Test extends TestCase
     }
 <% endif; %>
 <% if ($subNamespace === 'Model\\Table'): %>
-    /**
-     * @return void
-     */
-    public function testInstance() {
-        $this->assertInstanceOf(<%= $className %>::class, $this-><%= $subject %>);
-    }
 
     /**
      * @return void
@@ -105,8 +91,6 @@ class <%= $className %>Test extends TestCase
 <% foreach ($methods as $method): %>
 
     /**
-     * Test <%= $method %> method
-     *
      * @return void
      */
     public function test<%= Inflector::camelize($method) %>()
@@ -114,16 +98,4 @@ class <%= $className %>Test extends TestCase
         $this->markTestIncomplete('Not implemented yet.');
     }
 <% endforeach; %>
-<% if (empty($methods)): %>
-
-    /**
-     * Test initial setup
-     *
-     * @return void
-     */
-    public function testInitialization()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-<% endif; %>
 }
