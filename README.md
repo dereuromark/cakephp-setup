@@ -1,6 +1,6 @@
 # CakePHP Setup Plugin
 
-[![Build Status](https://api.travis-ci.com/dereuromark/cakephp-setup.svg?branch=cake3)](https://travis-ci.org/dereuromark/cakephp-setup)
+[![Build Status](https://api.travis-ci.com/dereuromark/cakephp-setup.svg?branch=cake3)](https://travis-ci.com/dereuromark/cakephp-setup)
 [![Coverage](https://img.shields.io/codecov/c/github/dereuromark/cakephp-setup/master.svg)](https://codecov.io/gh/dereuromark/cakephp-setup)
 [![Latest Stable Version](https://poser.pugx.org/dereuromark/cakephp-setup/v/stable.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg)](https://php.net/)
