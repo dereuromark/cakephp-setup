@@ -2,6 +2,7 @@ parameters:
 	autoload_files:
 		- %rootDir%/../../../tests/bootstrap.php
 		- %rootDir%/../../../tests/shim.php
+		- %rootDir%/../../../tests/config/bootstrap.php
 	ignoreErrors:
 		- '#Call to an undefined method .+FlashComponent::warning\(\)#'
 		- '#Access to protected property Cake\\Http\\ServerRequest::\$url#'
