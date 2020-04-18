@@ -2,6 +2,10 @@
 
 use Cake\Core\Configure;
 
+if (!defined('FORMAT_DB_DATETIME')) {
+	define('FORMAT_DB_DATETIME', 'Y-m-d H:i:s');
+}
+
 if (!function_exists('dd')) {
 	/**
 	 * @param mixed $var
