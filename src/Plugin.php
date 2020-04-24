@@ -20,7 +20,7 @@ class Plugin extends BasePlugin {
 	 * @return void
 	 */
 	public function routes(RouteBuilder $routes): void {
-		$routes->prefix('admin', function (RouteBuilder $routes) {
+		$routes->prefix('Admin', function (RouteBuilder $routes) {
 			$routes->plugin('Setup', function (RouteBuilder $routes) {
 				$routes->connect('/', ['controller' => 'Setup', 'action' => 'index']);
 
