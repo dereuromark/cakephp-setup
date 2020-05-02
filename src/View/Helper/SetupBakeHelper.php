@@ -81,7 +81,7 @@ class SetupBakeHelper extends BakeHelper {
 			$accessible[$field] = 'false';
 		}
 		foreach ($accessibleFields as $field => $status) {
-			if ($status === false) {
+			if ($status === 'false') {
 				$accessible[$field] = 'false';
 			}
 		}
