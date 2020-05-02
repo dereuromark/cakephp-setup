@@ -28,16 +28,17 @@
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit {{ singularHumanName }}'), ['action' => 'edit', {{ pK|raw }}], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete {{ singularHumanName }}'), ['action' => 'delete', {{ pK|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ pK|raw }}), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('Edit {0}', __('{{ singularHumanName }}')), ['action' => 'edit', {{ pK|raw }}], ['class' => 'side-nav-item']) ?>
+            <?= $this->Form->postLink(__('Delete {0}', __('{{ singularHumanName }}')), ['action' => 'delete', {{ pK|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ pK|raw }}), 'class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('List {0}', __('{{ pluralHumanName }}')), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('New {0}', __('{{ singularHumanName }}')), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
 {% set done = [] %}
         </div>
     </aside>
     <div class="column-responsive column-80">
         <div class="{{ pluralVar }} view content">
-            <h3><?= h(${{ singularVar }}->{{ displayField }}) ?></h3>
+            <h2><?= h(${{ singularVar }}->{{ displayField }}) ?></h2>
+
             <table>
 {% if groupedFields['string'] %}
 {% for field in groupedFields['string'] %}
@@ -47,6 +48,11 @@
                 <tr>
                     <th><?= __('{{ details.property|humanize }}') ?></th>
                     <td><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
+                </tr>
+{% elseif SetupBake.isArray(field, schema) %}
+                <tr>
+                    <th><?= __('{{ field|humanize }}') ?></th>
+                    <td><pre><?= print_r(h(${{ singularVar }}->{{ field }})); ?></pre></td>
                 </tr>
 {% else %}
                 <tr>
@@ -87,7 +93,7 @@
 {% for field in groupedFields.date %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
-                    <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
+                    <td><?= $this->Time->nice(${{ singularVar }}->{{ field }}) ?></td>
                 </tr>
 {% endfor %}
 {% endif %}
@@ -132,9 +138,9 @@
 {% endfor %}
 {% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
                             <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => '{{ details.controller }}', 'action' => 'view', {{ otherPk|raw }}]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => '{{ details.controller }}', 'action' => 'edit', {{ otherPk|raw }}]) ?>
-                                <?= $this->Form->postLink(__('Delete'), ['controller' => '{{ details.controller }}', 'action' => 'delete', {{ otherPk|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ otherPk|raw }})]) ?>
+                                <?php echo $this->Html->link($this->Format->icon('view'), ['controller' => '{{ details.controller }}', 'action' => 'view', {{ otherPk|raw }}], ['escapeTitle' => false]); ?>
+                                <?php echo $this->Html->link($this->Format->icon('edit'), ['controller' => '{{ details.controller }}', 'action' => 'edit', {{ otherPk|raw }}], ['escapeTitle' => false]); ?>
+                                <?php echo $this->Form->postLink($this->Format->icon('delete'), ['controller' => '{{ details.controller }}', 'action' => 'delete', {{ otherPk|raw }}], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', {{ otherPk|raw }})]); ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

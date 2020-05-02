@@ -30,7 +30,7 @@ class {{ name }}Form extends Form
      * @param \Cake\Form\Schema $schema From schema
      * @return \Cake\Form\Schema
      */
-    protected function _buildSchema(Schema $schema)
+    protected function _buildSchema(Schema $schema): Schema
     {
         return $schema;
     }
@@ -41,7 +41,7 @@ class {{ name }}Form extends Form
      * @param \Cake\Validation\Validator $validator to use against the form
      * @return \Cake\Validation\Validator
      */
-    protected function _buildValidator(Validator $validator)
+    protected function _buildValidator(Validator $validator): Validator
     {
         return $validator;
     }

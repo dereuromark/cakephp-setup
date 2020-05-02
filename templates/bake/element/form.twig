@@ -32,6 +32,8 @@
     </aside>
     <div class="column-responsive column-80">
         <div class="{{ pluralVar }} form content">
+            <h2><?= __('{{ pluralHumanName }}') ?></h2>
+
             <?= $this->Form->create(${{ singularVar }}) ?>
             <fieldset>
                 <legend><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></legend>

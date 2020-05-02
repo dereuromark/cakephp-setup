@@ -33,7 +33,7 @@ Saves some column space.
 
 ### Skipping fields
 Use `public $skipFields = [...]` in your Table class to skip certain fields from being outputted.
-By default the following fields are already excluded:
+By default, the following fields are being excluded:
 ```php
 ['password', 'slug', 'lft', 'rght', 'created_by', 'modified_by', 'approved_by', 'deleted_by']
 ```
@@ -52,7 +52,7 @@ $paginationOrderReversedFieldTypes = ['datetime', 'date', 'time', 'bool'];
 ```
 
 ### Better auto-display of fields
-The grouping of all fields has been removed, there is only text (paragraphs at the end) and default (all other field types) now.
+Text fields do not show up on index to avoid overcrowding.
 
 The following fields are auto-detected on top of the existing ones and formatted accordingly:
 
@@ -61,5 +61,6 @@ The following fields are auto-detected on top of the existing ones and formatted
 - ['boolean']: $this->Format->yesNo() using Tools.Format helper
 
 ## TODO
+- The grouping of all fields has been removed, there is only text (paragraphs at the end) and default (all other field types) now.
 - Custom sorting of fields, if the DB cannot provide a good default order, auto-prio displayField as 1st, created/modified as last.
 - port $schema[$field]['type'] === 'decimal' || $schema[$field]['type'] === 'float' && strpos($schema[$field]['length'], ',2') as money formatting

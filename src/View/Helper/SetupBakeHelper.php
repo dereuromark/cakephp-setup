@@ -13,6 +13,42 @@ class SetupBakeHelper extends BakeHelper {
 	/**
 	 * @param string $field
 	 * @param \Cake\Database\Schema\TableSchemaInterface $schema
+	 *
+	 * @return bool
+	 */
+	public function isDateTime(string $field, TableSchemaInterface $schema): bool {
+		$type = $schema->getColumnType($field);
+
+		return in_array($type, ['date', 'time', 'datetime', 'timestamp'], true);
+	}
+
+	/**
+	 * @param string $field
+	 * @param \Cake\Database\Schema\TableSchemaInterface $schema
+	 *
+	 * @return bool
+	 */
+	public function isText(string $field, TableSchemaInterface $schema): bool {
+		$type = $schema->getColumnType($field);
+
+		return in_array($type, ['text', 'mediumtext', 'longtext'], true);
+	}
+
+	/**
+	 * @param string $field
+	 * @param \Cake\Database\Schema\TableSchemaInterface $schema
+	 *
+	 * @return bool
+	 */
+	public function isArray(string $field, TableSchemaInterface $schema): bool {
+		$type = $schema->getColumnType($field);
+
+		return in_array($type, ['array', 'json'], true);
+	}
+
+	/**
+	 * @param string $field
+	 * @param \Cake\Database\Schema\TableSchemaInterface $schema
 	 * @param string $singularVar
 	 * @param string $namespace
 	 *
@@ -20,7 +56,7 @@ class SetupBakeHelper extends BakeHelper {
 	 */
 	public function isEnum(string $field, TableSchemaInterface $schema, string $singularVar, string $namespace): bool {
 		$type = $schema->getColumnType($field);
-		if (!in_array($type, ['integer', 'tinyinteger', 'biginteger', 'smallinteger', 'tinyinteger'])) {
+		if (!in_array($type, ['integer', 'tinyinteger', 'biginteger', 'smallinteger', 'tinyinteger'], true)) {
 			return false;
 		}
 
