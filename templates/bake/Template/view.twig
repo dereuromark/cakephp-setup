@@ -41,6 +41,7 @@
             <table>
 {% if groupedFields['string'] %}
 {% for field in groupedFields['string'] %}
+{% if field not in primaryKey %}
 {% if associationFields[field] is defined %}
 {% set details = associationFields[field] %}
                 <tr>
@@ -52,6 +53,7 @@
                     <th><?= __('{{ field|humanize }}') ?></th>
                     <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
                 </tr>
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -65,10 +67,20 @@
 {% endif %}
 {% if groupedFields.number %}
 {% for field in groupedFields.number %}
+{% if field not in primaryKey %}
+{% if SetupBake.isEnum(field, schema, singularVar, namespace) %}
+{% set enumMethod = SetupBake.enumMethod(field, schema) %}
+                <tr>
+                    <th><?= __('{{ field|humanize }}') ?></th>
+                    <td><?= ${{ singularVar }}::{{ enumMethod }}(${{ singularVar }}->{{ field }}) ?></td>
+                </tr>
+{% else %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
                     <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
                 </tr>
+{% endif %}
+{% endif %}
 {% endfor %}
 {% endif %}
 {% if groupedFields.date %}
@@ -83,7 +95,7 @@
 {% for field in groupedFields.boolean %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
-                    <td><?= ${{ singularVar }}->{{ field }} ? __('Yes') : __('No'); ?></td>
+                    <td><?= $this->Format->yesNo(${{ singularVar }}->{{ field }}) ?> <?= ${{ singularVar }}->{{ field }} ? __('Yes') : __('No'); ?></td>
                 </tr>
 {% endfor %}
 {% endif %}

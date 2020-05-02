@@ -5,7 +5,7 @@ You can use these templates by using the `--theme`/`-t` option:
 bin/cake bake -t Setup ...
 ```
 
-See [CakePHP docs](http://book.cakephp.org/3.0/en/bake/development.html#extending-bake) on how to further customize.
+See [CakePHP docs](https://book.cakephp.org/bake/2/en/development.html) on how to further customize.
 
 ## Model level
 By default uses Tools plugin Entity and Table classes in use statements.
@@ -23,12 +23,12 @@ class Entity extends CakeEntity {
 ```
 
 ## Controller level
-By default it uses compact() to pass down variables. Makes debugging them easier in the controller scope.
+By default, it uses compact() to pass down variables. Makes debugging them easier in the controller scope.
 
 ## View level
 A few additional Table class configs can be added to customize field output.
 
-By default the index pages do not print out the primary key(s). This is usually irrelevant info and can also be retrieved from the action links if necessary.
+By default, the index pages do not print out the primary key(s). This is usually irrelevant info and can also be retrieved from the action links if necessary.
 Saves some column space.
 
 ### Skipping fields
@@ -56,12 +56,9 @@ The grouping of all fields has been removed, there is only text (paragraphs at t
 
 The following fields are auto-detected on top of the existing ones and formatted accordingly:
 
-- Default string fields: h()
-- ['integer', 'float', 'decimal', 'biginteger']: $this->Number->format()
-- int(2) of type enum as per Tools plugin enum solution (plural static method of the field): $entity::$method()
+- tinyint(2) of type enum as per Tools plugin enum solution (plural static method of the field): $entity::$method()
 - ['date', 'time', 'datetime', 'timestamp']: $this->Time->nice()
 - ['boolean']: $this->Format->yesNo() using Tools.Format helper
-- ['text']: $this->Text->autoParagraph() below all all other fields
 
 ## TODO
 - Custom sorting of fields, if the DB cannot provide a good default order, auto-prio displayField as 1st, created/modified as last.

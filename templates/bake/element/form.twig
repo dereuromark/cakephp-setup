@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-{% set fields = Bake.filterFields(fields, schema, modelObject) %}
+{% set fields = SetupBake.filterFields(fields, schema, modelObject, 0, [], 'form') %}
 <div class="row">
     <aside class="column">
         <div class="side-nav">
@@ -47,6 +47,9 @@
                     echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
                     {{- "\n" }}
         {%- endif %}
+    {%- elseif SetupBake.isEnum(field, schema, singularVar, namespace) %}
+                    echo $this->Form->control('{{ field }}', ['options' => ${{ singularVar }}::{{ SetupBake.enumMethod(field, schema) }}()]);
+                    {{- "\n" }}
     {%- elseif field not in ['created', 'modified', 'updated'] %}
         {%- set fieldData = Bake.columnData(field, schema) %}
         {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
