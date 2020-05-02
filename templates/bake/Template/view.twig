@@ -52,7 +52,7 @@
 {% elseif SetupBake.isArray(field, schema) %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
-                    <td><pre><?= print_r(h(${{ singularVar }}->{{ field }})); ?></pre></td>
+                    <td><pre><?= print_r(h(${{ singularVar }}->{{ field }}), true); ?></pre></td>
                 </tr>
 {% else %}
                 <tr>
