@@ -14,8 +14,8 @@ This branch only works for **CakePHP3.x**
 * [Useful Setup Shells](Console/Shells.md)
 
 ## Bake Templates Deluxe
-The highly advanced bake templates of 2.x have been further enhanced and are part of this plugin.
-The defaults go well together with the Tools plugin, Boostrap3+ and some other useful defaults.
+The highly advanced bake templates have been further enhanced and are part of this plugin.
+The defaults go well together with the Tools plugin, Bootstrap3+ and some other useful defaults.
 You can also just steal ideas, of course ;)
 * [Setup plugin Bake templates](Console/Bake.md)
 

@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Core\Configure;
+use Cake\Event\EventManager;
 
 if (!function_exists('dd')) {
 	/**
@@ -76,4 +77,10 @@ if (!function_exists('vdd')) {
 		pr('vdd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
 		exit();
 	}
+}
+
+if (PHP_SAPI === 'cli') {
+	EventManager::instance()->on('Bake.initialize', function (\Cake\Event\EventInterface $event) {
+		$event->getSubject()->loadHelper('Setup.SetupBake');
+	});
 }
