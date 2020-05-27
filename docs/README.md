@@ -2,7 +2,7 @@
 
 ## Version notice
 
-This branch only works for **CakePHP3.x**
+This branch only works for **CakePHP 4.x**
 
 ## Installation
 * [Installation](Install.md)
