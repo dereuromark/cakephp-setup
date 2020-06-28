@@ -3,7 +3,6 @@
 namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
-use Cake\Console\Shell;
 use Cake\TestSuite\TestCase;
 use Setup\Shell\IndentShell;
 use Shim\TestSuite\ConsoleOutput;

@@ -36,6 +36,7 @@ class DbConstraintsShell extends Shell {
 				$this->checkModel($model);
 			} catch (Exception $e) {
 				$this->err('Skipping due to errors: ' . $e->getMessage());
+
 				continue;
 			}
 		}

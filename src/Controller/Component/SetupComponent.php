@@ -97,6 +97,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->error(__d('setup', 'Maintenance mode not {0}', $mode));
 			}
+
 			return $this->Controller->redirect($this->_cleanedUrl('maintenance'));
 		}
 
@@ -108,6 +109,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->error(__d('setup', 'debug not set'));
 			}
+
 			return $this->Controller->redirect($this->_cleanedUrl('debug'));
 		}
 
@@ -119,6 +121,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->error(__d('setup', 'cache not cleared'));
 			}
+
 			return $this->Controller->redirect($this->_cleanedUrl('clearcache'));
 		}
 
@@ -129,6 +132,7 @@ class SetupComponent extends Component {
 			} else {
 				$this->Controller->Flash->error(__d('setup', 'session not cleared'));
 			}
+
 			return $this->Controller->redirect($this->_cleanedUrl('clearsession'));
 		}
 
@@ -136,6 +140,7 @@ class SetupComponent extends Component {
 		if ($this->Controller->getRequest()->getQuery('layout') !== null) {
 			$this->setLayout($this->Controller->getRequest()->getQuery('layout'));
 			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->getRequest()->getQuery('layout')));
+
 			return $this->Controller->redirect($this->_cleanedUrl('layout'));
 		}
 
@@ -213,6 +218,7 @@ class SetupComponent extends Component {
 		if ($pwd && $pwd === Configure::read('Config.pwd')) {
 			return true;
 		}
+
 		return false;
 	}
 
@@ -225,6 +231,7 @@ class SetupComponent extends Component {
 	public function setLayout($layout) {
 		if (!$layout) {
 			$this->getController()->getRequest()->getSession()->delete('Setup.layout');
+
 			return;
 		}
 		$this->getController()->getRequest()->getSession()->write('Setup.layout', $layout);
@@ -273,9 +280,11 @@ class SetupComponent extends Component {
 		if ($type === 'session') {
 			if ($level < 0) {
 				$this->getController()->getRequest()->getSession()->delete('Setup.debug');
+
 				return false;
 			}
 			$this->getController()->getRequest()->getSession()->write('Setup.debug', $level);
+
 			return true;
 		}
 
@@ -305,6 +314,7 @@ class SetupComponent extends Component {
 			if (file_exists($file)) {
 				unlink($file);
 			}
+
 			return false;
 		}
 
@@ -337,6 +347,7 @@ class SetupComponent extends Component {
 	 */
 	public function clearSession() {
 		$this->getController()->getRequest()->getSession()->destroy();
+
 		return true;
 	}
 

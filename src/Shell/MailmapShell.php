@@ -86,8 +86,8 @@ class MailmapShell extends Shell {
 
 	/**
 	 * @param string $path
-	 * @return array
 	 * @throws \Exception
+	 * @return array
 	 */
 	protected function parseMailmap($path) {
 		$file = $path . '.mailmap';
@@ -121,8 +121,8 @@ class MailmapShell extends Shell {
 	/**
 	 * @param string $path
 	 * @param array $existingMap
-	 * @return array
 	 * @throws \Exception
+	 * @return array
 	 */
 	protected function parseHistory($path, array $existingMap) {
 		$output = $this->runGitCommand($path);

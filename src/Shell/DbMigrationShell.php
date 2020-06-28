@@ -92,6 +92,7 @@ class DbMigrationShell extends Shell {
 
 		if (!$todo) {
 			$this->out('Nothing to do :)');
+
 			return;
 		}
 
@@ -105,6 +106,7 @@ class DbMigrationShell extends Shell {
 		$sql = implode(PHP_EOL, $todo);
 		if (!$this->param('dry-run')) {
 			$this->out($sql);
+
 			return;
 		}
 

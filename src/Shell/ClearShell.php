@@ -79,6 +79,7 @@ class ClearShell extends Shell {
 
 			if ($path->isDir()) {
 				$this->_clearEmpty($fullPath);
+
 				continue;
 			}
 
@@ -106,6 +107,7 @@ class ClearShell extends Shell {
 			foreach ($this->args as $arg) {
 				if (!is_dir(LOGS . $arg)) {
 					$this->err('No log dir \'' . $arg . '\'');
+
 					continue;
 				}
 				$this->out('\'' . $arg . '\' emptied');
@@ -146,15 +148,18 @@ class ClearShell extends Shell {
 		if (empty($this->args)) {
 			$this->_empty(CACHE);
 			$this->out('Complete cache dir emptied');
+
 			return;
 		}
 		foreach ($this->args as $arg) {
 			if (in_array($arg, ['css', 'js'])) {
 				$this->{$arg}();
+
 				continue;
 			}
 			if (!is_dir(CACHE . $arg)) {
 				$this->err('No cache dir \'' . $arg . '\'');
+
 				continue;
 			}
 			$this->_empty(CACHE . $arg);
@@ -194,6 +199,7 @@ class ClearShell extends Shell {
 			foreach ($excludes as $exclude) {
 				if (strpos($fullPath, $exclude) === 0) {
 					$continue = true;
+
 					break;
 				}
 			}

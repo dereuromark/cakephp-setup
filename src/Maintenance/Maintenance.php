@@ -51,6 +51,7 @@ class Maintenance {
 
 		if ($content > 0 && $content < time()) {
 			$this->setMaintenanceMode(false);
+
 			return false;
 		}
 
@@ -58,9 +59,11 @@ class Maintenance {
 			$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ipAddress) . '.txt';
 			if (file_exists($file)) {
 				Configure::write('Maintenance.overwrite', $ipAddress);
+
 				return false;
 			}
 		}
+
 		return true;
 	}
 
@@ -93,6 +96,7 @@ class Maintenance {
 			if (!file_exists($this->file)) {
 				return true;
 			}
+
 			return unlink($this->file);
 		}
 
@@ -116,6 +120,7 @@ class Maintenance {
 			foreach ($newIps as $ip) {
 				$this->_addToWhitelist($ip, $debugMode);
 			}
+
 			return true;
 		}
 
@@ -126,6 +131,7 @@ class Maintenance {
 			$ip = substr($ip, strpos($ip, '-') + 1);
 			$ips[] = $this->_unslugIp($ip);
 		}
+
 		return $ips;
 	}
 
@@ -146,6 +152,7 @@ class Maintenance {
 				}
 			}
 		}
+
 		return true;
 	}
 
@@ -161,6 +168,7 @@ class Maintenance {
 		if (!file_put_contents($file, $debugMode)) {
 			return false;
 		}
+
 		return true;
 	}
 

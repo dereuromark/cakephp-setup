@@ -189,6 +189,7 @@ class UserShell extends Shell {
 		$entity = $this->Users->newEntity($data, ['validate' => false]);
 		if (!empty($this->params['dry-run'])) {
 			$this->out('User dry-run inserted! Data: ' . print_r($entity->toArray(), true));
+
 			return;
 		}
 		if (!$this->Users->save($entity, ['checkRules' => false])) {

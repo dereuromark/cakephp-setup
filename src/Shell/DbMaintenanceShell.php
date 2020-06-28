@@ -87,6 +87,7 @@ SQL;
 				$in = $this->in('Fix table ' . $table . '?', ['y', 'n'], 'y');
 				if ($in !== 'y') {
 					$this->out(' - skipping ' . $table);
+
 					continue;
 				}
 			}
@@ -362,6 +363,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		if (!$todo) {
 			$this->out('Nothing to do :)');
+
 			return;
 		}
 
@@ -377,6 +379,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$sql = implode(PHP_EOL, $todo);
 		if (!empty($this->params['dry-run'])) {
 			$this->out($sql);
+
 			return;
 		}
 
@@ -454,6 +457,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		if (!$todo) {
 			$this->out('Nothing to do :)');
+
 			return;
 		}
 
@@ -468,6 +472,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$sql = implode(PHP_EOL, $todo);
 		if (!empty($this->params['dry-run'])) {
 			$this->out($sql);
+
 			return;
 		}
 

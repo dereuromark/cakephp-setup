@@ -63,6 +63,7 @@ class BackendController extends AppController {
 			Cache::write('_setup_test_string_' . $cacheKey . '_', time(), $cacheKey);
 
 			$this->Flash->success('Cache written for config ' . $cacheKey);
+
 			return $this->redirect(['action' => 'cache']);
 		}
 

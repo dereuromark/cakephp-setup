@@ -55,7 +55,7 @@ class IndentShell extends Shell {
 	/**
 	 * @var bool|null
 	 */
-	protected $_changes = null;
+	protected $_changes;
 
 	/**
 	 * @var array
@@ -144,6 +144,7 @@ class IndentShell extends Shell {
 			}
 			$file = pathinfo($file, PATHINFO_DIRNAME) . DS . $filename . '_.' . pathinfo($file, PATHINFO_EXTENSION);
 		}
+
 		return (bool)file_put_contents($file, $text);
 	}
 
@@ -159,6 +160,7 @@ class IndentShell extends Shell {
 			return [];
 		}
 		$pieces = explode(NL, $text);
+
 		return $pieces;
 	}
 
@@ -222,6 +224,7 @@ class IndentShell extends Shell {
 		if ($newPiece != $piece || strlen($newPiece) !== strlen($piece)) {
 			$this->_changes = true;
 		}
+
 		return $newPiece;
 	}
 
@@ -250,6 +253,7 @@ class IndentShell extends Shell {
 		if ($newPiece !== $piece) {
 			$this->_changes = true;
 		}
+
 		return $newPiece;
 	}
 

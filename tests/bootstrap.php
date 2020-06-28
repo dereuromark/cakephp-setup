@@ -102,6 +102,7 @@ if (getenv('db_dsn')) {
 		'quoteIdentifiers' => true,
 		'cacheMetadata' => true,
 	]);
+
 	return;
 }
 
