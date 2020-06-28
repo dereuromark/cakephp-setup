@@ -112,6 +112,7 @@ class SetupBakeHelper extends BakeHelper {
 	public function getFieldAccessibility($fields = null, $primaryKey = null): array {
 		$accessibleFields = parent::getFieldAccessibility($fields, $primaryKey);
 
+		$accessible = [];
 		$accessible['*'] = $accessibleFields['*'] ?? 'true';
 		foreach ((array)$primaryKey as $field) {
 			$accessible[$field] = 'false';
