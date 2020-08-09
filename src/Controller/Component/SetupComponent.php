@@ -6,6 +6,7 @@ use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\InternalErrorException;
 use Exception;
 use Setup\Maintenance\Maintenance;
@@ -57,11 +58,11 @@ class SetupComponent extends Component {
 	];
 
 	/**
-	 * @param \Cake\Event\Event $event
+	 * @param \Cake\Event\EventInterface $event
 	 * @throws \Exception
 	 * @return \Cake\Http\Response|null|void
 	 */
-	public function beforeFilter(Event $event) {
+	public function beforeFilter(EventInterface $event) {
 		/** @var \Cake\Controller\Controller $Controller */
 		$Controller = $event->getSubject();
 		$this->Controller = $Controller;
