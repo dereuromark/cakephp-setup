@@ -8,6 +8,7 @@ use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
+use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Utility\Security;
 use Exception;
@@ -41,6 +42,14 @@ class CurrentConfigShell extends Shell {
 	public function display() {
 		$this->info('Security Salt: ' . Security::getSalt());
 		$this->info('Full Base URL: ' . Configure::read('App.fullBaseUrl'));
+
+		$this->out('');
+
+		$time = new FrozenTime();
+		$timestamp = $time->getTimestamp();
+		$offset = (int)($time->getOffset() / HOUR);
+		$this->info('Datetime: ' . $time->format(FORMAT_DB_DATETIME) . ' (' . date_default_timezone_get() . ') [GMT' . ($offset > 0 ? '+' . $offset : '-' . abs($offset)) . ']');
+		$this->info('Timestamp: ' . $timestamp . ' => ' . (new FrozenTime(date(FORMAT_DB_DATETIME, $timestamp)))->format(FORMAT_DB_DATETIME));
 
 		$this->out('');
 

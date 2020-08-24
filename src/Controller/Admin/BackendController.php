@@ -21,7 +21,7 @@ class BackendController extends AppController {
 	 * @return void
 	 */
 	public function initialize(): void {
-		$this->viewBuilder()->setHelpers(['Tools.Time', 'Tools.Format']);
+		$this->viewBuilder()->setHelpers(['Tools.Time', 'Tools.Format', 'Tools.Progress']);
 	}
 
 	/**
@@ -93,12 +93,20 @@ class BackendController extends AppController {
 		$dbTables = $db->query('SHOW TABLE STATUS');
 		$dbTables = (new Collection($dbTables))->toArray();
 
-		$dbSize = 0;
-		foreach ($dbTables as $dbTable) {
-			$dbSize += $dbTable['Data_length'];
-		}
+		$dbSizes = [];
+		foreach ($dbTables as $key => $dbTable) {
+			if (preg_match('/phinxlog$/', $dbTable['Name'])) {
+				unset($dbTables[$key]);
 
-		$this->set(compact('dbTables', 'dbSize'));
+				continue;
+			}
+
+			$dbSizes[] = $dbTable['Data_length'];
+		}
+		$dbSize = array_sum($dbSizes);
+		$maxSize = $dbSizes ? max($dbSizes) : 0;
+
+		$this->set(compact('dbTables', 'dbSize', 'maxSize'));
 	}
 
 	/**

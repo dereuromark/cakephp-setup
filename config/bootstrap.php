@@ -3,6 +3,10 @@
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
 
+if (!defined('FORMAT_DB_DATETIME')) {
+	define('FORMAT_DB_DATETIME', 'Y-m-d H:i:s');
+}
+
 if (!function_exists('dd')) {
 	/**
 	 * @param mixed $var
