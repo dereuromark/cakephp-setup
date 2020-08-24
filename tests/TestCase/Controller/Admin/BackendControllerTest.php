@@ -12,6 +12,13 @@ class BackendControllerTest extends TestCase {
 	use IntegrationTestTrait;
 
 	/**
+	 * @var string[]
+	 */
+	public $fixtures = [
+		'core.Sessions',
+	];
+
+	/**
 	 * @return void
 	 */
 	public function testPhpinfo() {

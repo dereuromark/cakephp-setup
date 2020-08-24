@@ -44,6 +44,8 @@ Cake\Core\Configure::write('App', [
 ]);
 Cake\Core\Configure::write('debug', true);
 
+Cake\Utility\Security::setSalt('123');
+
 class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
 class_alias(Cake\View\View::class, 'App\View\AppView');
 
