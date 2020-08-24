@@ -104,7 +104,7 @@ class BackendController extends AppController {
 			$dbSizes[] = $dbTable['Data_length'];
 		}
 		$dbSize = array_sum($dbSizes);
-		$maxSize = max($dbSizes);
+		$maxSize = $dbSizes ? max($dbSizes) : 0;
 
 		$this->set(compact('dbTables', 'dbSize', 'maxSize'));
 	}
