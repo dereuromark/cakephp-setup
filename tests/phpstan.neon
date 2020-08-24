@@ -1,7 +1,8 @@
 parameters:
-	autoload_files:
-		- bootstrap.php
-		- shim.php
+	bootstrapFiles:
+		- %rootDir%/../../../tests/bootstrap.php
+		- %rootDir%/../../../tests/shim.php
+		- %rootDir%/../../../tests/config/bootstrap.php
 	ignoreErrors:
 		- '#Call to an undefined method .+FlashComponent::warning\(\)#'
 		- '#Parameter \#1 \$items of class .+Collection constructor expects iterable, .+StatementInterface given.#'
