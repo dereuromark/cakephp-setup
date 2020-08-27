@@ -12,7 +12,7 @@ class UserShellTest extends TestCase {
 	/**
 	 * @var array
 	 */
-	public $fixtures = ['plugin.Setup.Users'];
+	protected $fixtures = ['plugin.Setup.Users'];
 
 	/**
 	 * @var \Setup\Shell\UserShell|\PHPUnit\Framework\MockObject\MockObject

@@ -17,7 +17,7 @@ class ResetShellTest extends TestCase {
 	/**
 	 * @var array
 	 */
-	public $fixtures = ['plugin.Setup.Users'];
+	protected $fixtures = ['plugin.Setup.Users'];
 
 	/**
 	 * @return void
