@@ -14,7 +14,7 @@ class BackendControllerTest extends TestCase {
 	/**
 	 * @var string[]
 	 */
-	public $fixtures = [
+	protected $fixtures = [
 		'core.Sessions',
 	];
 
