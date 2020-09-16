@@ -25,21 +25,20 @@
 {% set groupedFields = fieldsData.groupedFields %}
 {% set pK = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
 <div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit {0}', __('{{ singularHumanName }}')), ['action' => 'edit', {{ pK|raw }}], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete {0}', __('{{ singularHumanName }}')), ['action' => 'delete', {{ pK|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ pK|raw }}), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List {0}', __('{{ pluralHumanName }}')), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New {0}', __('{{ singularHumanName }}')), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+    <aside class="column actions large-3 medium-4 col-sm-4 col-xs-12">
+        <ul class="side-nav nav nav-pills flex-column">
+            <li class="nav-item heading"><?= __('Actions') ?></li>
+            <li class="nav-item"><?= $this->Html->link(__('Edit {0}', __('{{ singularHumanName }}')), ['action' => 'edit', {{ pK|raw }}], ['class' => 'side-nav-item']) ?></li>
+            <li class="nav-item"><?= $this->Form->postLink(__('Delete {0}', __('{{ singularHumanName }}')), ['action' => 'delete', {{ pK|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ pK|raw }}), 'class' => 'side-nav-item']) ?></li>
+            <li class="nav-item"><?= $this->Html->link(__('List {0}', __('{{ pluralHumanName }}')), ['action' => 'index'], ['class' => 'side-nav-item']) ?></li>
 {% set done = [] %}
-        </div>
+        </ul>
     </aside>
-    <div class="column-responsive column-80">
+    <div class="column-responsive column-80 content large-9 medium-8 col-sm-8 col-xs-12">
         <div class="{{ pluralVar }} view content">
             <h2><?= h(${{ singularVar }}->{{ displayField }}) ?></h2>
 
-            <table>
+            <table class="table table-striped">
 {% if groupedFields['string'] %}
 {% for field in groupedFields['string'] %}
 {% if field not in primaryKey %}
@@ -123,8 +122,8 @@
             <div class="related">
                 <h4><?= __('Related {{ otherPluralHumanName }}') ?></h4>
                 <?php if (!empty(${{ singularVar }}->{{ details.property }})) : ?>
-                <div class="table-responsive">
-                    <table>
+                <div>
+                    <table class="table table-striped">
                         <tr>
 {% for field in details.fields %}
                             <th><?= __('{{ field|humanize }}') ?></th>

@@ -19,13 +19,21 @@
  * @var \{{ entityClass }}[]|\Cake\Collection\CollectionInterface ${{ pluralVar }}
  */
 ?>
-<div class="{{ pluralVar }} index content">
+<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12" id="actions-sidebar">
+    <ul class="side-nav nav nav-pills flex-column">
+        <li class="nav-item heading"><?= __('Actions') ?></li>
+        <li class="nav-item">
+            <?= $this->Html->link(__('New {0}', __('{{ singularHumanName }}')), ['action' => 'add'], ['class' => 'nav-link']) ?>
+        </li>
+    </ul>
+</nav>
+<div class="{{ pluralVar }} index content large-9 medium-8 columns col-sm-8 col-12">
 {% set fields = SetupBake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text'], 'index') %}
-    <?= $this->Html->link(__('New {0}', __('{{ singularHumanName }}')), ['action' => 'add'], ['class' => 'button float-right']) ?>
+
 {% set done = [] %}
     <h2><?= __('{{ pluralHumanName }}') ?></h2>
 
-    <div class="table-responsive">
+    <div class="">
         <table class="table table-sm table-striped">
             <thead>
                 <tr>

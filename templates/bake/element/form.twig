@@ -15,22 +15,22 @@
 #}
 {% set fields = SetupBake.filterFields(fields, schema, modelObject, 0, [], 'form') %}
 <div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
+    <aside class="column large-3 medium-4 columns col-sm-4 col-12">
+        <ul class="side-nav nav nav-pills flex-column">
+            <li class="nav-item heading"><?= __('Actions') ?></li>
 {% if 'add' not in action %}
-            <?= $this->Form->postLink(
+            <li class="nav-item"><?= $this->Form->postLink(
                 __('Delete'),
                 ['action' => 'delete', ${{ singularVar }}->{{ primaryKey[0] }}],
                 ['confirm' => __('Are you sure you want to delete # {0}?', ${{ singularVar }}->{{ primaryKey[0] }}), 'class' => 'side-nav-item']
-            ) ?>
+                ) ?></li>
 {% endif %}
-            <?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <li class="nav-item"><?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index'], ['class' => 'side-nav-item']) ?></li>
             {{- "\n" }}
 {%- set done = [] %}
-        </div>
+        </ul>
     </aside>
-    <div class="column-responsive column-80">
+    <div class="column-responsive column-80 form large-9 medium-8 columns col-sm-8 col-12">
         <div class="{{ pluralVar }} form content">
             <h2><?= __('{{ pluralHumanName }}') ?></h2>
 
