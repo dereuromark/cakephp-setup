@@ -5,7 +5,6 @@ namespace Setup\Controller\Component;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
-use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\InternalErrorException;
 use Exception;
@@ -153,10 +152,10 @@ class SetupComponent extends Component {
 	 *
 	 * - Sets the layout based on session value 'Setup.layout'.
 	 *
-	 * @param \Cake\Event\Event $event
+	 * @param \Cake\Event\EventInterface $event
 	 * @return void
 	 */
-	public function startup(Event $event) {
+	public function startup(EventInterface $event) {
 		$layout = $this->getController()->getRequest()->getSession()->read('Setup.layout');
 		if ($layout) {
 			$this->Controller->viewBuilder()->setLayout($layout);
