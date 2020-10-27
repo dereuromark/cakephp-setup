@@ -149,9 +149,6 @@ class UserShell extends Shell {
 		}
 		$data[$displayField] = $displayFieldValue;
 
-		if (!empty($email)) {
-			$data['email'] = $email;
-		}
 		if (!empty($role)) {
 			$data['role_id'] = $role;
 		}
