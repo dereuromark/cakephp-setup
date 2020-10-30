@@ -21,6 +21,8 @@ class BackendController extends AppController {
 	 * @return void
 	 */
 	public function initialize(): void {
+		parent::initialize();
+
 		$this->viewBuilder()->setHelpers(['Tools.Time', 'Tools.Format', 'Tools.Progress']);
 	}
 
