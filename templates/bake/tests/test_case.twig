@@ -39,9 +39,7 @@ use {{ dependency }};
 {% endfor %}
 
 /**
- * {{ fullClassName }} Test Case
 {% if isController or isCommand %}
- *
  * @uses \{{ fullClassName }}
 {% endif %}
  */
@@ -72,9 +70,7 @@ class {{ className }}Test extends TestCase
 
 {%- if fixtures %}
     /**
-     * Fixtures
-     *
-     * @var array
+     * @var string[]
      */
     protected $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
 {% if construction or methods %}
@@ -84,8 +80,6 @@ class {{ className }}Test extends TestCase
 
 {%- if construction %}
     /**
-     * setUp method
-     *
      * @return void
      */
     public function setUp(): void
@@ -106,8 +100,6 @@ class {{ className }}Test extends TestCase
 {% if not isCommand %}
 
     /**
-     * tearDown method
-     *
      * @return void
      */
     public function tearDown(): void
@@ -127,8 +119,6 @@ class {{ className }}Test extends TestCase
 
 {% endif %}
     /**
-     * Test {{ method }} method
-     *
      * @return void
      */
     public function test{{ method|camelize }}(): void

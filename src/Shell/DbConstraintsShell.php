@@ -73,11 +73,14 @@ class DbConstraintsShell extends Shell {
 
 			$this->out('Checking: ' . $model->getAlias() . '.' . $relation->getForeignKey() . ' => ' . $relation->getName() . '.' . $relation->getBindingKey());
 			$field = $schema->getColumn($relation->getForeignKey());
-			if ($field['null'] !== true || $field['default'] !== null) {
+			if (!$field) {
+				$this->warn(' - Cannot find column definition for `' . $relation->getForeignKey() . '`');
+			}
+			if ($field && ($field['null'] !== true || $field['default'] !== null)) {
 				continue;
 			}
 			// We only care about AIIDs for now
-			if ($field['type'] !== 'integer') {
+			if ($field && $field['type'] !== 'integer') {
 				continue;
 			}
 

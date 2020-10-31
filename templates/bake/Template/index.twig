@@ -69,10 +69,12 @@
                     <td><?= ${{ singularVar }}::{{ SetupBake.enumMethod(field, schema) }}(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif SetupBake.isDateTime(field, schema) %}
                     <td><?= $this->Time->nice(${{ singularVar }}->{{ field }}) ?></td>
-{% elseif columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
-                    <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
-{% else %}
+{% elseif columnData.type in ['boolean'] %}
+                    <td><?= $this->Format->yesNo(${{ singularVar }}->{{ field }}) ?></td>
+{% elseif columnData.type in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
                     <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
+{% else %}
+                    <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
 {% endif %}
 {% endif %}
 {% endif %}
