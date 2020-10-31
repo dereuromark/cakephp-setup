@@ -41,6 +41,7 @@ class DbConstraintsShell extends Shell {
 			}
 		}
 
+		$this->out('');
 		$this->out('Done :) Possible nullable foreign key constraints checks executed.');
 	}
 
@@ -84,6 +85,7 @@ class DbConstraintsShell extends Shell {
 				continue;
 			}
 
+			$ok = false;
 			$constraints = $schema->constraints();
 			foreach ($constraints as $constraint) {
 				$constraintDetails = $schema->getConstraint($constraint);
@@ -94,12 +96,20 @@ class DbConstraintsShell extends Shell {
 					continue;
 				}
 
+				$ok = true;
+
 				if (!empty($constraintDetails['delete']) && $constraintDetails['delete'] === 'setNull') {
 					continue;
 				}
 
 				$this->warn('- Possibly missing a [\'delete\' => \'SET_NULL\'] constraint.');
 			}
+
+			if ($ok) {
+				continue;
+			}
+
+			$this->warn('- Foreign key constraint missing: ' . $relation->getForeignKey());
 		}
 	}
 
@@ -109,11 +119,6 @@ class DbConstraintsShell extends Shell {
 	public function getOptionParser(): ConsoleOptionParser {
 		$subcommandParser = [
 			'options' => [
-				'dry-run' => [
-					'short' => 'd',
-					'help' => 'Dry run the command, nothing will actually be modified. It will output the SQL to copy-and-paste, e.g. into a Migrations file.',
-					'boolean' => true,
-				],
 				'plugin' => [
 					'short' => 'p',
 					'help' => 'Plugin',
