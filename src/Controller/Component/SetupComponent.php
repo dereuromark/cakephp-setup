@@ -115,7 +115,7 @@ class SetupComponent extends Component {
 
 		// clear cache
 		if ($this->Controller->getRequest()->getQuery('clearcache') !== null) {
-			$result = $this->clearCache($this->Controller->getRequest()->getQuery('clearcache'));
+			$result = $this->clearCache((string)$this->Controller->getRequest()->getQuery('clearcache'));
 			if ($result !== false) {
 				$this->Controller->Flash->success(__d('setup', 'cache cleared'));
 			} else {
@@ -138,7 +138,7 @@ class SetupComponent extends Component {
 
 		// layout switch
 		if ($this->Controller->getRequest()->getQuery('layout') !== null) {
-			$this->setLayout($this->Controller->getRequest()->getQuery('layout'));
+			$this->setLayout((string)$this->Controller->getRequest()->getQuery('layout'));
 			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->getRequest()->getQuery('layout')));
 
 			return $this->Controller->redirect($this->_cleanedUrl('layout'));

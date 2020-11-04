@@ -61,7 +61,7 @@ class BackendController extends AppController {
 	 */
 	public function cache() {
 		if ($this->request->is(['post', 'put'])) {
-			$cacheKey = $this->request->getQuery('key');
+			$cacheKey = (string)$this->request->getQuery('key');
 			Cache::write('_setup_test_string_' . $cacheKey . '_', time(), $cacheKey);
 
 			$this->Flash->success('Cache written for config ' . $cacheKey);
