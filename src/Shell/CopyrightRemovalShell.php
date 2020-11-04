@@ -5,6 +5,7 @@ namespace Setup\Shell;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Filesystem\Folder;
+use RuntimeException;
 
 /**
  * Shell to remove CakePHP copyright from APP files.
@@ -23,6 +24,11 @@ class CopyrightRemovalShell extends Shell {
 		} else {
 			$folder = APP;
 		}
+
+		if ($folder === false) {
+			throw new RuntimeException('Cannot use folder: ' . $this->args[0]);
+		}
+
 		$App = new Folder($folder);
 		$this->out('Cleaning copyright notices in ' . $folder);
 

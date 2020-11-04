@@ -7,6 +7,7 @@ use Cake\Http\ServerRequestFactory;
 use Cake\Utility\Inflector;
 use Cake\View\View;
 use Cake\View\ViewBuilder;
+use Laminas\Diactoros\CallbackStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -68,24 +69,32 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 		$templateName = $this->getConfig('templateFileName');
 		$templatePath = $this->getConfig('templatePath');
 
+		$builder->setClassName($this->getConfig('className'))
+			->setTemplatePath(Inflector::camelize($templatePath));
+		if (!$this->getConfig('templateLayout')) {
+			$builder->disableAutoLayout();
+		} else {
+			$builder->setLayout($this->getConfig('templateLayout'));
+		}
+
 		$view = $builder
-			->setClassName($this->getConfig('className'))
-			->setTemplatePath(Inflector::camelize($templatePath))
-			->setLayout($this->getConfig('templateLayout'))
 			->build([], $cakeRequest)
 			->setConfig('_ext', $this->getConfig('templateExtension'));
-		//$view->_ext = $this->getConfig('templateExtension');
 
-		$bodyString = $view->render($templateName);
+		$bodyString = $view->render($templateName, $this->getConfig('templateLayout'));
 
 		$response = $response->withHeader('Retry-After', (string)HOUR)
 			->withHeader('Content-Type', $this->getConfig('contentType'))
 			->withStatus($this->getConfig('statusCode'));
 
-		$body = $response->getBody();
-		$body->write($bodyString);
+		$body = new CallbackStream(function () use ($bodyString) {
+			return $bodyString;
+		});
 
-		return $response;
+		/** @var \Psr\Http\Message\ResponseInterface $maintenanceResponse */
+		$maintenanceResponse = $response->withBody($body);
+
+		return $maintenanceResponse;
 	}
 
 }

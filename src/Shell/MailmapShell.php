@@ -6,6 +6,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Exception;
+use RuntimeException;
 
 /**
  * A shell to manage a .mailmap file for a Git project.
@@ -96,6 +97,10 @@ class MailmapShell extends Shell {
 		}
 
 		$content = file_get_contents($file);
+		if ($content === false) {
+			throw new RuntimeException('Cannot read file: ' . $file);
+		}
+
 		$content = explode(PHP_EOL, $content);
 		$this->map = array_filter($content);
 

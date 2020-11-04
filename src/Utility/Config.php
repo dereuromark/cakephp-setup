@@ -2,12 +2,14 @@
 
 namespace Setup\Utility;
 
+use RuntimeException;
+
 class Config {
 
 	/**
 	 * @return array
 	 */
-	public static function getEnvVars() {
+	public static function getEnvVars(): array {
 		$path = CONFIG;
 
 		$envVars = $result = [];
@@ -15,6 +17,9 @@ class Config {
 		$files = glob($path . 'app*\.php') ?: [];
 		foreach ($files as $file) {
 			$content = file_get_contents($file);
+			if ($content === false) {
+				throw new RuntimeException('Cannot read file: ' . $file);
+			}
 			preg_match_all('#env\(\'([A-Z_)]+)\'.*\)#', $content, $matches);
 
 			$envs = $matches ? $matches[1] : [];
@@ -35,7 +40,7 @@ class Config {
 	/**
 	 * @return array|null
 	 */
-	public static function getLocal() {
+	public static function getLocal(): ?array {
 		$file = CONFIG . 'app_local.php';
 		if (!file_exists($file)) {
 			return null;
@@ -59,7 +64,7 @@ class Config {
 	 *
 	 * @return array
 	 */
-	public static function configTree(array $array) {
+	public static function configTree(array $array): array {
 		$result = [];
 
 		foreach ($array as $k => $v) {
