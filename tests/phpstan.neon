@@ -4,6 +4,9 @@ parameters:
 		- %rootDir%/../../../tests/shim.php
 		- %rootDir%/../../../tests/config/bootstrap.php
 	checkMissingIterableValueType: false
+	earlyTerminatingMethodCalls:
+		Cake\Console\Shell:
+			- abort
 
 	ignoreErrors:
 		- '#Call to an undefined method .+FlashComponent::warning\(\)#'

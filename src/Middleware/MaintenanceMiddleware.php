@@ -81,7 +81,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 			->build([], $cakeRequest)
 			->setConfig('_ext', $this->getConfig('templateExtension'));
 
-		$bodyString = $view->render($templateName, $this->getConfig('templateLayout'));
+		$bodyString = $view->render($templateName);
 
 		$response = $response->withHeader('Retry-After', (string)HOUR)
 			->withHeader('Content-Type', $this->getConfig('contentType'))
