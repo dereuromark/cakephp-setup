@@ -94,8 +94,12 @@ SQL;
 
 			if (!$this->params['dry-run']) {
 				$this->out(' - fixing table ' . $table, 1, Shell::VERBOSE);
-				$db->query($row);
-				$db->query($sql);
+				try {
+					$db->query($row);
+					$db->query($sql);
+				} catch (Exception $exception) {
+					$this->err('Error on table ' . $table . ': ' . $exception->getMessage());
+				}
 			} else {
 				$this->out($row);
 				$this->out($sql);

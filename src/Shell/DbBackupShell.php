@@ -148,6 +148,7 @@ class DbBackupShell extends Shell {
 		} else {
 			exec($command, $output, $ret);
 		}
+
 		return $ret === 0;
 	}
 
@@ -161,10 +162,12 @@ class DbBackupShell extends Shell {
 			case 'gzip':
 			case 'gunzip':
 				$path = Configure::read('Cli.gitPath');
+
 				break;
 			default:
 				$path = Configure::read('Cli.mysqlPath');
 		}
+
 		return (WINDOWS && $path ? $path : '') . $command;
 	}
 
@@ -179,6 +182,7 @@ class DbBackupShell extends Shell {
 				$path = $customPath;
 			}
 		}
+
 		return $path;
 	}
 
@@ -296,6 +300,7 @@ class DbBackupShell extends Shell {
 		if (!empty($this->params['verbose']) && !empty($output)) {
 			$this->log($output, 'info');
 		}
+
 		return $ret === 0;
 	}
 
@@ -343,6 +348,7 @@ class DbBackupShell extends Shell {
 			$files[] = $v[0];
 		}
 		$files = array_reverse($files);
+
 		return $files;
 	}
 
