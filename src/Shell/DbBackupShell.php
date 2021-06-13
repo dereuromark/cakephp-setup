@@ -168,7 +168,10 @@ class DbBackupShell extends Shell {
 				$path = Configure::read('Cli.mysqlPath');
 		}
 
-		return (WINDOWS && $path ? $path : '') . $command;
+		/** @var bool $windows */
+		$windows = WINDOWS;
+
+		return ($windows && $path ? $path : '') . $command;
 	}
 
 	/**
