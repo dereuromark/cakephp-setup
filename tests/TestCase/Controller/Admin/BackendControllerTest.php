@@ -12,7 +12,7 @@ class BackendControllerTest extends TestCase {
 	use IntegrationTestTrait;
 
 	/**
-	 * @var string[]
+	 * @var array<string>
 	 */
 	protected $fixtures = [
 		'core.Sessions',

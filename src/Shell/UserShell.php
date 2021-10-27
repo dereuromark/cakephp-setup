@@ -44,7 +44,7 @@ class UserShell extends Shell {
 			$query = $query->where(['role_id' => (int)$role]);
 		}
 
-		/** @var \App\Model\Entity\User[] $users */
+		/** @var array<\App\Model\Entity\User> $users */
 		$users = $query->orderDesc($this->Users->getPrimaryKey())->limit(100)->all()->toArray();
 
 		$count = count($users);

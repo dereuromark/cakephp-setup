@@ -105,9 +105,9 @@ class SetupBakeHelper extends BakeHelper {
 	/**
 	 * Get field accessibility data.
 	 *
-	 * @param string[]|false|null $fields Fields list.
-	 * @param string[]|null $primaryKey Primary key.
-	 * @return bool[]
+	 * @param array<string>|false|null $fields Fields list.
+	 * @param array<string>|null $primaryKey Primary key.
+	 * @return array<bool>
 	 */
 	public function getFieldAccessibility($fields = null, $primaryKey = null): array {
 		$accessibleFields = parent::getFieldAccessibility($fields, $primaryKey);

@@ -132,7 +132,7 @@ class IndentShell extends Shell {
 
 	/**
 	 * @param string $file
-	 * @param string[] $texts
+	 * @param array<string> $texts
 	 * @return bool Success
 	 */
 	protected function _write($file, $texts) {

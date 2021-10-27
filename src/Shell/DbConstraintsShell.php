@@ -145,7 +145,7 @@ class DbConstraintsShell extends Shell {
 	 *
 	 * @throws \RuntimeException
 	 *
-	 * @return \Cake\ORM\Table[]
+	 * @return array<\Cake\ORM\Table>
 	 */
 	protected function _getModels($model, $plugin) {
 		if ($model) {
