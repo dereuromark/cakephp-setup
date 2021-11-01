@@ -295,7 +295,7 @@ class SetupComponent extends Component {
 
 		$id = null;
 		if ($type === 'session') {
-			$id = isset($_COOKIE[$cookieName]) ? $_COOKIE[$cookieName] : '';
+			$id = $_COOKIE[$cookieName] ?? '';
 
 		} elseif ($type === 'ip') {
 			$ip = env('REMOTE_ADDR');
@@ -354,7 +354,7 @@ class SetupComponent extends Component {
 	/**
 	 * Remove specific named param from parsed url array
 	 *
-	 * @param string|array $type
+	 * @param array|string $type
 	 * @return array URL
 	 */
 	protected function _cleanedUrl($type) {

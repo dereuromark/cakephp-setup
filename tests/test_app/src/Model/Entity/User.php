@@ -10,8 +10,8 @@ use Tools\Model\Entity\Entity;
 class User extends Entity {
 
 	/**
-	 * @param int|array|null $value
-	 * @return string|array
+	 * @param array|int|null $value
+	 * @return array|string
 	 */
 	public static function statuses($value = null) {
 		$options = [
