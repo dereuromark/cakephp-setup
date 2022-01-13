@@ -67,7 +67,8 @@ class SetupComponent extends Component {
 		$this->Controller = $Controller;
 
 		// For debug overwrite
-		if (($debug = $this->getController()->getRequest()->getSession()->read('Setup.debug')) !== null) {
+		$debug = $this->getController()->getRequest()->getSession()->read('Setup.debug');
+		if ($debug !== null) {
 			Configure::write('debug', $debug);
 		}
 

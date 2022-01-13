@@ -64,7 +64,7 @@ class IndentShellTest extends TestCase {
 		$output = $this->out->output();
 		$this->assertStringContainsString('found: 1', $output);
 
-  	$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
+		$result = file_get_contents(TMP . 'indent' . DS . 'indent.php');
 
 		$expected = file_get_contents($this->testFilePath . 'indent_basic.php');
 		$this->assertTextEquals($expected, $result);

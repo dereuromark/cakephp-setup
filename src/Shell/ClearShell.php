@@ -64,8 +64,10 @@ class ClearShell extends Shell {
 	 * @return void
 	 */
 	public function _clearEmpty($dir) {
-		$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
-			RecursiveIteratorIterator::CHILD_FIRST);
+		$Iterator = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($dir),
+			RecursiveIteratorIterator::CHILD_FIRST,
+		);
 		/** @var \SplFileInfo $path */
 		foreach ($Iterator as $path) {
 			$fullPath = $path->__toString();
@@ -191,8 +193,10 @@ class ClearShell extends Shell {
 	 * @return void
 	 */
 	public function _empty($dir, $excludes = []) {
-		$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
-			RecursiveIteratorIterator::CHILD_FIRST);
+		$Iterator = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($dir),
+			RecursiveIteratorIterator::CHILD_FIRST,
+		);
 		foreach ($Iterator as $path) {
 			$fullPath = $path->__toString();
 			$continue = false;

@@ -245,7 +245,8 @@ class IndentShell extends Shell {
 			$newPiece = mb_substr($newPiece, $space);
 		}
 		// In the middle
-		if (($pos = mb_strpos($newPiece, (string)$space)) > 0 && mb_substr($newPiece, $pos - 1, 1) === TB
+		$pos = mb_strpos($newPiece, (string)$space);
+		if ($pos > 0 && mb_substr($newPiece, $pos - 1, 1) === TB
 			&& mb_substr($newPiece, $pos + 1, 1) === TB) {
 			$newPiece = mb_substr($newPiece, $pos) . mb_substr($newPiece, $pos + 2);
 		}
