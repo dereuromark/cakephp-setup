@@ -133,7 +133,7 @@ class DbBackupShell extends Shell {
 	}
 
 	/**
-	 * @param array $options
+	 * @param array<string, mixed> $options
 	 *
 	 * @return bool
 	 */
@@ -277,7 +277,7 @@ class DbBackupShell extends Shell {
 	}
 
 	/**
-	 * @param array $options
+	 * @param array<string, mixed> $options
 	 * @param string $file
 	 *
 	 * @return bool
