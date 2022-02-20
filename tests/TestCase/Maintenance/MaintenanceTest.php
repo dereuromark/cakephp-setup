@@ -73,7 +73,7 @@ class MaintenanceTest extends TestCase {
 		$result = $this->Maintenance->whitelist();
 		$this->assertSame($whitelist, $result);
 
-		$result = $this->Maintenance->clearWhitelist();
+		$this->Maintenance->clearWhitelist();
 		$result = $this->Maintenance->whitelist();
 		$this->assertEmpty($result);
 	}

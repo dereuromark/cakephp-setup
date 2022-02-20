@@ -111,7 +111,7 @@ class Maintenance {
 	 * Get the whitelist or add new IPs.
 	 * Note: Expects IPs to be valid.
 	 *
-	 * @param array $newIps IP addressed to be added to the whitelist.
+	 * @param array<string> $newIps IP addressed to be added to the whitelist.
 	 * @param int $debugMode
 	 * @return array<string>|true Boolean Success for adding, an array of all whitelisted IPs otherwise.
 	 */
@@ -139,7 +139,7 @@ class Maintenance {
 	/**
 	 * Clear whitelist. If IPs are passed, only those will be removed, otherwise all.
 	 *
-	 * @param array $ips
+	 * @param array<string> $ips
 	 * @return bool Success
 	 */
 	public function clearWhitelist($ips = []) {
@@ -148,7 +148,7 @@ class Maintenance {
 		foreach ($files as $file) {
 			$ip = pathinfo($file, PATHINFO_FILENAME);
 			$ip = substr($ip, strpos($ip, '-') + 1);
-			if (!$ips || in_array($this->_unslugIp($ip), $ips)) {
+			if (!$ips || in_array($this->_unslugIp($ip), $ips, true)) {
 				if (!unlink($file)) {
 					return false;
 				}
@@ -165,7 +165,7 @@ class Maintenance {
 	 * @param int $debugMode
 	 * @return bool Success.
 	 */
-	protected function _addToWhitelist($ip, $debugMode = 0) {
+	protected function _addToWhitelist(string $ip, $debugMode = 0) {
 		$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ip) . '.txt';
 		if (!file_put_contents($file, $debugMode)) {
 			return false;
@@ -180,7 +180,7 @@ class Maintenance {
 	 * @param string $ip
 	 * @return string
 	 */
-	protected function _slugIp($ip) {
+	protected function _slugIp(string $ip) {
 		return str_replace(':', '#', $ip);
 	}
 
@@ -190,7 +190,7 @@ class Maintenance {
 	 * @param string $ip
 	 * @return string
 	 */
-	protected function _unslugIp($ip) {
+	protected function _unslugIp(string $ip) {
 		return str_replace('#', ':', $ip);
 	}
 

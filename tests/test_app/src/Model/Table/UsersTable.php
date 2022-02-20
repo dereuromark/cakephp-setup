@@ -7,7 +7,7 @@ use Tools\Model\Table\Table;
 class UsersTable extends Table {
 
 	/**
-	 * @param array $config
+	 * @param array<string, mixed> $config
 	 * @return void
 	 */
 	public function initialize(array $config): void {

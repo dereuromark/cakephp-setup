@@ -25,10 +25,14 @@ class TestCliShell extends Shell {
 
 		$arrayUrl = ['controller' => 'Test'];
 		if ($this->param('prefix')) {
-			$arrayUrl['prefix'] = $this->param('prefix');
+			/** @var string $prefix */
+			$prefix = $this->param('prefix');
+			$arrayUrl['prefix'] = $prefix;
 		}
 		if ($this->param('plugin')) {
-			$arrayUrl['plugin'] = $this->param('plugin');
+			/** @var string $plugin */
+			$plugin = $this->param('plugin');
+			$arrayUrl['plugin'] = $plugin;
 		}
 
 		$url = Router::url($arrayUrl);
@@ -72,7 +76,7 @@ class TestCliShell extends Shell {
 	}
 
 	/**
-	 * @param array $arrayUrl
+	 * @param array<string, string> $arrayUrl
 	 * @return string
 	 */
 	protected function _urlToText(array $arrayUrl) {

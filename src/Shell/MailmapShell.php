@@ -125,7 +125,7 @@ class MailmapShell extends Shell {
 
 	/**
 	 * @param string $path
-	 * @param array $existingMap
+	 * @param array<string, mixed> $existingMap
 	 * @throws \Exception
 	 * @return array
 	 */

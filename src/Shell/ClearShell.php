@@ -189,7 +189,7 @@ class ClearShell extends Shell {
 
 	/**
 	 * @param string $dir
-	 * @param array $excludes
+	 * @param array<string> $excludes
 	 * @return void
 	 */
 	public function _empty($dir, $excludes = []) {

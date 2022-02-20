@@ -32,7 +32,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 	];
 
 	/**
-	 * @param array $config
+	 * @param array<string, mixed> $config
 	 */
 	public function __construct(array $config = []) {
 		$this->setConfig($config);

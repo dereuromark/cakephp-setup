@@ -92,7 +92,7 @@ class SetupComponent extends Component {
 		// maintenance mode
 		if ($this->Controller->getRequest()->getQuery('maintenance') !== null) {
 			$mode = $this->Controller->getRequest()->getQuery('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
-			$result = $this->setMaintenance($this->Controller->getRequest()->getQuery('maintenance'));
+			$result = $this->setMaintenance((bool)$this->Controller->getRequest()->getQuery('maintenance'));
 			if ($result !== false) {
 				$this->Controller->Flash->success(__d('setup', 'Maintenance mode {0}', $mode));
 			} else {
@@ -247,11 +247,11 @@ class SetupComponent extends Component {
 	 * URL Options:
 	 * - `duration` query string can be used to set a timeout maintenance window
 	 *
-	 * @param mixed $maintenance
+	 * @param bool $maintenance
 	 * @return bool Success
 	 */
 	public function setMaintenance($maintenance) {
-		$ip = env('REMOTE_ADDR');
+		$ip = (string)env('REMOTE_ADDR');
 		// optional length in minutes
 		$length = (int)$this->Controller->getRequest()->getQuery('duration');
 

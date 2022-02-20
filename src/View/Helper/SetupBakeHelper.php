@@ -133,7 +133,7 @@ class SetupBakeHelper extends BakeHelper {
 	 * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
 	 * @param \Cake\ORM\Table|null $modelObject Model object.
 	 * @param string|int $takeFields Take fields.
-	 * @param array $filterTypes Filter field types.
+	 * @param array<string> $filterTypes Filter field types.
 	 * @param string|null $type
 	 * @return array
 	 */
