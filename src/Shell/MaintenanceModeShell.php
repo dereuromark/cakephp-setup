@@ -94,6 +94,7 @@ class MaintenanceModeShell extends Shell {
 		}
 
 		$this->out('Current whitelist:');
+		/** @var array<string> $ips */
 		$ips = $this->Maintenance->whitelist();
 		if (!$ips) {
 			$this->out('n/a');

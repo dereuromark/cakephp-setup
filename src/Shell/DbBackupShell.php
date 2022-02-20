@@ -69,7 +69,7 @@ class DbBackupShell extends Shell {
 
 		$file = $this->_path() . 'backup_' . date('Y-m-d--H-i-s');
 
-		$options = [
+		$optionStrings = [
 			'--user="' . ($config['username'] ?? '') . '"',
 			'--password="' . ($config['password'] ?? '') . '"',
 			'--default-character-set=' . ($config['encoding'] ?? 'utf8'),
@@ -94,7 +94,7 @@ class DbBackupShell extends Shell {
 					$tableList[] = $sources[(int)$table];
 				}
 			}
-			$options[] = '--tables ' . implode(' ', $tableList);
+			$optionStrings[] = '--tables ' . implode(' ', $tableList);
 			$file .= '_custom';
 
 		} elseif (!empty($this->params['tables'])) {
@@ -102,7 +102,7 @@ class DbBackupShell extends Shell {
 			foreach ($sources as $key => $val) {
 				$sources[$key] = $usePrefix . $val;
 			}
-			$options[] = '--tables ' . implode(' ', $sources);
+			$optionStrings[] = '--tables ' . implode(' ', $sources);
 			$file .= '_custom';
 		} elseif ($usePrefix) {
 			foreach ($sources as $key => $source) {
@@ -110,15 +110,15 @@ class DbBackupShell extends Shell {
 					unset($sources[$key]);
 				}
 			}
-			$options[] = '--tables ' . implode(' ', $sources);
+			$optionStrings[] = '--tables ' . implode(' ', $sources);
 			$file .= '_' . rtrim($usePrefix, '_');
 		}
 		$file .= '.sql';
 		if (!empty($this->params['compress'])) {
-			$options[] = '| gzip';
+			$optionStrings[] = '| gzip';
 			$file .= '.gz';
 		}
-		$options[] = '> ' . $file;
+		$optionStrings[] = '> ' . $file;
 
 		$this->out('Backup will be written to:');
 		$this->out(' - ' . $this->_path());
@@ -127,20 +127,20 @@ class DbBackupShell extends Shell {
 			$this->abort('Aborted!');
 		}
 
-		if ($this->_create($options)) {
+		if ($this->_create($optionStrings)) {
 			$this->out('Done :)');
 		}
 	}
 
 	/**
-	 * @param array<string, mixed> $options
+	 * @param array<string> $optionStrings
 	 *
 	 * @return bool
 	 */
-	protected function _create($options) {
+	protected function _create(array $optionStrings) {
 		$command = $this->_command('mysqldump');
-		if (!empty($options)) {
-			$command .= ' ' . implode(' ', $options);
+		if ($optionStrings) {
+			$command .= ' ' . implode(' ', $optionStrings);
 		}
 		if (!empty($this->params['dry-run'])) {
 			$this->out($command);
@@ -211,7 +211,7 @@ class DbBackupShell extends Shell {
 		$db = ConnectionManager::get('default');
 		$config = $db->config();
 
-		$options = [
+		$optionStrings = [
 			'--user="' . $config['username'] . '"',
 			'--password="' . $config['password'] . '"',
 			'--default-character-set=' . ($config['encoding'] ?? 'utf-8'),
@@ -220,9 +220,9 @@ class DbBackupShell extends Shell {
 		];
 
 		if (!empty($this->params['verbose'])) {
-			$options[] = '--verbose';
+			$optionStrings[] = '--verbose';
 		}
-		if ($this->_restore($options, $file)) {
+		if ($this->_restore($optionStrings, $file)) {
 			$this->out('Done :)');
 		}
 	}
@@ -252,7 +252,7 @@ class DbBackupShell extends Shell {
 		}
 
 		foreach ($files as $key => $file) {
-			$size = filesize($path . $file);
+			$size = (int)filesize($path . $file);
 			$this->out('[' . $key . '] ' . $file . ' (' . Number::toReadableSize($size) . ')');
 		}
 
@@ -277,22 +277,22 @@ class DbBackupShell extends Shell {
 	}
 
 	/**
-	 * @param array<string, mixed> $options
+	 * @param array<string> $optionStrings
 	 * @param string $file
 	 *
 	 * @return bool
 	 */
-	protected function _restore(array $options, string $file) {
+	protected function _restore(array $optionStrings, string $file) {
 		$command = $this->_command('mysql');
 
 		if (strpos($file, '.gz') !== false || !empty($this->params['compress'])) {
 			$command = $this->_command('gunzip') . ' < ' . $file . ' | ' . $command;
 		} else {
-			$options[] = '< ' . $file;
+			$optionStrings[] = '< ' . $file;
 		}
 
-		if (!empty($options)) {
-			$command .= ' ' . implode(' ', $options);
+		if (!empty($optionStrings)) {
+			$command .= ' ' . implode(' ', $optionStrings);
 		}
 		if (!empty($this->params['dry-run'])) {
 			$this->out($command);

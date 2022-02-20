@@ -78,6 +78,9 @@ class ResetShell extends Shell {
 		}
 		$passwordHasher = PasswordHasherFactory::build($hasher);
 		$pwd = $passwordHasher->hash($pwdToHash);
+		if (!$pwd) {
+			$this->abort('Hashing failed');
+		}
 
 		$this->hr();
 		$this->out('Hash:');

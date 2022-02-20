@@ -85,7 +85,7 @@ class ClearShell extends Shell {
 				continue;
 			}
 
-			if ($path->getFilename() !== 'empty' || trim(file_get_contents($fullPath)) !== '') {
+			if ($path->getFilename() !== 'empty' || trim((string)file_get_contents($fullPath)) !== '') {
 				continue;
 			}
 

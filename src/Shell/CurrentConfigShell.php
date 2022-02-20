@@ -30,6 +30,7 @@ class CurrentConfigShell extends Shell {
 	public function phpinfo() {
 		ob_start();
 		phpinfo();
+		/** @var string $phpinfo */
 		$phpinfo = ob_get_contents();
 		ob_end_clean();
 

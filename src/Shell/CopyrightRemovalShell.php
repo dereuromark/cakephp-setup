@@ -43,7 +43,7 @@ class CopyrightRemovalShell extends Shell {
 		foreach ($files as $file) {
 			$this->out('Processing ' . $file, 1, Shell::VERBOSE);
 
-			$content = $original = file_get_contents($file);
+			$content = $original = (string)file_get_contents($file);
 			$content = preg_replace('/\<\?php\s*\s+\/\*\*\s*\s+\* CakePHP.*\*\//msUi', '<?php', $content);
 
 			if ($content === $original) {

@@ -49,7 +49,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		}
 		$tables = new Collection($res);
 
-		$whitelist = Text::tokenize($this->param('table'));
+		$whitelist = Text::tokenize((string)$this->param('table'));
 
 		$tables = $tables->toArray();
 		foreach ($tables as $key => $table) {

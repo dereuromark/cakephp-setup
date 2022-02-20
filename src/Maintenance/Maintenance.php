@@ -113,7 +113,7 @@ class Maintenance {
 	 *
 	 * @param array $newIps IP addressed to be added to the whitelist.
 	 * @param int $debugMode
-	 * @return array|bool Boolean Success for adding, an array of all whitelisted IPs otherwise.
+	 * @return array<string>|true Boolean Success for adding, an array of all whitelisted IPs otherwise.
 	 */
 	public function whitelist($newIps = [], $debugMode = 0) {
 		if ($newIps) {
@@ -124,6 +124,7 @@ class Maintenance {
 			return true;
 		}
 
+		/** @var array<string> $files */
 		$files = glob(TMP . 'maintenanceOverride-*.txt');
 		$ips = [];
 		foreach ($files as $file) {
@@ -142,6 +143,7 @@ class Maintenance {
 	 * @return bool Success
 	 */
 	public function clearWhitelist($ips = []) {
+		/** @var array<string> $files */
 		$files = glob(TMP . 'maintenanceOverride-*.txt');
 		foreach ($files as $file) {
 			$ip = pathinfo($file, PATHINFO_FILENAME);

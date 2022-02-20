@@ -299,9 +299,11 @@ class SetupComponent extends Component {
 			$id = $_COOKIE[$cookieName] ?? '';
 
 		} elseif ($type === 'ip') {
+			/** @var string|null $ip */
 			$ip = env('REMOTE_ADDR');
 			$host = 'unknown';
-			if (!empty($ip)) {
+			if ($ip) {
+				/** @var string $host */
 				$host = gethostbyaddr($ip);
 			}
 			$id = $ip . '-' . $host;
