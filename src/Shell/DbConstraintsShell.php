@@ -5,7 +5,7 @@ namespace Setup\Shell;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\App;
-use Cake\Database\Exception;
+use Cake\Core\Exception\CakeException;
 use Cake\Filesystem\Folder;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -34,7 +34,7 @@ class DbConstraintsShell extends Shell {
 		foreach ($models as $model) {
 			try {
 				$this->checkModel($model);
-			} catch (Exception $e) {
+			} catch (CakeException $e) {
 				$this->err('Skipping due to errors: ' . $e->getMessage());
 
 				continue;
