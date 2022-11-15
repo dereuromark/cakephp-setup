@@ -144,12 +144,12 @@ class DbBackupShell extends Shell {
 		}
 		if (!empty($this->params['dry-run'])) {
 			$this->out($command);
-			$ret = 0;
+			$ret = static::CODE_SUCCESS;
 		} else {
 			exec($command, $output, $ret);
 		}
 
-		return $ret === 0;
+		return $ret === static::CODE_SUCCESS;
 	}
 
 	/**
@@ -296,15 +296,15 @@ class DbBackupShell extends Shell {
 		}
 		if (!empty($this->params['dry-run'])) {
 			$this->out($command);
-			$ret = 0;
+			$ret = static::CODE_SUCCESS;
 		} else {
 			exec($command, $output, $ret);
 		}
 		if (!empty($this->params['verbose']) && !empty($output)) {
-			$this->log($output, 'info');
+			$this->log(implode(PHP_EOL, $output), 'info');
 		}
 
-		return $ret === 0;
+		return $ret === static::CODE_SUCCESS;
 	}
 
 	/**
