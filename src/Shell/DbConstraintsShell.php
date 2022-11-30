@@ -30,7 +30,7 @@ class DbConstraintsShell extends Shell {
 		$plugin = $this->param('plugin');
 		$models = $this->_getModels($modelName, $plugin);
 
-		$this->out('Checking ' . count($models) . ' models that need updating:', 1, static::VERBOSE);
+		$this->out('Checking ' . count($models) . ' models:', 1, static::VERBOSE);
 		$tables = [];
 		foreach ($models as $model) {
 			try {
@@ -72,7 +72,7 @@ class DbConstraintsShell extends Shell {
 		$plugin = $this->param('plugin');
 		$models = $this->_getModels($modelName, $plugin);
 
-		$this->out('Checking ' . count($models) . ' models that need fixing:', 1, static::VERBOSE);
+		$this->out('Checking ' . count($models) . ' models:', 1, static::VERBOSE);
 
 		foreach ($models as $model) {
 			try {
