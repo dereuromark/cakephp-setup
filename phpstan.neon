@@ -8,6 +8,7 @@ parameters:
 		- %rootDir%/../../../tests/shim.php
 		- %rootDir%/../../../tests/config/bootstrap.php
 	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
 	earlyTerminatingMethodCalls:
 		Cake\Console\Shell:
 			- abort
