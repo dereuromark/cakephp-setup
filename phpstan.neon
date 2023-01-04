@@ -9,6 +9,7 @@ parameters:
 		- %rootDir%/../../../tests/config/bootstrap.php
 	checkMissingIterableValueType: false
 	checkGenericClassInNonGenericObjectType: false
+	reportUnmatchedIgnoredErrors: false
 	earlyTerminatingMethodCalls:
 		Cake\Console\Shell:
 			- abort
