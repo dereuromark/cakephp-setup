@@ -215,6 +215,7 @@ class UserShell extends Shell {
 			$displayFieldValue = $this->in($displayFieldName);
 		}
 
+		/** @var \App\Model\Entity\User $user */
 		$user = $this->Users->find()->where([$displayField => $displayFieldValue])->firstOrFail();
 
 		while (empty($password)) {

@@ -15,6 +15,7 @@ parameters:
 
 	ignoreErrors:
 		- '#Parameter \#1 \$items of class .+Collection constructor expects iterable, .+StatementInterface given.#'
+		- '#Call to function property\_exists\(\) with .+Table and .+ will always evaluate to false.#'
 		-
 			message: '#If condition is always false.#'
 			path: '%currentWorkingDirectory%/src/Shell/IndentShell.php'

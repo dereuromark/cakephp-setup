@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
 
 if (!defined('FORMAT_DB_DATETIME')) {
@@ -84,7 +85,7 @@ if (!function_exists('vdd')) {
 }
 
 if (PHP_SAPI === 'cli') {
-	EventManager::instance()->on('Bake.initialize', function (\Cake\Event\EventInterface $event) {
+	EventManager::instance()->on('Bake.initialize', function (EventInterface $event) {
 		$event->getSubject()->loadHelper('Setup.SetupBake');
 	});
 }
