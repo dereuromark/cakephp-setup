@@ -42,10 +42,10 @@ class TestCliShellTest extends TestCase {
 			->getMock();
 
 		Router::defaultRouteClass(DashedRoute::class);
-		Router::scope('/', function (RouteBuilder $routes) {
+		Router::scope('/', function (RouteBuilder $routes): void {
 			$routes->fallbacks();
 		});
-		Router::prefix('Admin', function (RouteBuilder $routes) {
+		Router::prefix('Admin', function (RouteBuilder $routes): void {
 			$routes->fallbacks();
 		});
 	}

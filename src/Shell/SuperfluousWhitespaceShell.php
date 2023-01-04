@@ -5,8 +5,8 @@ namespace Setup\Shell;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
+use Shim\Filesystem\Folder;
 
 /**
  * Shell to remove superfluous whitespace.
@@ -56,7 +56,7 @@ class SuperfluousWhitespaceShell extends Shell {
 		foreach ($files as $file) {
 			$errors = [];
 			$action = '';
-			$this->out('Processing ' . $file, 1, Shell::VERBOSE);
+			$this->out('Processing ' . $file, 1, ConsoleIo::VERBOSE);
 
 			$c = file_get_contents($file);
 			if (preg_match('/^[\n\r|\n|\r|\s]+\<\?php/', $c)) {
@@ -144,7 +144,7 @@ class SuperfluousWhitespaceShell extends Shell {
 		}
 
 		foreach ($files as $file) {
-			$this->out('Processing ' . $file, 1, Shell::VERBOSE);
+			$this->out('Processing ' . $file, 1, ConsoleIo::VERBOSE);
 			$content = $store = file_get_contents($file);
 			$content = trim($content);
 			$ext = pathinfo($file, PATHINFO_EXTENSION);

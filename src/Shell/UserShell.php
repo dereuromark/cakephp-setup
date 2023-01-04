@@ -3,6 +3,7 @@
 namespace Setup\Shell;
 
 use ArrayObject;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
@@ -194,7 +195,7 @@ class UserShell extends Shell {
 		}
 
 		$this->out('User inserted! ID: ' . $entity['id']);
-		$this->out('Data: ' . print_r($entity->toArray(), true), 1, Shell::VERBOSE);
+		$this->out('Data: ' . print_r($entity->toArray(), true), 1, ConsoleIo::VERBOSE);
 	}
 
 	/**

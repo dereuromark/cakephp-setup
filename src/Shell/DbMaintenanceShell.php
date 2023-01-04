@@ -3,10 +3,10 @@
 namespace Setup\Shell;
 
 use Cake\Collection\Collection;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Console\Shell;
 use Exception;
-use Setup\Shell\Traits\DbToolsTrait;
+use Setup\Command\Traits\DbToolsTrait;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {
@@ -93,7 +93,7 @@ SQL;
 			}
 
 			if (!$this->params['dry-run']) {
-				$this->out(' - fixing table ' . $table, 1, Shell::VERBOSE);
+				$this->out(' - fixing table ' . $table, 1, ConsoleIo::VERBOSE);
 				try {
 					$db->query($row);
 					$db->query($sql);
@@ -147,7 +147,7 @@ SQL;
 
 		$script = '';
 		foreach ($res as $r) {
-			$this->out($r['statement'], 1, Shell::VERBOSE);
+			$this->out($r['statement'], 1, ConsoleIo::VERBOSE);
 			$script .= $r['statement'];
 		}
 
@@ -221,7 +221,7 @@ SQL;
 		$script = '';
 		foreach ($res as $r) {
 			$script .= $r['statement'];
-			$this->out($r['statement'], 1, Shell::VERBOSE);
+			$this->out($r['statement'], 1, ConsoleIo::VERBOSE);
 		}
 
 		if (!$this->param('dry-run')) {
@@ -269,7 +269,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$script = '';
 		foreach ($res as $r) {
 			$script .= $r['statement'];
-			$this->out($r['statement'], 1, Shell::VERBOSE);
+			$this->out($r['statement'], 1, ConsoleIo::VERBOSE);
 		}
 
 		$this->out('Database ' . $database . ': ' . count($res) . ' tables found');

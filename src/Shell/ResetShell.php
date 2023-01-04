@@ -36,7 +36,7 @@ class ResetShell extends Shell {
 		}
 
 		/** @var \App\Model\Table\UsersTable $Users */
-		$Users = TableRegistry::get(CLASS_USERS);
+		$Users = TableRegistry::getTableLocator()->get(CLASS_USERS);
 		$this->Users = $Users;
 		if (!$this->Users->hasField('email')) {
 			$this->abort(CLASS_USERS . ' table doesnt have an email field!');
@@ -90,7 +90,7 @@ class ResetShell extends Shell {
 		$this->out('resetting...');
 
 		/** @var \App\Model\Table\UsersTable $Users */
-		$Users = TableRegistry::get(CLASS_USERS);
+		$Users = TableRegistry::getTableLocator()->get(CLASS_USERS);
 		$this->Users = $Users;
 		if (!$this->Users->hasField('password')) {
 			$this->abort(CLASS_USERS . ' table doesnt have a password field!');

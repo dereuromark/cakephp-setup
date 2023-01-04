@@ -20,7 +20,7 @@ class MailmapShell extends Shell {
 	/**
 	 * @var array
 	 */
-	protected $map = [];
+	protected array $map = [];
 
 	/**
 	 * Generates .mailmap file.

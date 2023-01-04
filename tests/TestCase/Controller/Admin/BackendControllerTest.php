@@ -14,8 +14,8 @@ class BackendControllerTest extends TestCase {
 	/**
 	 * @var array<string>
 	 */
-	protected $fixtures = [
-		'core.Sessions',
+	protected array $fixtures = [
+		'plugin.Setup.Sessions',
 	];
 
 	/**

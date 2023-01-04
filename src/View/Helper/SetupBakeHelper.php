@@ -143,7 +143,7 @@ class SetupBakeHelper extends BakeHelper {
 		?Table $modelObject = null,
 		$takeFields = 0,
 		$filterTypes = ['binary'],
-		?string $type = null
+		?string $type = null,
 	): array {
 		$fields = parent::filterFields($fields, $schema, $modelObject, $takeFields, $filterTypes);
 

@@ -5,7 +5,7 @@ namespace Setup\Shell;
 use Cake\Collection\Collection;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
-use Setup\Shell\Traits\DbToolsTrait;
+use Setup\Command\Traits\DbToolsTrait;
 
 if (!defined('WINDOWS')) {
 	if (substr(PHP_OS, 0, 3) === 'WIN') {

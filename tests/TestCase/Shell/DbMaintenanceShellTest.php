@@ -6,8 +6,8 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\Exception\StopException;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
+use Setup\Command\Traits\DbToolsTrait;
 use Setup\Shell\DbMaintenanceShell;
-use Setup\Shell\Traits\DbToolsTrait;
 use Shim\TestSuite\ConsoleOutput;
 
 class DbMaintenanceShellTest extends TestCase {

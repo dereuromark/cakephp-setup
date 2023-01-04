@@ -6,7 +6,7 @@ use App\Controller\AppController;
 use Cake\Cache\Cache;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
-use Cake\I18n\Time;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Setup\Utility\Config;
 
@@ -39,12 +39,12 @@ class BackendController extends AppController {
 	public function session() {
 		$timestamp = $this->request->getSession()->read('Config.time');
 
-		$time = new Time($timestamp);
+		$time = new DateTime($timestamp);
 
 		$sessionConfig = Configure::read('Session');
 		$sessionId = $this->request->getSession()->id();
 		if ($sessionConfig && $sessionConfig['defaults'] === 'database') {
-			$sessionData = TableRegistry::get('Sessions')->get($sessionId);
+			$sessionData = TableRegistry::getTableLocator()->get('Sessions')->get($sessionId);
 		} else {
 			$sessionData = [
 				'id' => $sessionId,
@@ -89,7 +89,7 @@ class BackendController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function database() {
-		$Model = TableRegistry::get('Model');
+		$Model = TableRegistry::getTableLocator()->get('Model');
 		/** @var \Cake\Database\Connection $db */
 		$db = $Model->getConnection();
 

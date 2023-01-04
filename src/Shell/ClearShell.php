@@ -2,6 +2,7 @@
 
 namespace Setup\Shell;
 
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use RecursiveDirectoryIterator;
@@ -26,7 +27,7 @@ class ClearShell extends Shell {
 	public function startup(): void {
 		parent::startup();
 		if (!empty($this->params['dry-run'])) {
-			$this->out('<warning>Dry-run mode enabled!</warning>', 1, Shell::QUIET);
+			$this->out('<warning>Dry-run mode enabled!</warning>', 1, ConsoleIo::QUIET);
 		}
 	}
 

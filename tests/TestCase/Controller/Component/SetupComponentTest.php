@@ -5,6 +5,7 @@ namespace Setup\Test\TestCase\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Http\ServerRequest;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -29,12 +30,12 @@ class SetupComponentTest extends TestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->Controller = new Controller();
+		$this->Controller = new Controller(new ServerRequest());
 		$this->Controller->loadComponent('Flash');
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
 		Router::defaultRouteClass(DashedRoute::class);
-		Router::scope('/', function (RouteBuilder $routes) {
+		Router::scope('/', function (RouteBuilder $routes): void {
 			$routes->fallbacks();
 		});
 	}

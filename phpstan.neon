@@ -3,6 +3,9 @@ parameters:
 	paths:
 		- src/
 
+	excludePaths:
+		- src/Shell/
+
 	bootstrapFiles:
 		- %rootDir%/../../../tests/bootstrap.php
 		- %rootDir%/../../../tests/shim.php

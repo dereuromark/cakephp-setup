@@ -19,9 +19,9 @@ class DatabaseController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function foreignKeys($table = null) {
-		$Model = TableRegistry::get('Model');
+		$Model = TableRegistry::getTableLocator()->get('Model');
 		/** @var \Cake\Database\Connection $db */
-		$db = $Model->getConnection();
+		$db = $Model->query();
 
 		if (!$table) {
 			$dbTables = $db->query('SHOW TABLE STATUS');
@@ -44,7 +44,7 @@ class DatabaseController extends AppController {
 				continue;
 			}
 
-			$Model = TableRegistry::get($dbTable['Name']);
+			$Model = TableRegistry::getTableLocator()->get($dbTable['Name']);
 
 			$schema = $Model->getSchema();
 			$tables[$dbTable['Name']] = [

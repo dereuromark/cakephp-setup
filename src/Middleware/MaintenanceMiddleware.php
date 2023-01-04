@@ -21,7 +21,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 	/**
 	 * @var array
 	 */
-	protected $_defaultConfig = [
+	protected array $_defaultConfig = [
 		'className' => View::class,
 		'templatePath' => 'Error',
 		'statusCode' => 503,
@@ -78,7 +78,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 		}
 
 		$view = $builder
-			->build([], $cakeRequest)
+			->build($cakeRequest)
 			->setConfig('_ext', $this->getConfig('templateExtension'));
 
 		$bodyString = $view->render($templateName);

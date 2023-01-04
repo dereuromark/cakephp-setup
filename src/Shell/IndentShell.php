@@ -4,8 +4,8 @@ namespace Setup\Shell;
 
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
-use Cake\Filesystem\Folder;
 use Cake\Utility\Text;
+use Shim\Filesystem\Folder;
 
 if (!defined('TB')) {
 	define('TB', "\t");
@@ -60,12 +60,12 @@ class IndentShell extends Shell {
 	/**
 	 * @var array
 	 */
-	protected $_paths = [];
+	protected array $_paths = [];
 
 	/**
 	 * @var array
 	 */
-	protected $_files = [];
+	protected array $_files = [];
 
 	/**
 	 * Main execution function to indent a folder recursivly

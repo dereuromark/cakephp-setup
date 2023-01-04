@@ -6,10 +6,10 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Exception\CakeException;
-use Cake\Filesystem\Folder;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use RuntimeException;
+use Shim\Filesystem\Folder;
 
 /**
  * Alerts about possible constraints missing in terms of data integrity issues.

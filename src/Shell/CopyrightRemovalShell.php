@@ -4,8 +4,8 @@ namespace Setup\Shell;
 
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
-use Cake\Filesystem\Folder;
 use RuntimeException;
+use Shim\Filesystem\Folder;
 
 /**
  * Shell to remove CakePHP copyright from APP files.
@@ -41,7 +41,7 @@ class CopyrightRemovalShell extends Shell {
 
 		$count = 0;
 		foreach ($files as $file) {
-			$this->out('Processing ' . $file, 1, Shell::VERBOSE);
+			$this->out('Processing ' . $file, 1, ConsoleIo::VERBOSE);
 
 			$content = $original = (string)file_get_contents($file);
 			$content = preg_replace('/\<\?php\s*\s+\/\*\*\s*\s+\* CakePHP.*\*\//msUi', '<?php', $content);

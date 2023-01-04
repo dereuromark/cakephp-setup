@@ -1,13 +1,13 @@
 <?php
 
-namespace Setup\Shell\Traits;
+namespace Setup\Command\Traits;
 
 use Cake\Collection\Collection;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Text;
 
 /**
- * @mixin \Cake\Console\Shell
+ * @mixin \Cake\Command\Command
  */
 trait DbToolsTrait {
 
@@ -16,7 +16,7 @@ trait DbToolsTrait {
 	 *
 	 * @return \Cake\Database\Connection
 	 */
-	protected function _getConnection($name = 'default') {
+	protected function _getConnection(string $name = 'default') {
 		if (!empty($this->params['connection'])) {
 			$name = $this->params['connection'];
 		}
@@ -31,7 +31,7 @@ trait DbToolsTrait {
 	 * @param string $prefix
 	 * @return array
 	 */
-	protected function _getTables($prefix) {
+	protected function _getTables(string $prefix): array {
 		$db = $this->_getConnection();
 		$config = $db->config();
 		$database = $config['database'];
