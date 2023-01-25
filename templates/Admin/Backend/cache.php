@@ -6,7 +6,7 @@
  */
 
 use Cake\Error\Debugger;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 
 ?>
 
@@ -23,7 +23,7 @@ use Cake\I18n\FrozenTime;
 		<div>
 			Data: <?php echo Debugger::exportVar($data[$key]); ?>
 			<?php if ($data[$key]) { ?>
-				<small>(<?php echo $this->Time->timeAgoInWords(new FrozenTime($data[$key])); ?>)</small>
+				<small>(<?php echo $this->Time->timeAgoInWords(new DateTime($data[$key])); ?>)</small>
 			<?php } ?>
 			<div>
 			<?php echo $this->Form->postLink('Store current time for testing', ['?' => ['key' => $key]], ['class' => 'button primary btn btn-primary']); ?>

@@ -8,7 +8,7 @@ use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\Mailer\Mailer;
 use Cake\Utility\Security;
 use Exception;
@@ -46,11 +46,11 @@ class CurrentConfigShell extends Shell {
 
 		$this->out('');
 
-		$time = new FrozenTime();
+		$time = new DateTime();
 		$timestamp = $time->getTimestamp();
 		$offset = (int)($time->getOffset() / HOUR);
 		$this->info('Datetime: ' . $time->format(FORMAT_DB_DATETIME) . ' (' . date_default_timezone_get() . ') [GMT' . ($offset > 0 ? '+' . $offset : '-' . abs($offset)) . ']');
-		$this->info('Timestamp: ' . $timestamp . ' => ' . (new FrozenTime(date(FORMAT_DB_DATETIME, $timestamp)))->format(FORMAT_DB_DATETIME));
+		$this->info('Timestamp: ' . $timestamp . ' => ' . (new DateTime(date(FORMAT_DB_DATETIME, $timestamp)))->format(FORMAT_DB_DATETIME));
 
 		$this->out('');
 
