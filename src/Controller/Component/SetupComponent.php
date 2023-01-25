@@ -72,7 +72,7 @@ class SetupComponent extends Component {
 			Configure::write('debug', $debug);
 		}
 
-		if (!isset($this->Controller->Flash)) {
+		if (!isset($this->Controller->components()->Flash)) {
 			throw new Exception('Flash component missing in AppController setup.');
 		}
 
