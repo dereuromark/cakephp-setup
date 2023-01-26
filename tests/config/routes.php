@@ -2,13 +2,15 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
 
-Router::defaultRouteClass(DashedRoute::class);
+return static function (RouteBuilder $routes) {
 
-Router::scope('/', function (RouteBuilder $routes) {
-	$routes->fallbacks();
-});
-Router::prefix('Admin', function (RouteBuilder $routes) {
-	$routes->fallbacks();
-});
+	$routes->setRouteClass(DashedRoute::class);
+
+	$routes->scope('/', function (RouteBuilder $routes) {
+		$routes->fallbacks();
+	});
+	$routes->prefix('Admin', function (RouteBuilder $routes) {
+		$routes->fallbacks();
+	});
+};

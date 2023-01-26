@@ -2,6 +2,7 @@
 
 namespace Setup\Test\TestCase\Controller\Component;
 
+use App\Controller\AppController;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
@@ -17,12 +18,12 @@ class SetupComponentTest extends TestCase {
 	/**
 	 * @var \App\Controller\AppController
 	 */
-	public $Controller;
+	public AppController|Controller $Controller;
 
 	/**
 	 * @var \Setup\Controller\Component\SetupComponent
 	 */
-	protected $Setup;
+	protected SetupComponent $Setup;
 
 	/**
 	 * @return void
@@ -34,8 +35,9 @@ class SetupComponentTest extends TestCase {
 		$this->Controller->loadComponent('Flash');
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
-		Router::defaultRouteClass(DashedRoute::class);
-		Router::scope('/', function (RouteBuilder $routes): void {
+		$builder = Router::createRouteBuilder('/');
+		$builder->setRouteClass(DashedRoute::class);
+		$builder->scope('/', function (RouteBuilder $routes): void {
 			$routes->fallbacks();
 		});
 	}

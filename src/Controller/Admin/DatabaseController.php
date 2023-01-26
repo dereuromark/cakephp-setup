@@ -24,7 +24,7 @@ class DatabaseController extends AppController {
 		$db = $Model->query();
 
 		if (!$table) {
-			$dbTables = $db->query('SHOW TABLE STATUS');
+			$dbTables = $db->selectQuery('SHOW TABLE STATUS');
 			$dbTables = (new Collection($dbTables))->toArray();
 		} else {
 			$dbTables = [

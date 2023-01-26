@@ -2,9 +2,11 @@
 
 namespace App\Test\TestCase\Controller\Admin;
 
+use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 use Setup\TestSuite\DriverSkipTrait;
 use Shim\TestSuite\TestCase;
+use Tools\View\Icon\BootstrapIcon;
 
 class BackendControllerTest extends TestCase {
 
@@ -79,6 +81,11 @@ class BackendControllerTest extends TestCase {
 		$this->disableErrorHandlerMiddleware();
 
 		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+		Configure::write('Icon', [
+			'sets' => [
+				'bs' => BootstrapIcon::class,
+			],
+		]);
 
 		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'env']);
 
