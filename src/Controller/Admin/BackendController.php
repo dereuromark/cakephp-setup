@@ -93,7 +93,7 @@ class BackendController extends AppController {
 		/** @var \Cake\Database\Connection $db */
 		$db = $Model->getConnection();
 
-		$dbTables = $db->query('SHOW TABLE STATUS');
+		$dbTables = $db->selectQuery('SHOW TABLE STATUS');
 		$dbTables = (new Collection($dbTables))->toArray();
 
 		$dbSizes = [];
