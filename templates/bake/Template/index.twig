@@ -81,9 +81,9 @@
 {% endfor %}
 {% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
                     <td class="actions">
-                        <?php echo $this->Html->link($this->Format->icon('view'), ['action' => 'view', {{ pk|raw }}], ['escapeTitle' => false]); ?>
-                        <?php echo $this->Html->link($this->Format->icon('edit'), ['action' => 'edit', {{ pk|raw }}], ['escapeTitle' => false]); ?>
-                        <?php echo $this->Form->postLink($this->Format->icon('delete'), ['action' => 'delete', {{ pk|raw }}], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', {{ pk|raw }})]); ?>
+                        <?php echo $this->Html->link($this->Icon->render('view'), ['action' => 'view', {{ pk|raw }}], ['escapeTitle' => false]); ?>
+                        <?php echo $this->Html->link($this->Icon->render('edit'), ['action' => 'edit', {{ pk|raw }}], ['escapeTitle' => false]); ?>
+                        <?php echo $this->Form->postLink($this->Icon->render('delete'), ['action' => 'delete', {{ pk|raw }}], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', {{ pk|raw }})]); ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
