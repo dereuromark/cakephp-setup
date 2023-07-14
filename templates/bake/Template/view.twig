@@ -73,7 +73,7 @@
 {% if groupedFields.number %}
 {% for field in groupedFields.number %}
 {% if field not in primaryKey %}
-{% if SetupBake.isEnum(field, schema, singularVar, namespace) %}
+{% if SetupBake.isEnum(field, schema, singularVar, plugin ? plugin : namespace) %}
 {% set enumMethod = SetupBake.enumMethod(field, schema) %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>

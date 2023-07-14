@@ -65,7 +65,7 @@
 {% endif %}
 {% if isKey is not same as(true) and not SetupBake.isArray(field, schema) and not SetupBake.isText(field, schema) %}
 {% set columnData = Bake.columnData(field, schema) %}
-{% if SetupBake.isEnum(field, schema, singularVar, namespace) %}
+{% if SetupBake.isEnum(field, schema, singularVar, plugin ? plugin : namespace) %}
                     <td><?= ${{ singularVar }}::{{ SetupBake.enumMethod(field, schema) }}(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif SetupBake.isDateTime(field, schema) %}
                     <td><?= $this->Time->nice(${{ singularVar }}->{{ field }}) ?></td>
