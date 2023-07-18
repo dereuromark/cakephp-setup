@@ -49,7 +49,7 @@
                     echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
                     {{- "\n" }}
         {%- endif %}
-    {%- elseif SetupBake.isEnum(field, schema, singularVar, namespace) %}
+    {%- elseif SetupBake.isEnum(field, schema, singularVar, plugin ? plugin : namespace) %}
                     echo $this->Form->control('{{ field }}', ['options' => ${{ singularVar }}::{{ SetupBake.enumMethod(field, schema) }}()]);
                     {{- "\n" }}
     {%- elseif field not in ['created', 'modified', 'updated'] %}

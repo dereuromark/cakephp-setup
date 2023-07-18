@@ -8,6 +8,16 @@ if (!defined('FORMAT_DB_DATETIME')) {
 	define('FORMAT_DB_DATETIME', 'Y-m-d H:i:s');
 }
 
+if (!defined('SECOND')) {
+	define('SECOND', 1);
+	define('MINUTE', 60);
+	define('HOUR', 3600);
+	define('DAY', 86400);
+	define('WEEK', 604800);
+	define('MONTH', 2592000);
+	define('YEAR', 31536000);
+}
+
 if (!function_exists('dd')) {
 	/**
 	 * @param mixed $var

@@ -65,7 +65,7 @@
 {% endif %}
 {% if isKey is not same as(true) and not SetupBake.isArray(field, schema) and not SetupBake.isText(field, schema) %}
 {% set columnData = Bake.columnData(field, schema) %}
-{% if SetupBake.isEnum(field, schema, singularVar, namespace) %}
+{% if SetupBake.isEnum(field, schema, singularVar, plugin ? plugin : namespace) %}
                     <td><?= ${{ singularVar }}::{{ SetupBake.enumMethod(field, schema) }}(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif SetupBake.isDateTime(field, schema) %}
                     <td><?= $this->Time->nice(${{ singularVar }}->{{ field }}) ?></td>
@@ -81,9 +81,9 @@
 {% endfor %}
 {% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
                     <td class="actions">
-                        <?php echo $this->Html->link($this->Format->icon('view'), ['action' => 'view', {{ pk|raw }}], ['escapeTitle' => false]); ?>
-                        <?php echo $this->Html->link($this->Format->icon('edit'), ['action' => 'edit', {{ pk|raw }}], ['escapeTitle' => false]); ?>
-                        <?php echo $this->Form->postLink($this->Format->icon('delete'), ['action' => 'delete', {{ pk|raw }}], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', {{ pk|raw }})]); ?>
+                        <?php echo $this->Html->link($this->Icon->render('view'), ['action' => 'view', {{ pk|raw }}], ['escapeTitle' => false]); ?>
+                        <?php echo $this->Html->link($this->Icon->render('edit'), ['action' => 'edit', {{ pk|raw }}], ['escapeTitle' => false]); ?>
+                        <?php echo $this->Form->postLink($this->Icon->render('delete'), ['action' => 'delete', {{ pk|raw }}], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', {{ pk|raw }})]); ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
