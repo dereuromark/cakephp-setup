@@ -8,7 +8,7 @@ use Cake\Routing\RouteBuilder;
 /**
  * Plugin for Setup
  */
-class Plugin extends BasePlugin {
+class SetupPlugin extends BasePlugin {
 
 	/**
 	 * @var bool
