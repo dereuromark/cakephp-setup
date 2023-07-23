@@ -164,7 +164,9 @@ class UserShell extends Shell {
 		}
 
 		if ($schema->getColumn('email') && $displayField !== 'email') {
-			$provideEmail = $this->in('Provide Email?', ['y', 'n'], 'n');
+			$emailSchema = $schema->getColumn('email');
+			$nullAllowed = $emailSchema['null'] ?? null;
+			$provideEmail = $nullAllowed === false ? 'y' : $this->in('Provide Email?', ['y', 'n'], 'n');
 			if ($provideEmail === 'y') {
 				$email = $this->in('Please insert an email');
 				$data['email'] = $email;
