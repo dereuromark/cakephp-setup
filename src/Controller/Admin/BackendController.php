@@ -39,7 +39,7 @@ class BackendController extends AppController {
 	public function session() {
 		$timestamp = $this->request->getSession()->read('Config.time');
 
-		$time = new DateTime($timestamp);
+		$time = $timestamp ? (new DateTime())->setTimestamp((int)$timestamp) : new DateTime();
 
 		$sessionConfig = Configure::read('Session');
 		$sessionId = $this->request->getSession()->id();

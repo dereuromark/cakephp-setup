@@ -24,7 +24,7 @@ class MailmapShellTest extends TestCase {
 		$io = new ConsoleIo($this->out);
 
 		$this->Shell = $this->getMockBuilder(MailmapShell::class)
-			->setMethods(['in', 'err', '_stop', 'runGitCommand'])
+			->onlyMethods(['in', 'err', '_stop', 'runGitCommand'])
 			->setConstructorArgs([$io])
 			->getMock();
 

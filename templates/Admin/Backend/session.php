@@ -2,9 +2,10 @@
 /**
  * @var \App\View\AppView $this
  * @var array $sessionConfig
+ * @var \Cake\I18n\DateTime $time
  */
 
-use Cake\I18n\Time;
+use Cake\I18n\DateTime;
 
 ?>
 <div class="columns col-md-12">
@@ -37,7 +38,7 @@ echo print_r($sessionConfig);
 <?php
 $currentTimeoutInSecs = (int)ini_get('session.gc_maxlifetime');
 
-echo $currentTimeoutInSecs . ' sec = ' . $this->Time->timeAgoInWords(new Time(time() + $currentTimeoutInSecs), []);
+echo $currentTimeoutInSecs . ' sec = ' . $this->Time->timeAgoInWords((new DateTime())->addSeconds($currentTimeoutInSecs), []);
 
 ?>
 

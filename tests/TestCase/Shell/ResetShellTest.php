@@ -30,7 +30,7 @@ class ResetShellTest extends TestCase {
 		$io = new ConsoleIo($this->out, $this->err);
 
 		$this->Shell = $this->getMockBuilder(ResetShell::class)
-			->setMethods(['in', '_stop'])
+			->onlyMethods(['in', '_stop'])
 			->setConstructorArgs([$io])
 			->getMock();
 	}

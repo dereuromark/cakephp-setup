@@ -7,7 +7,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\Fixture\SchemaLoader;
 use Cake\Utility\Security;
 use Cake\View\View;
-use Setup\SetupPlugin as SetupPlugin;
+use Setup\SetupPlugin;
 use Shim\Filesystem\Folder;
 use TestApp\Application;
 use TestApp\Controller\AppController;
@@ -51,6 +51,7 @@ ini_set('intl.default_locale', 'de-DE');
 
 require ROOT . '/vendor/autoload.php';
 require CORE_PATH . 'config/bootstrap.php';
+require CAKE . 'functions.php';
 
 Configure::write('App', [
 	'namespace' => 'TestApp',

@@ -32,7 +32,7 @@ class CurrentConfigShellTest extends TestCase {
 		$io = new ConsoleIo($this->out);
 
 		$this->Shell = $this->getMockBuilder(CurrentConfigShell::class)
-			->setMethods(['in', 'err', '_stop'])
+			->onlyMethods(['in', 'err', '_stop'])
 			->setConstructorArgs([$io])
 			->getMock();
 	}
