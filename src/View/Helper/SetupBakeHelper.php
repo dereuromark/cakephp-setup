@@ -141,8 +141,8 @@ class SetupBakeHelper extends BakeHelper {
 		array $fields,
 		SchemaInterface $schema,
 		?Table $modelObject = null,
-		$takeFields = 0,
-		$filterTypes = ['binary'],
+		string|int $takeFields = 0,
+		array $filterTypes = ['binary'],
 		?string $type = null,
 	): array {
 		$fields = parent::filterFields($fields, $schema, $modelObject, $takeFields, $filterTypes);
@@ -167,6 +167,7 @@ class SetupBakeHelper extends BakeHelper {
 			return in_array($field, $skipFields, true);
 		});
 
+		/** @var \Cake\Collection\Collection $fields */
 		return $fields->toArray();
 	}
 
