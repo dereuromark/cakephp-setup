@@ -39,6 +39,9 @@ class UserUpdateCommand extends Command {
 		$Users = $this->fetchModel(CLASS_USERS);
 
 		$displayField = $Users->getDisplayField();
+		if (!is_string($displayField)) {
+			$io->abort('Only supported for single display fields');
+		}
 		$displayFieldName = Inflector::humanize($displayField);
 
 		$displayFieldValue = $args->getArgument('login');

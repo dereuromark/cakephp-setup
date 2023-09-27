@@ -49,7 +49,7 @@ class MaintenanceModeWhitelistCommand extends Command {
 			if ($args->getOption('remove')) {
 				$this->Maintenance->clearWhitelist([$ip]);
 			} else {
-				$this->Maintenance->whitelist([$ip], $args->getOption('debug'));
+				$this->Maintenance->whitelist([$ip], (bool)$args->getOption('debug'));
 			}
 			$io->out('Done!', 2);
 		} else {

@@ -43,6 +43,9 @@ class UserCreateCommand extends Command {
 		$schema = $Users->getSchema();
 
 		$displayField = $Users->getDisplayField();
+		if (!is_string($displayField)) {
+			$io->abort('Only supported for single display fields');
+		}
 		$displayFieldName = Inflector::humanize($displayField);
 
 		while (empty($displayFieldValue)) {
@@ -115,9 +118,10 @@ class UserCreateCommand extends Command {
 
 		$userEntity = CLASS_USER;
 		if ($schema->getColumn('status') && method_exists($userEntity, 'statuses')) {
+			/** @var array<string, string> $statuses */
 			$statuses = $userEntity::statuses();
 			$io->out(print_r($statuses, true));
-			$status = $io->ask('Please insert a status', array_keys($statuses));
+			$status = $io->askChoice('Please insert a status', array_keys($statuses));
 
 			$data['status'] = $status;
 		}
@@ -178,23 +182,6 @@ Make sure you configured the Passwordable behavior accordingly as per docs.')
 				'help' => 'Dry run the command, no data will actually be created.',
 				'boolean' => true,
 			]);
-			/*
-			->addSubcommand('index', [
-				'help' => 'Lists current users.',
-				'parser' => $listParser,
-			])
-			->addSubcommand('create', [
-				'help' => 'Create a new user with email and password provided.',
-				'parser' => $createParser,
-			])
-			->addSubcommand('update', [
-				'help' => 'Update a specific user with a new password.',
-				'parser' => $subcommandParser,
-			])
-			->addSubcommand('password', [
-				'help' => 'Generate a hash from a given password.',
-				'parser' => $subcommandParser,
-			]);*/
 	}
 
 }

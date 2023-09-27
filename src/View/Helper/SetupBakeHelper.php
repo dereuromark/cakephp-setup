@@ -94,7 +94,7 @@ class SetupBakeHelper extends BakeHelper {
 			$paginationOrderReversedFieldTypes = array_merge($paginationOrderReversedFieldTypes, (array)$modelObject->paginationOrderReversedFieldTypes);
 		}
 
-		$fieldData = $schema->getColumn($field);
+		$fieldData = (array)$schema->getColumn($field);
 		if (in_array($field, $paginationOrderReversedFields, true) || in_array($fieldData['type'], $paginationOrderReversedFieldTypes, true)) {
 			return true;
 		}
@@ -156,7 +156,7 @@ class SetupBakeHelper extends BakeHelper {
 
 		$skipFields = ['password', 'slug', 'created_by', 'modified_by', 'approved_by', 'deleted_by'];
 		$customProperty = $type ? 'scaffoldSkipFields' . ucfirst($type) : null;
-		if ($type && $modelObject && property_exists($modelObject, $customProperty)) {
+		if ($type && $customProperty && $modelObject && property_exists($modelObject, $customProperty)) {
 			$skipFields = array_merge($skipFields, (array)$modelObject->$customProperty);
 		}
 		if ($modelObject && property_exists($modelObject, 'scaffoldSkipFields')) {
