@@ -9,6 +9,8 @@ use Setup\Command\MaintenanceModeActivateCommand;
 use Setup\Command\MaintenanceModeDeactivateCommand;
 use Setup\Command\MaintenanceModeStatusCommand;
 use Setup\Command\MaintenanceModeWhitelistCommand;
+use Setup\Command\UserCreateCommand;
+use Setup\Command\UserUpdateCommand;
 
 /**
  * Plugin for Setup
@@ -31,6 +33,9 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('maintenance_mode activate', MaintenanceModeActivateCommand::class);
 		$commands->add('maintenance_mode deactivate', MaintenanceModeDeactivateCommand::class);
 		$commands->add('maintenance_mode whitelist', MaintenanceModeWhitelistCommand::class);
+
+		$commands->add('user create', UserCreateCommand::class);
+		$commands->add('user update', UserUpdateCommand::class);
 
 		return $commands;
 	}

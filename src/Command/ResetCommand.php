@@ -22,6 +22,9 @@ if (!defined('CLASS_USERS')) {
  */
 class ResetCommand extends Command {
 
+	/**
+	 * @return string
+	 */
 	public static function getDescription(): string {
 		return 'Can reset local development data.
 Note that you can define the constant CLASS_USERS in your bootstrap to point to another table class, if \'Users\' is not used.';
