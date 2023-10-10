@@ -5,6 +5,10 @@ namespace Setup;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Routing\RouteBuilder;
+use Setup\Command\CurrentConfigConfigureCommand;
+use Setup\Command\CurrentConfigDisplayCommand;
+use Setup\Command\CurrentConfigPhpinfoCommand;
+use Setup\Command\CurrentConfigValidateCommand;
 use Setup\Command\MaintenanceModeActivateCommand;
 use Setup\Command\MaintenanceModeDeactivateCommand;
 use Setup\Command\MaintenanceModeStatusCommand;
@@ -33,6 +37,11 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('maintenance_mode activate', MaintenanceModeActivateCommand::class);
 		$commands->add('maintenance_mode deactivate', MaintenanceModeDeactivateCommand::class);
 		$commands->add('maintenance_mode whitelist', MaintenanceModeWhitelistCommand::class);
+
+		$commands->add('current_config display', CurrentConfigDisplayCommand::class);
+		$commands->add('current_config configure', CurrentConfigConfigureCommand::class);
+		$commands->add('current_config validate', CurrentConfigValidateCommand::class);
+		$commands->add('current_config phpinfo', CurrentConfigPhpinfoCommand::class);
 
 		$commands->add('user create', UserCreateCommand::class);
 		$commands->add('user update', UserUpdateCommand::class);
