@@ -1,0 +1,20 @@
+<?php
+
+namespace Setup\Test\TestCase\Command;
+
+use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
+use Cake\TestSuite\TestCase;
+
+class MaintenanceModeActivateCommandTest extends TestCase {
+
+	use ConsoleIntegrationTestTrait;
+
+	/**
+	 * @return void
+	 */
+	public function testActivate() {
+		$this->exec('maintenance_mode activate');
+		$this->assertOutputContains('Maintenance mode activated ...');
+	}
+
+}
