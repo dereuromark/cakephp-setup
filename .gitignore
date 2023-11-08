@@ -7,3 +7,4 @@
 /plugins/Tools
 .idea/
 .phpunit.result.cache
+/.phpunit.cache/
