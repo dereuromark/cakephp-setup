@@ -1,6 +1,6 @@
 # CakePHP Setup Plugin
 
-[![CI](https://github.com/dereuromark/cakephp-setup/workflows/CI/badge.svg?branch=master)](https://github.com/dereuromark/cakephp-setup/actions?query=workflow%3ACI+branch%3Amaster)
+[![CI](https://github.com/dereuromark/cakephp-setup/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/dereuromark/cakephp-setup/actions?query=workflow%3ACI+branch%3Amaster)
 [![Coverage](https://img.shields.io/codecov/c/github/dereuromark/cakephp-setup/master.svg)](https://codecov.io/gh/dereuromark/cakephp-setup)
 [![Latest Stable Version](https://poser.pugx.org/dereuromark/cakephp-setup/v/stable.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg)](https://php.net/)
