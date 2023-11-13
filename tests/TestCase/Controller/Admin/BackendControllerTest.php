@@ -63,7 +63,7 @@ class BackendControllerTest extends TestCase {
 	 * @return void
 	 */
 	public function testDatabase() {
-		$this->skipIfNotDriver('Mysql', 'Only for MYSQL for now');
+		$this->skipIfNotDriver('Sqlite', 'Only for Sqlite for now');
 
 		$this->disableErrorHandlerMiddleware();
 

@@ -19,12 +19,13 @@
 foreach ($dbTables as $table) {
 	// TODO: format updated (red if today, orange if yesterday, yellow if the day beforeYesterday)
 	$updated = $table['Update_time'];
-	$size = $maxSize ? $table['Data_length'] / $maxSize : 0;
+	$length = $table['Data_length'] ?? 0;
+	$size = $maxSize ? $length / $maxSize : 0;
 
 	echo '<tr>';
 	echo '<td>' . h($table['Name']) . '</td>';
 	echo '<td>' . $table['Rows'] . '</td>';
-	echo '<td>' . $this->Number->toReadableSize($table['Data_length']) . $this->Progress->htmlProgressBar($size) . '</td>';
+	echo '<td>' . $this->Number->toReadableSize($length) . $this->Progress->htmlProgressBar($size) . '</td>';
 	echo '<td>' . $table['Engine'] . ' ' . $table['Collation'] . '</td>';
 	echo '<td>' . $updated . '</td>';
 	echo '<td>' . h($table['Comment']) . '</td>';
