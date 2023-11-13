@@ -19,12 +19,12 @@ class DatabaseController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function foreignKeys($table = null) {
-		$Model = TableRegistry::getTableLocator()->get('Model');
+		$Model = TableRegistry::getTableLocator()->get('Sessions');
 		/** @var \Cake\Database\Connection $db */
 		$db = $Model->query();
 
 		if (!$table) {
-			$dbTables = $db->selectQuery('SHOW TABLE STATUS');
+			$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll();
 			$dbTables = (new Collection($dbTables))->toArray();
 		} else {
 			$dbTables = [
