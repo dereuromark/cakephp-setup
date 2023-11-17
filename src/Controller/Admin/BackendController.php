@@ -46,6 +46,9 @@ class BackendController extends AppController {
 		$sessionId = $this->request->getSession()->id();
 		if ($sessionConfig && $sessionConfig['defaults'] === 'database') {
 			$sessionData = TableRegistry::getTableLocator()->get('Sessions')->get($sessionId);
+			if ($sessionData->get('data') && is_resource($sessionData->get('data'))) {
+				$sessionData->set('data', stream_get_contents($sessionData->get('data')));
+			}
 		} else {
 			$sessionData = [
 				'id' => $sessionId,
