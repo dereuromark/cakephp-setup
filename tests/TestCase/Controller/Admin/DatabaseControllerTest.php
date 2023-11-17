@@ -15,7 +15,7 @@ class DatabaseControllerTest extends TestCase {
 	 * @return void
 	 */
 	public function testForeignKeys() {
-		//$this->skipIfNotDriver('Mysql', 'Only for MYSQL for now');
+		$this->skipIfNotDriver('Mysql', 'Only for MYSQL for now');
 
 		$this->disableErrorHandlerMiddleware();
 

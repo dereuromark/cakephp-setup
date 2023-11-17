@@ -6,7 +6,6 @@ use App\Controller\AppController;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 
 class DatabaseController extends AppController {
 
@@ -25,7 +24,7 @@ class DatabaseController extends AppController {
 		$db = $Model->getConnection();
 
 		if (!$table) {
-			$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll(\PDO::FETCH_ASSOC);
+			$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll(PDO::FETCH_ASSOC);
 			$dbTables = (new Collection($dbTables))->toArray();
 		} else {
 			$dbTables = [

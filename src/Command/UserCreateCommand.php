@@ -104,8 +104,10 @@ class UserCreateCommand extends Command {
 
 		$data = [
 			'pwd' => $password,
-			'active' => 1,
 		];
+		if ($Users->getSchema()->getColumn('active')) {
+			$data['active'] = 1;
+		}
 
 		if ($displayField === $Users->getPrimaryKey()) {
 			$io->abort('Cannot read a displayField from the Users table. You need to define one, e.g. "username".');
