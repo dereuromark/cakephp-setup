@@ -6,6 +6,7 @@ use App\Controller\AppController;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 
 class DatabaseController extends AppController {
 
@@ -21,10 +22,10 @@ class DatabaseController extends AppController {
 	public function foreignKeys($table = null) {
 		$Model = TableRegistry::getTableLocator()->get('Sessions');
 		/** @var \Cake\Database\Connection $db */
-		$db = $Model->query();
+		$db = $Model->getConnection();
 
 		if (!$table) {
-			$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll();
+			$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll(\PDO::FETCH_ASSOC);
 			$dbTables = (new Collection($dbTables))->toArray();
 		} else {
 			$dbTables = [
@@ -44,12 +45,12 @@ class DatabaseController extends AppController {
 				continue;
 			}
 
-			$Model = TableRegistry::getTableLocator()->get($dbTable['Name']);
+			$name = $dbTable['Name'];
+			$Model = TableRegistry::getTableLocator()->get($name, ['allowFallbackClass' => true]);
 
 			$schema = $Model->getSchema();
 			$tables[$dbTable['Name']] = [
 				'schema' => $schema,
-				//'relations' => $Model->get
 			];
 		}
 
