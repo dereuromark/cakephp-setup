@@ -8,6 +8,7 @@ use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
+use PDO;
 use Setup\Utility\Config;
 
 class BackendController extends AppController {
@@ -89,13 +90,12 @@ class BackendController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function database() {
-		$Model = TableRegistry::getTableLocator()->get('Model');
+		$Model = TableRegistry::getTableLocator()->get('Sessions');
 		/** @var \Cake\Database\Connection $db */
 		$db = $Model->getConnection();
 
-		$dbTables = $db->selectQuery('SHOW TABLE STATUS');
+		$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll(PDO::FETCH_ASSOC);
 		$dbTables = (new Collection($dbTables))->toArray();
-
 		$dbSizes = [];
 		foreach ($dbTables as $key => $dbTable) {
 			if (preg_match('/phinxlog$/', $dbTable['Name'])) {
