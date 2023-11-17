@@ -6,6 +6,7 @@ use App\Controller\AppController;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use PDO;
 
 class DatabaseController extends AppController {
 
