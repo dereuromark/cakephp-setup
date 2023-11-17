@@ -12,7 +12,7 @@ class DatabaseController extends AppController {
 	/**
 	 * @var string|null
 	 */
-	protected $modelClass = '';
+	protected ?string $modelClass = '';
 
 	/**
 	 * @param string|null $table

@@ -15,7 +15,7 @@ class BackendController extends AppController {
 	/**
 	 * @var string|null
 	 */
-	protected $modelClass = '';
+	protected ?string $modelClass = '';
 
 	/**
 	 * @return void
