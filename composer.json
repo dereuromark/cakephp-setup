@@ -31,6 +31,7 @@
 	},
 	"require-dev": {
 		"cakephp/bake": "^3.0.1",
+		"cakephp/debug_kit": "^5.0.1",
 		"dereuromark/cakephp-tools": "^3.0.0",
 		"fig-r/psr2r-sniffer": "dev-next",
 		"phpunit/phpunit": "^10.2"
