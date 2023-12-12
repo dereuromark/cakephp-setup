@@ -140,12 +140,15 @@ class DbUnsignedCommand extends Command {
 
 		$fields = [];
 
-		/** @var string $key */
 		$key = $model->getPrimaryKey();
-		$field = $schema->getColumn($key);
-		if ($field && $this->requiresUpdate($field)) {
-			$field['null'] = false;
-			$fields['id'] = $field;
+		if (is_array($key)) {
+			$io->warning('Skipping ' . $table . ' - multi-primary key not yet supported');
+		} else {
+			$field = $schema->getColumn($key);
+			if ($field && $this->requiresUpdate($field)) {
+				$field['null'] = false;
+				$fields['id'] = $field;
+			}
 		}
 
 		if (!$relationKeys) {
