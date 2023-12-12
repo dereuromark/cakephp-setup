@@ -1,12 +1,12 @@
-# Useful Setup shells
+# Useful Setup commands
 
-You can run any shell from the ROOT dir as `bin/cake [shell] [command]` (or `.\bin\cake [shell] [command]` for Windows).
+You can run any command from the ROOT dir as `bin/cake [command]`.
 
 
-## Application Maintenance Shells
+## Application Maintenance
 
-### CurrentConfigShell
-This shell lets you quickly see what the current config is, both for DB and cache.
+### CurrentConfig*
+These commands let you quickly see what the current config is, both for DB and cache.
 
 - `bin/cake current_config display`
 
@@ -21,18 +21,27 @@ So if you are only interested in your `xdebug` settings for CLI:
 
 Very useful and quicker than any other lookup on CLI.
 
-### DbConstraintsShell
+## DB Maintenance
+
+### DbUnsigned
+Alerts about possible not unsigned integer (foreign) keys in terms of data integrity issues.
+
+- Provides a migration file content to be executed.
+- This is needed as pre-requirement for DbConstraints and others that need the keys to be aligned.
+
+### DbConstraints
 Alerts about possible constraints missing in terms of data integrity issues.
 
+- Provides a migration file content to be executed.
 - Optional relation with foreign key not being set back to null when related has* entity has removed been removed.
   This is only relevant if relation is not "dependent => true", though.
 
-### DbMigrationShell
+### DbMigrationShell (TODO)
 A Shell to ease database migrations needed.
 
 - Convert null fields without a default value.
 
-### DbMaintenanceShell
+### DbMaintenanceShell (TODO)
 Easily convert table format or table encoding. Those are mainly relevant for MySQL.
 
 To make sure your tables are fit for 3 and 4 byte unicode (including Emoji etc), you can run:
@@ -57,11 +66,12 @@ If you want to assert that for dates (`0000-00-00` etc are usually not valid dat
 
 Most of those commands contain a `-d` dry run param, so you can output the generated SQL and pass it into your Migrations scripts instead.
 
+## Others
 
-### TestCliShell
+### TestCli
 Let's you test certain features like Routing and how/if they work in CLI.
 
-- `bin/cake Setup.TestCli router`
+- `bin/cake cli_test`
 
 Depending on your domain it will output something like:
 ```
@@ -75,26 +85,19 @@ Router::url(['controller' => 'test'], true):
     http://example.local/test
 ```
 
-### UserShell
+### User*
 Let's you quickly add a new user to your "users" table, including a properly hashed password, so
 you can log in.
 
 - `bin/cake user create [user]`
 
-Alternatively, you can also just print out the hash for a given plain-text password and then manually insert that into the database.
-
-- `bin/cake user pwd [pwd]`
-
 To update existing user you can use:
 
 - `bin/cake user update [user]`
 
-To list currently available users (or check if there are any yet):
-- `bin/cake user index`
-
-### ResetShell
-Let's you reset all emails or passwords, this is very useful when copying live data dumps to your local dev
-environment. Afterwards you can login with `123` for any user, when resetting the passwords to this value, for example.
+### Reset
+Lets you reset all emails or passwords, this is very useful when copying live data dumps to your local dev
+environment. Afterward you can login with `123` for any user, when resetting the passwords to this value, for example.
 
 - `bin/cake reset email`
 
@@ -102,30 +105,7 @@ or
 
 - `bin/cake reset pwd`
 
-## Code Cleanup Shells
-
-### SuperfluousWhitespaceShell
-Removes trailing whitespace from files and asserts a single newline at the end of PHP files.
-It can also remove any trailing `?>` at the end.
-
-- `bin/cake superfluous_whitespace clean`
-
-and
-
-- `bin/cake superfluous_whitespace eof`
-
-### IndentShell
-Corrects indentation (using PSR-2-R and a single tab, no spaces!) of (code) files.
-
-- `bin/cake indent folder `
-
-### CopyrightRemovalShell
-Removes the unnecessary copyrights from the skeleton application code.
-It can and only may used for such skeleton "bake" files that could just as well be manually "re-created" for starting a fresh application project.
-
-- `bin/cake copyright_removal clean`
-
-## Tooling Shells
+## Tooling
 
 ### MailmapShell
 Creates a `.mailmap` file from your current commit history. Requires Git as tool.

@@ -169,95 +169,6 @@ class DbConstraintsCommand extends Command {
 	}
 
 	/**
-	 * @param \Cake\ORM\Table $model
-	 *
-	 * @return void
-	 */
-	/*
-	protected function fixModel(Table $model): void {
-		$table = $model->getTable();
-		if (!$table) {
-			return;
-		}
-
-		$io->out('### ' . $table, 1, ConsoleIo::VERBOSE);
-
-		$schema = $model->getSchema();
-
-		$associations = $model->associations();
-		$relationKeys = $associations->keys();
-		if (!$relationKeys) {
-			return;
-		}
-
-		$fields = [];
-
-		foreach ($relationKeys as $relationKey) {
-			$relation = $associations->get($relationKey);
-			if ($relation->type() !== $relation::MANY_TO_ONE) {
-				continue;
-			}
-
-			$io->out('Checking: ' . $model->getAlias() . '.' . $relation->getForeignKey() . ' => ' . $relation->getName() . '.' . $relation->getBindingKey());
-			$field = $schema->getColumn($relation->getForeignKey());
-			if (!$field) {
-				$this->warn(' - Cannot find column definition for `' . $relation->getForeignKey() . '`');
-			}
-			if ($field && ($field['null'] !== true || $field['default'] !== null)) {
-				continue;
-			}
-			// We only care about AIIDs for now
-			if ($field && $field['type'] !== 'integer') {
-				continue;
-			}
-
-			$ok = false;
-			$constraints = $schema->constraints();
-			foreach ($constraints as $constraint) {
-				$constraintDetails = $schema->getConstraint($constraint);
-				if ($constraintDetails['type'] !== 'foreign') {
-					continue;
-				}
-				if ($constraintDetails['columns'] !== [$relation->getForeignKey()]) {
-					continue;
-				}
-
-				$ok = true;
-
-				if (!empty($constraintDetails['delete']) && $constraintDetails['delete'] === 'setNull') {
-					continue;
-				}
-
-				//$this->warn('- Possibly missing a [\'delete\' => \'SET_NULL\'] constraint.');
-			}
-
-			if ($ok) {
-				continue;
-			}
-
-			$records = $model->find()
-				->contain([$relation->getName()])
-				->select([
-					$model->getAlias() . '.' . $model->getPrimaryKey(),
-					$model->getAlias() . '.' . $relation->getForeignKey(),
-					$relation->getName() . '.' . $relation->getPrimaryKey(),
-				])
-				->where([$relation->getForeignKey() . ' IS NOT' => null])
-				->all()
-				->toArray();
-			$property = $relation->getProperty();
-			foreach ($records as $record) {
-				if ($record->$property) {
-					continue;
-				}
-
-				$io->err('Invalid non-null foreign key for ID ' . $record->id);
-			}
-		}
-	}
-	*/
-
-	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser(): ConsoleOptionParser {
@@ -269,7 +180,7 @@ class DbConstraintsCommand extends Command {
 			/*
 			'fix' => [
 				'short' => 'f',
-				'help' => 'Fix instead of just reporting',
+				'help' => 'Fix instead of just outputting migration content',
 			],
 			*/
 		];
