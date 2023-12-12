@@ -1,9 +1,11 @@
 <?php
 
-namespace Setup\Shell;
+namespace Setup\Command;
 
+use Cake\Command\Command;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Exception\CakeException;
 use Cake\ORM\Table;
@@ -19,31 +21,42 @@ use Shim\Filesystem\Folder;
  * @author Mark Scherer
  * @license MIT
  */
-class DbConstraintsShell extends Shell {
+class DbConstraintsCommand extends Command {
 
 	/**
-	 * @param string|null $modelName
-	 *
-	 * @return void
+	 * @return string
 	 */
-	public function check($modelName = null) {
-		$plugin = $this->param('plugin');
+	public static function getDescription(): string {
+		return 'Check database integrity issues regarding nullable foreign key columns and correct them by adding missing on delete constraints.';
+	}
+
+	/**
+	 * @param \Cake\Console\Arguments $args The command arguments.
+	 * @param \Cake\Console\ConsoleIo $io The console io
+	 * @return int|null|void The exit code or null for success
+	 */
+	public function execute(Arguments $args, ConsoleIo $io) {
+		$modelName = $args->getArgument('model');
+
+		$plugin = (string)$args->getOption('plugin') ?: null;
 		$models = $this->_getModels($modelName, $plugin);
 
-		$this->out('Checking ' . count($models) . ' models:', 1, static::VERBOSE);
+		$io->out('Checking ' . count($models) . ' models:', 1, ConsoleIo::VERBOSE);
 		$tables = [];
 		foreach ($models as $model) {
 			try {
-				$tables += $this->checkModel($model);
+				$tables += $this->checkModel($model, $io);
 			} catch (CakeException $e) {
-				$this->err('Skipping due to errors: ' . $e->getMessage());
+				$io->err('Skipping due to errors: ' . $e->getMessage());
 
 				continue;
 			}
 		}
 
-		if ($tables && $this->param('verbose')) {
-			$this->out('');
+		if ($tables && $args->getOption('verbose')) {
+			$io->out('');
+			$io->out('Add the following as migration to your config:');
+			$io->out('');
 
 			$result = [];
 			foreach ($tables as $table => $fields) {
@@ -56,51 +69,28 @@ class DbConstraintsShell extends Shell {
 				$result[] = "\t" . '->update();';
 			}
 
-			$this->out($result);
+			$io->out($result);
 		}
 
-		$this->out('');
-		$this->out('Done :) Possible nullable foreign key constraints checks executed.');
-	}
-
-	/**
-	 * @param string|null $modelName
-	 *
-	 * @return void
-	 */
-	public function fix($modelName = null) {
-		$plugin = $this->param('plugin');
-		$models = $this->_getModels($modelName, $plugin);
-
-		$this->out('Checking ' . count($models) . ' models:', 1, static::VERBOSE);
-
-		foreach ($models as $model) {
-			try {
-				$this->fixModel($model);
-			} catch (CakeException $e) {
-				$this->err('Skipping due to errors: ' . $e->getMessage());
-
-				continue;
-			}
-		}
-
-		$this->out('');
-		$this->out('Done :) Possible nullable foreign key constraints fixes executed.');
+		$io->out('');
+		$io->out('Done :) Possible nullable foreign key constraints checks executed.');
 	}
 
 	/**
 	 * @param \Cake\ORM\Table $model
+	 * @param \Cake\Console\ConsoleIo $io
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */
-	protected function checkModel(Table $model): array {
+	protected function checkModel(Table $model, ConsoleIo $io): array {
 		$table = $model->getTable();
 		if (!$table) {
 			return [];
 		}
 
-		$this->out('### ' . $table, 1, static::VERBOSE);
+		$io->out('### ' . $table, 1, ConsoleIo::VERBOSE);
 
+		/** @var \Cake\Database\Schema\TableSchema $schema */
 		$schema = $model->getSchema();
 
 		$associations = $model->associations();
@@ -112,14 +102,18 @@ class DbConstraintsShell extends Shell {
 		$fields = [];
 		foreach ($relationKeys as $relationKey) {
 			$relation = $associations->get($relationKey);
-			if ($relation->type() !== $relation::MANY_TO_ONE) {
+			if (!$relation || $relation->type() !== $relation::MANY_TO_ONE) {
 				continue;
 			}
 
-			$this->out('Checking: ' . $model->getAlias() . '.' . $relation->getForeignKey() . ' => ' . $relation->getName() . '.' . $relation->getBindingKey());
-			$field = $schema->getColumn($relation->getForeignKey());
+			$foreignKey = $relation->getForeignKey();
+			assert(is_string($foreignKey));
+			$bindingKey = $relation->getBindingKey();
+			assert(is_string($bindingKey));
+			$io->out('Checking: ' . $model->getAlias() . '.' . $foreignKey . ' => ' . $relation->getName() . '.' . $bindingKey);
+			$field = $schema->getColumn($foreignKey);
 			if (!$field) {
-				$this->warn(' - Cannot find column definition for `' . $relation->getForeignKey() . '`');
+				$io->warning(' - Cannot find column definition for `' . $foreignKey . '`');
 			}
 			if ($field && ($field['null'] !== true || $field['default'] !== null)) {
 				continue;
@@ -133,10 +127,11 @@ class DbConstraintsShell extends Shell {
 			$constraints = $schema->constraints();
 			foreach ($constraints as $constraint) {
 				$constraintDetails = $schema->getConstraint($constraint);
+				assert($constraintDetails !== null);
 				if ($constraintDetails['type'] !== 'foreign') {
 					continue;
 				}
-				if ($constraintDetails['columns'] !== [$relation->getForeignKey()]) {
+				if ($constraintDetails['columns'] !== [$foreignKey]) {
 					continue;
 				}
 
@@ -146,16 +141,16 @@ class DbConstraintsShell extends Shell {
 					continue;
 				}
 
-				$this->warn('- Possibly missing a [\'delete\' => \'SET_NULL\'] constraint.');
+				$io->warning('- Possibly missing a [\'delete\' => \'SET_NULL\'] constraint.');
 			}
 
 			if ($ok) {
 				continue;
 			}
 
-			$this->warn('- Foreign key constraint missing: ' . $relation->getForeignKey());
+			$io->warning('- Foreign key constraint missing: ' . $foreignKey);
 
-			$fields[$model->getTable()][$relation->getForeignKey()] = [
+			$fields[$model->getTable()][$foreignKey] = [
 				'table' => $relation->getTable(),
 				'field' => $relation->getPrimaryKey(),
 			];
@@ -169,13 +164,14 @@ class DbConstraintsShell extends Shell {
 	 *
 	 * @return void
 	 */
+	/*
 	protected function fixModel(Table $model): void {
 		$table = $model->getTable();
 		if (!$table) {
 			return;
 		}
 
-		$this->out('### ' . $table, 1, static::VERBOSE);
+		$io->out('### ' . $table, 1, ConsoleIo::VERBOSE);
 
 		$schema = $model->getSchema();
 
@@ -193,7 +189,7 @@ class DbConstraintsShell extends Shell {
 				continue;
 			}
 
-			$this->out('Checking: ' . $model->getAlias() . '.' . $relation->getForeignKey() . ' => ' . $relation->getName() . '.' . $relation->getBindingKey());
+			$io->out('Checking: ' . $model->getAlias() . '.' . $relation->getForeignKey() . ' => ' . $relation->getName() . '.' . $relation->getBindingKey());
 			$field = $schema->getColumn($relation->getForeignKey());
 			if (!$field) {
 				$this->warn(' - Cannot find column definition for `' . $relation->getForeignKey() . '`');
@@ -246,39 +242,38 @@ class DbConstraintsShell extends Shell {
 					continue;
 				}
 
-				$this->err('Invalid non-null foreign key for ID ' . $record->id);
+				$io->err('Invalid non-null foreign key for ID ' . $record->id);
 			}
 		}
 	}
+	*/
 
 	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser(): ConsoleOptionParser {
-		$subcommandParser = [
-			'options' => [
-				'plugin' => [
-					'short' => 'p',
-					'help' => 'Plugin',
-				],
+		$options = [
+			'plugin' => [
+				'short' => 'p',
+				'help' => 'Plugin',
 			],
-			'arguments' => [
-				'model' => [
-					'help' => 'Specific model (table)',
-				],
+			/*
+			'fix' => [
+				'short' => 'f',
+				'help' => 'Fix instead of just reporting',
+			],
+			*/
+		];
+		$arguments = [
+			'model' => [
+				'help' => 'Specific model (table)',
 			],
 		];
 
 		return parent::getOptionParser()
-			->setDescription('A Shell to check database integrity issues regarding nullable foreign key columns.')
-			->addSubcommand('check', [
-				'help' => 'Correct nullable foreign key columns by adding missing on delete constraints.',
-				'parser' => $subcommandParser,
-			])
-			->addSubcommand('fix', [
-				'help' => 'Correct nullable foreign key columns by setting invalid ones back to NULL.',
-				'parser' => $subcommandParser,
-			]);
+			->setDescription(static::getDescription())
+			->addOptions($options)
+			->addArguments($arguments);
 	}
 
 	/**
@@ -289,7 +284,7 @@ class DbConstraintsShell extends Shell {
 	 *
 	 * @return array<\Cake\ORM\Table>
 	 */
-	protected function _getModels($model, $plugin) {
+	protected function _getModels(?string $model, ?string $plugin): array {
 		if ($model) {
 			$className = App::className($plugin ? $plugin . '.' : $model, 'Model/Table', 'Table');
 			if (!$className) {
@@ -301,7 +296,7 @@ class DbConstraintsShell extends Shell {
 			];
 		}
 
-		$folders = App::path('Model/Table', $plugin);
+		$folders = App::classPath('Model/Table', $plugin);
 
 		$models = [];
 		foreach ($folders as $folder) {
