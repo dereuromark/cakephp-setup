@@ -53,6 +53,18 @@ class DbConstraintsCommand extends Command {
 			}
 		}
 
+		$io->out('');
+		if ($tables) {
+			$io->warning(count($tables) . ' tables found with possible missing constraints.');
+		} else {
+			$io->success('Done :) No possible nullable foreign key constraints found.');
+		}
+
+		if ($tables && !$args->getOption('verbose')) {
+			$io->out('');
+			$io->info('Tip: Use verbose mode to have a ready-to-use migration file content generated for you.');
+		}
+
 		if ($tables && $args->getOption('verbose')) {
 			$io->out('');
 			$io->out('Add the following as migration to your config:');
@@ -71,9 +83,6 @@ class DbConstraintsCommand extends Command {
 
 			$io->out($result);
 		}
-
-		$io->out('');
-		$io->out('Done :) Possible nullable foreign key constraints checks executed.');
 	}
 
 	/**
