@@ -393,99 +393,6 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 	}
 
 	/**
-	 * Fixes 0000-00-00 00:00:00 dates to NULL.
-	 * Also alerts about wrong "DEFAULT NOT NULL" etc.
-	 *
-	 * @param string|null $prefix
-	 * @return void
-	 */
-	public function dates($prefix = null) {
-		$tables = $this->_getTables($prefix);
-
-		$todo = [];
-
-		$db = $this->_getConnection();
-
-		$this->out('Checking for tables that need updating:', 1, static::VERBOSE);
-		foreach ($tables as $table) {
-			// Structure
-			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
-			$this->out('- ' . $sql, 1, static::VERBOSE);
-			/** @var \Cake\Database\Statement\StatementDecorator $res */
-			$res = $db->query($sql);
-			$fields = new Collection($res);
-
-			$fieldList = [];
-			foreach ($fields as $field) {
-				$name = $field['Field'];
-				$type = $field['Type'];
-				$null = $field['Null'];
-				if ($type !== 'date' && $type !== 'datetime') {
-					continue;
-				}
-				$fieldList[] = $field['Field'];
-
-				if ($null === 'YES' && empty($field['Default'])) {
-					continue;
-				}
-				// We need to migrate sth
-				$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NULL DEFAULT NULL;';
-			}
-
-			if (empty($fieldList)) {
-				continue;
-			}
-
-			// Data for $fieldList
-			$z = '0000-00-00 00:00:00';
-			$conditions = [];
-			foreach ($fieldList as $fieldName) {
-				$conditions[] = '`' . $fieldName . "` = '" . $z . "'";
-			}
-			$conditions = implode(' OR ', $conditions);
-
-			$sql = 'SELECT COUNT(*) as count FROM ' . $table['table_name'] . ' WHERE ' . $conditions;
-			$this->out('Checking for records that need updating:', 1, static::VERBOSE);
-			$this->out(' - ' . $sql, 1, static::VERBOSE);
-			$res = $db->query($sql);
-			$res = (new Collection($res))->toArray();
-			if (empty($res[0]['count'])) {
-				continue;
-			}
-
-			$sets = [];
-			foreach ($fieldList as $fieldName) {
-				$todo[] = 'UPDATE ' . $table['table_name'] . ' SET ' . '`' . $fieldName . '` = NULL' . ' WHERE `' . $fieldName . '` = \'' . $z . '\';';
-			}
-		}
-
-		if (!$todo) {
-			$this->out('Nothing to do :)');
-
-			return;
-		}
-
-		$this->out(count($todo) . ' tables/fields need updating.');
-		if (!$this->param('dry-run')) {
-			$continue = $this->in('Continue?', ['y', 'n'], 'y');
-			if ($continue !== 'y') {
-				$this->abort('Aborted!');
-			}
-		}
-
-		$sql = implode(PHP_EOL, $todo);
-		if (!empty($this->params['dry-run'])) {
-			$this->out($sql);
-
-			return;
-		}
-
-		// Execute
-		$db->query($sql);
-		$this->out('Done :)');
-	}
-
-	/**
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser(): ConsoleOptionParser {
@@ -538,10 +445,6 @@ Use -d -v (dry-run and verbose mode) to only display queries but not execute the
 			->addSubcommand('table_prefix', [
 				'help' => 'Add or remove table prefixes.',
 				'parser' => $tablePrefixParser,
-			])
-			->addSubcommand('dates', [
-				'help' => 'Correct date(time) fields and alerts of wrong field types.',
-				'parser' => $subcommandParser,
 			])
 			->addSubcommand('foreign_keys', [
 				'help' => 'Correct foreign key fields and alerts of wrong field types.',

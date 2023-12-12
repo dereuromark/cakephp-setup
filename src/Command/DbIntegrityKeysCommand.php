@@ -13,6 +13,7 @@ use Cake\ORM\TableRegistry;
 use Cake\View\View;
 use Migrations\View\Helper\MigrationHelper;
 use RuntimeException;
+use Setup\Command\Traits\DbToolsTrait;
 use Shim\Filesystem\Folder;
 
 /**
@@ -21,7 +22,9 @@ use Shim\Filesystem\Folder;
  * @author Mark Scherer
  * @license MIT
  */
-class DbUnsignedCommand extends Command {
+class DbIntegrityKeysCommand extends Command {
+
+	use DbToolsTrait;
 
 	/**
 	 * @return string

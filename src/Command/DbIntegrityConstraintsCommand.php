@@ -6,12 +6,9 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Core\App;
 use Cake\Core\Exception\CakeException;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
-use RuntimeException;
-use Shim\Filesystem\Folder;
+use Setup\Command\Traits\DbToolsTrait;
 
 /**
  * Alerts about possible constraints missing in terms of data integrity issues.
@@ -21,7 +18,9 @@ use Shim\Filesystem\Folder;
  * @author Mark Scherer
  * @license MIT
  */
-class DbConstraintsCommand extends Command {
+class DbIntegrityConstraintsCommand extends Command {
+
+	use DbToolsTrait;
 
 	/**
 	 * @return string
@@ -194,54 +193,6 @@ class DbConstraintsCommand extends Command {
 			->setDescription(static::getDescription())
 			->addOptions($options)
 			->addArguments($arguments);
-	}
-
-	/**
-	 * @param string|null $model
-	 * @param string|null $plugin
-	 *
-	 * @throws \RuntimeException
-	 *
-	 * @return array<\Cake\ORM\Table>
-	 */
-	protected function _getModels(?string $model, ?string $plugin): array {
-		if ($model) {
-			$className = App::className($plugin ? $plugin . '.' : $model, 'Model/Table', 'Table');
-			if (!$className) {
-				throw new RuntimeException('Model not found: ' . $model);
-			}
-
-			return [
-				TableRegistry::getTableLocator()->get($plugin ? $plugin . '.' : $model),
-			];
-		}
-
-		$folders = App::classPath('Model/Table', $plugin);
-
-		$models = [];
-		foreach ($folders as $folder) {
-			$folderContent = (new Folder($folder))->read(Folder::SORT_NAME, true);
-
-			foreach ($folderContent[1] as $file) {
-				$name = pathinfo($file, PATHINFO_FILENAME);
-
-				preg_match('#^(.+)Table$#', $name, $matches);
-				if (!$matches) {
-					continue;
-				}
-
-				$model = $matches[1];
-
-				$className = App::className($plugin ? $plugin . '.' . $model : $model, 'Model/Table', 'Table');
-				if (!$className) {
-					continue;
-				}
-
-				$models[] = TableRegistry::getTableLocator()->get($plugin ? $plugin . '.' . $model : $model);
-			}
-		}
-
-		return $models;
 	}
 
 }

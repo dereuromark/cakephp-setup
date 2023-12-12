@@ -21,20 +21,27 @@ So if you are only interested in your `xdebug` settings for CLI:
 
 Very useful and quicker than any other lookup on CLI.
 
-## DB Maintenance
+## DB Integrity
 
-### DbUnsigned
+### Keys
 Alerts about possible not unsigned integer (foreign) keys in terms of data integrity issues.
 
 - Provides a migration file content to be executed.
 - This is needed as pre-requirement for DbConstraints and others that need the keys to be aligned.
 
-### DbConstraints
+### Constraints
 Alerts about possible constraints missing in terms of data integrity issues.
 
 - Provides a migration file content to be executed.
 - Optional relation with foreign key not being set back to null when related has* entity has removed been removed.
   This is only relevant if relation is not "dependent => true", though.
+
+### Nulls
+Check for fields that might need nullable or the opposite.
+
+- Converts null fields without a default value.
+-
+
 
 ### DbMigrationShell (TODO)
 A Shell to ease database migrations needed.

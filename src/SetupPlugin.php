@@ -7,8 +7,10 @@ use Cake\Core\BasePlugin;
 use Cake\Routing\RouteBuilder;
 use Setup\Command\CurrentConfigConfigureCommand;
 use Setup\Command\CurrentConfigDisplayCommand;
-use Setup\Command\CurrentConfigPhpinfoCommand;
 use Setup\Command\CurrentConfigValidateCommand;
+use Setup\Command\DbIntegrityConstraintsCommand;
+use Setup\Command\DbIntegrityKeysCommand;
+use Setup\Command\DbIntegrityNullsCommand;
 use Setup\Command\MaintenanceModeActivateCommand;
 use Setup\Command\MaintenanceModeDeactivateCommand;
 use Setup\Command\MaintenanceModeStatusCommand;
@@ -41,7 +43,10 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('current_config display', CurrentConfigDisplayCommand::class);
 		$commands->add('current_config configure', CurrentConfigConfigureCommand::class);
 		$commands->add('current_config validate', CurrentConfigValidateCommand::class);
-		$commands->add('current_config phpinfo', CurrentConfigPhpinfoCommand::class);
+
+		$commands->add('db_integrity keys', DbIntegrityKeysCommand::class);
+		$commands->add('db_integrity constraints', DbIntegrityConstraintsCommand::class);
+		$commands->add('db_integrity nulls', DbIntegrityNullsCommand::class);
 
 		$commands->add('user create', UserCreateCommand::class);
 		$commands->add('user update', UserUpdateCommand::class);

@@ -3,8 +3,12 @@
 namespace Setup\Command\Traits;
 
 use Cake\Collection\Collection;
+use Cake\Core\App;
 use Cake\Datasource\ConnectionManager;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
+use RuntimeException;
+use Shim\Filesystem\Folder;
 
 /**
  * @mixin \Cake\Command\Command
@@ -12,57 +16,51 @@ use Cake\Utility\Text;
 trait DbToolsTrait {
 
 	/**
-	 * @param string $name
-	 *
-	 * @return \Cake\Database\Connection
-	 */
-	protected function _getConnection(string $name = 'default') {
-		if (!empty($this->params['connection'])) {
-			$name = $this->params['connection'];
-		}
-
-		/** @var \Cake\Database\Connection $connection */
-		$connection = ConnectionManager::get($name);
-
-		return $connection;
-	}
-
-	/**
-	 * @param string $prefix
-	 * @return array
-	 */
-	protected function _getTables(string $prefix): array {
-		$db = $this->_getConnection();
-		$config = $db->config();
-		$database = $config['database'];
-
-		$script = "
-SELECT table_name
-FROM information_schema.tables AS tb
-WHERE   table_schema = '$database'
-AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
-
-		/** @var \Cake\Database\Statement\StatementDecorator $res */
-		$res = $db->query($script);
-		if (!$res->count()) {
-			$this->abort('Nothing to do...');
-		}
-		$tables = new Collection($res);
-
-		$whitelist = Text::tokenize((string)$this->param('table'));
-
-		$tables = $tables->toArray();
-		foreach ($tables as $key => $table) {
-			if (substr($table['table_name'], 0, 1) === '_') {
-				unset($tables[$key]);
+		* @param string|null $model
+		* @param string|null $plugin
+		*
+		* @throws \RuntimeException
+		*
+		* @return array<\Cake\ORM\Table>
+		*/
+	protected function _getModels(?string $model, ?string $plugin): array {
+		if ($model) {
+			$className = App::className($plugin ? $plugin . '.' : $model, 'Model/Table', 'Table');
+			if (!$className) {
+				throw new RuntimeException('Model not found: ' . $model);
 			}
 
-			if ($whitelist && !in_array($table['table_name'], $whitelist)) {
-				unset($tables[$key]);
+			return [
+				TableRegistry::getTableLocator()->get($plugin ? $plugin . '.' : $model),
+			];
+		}
+
+		$folders = App::classPath('Model/Table', $plugin);
+
+		$models = [];
+		foreach ($folders as $folder) {
+			$folderContent = (new Folder($folder))->read(Folder::SORT_NAME, true);
+
+			foreach ($folderContent[1] as $file) {
+				$name = pathinfo($file, PATHINFO_FILENAME);
+
+				preg_match('#^(.+)Table$#', $name, $matches);
+				if (!$matches) {
+					continue;
+				}
+
+				$model = $matches[1];
+
+				$className = App::className($plugin ? $plugin . '.' . $model : $model, 'Model/Table', 'Table');
+				if (!$className) {
+					continue;
+				}
+
+				$models[] = TableRegistry::getTableLocator()->get($plugin ? $plugin . '.' . $model : $model);
 			}
 		}
 
-		return $tables;
+		return $models;
 	}
 
 }

@@ -4,7 +4,7 @@ namespace Setup\Test\TestCase\Shell;
 
 use Cake\Console\ConsoleIo;
 use Cake\TestSuite\TestCase;
-use Setup\Shell\DbMigrationShell;
+use Setup\Shell\DbIntegrityNullsCommand;
 use Setup\TestSuite\DriverSkipTrait;
 use Shim\TestSuite\ConsoleOutput;
 
@@ -13,7 +13,7 @@ class DbMigrationShellTest extends TestCase {
 	use DriverSkipTrait;
 
 	/**
-	 * @var \Setup\Shell\DbMigrationShell|\PHPUnit\Framework\MockObject\MockObject
+	 * @var \Setup\Shell\DbIntegrityNullsCommand|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected $Shell;
 
@@ -41,7 +41,7 @@ class DbMigrationShellTest extends TestCase {
 		$this->err = new ConsoleOutput();
 		$io = new ConsoleIo($this->out, $this->err);
 
-		$this->Shell = $this->getMockBuilder(DbMigrationShell::class)
+		$this->Shell = $this->getMockBuilder(DbIntegrityNullsCommand::class)
 			->onlyMethods(['in', '_stop'])
 			->setConstructorArgs([$io])
 			->getMock();
