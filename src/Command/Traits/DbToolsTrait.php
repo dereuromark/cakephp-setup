@@ -2,11 +2,8 @@
 
 namespace Setup\Command\Traits;
 
-use Cake\Collection\Collection;
 use Cake\Core\App;
-use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Text;
 use RuntimeException;
 use Shim\Filesystem\Folder;
 
