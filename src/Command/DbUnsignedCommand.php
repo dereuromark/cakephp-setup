@@ -144,6 +144,7 @@ class DbUnsignedCommand extends Command {
 		$key = $model->getPrimaryKey();
 		$field = $schema->getColumn($key);
 		if ($field && $this->requiresUpdate($field)) {
+			$field['null'] = false;
 			$fields['id'] = $field;
 		}
 
