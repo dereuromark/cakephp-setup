@@ -166,10 +166,11 @@ class DbIntegrityNullsCommand extends Command {
 			$default = $fieldSchema['default'];
 
 			if ($type === 'boolean') {
-				if ($null === true || $default !== null) {
+				if ($default !== null) {
 					continue;
 				}
 
+				$fieldSchema['null'] = false;
 				$fieldSchema['default'] = '0';
 
 				$fields[$field] = $fieldSchema;
