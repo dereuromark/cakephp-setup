@@ -43,7 +43,7 @@ class {{ name }} extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [{{ Bake.stringifyList(accessible, {'quotes': false})|raw }}];
+    protected array $_accessible = [{{ Bake.stringifyList(accessible, {'quotes': false})|raw }}];
 {% endif %}
 {% if accessible and hidden %}
 
@@ -54,6 +54,6 @@ class {{ name }} extends Entity
      *
      * @var array<string>
      */
-    protected $_hidden = [{{ Bake.stringifyList(hidden)|raw }}];
+    protected array $_hidden = [{{ Bake.stringifyList(hidden)|raw }}];
 {% endif %}
 }
