@@ -8,6 +8,8 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Exception\CakeException;
 use Cake\ORM\Table;
+use Cake\View\View;
+use Migrations\View\Helper\MigrationHelper;
 use Setup\Command\Traits\DbToolsTrait;
 
 /**
@@ -25,7 +27,7 @@ class DbIntegrityNullsCommand extends Command {
 	 * @return string
 	 */
 	public static function getDescription(): string {
-		return 'Assert proper non null fields (having a default value, needed for MySQL > 5.6).';
+		return 'Assert proper non null fields (having a default value, needed for MySQL > 5.6 if you are not providing it yourself on create).';
 	}
 
 	/**
@@ -58,22 +60,53 @@ class DbIntegrityNullsCommand extends Command {
 			return;
 		}
 
-		$io->out(count($tables) . ' tables/fields need updating.');
-		if (!$args->getOption('dry-run')) {
-			$continue = $io->askChoice('Continue?', ['y', 'n'], 'y');
-			if ($continue !== 'y') {
-				$io->abort('Aborted!');
-			}
-		}
-		$sql = implode(PHP_EOL, $tables);
-		if (!$args->getOption('dry-run')) {
-			$io->out($sql);
+		$io->out();
+		$io->out(count($tables) . ' tables/fields could potentially need updating.');
+
+		if (!$args->getOption('verbose')) {
+			$io->out('');
+			$io->info('Tip: Use verbose mode to have a ready-to-use migration file content generated for you.');
 
 			return;
 		}
 
-		//$db->execute($sql);
-		$io->out('Done :)');
+		$io->out('');
+		$io->out('Add the following as migration to your config:');
+		$io->out('');
+
+		$result = [];
+		foreach ($tables as $table => $fields) {
+			$result[] = '$this->table(\'' . $table . '\')';
+
+			foreach ($fields as $field => $data) {
+				$data['signed'] = false;
+				$type = $data['type'];
+				unset($data['type']);
+				if (empty($data['autoIncrement'])) {
+					unset($data['autoIncrement']);
+				}
+
+				$wantedOptions = array_flip([
+					'default',
+					'signed',
+					'null',
+					'comment',
+					'autoIncrement',
+				]);
+				$options = [
+					'indent' => 2,
+				];
+				$attributes = (new MigrationHelper(new View()))->stringifyList($data, $options, $wantedOptions);
+
+				$result[] = str_repeat(' ', 4) . '->changeColumn(\'' . $field . '\', \'' . $type . '\', ['
+					. $attributes
+					. '])';
+			}
+
+			$result[] = str_repeat(' ', 4) . '->update();';
+		}
+
+		$io->out($result);
 	}
 
 	/**
@@ -137,7 +170,9 @@ class DbIntegrityNullsCommand extends Command {
 					continue;
 				}
 
-				$fields[] = $field; // 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NOT NULL DEFAULT \'0\';';
+				$fieldSchema['default'] = '0';
+
+				$fields[$field] = $fieldSchema; // 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NOT NULL DEFAULT \'0\';';
 			}
 
 			if (!in_array($type, ['longtext', 'mediumtext', 'text', 'char', 'string'], true)) {
@@ -148,7 +183,13 @@ class DbIntegrityNullsCommand extends Command {
 				continue;
 			}
 
-			$fields[] = $field;
+			$fieldSchema['default'] = '';
+
+			$fields[$field] = $fieldSchema;
+		}
+
+		foreach ($fields as $field => $fieldSchema) {
+			$io->out('- ' . $field, 1, ConsoleIo::VERBOSE);
 		}
 
 		return $fields ? [$table => $fields] : [];
@@ -159,21 +200,21 @@ class DbIntegrityNullsCommand extends Command {
 	 */
 	public function getOptionParser(): ConsoleOptionParser {
 		$options = [
-			'dry-run' => [
-				'short' => 'd',
-				'help' => 'Dry run the command, nothing will actually be modified. It will output the SQL to copy-and-paste, e.g. into a Migrations file.',
-				'boolean' => true,
+			'plugin' => [
+				'short' => 'p',
+				'help' => 'Plugin',
 			],
-			'table' => [
-				'short' => 't',
-				'help' => 'Specific table (separate multiple with comma).',
-				'default' => '',
+		];
+		$arguments = [
+			'model' => [
+				'help' => 'Specific model (table)',
 			],
 		];
 
 		return parent::getOptionParser()
 			->setDescription(static::getDescription())
-			->addOptions($options);
+			->addOptions($options)
+			->addArguments($arguments);
 	}
 
 }

@@ -98,23 +98,19 @@ class DbIntegrityKeysCommand extends Command {
 						'null',
 						'comment',
 						'autoIncrement',
-						//'length',
 						//'limit',
-						//'precision',
-						//'after',
-						//'collate',
 					]);
 					$options = [
-						'indent' => 3,
+						'indent' => 2,
 					];
 					$attributes = (new MigrationHelper(new View()))->stringifyList($data, $options, $wantedOptions);
 
-					$result[] = "\t" . '->changeColumn(\'' . $field . '\', \'' . $type . '\', ['
+					$result[] = str_repeat(' ', 4) . '->changeColumn(\'' . $field . '\', \'' . $type . '\', ['
 						. $attributes
 						. '])';
 				}
 
-				$result[] = "\t" . '->update();';
+				$result[] = str_repeat(' ', 4) . '->update();';
 			}
 
 			$io->out($result);
@@ -191,13 +187,6 @@ class DbIntegrityKeysCommand extends Command {
 				'short' => 'p',
 				'help' => 'Plugin',
 			],
-			/*
-			'fix' => [
-				'short' => 'f',
-				'help' => 'Fix instead of just outputting migration content',
-				'boolean' => true,
-			],
-			*/
 		];
 		$arguments = [
 			'model' => [
