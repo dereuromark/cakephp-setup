@@ -46,7 +46,7 @@
 {% set details = associationFields[field] %}
                 <tr>
                     <th><?= __('{{ details.property|humanize }}') ?></th>
-                    <td><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
+                    <td><?= ${{ singularVar }}->hasValue('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
                 </tr>
 {% elseif SetupBake.isArray(field, schema) %}
                 <tr>
@@ -66,7 +66,7 @@
 {% for alias, details in associations.HasOne %}
                 <tr>
                     <th><?= __('{{ alias|underscore|singularize|humanize }}') ?></th>
-                    <td><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
+                    <td><?= ${{ singularVar }}->hasValue('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
                 </tr>
 {% endfor %}
 {% endif %}
@@ -100,7 +100,7 @@
 {% for field in groupedFields.boolean %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
-                    <td><?= $this->Format->yesNo(${{ singularVar }}->{{ field }}) ?> <?= ${{ singularVar }}->{{ field }} ? __('Yes') : __('No'); ?></td>
+                    <td><?= $this->IconSnippet->yesNo(${{ singularVar }}->{{ field }}) ?> <?= ${{ singularVar }}->{{ field }} ? __('Yes') : __('No'); ?></td>
                 </tr>
 {% endfor %}
 {% endif %}

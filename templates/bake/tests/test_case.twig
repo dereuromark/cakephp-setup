@@ -70,7 +70,7 @@ class {{ className }}Test extends TestCase
 
 {%- if fixtures %}
     /**
-     * @var array<string>
+     * @var list<string>
      */
     protected array $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
 {% if construction or methods %}

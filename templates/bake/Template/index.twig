@@ -59,7 +59,7 @@
 {% for alias, details in associations.BelongsTo %}
 {% if field == details.foreignKey %}
 {% set isKey = true %}
-                    <td><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
+                    <td><?= ${{ singularVar }}->hasValue('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -70,7 +70,7 @@
 {% elseif SetupBake.isDateTime(field, schema) %}
                     <td><?= $this->Time->nice(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif columnData.type in ['boolean'] %}
-                    <td><?= $this->Format->yesNo(${{ singularVar }}->{{ field }}) ?></td>
+                    <td><?= $this->IconSnippet->yesNo(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif columnData.type in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
                     <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
 {% else %}
