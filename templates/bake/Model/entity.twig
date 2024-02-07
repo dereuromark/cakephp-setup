@@ -1,16 +1,16 @@
 {#
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @since         2.0.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
 {% set propertyHintMap = DocBlock.buildEntityPropertyHintTypeMap(propertySchema ?: []) %}
@@ -23,17 +23,23 @@
 {% endif %}
 
 {%- set accessible = SetupBake.getFieldAccessibility(fields, primaryKey) %}
-<?php
-declare(strict_types=1);
 
-namespace {{ namespace }}\Model\Entity;
-
-use Cake\ORM\Entity;
+{%- set generatedProperties = [] %}
+{{ element('Bake.file_header', {
+    namespace: fileBuilder.namespace,
+    classImports: fileBuilder.classImports(['Cake\\ORM\\Entity']),
+}) }}
 
 {{ DocBlock.classDescription(name, 'Entity', annotations)|raw }}
-class {{ name }} extends Entity
+class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implements ' ~ fileBuilder.classBuilder.implements|join(', ') : '' }}
 {
+{% set userConstants = fileBuilder.classBuilder.userConstants([]) %}
+{% if userConstants %}
+    {{~ Bake.concat('\n\n', userConstants) }}
+
+{% endif %}
 {% if accessible %}
+{%- set generatedProperties = generatedProperties|merge(['_accessible']) %}
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -43,17 +49,28 @@ class {{ name }} extends Entity
      *
      * @var array<string, bool>
      */
-    protected array $_accessible = [{{ Bake.stringifyList(accessible, {'quotes': false})|raw }}];
+    protected array $_accessible = {{ Bake.exportVar(accessible, 1)|raw }};
 {% endif %}
 {% if accessible and hidden %}
 
 {% endif %}
 {%- if hidden %}
+{%- set generatedProperties = generatedProperties|merge(['_hidden']) %}
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
      * @var list<string>
      */
-    protected array $_hidden = [{{ Bake.stringifyList(hidden)|raw }}];
+    protected array $_hidden = {{ Bake.exportVar(hidden, 1)|raw }};
+{% endif %}
+{% set userProperties = fileBuilder.classBuilder.userProperties(generatedProperties) %}
+{% if userProperties %}
+
+    {{~ Bake.concat('\n\n', userProperties) }}
+{% endif %}
+{% set userFunctions = fileBuilder.classBuilder.userFunctions([]) %}
+{% if userFunctions %}
+
+    {{~ Bake.concat('\n\n', userFunctions) }}
 {% endif %}
 }
