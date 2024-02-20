@@ -41,6 +41,10 @@ class DbMigrationShell extends Shell {
 
 		$this->out('Checking for tables that need updating:', 1, static::VERBOSE);
 		foreach ($tables as $table) {
+			if (empty($table['table_name'])) {
+				continue;
+			}
+
 			// Structure
 			$sql = 'DESCRIBE ' . $table['table_name'] . ';';
 			$this->out('- ' . $sql, 1, static::VERBOSE);
@@ -57,6 +61,13 @@ class DbMigrationShell extends Shell {
 
 				$type = $field['Type'];
 				$null = $field['Null'];
+
+				if (preg_match('/^tinyint\(1\) unsigned/', $type)) {
+					$type = 'tinyint(1)';
+					$todo[] = 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NOT NULL DEFAULT \'0\';';
+
+					continue;
+				}
 
 				if (preg_match('/^tinyint\([\d]\)/', $type)) {
 					if ($null === 'YES' || $field['Default'] !== null) {
@@ -104,7 +115,7 @@ class DbMigrationShell extends Shell {
 			}
 		}
 		$sql = implode(PHP_EOL, $todo);
-		if (!$this->param('dry-run')) {
+		if ($this->param('dry-run')) {
 			$this->out($sql);
 
 			return;
