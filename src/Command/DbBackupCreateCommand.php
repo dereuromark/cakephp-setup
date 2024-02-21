@@ -36,6 +36,13 @@ class DbBackupCreateCommand extends Command {
 	protected $io;
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Dumps SQL database into a backup file.';
+	}
+
+	/**
 	 * @return void
 	 */
 	public function initialize(): void {
@@ -195,7 +202,7 @@ class DbBackupCreateCommand extends Command {
 		];
 
 		return parent::getOptionParser()
-			->setDescription('dump and restore SQL databases. The advantage: It uses native CLI commands which save a lot of resources and are very fast.')
+			->setDescription(static::getDescription() . ' The advantage: It uses native CLI commands which save a lot of resources and are very fast.')
 			->addArgument('file', [
 				'help' => 'Use a specific backup file (needs to be an absolute path).',
 				'optional' => true,

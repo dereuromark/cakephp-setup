@@ -9,7 +9,11 @@ use Setup\Command\CurrentConfigConfigureCommand;
 use Setup\Command\CurrentConfigDisplayCommand;
 use Setup\Command\CurrentConfigPhpinfoCommand;
 use Setup\Command\CurrentConfigValidateCommand;
+use Setup\Command\DbBackupCreateCommand;
+use Setup\Command\DbBackupRestoreCommand;
+use Setup\Command\DbIntegrityBoolsCommand;
 use Setup\Command\DbIntegrityConstraintsCommand;
+use Setup\Command\DbIntegrityIntsCommand;
 use Setup\Command\DbIntegrityKeysCommand;
 use Setup\Command\DbIntegrityNullsCommand;
 use Setup\Command\MaintenanceModeActivateCommand;
@@ -49,6 +53,11 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('db_integrity keys', DbIntegrityKeysCommand::class);
 		$commands->add('db_integrity constraints', DbIntegrityConstraintsCommand::class);
 		$commands->add('db_integrity nulls', DbIntegrityNullsCommand::class);
+		$commands->add('db_integrity bools', DbIntegrityBoolsCommand::class);
+		$commands->add('db_integrity ints', DbIntegrityIntsCommand::class);
+
+		$commands->add('db_backup create', DbBackupCreateCommand::class);
+		$commands->add('db_backup restore', DbBackupRestoreCommand::class);
 
 		$commands->add('user create', UserCreateCommand::class);
 		$commands->add('user update', UserUpdateCommand::class);

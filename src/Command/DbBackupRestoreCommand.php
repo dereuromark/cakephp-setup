@@ -34,6 +34,13 @@ class DbBackupRestoreCommand extends Command {
 	protected $io;
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Restores SQL database from a backup file.';
+	}
+
+	/**
 	 * @return void
 	 */
 	public function initialize(): void {
@@ -194,7 +201,7 @@ class DbBackupRestoreCommand extends Command {
 		];
 
 		return parent::getOptionParser()
-			->setDescription('dump and restore SQL databases. The advantage: It uses native CLI commands which save a lot of resources and are very fast.')
+			->setDescription(static::getDescription())
 			->addArgument('file', [
 				'help' => 'Use a specific backup file (needs to be an absolute path).',
 				'optional' => true,
