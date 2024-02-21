@@ -3,7 +3,9 @@
 namespace Setup\Command\Traits;
 
 use Cake\Core\App;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
+use Pdo;
 use RuntimeException;
 use Shim\Filesystem\Folder;
 
@@ -11,6 +13,64 @@ use Shim\Filesystem\Folder;
  * @mixin \Cake\Command\Command
  */
 trait DbToolsTrait {
+
+	/**
+	 * @param string $name
+	 *
+	 * @return \Cake\Database\Connection
+	 */
+	protected function _getConnection(string $name = 'default') {
+		if (!empty($this->params['connection'])) {
+			$name = $this->params['connection'];
+		}
+
+		/** @var \Cake\Database\Connection $connection */
+		$connection = ConnectionManager::get($name);
+
+		return $connection;
+	}
+
+	/**
+	 * @param string $prefix
+	 *
+	 * @return array<string>
+	 */
+	protected function _getTables(string $prefix = ''): array {
+		$db = $this->_getConnection();
+		$config = $db->config();
+		$database = $config['database'];
+
+		$script = "
+SELECT table_name
+FROM information_schema.tables AS tb
+WHERE   table_schema = '$database'
+AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
+
+		$res = $db->execute($script)->fetchAll(Pdo::FETCH_ASSOC);
+		if (!$res) {
+			throw new RuntimeException('No tables found for DB `' . $database . '`...');
+		}
+
+		/** @var array $whitelist */
+		$whitelist = []; //Text::tokenize((string)$this->args->getOption('table'));
+
+		$tables = [];
+		foreach ($res as $key => $table) {
+			if (str_starts_with($table['table_name'], '_')) {
+				continue;
+			}
+
+			if ($whitelist && !in_array($table['table_name'], $whitelist)) {
+				continue;
+			}
+
+			$tables[] = $table['table_name'];
+		}
+
+		sort($tables);
+
+		return $tables;
+	}
 
 	/**
 		* @param string|null $model
