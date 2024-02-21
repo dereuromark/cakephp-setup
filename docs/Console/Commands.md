@@ -40,38 +40,29 @@ Alerts about possible constraints missing in terms of data integrity issues.
 Check for fields that might need nullable or the opposite.
 
 - Converts null fields without a default value.
--
 
+### Bools
+Check all boolean field types, usually tinyint(1), for valid schema.
+Since MySQL 8+ they cannot be unsigned anymore or the length will be lost (making them normal tinyint or enums).
+So in order to avoid this, make sure to run this on a < v8 DB and then have a safe migration towards 8+.
 
-### DbMigrationShell (TODO)
-A Shell to ease database migrations needed.
+- Converts any bool field to a signed one.
 
-- Convert null fields without a default value.
+### Ints
+Ints in newer Mysql versions lose their length as schema definition.
+In order to not lose this sometimes important meta info, they can be written (and then later re-used) to comment as meta data.
 
-### DbMaintenanceShell (TODO)
-Easily convert table format or table encoding. Those are mainly relevant for MySQL.
+- Adds length field info to comment as prefix (`[schema] length: x`).
 
-To make sure your tables are fit for 3 and 4 byte unicode (including Emoji etc), you can run:
+## Backup create and restore
 
-- `bin/cake db_maintenance encoding`
+### Create
+Dump a full DB schema including content into a file in your backup folder.
+It uses `mysqldump` and is therefore the most performant task possible here.
 
-To switch the engine from InnoDB to MyISAM or vice versa:
+### Restore
 
-- `bin/cake db_maintenance engine`
-
-A useful command to migrate a database with prefixed tables to one for CakePHP 3.x (without prefixes):
-
-- `bin/cake db_maintenance table_prefix`
-
-To assert foreign keys are not `DEFAULT '0'` but `DEFAULT NULL`, you can run:
-
-- `bin/cake db_maintenance foreign_keys`
-
-If you want to assert that for dates (`0000-00-00` etc are usually not valid dates):
-
-- `bin/cake db_maintenance dates`
-
-Most of those commands contain a `-d` dry run param, so you can output the generated SQL and pass it into your Migrations scripts instead.
+Restore a dumped file into DB, overwriting the previous values there.
 
 ## Others
 

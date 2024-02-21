@@ -88,23 +88,6 @@ Make sure you configured the Passwordable behavior accordingly as per docs.')
 				'help' => 'Dry run the command, no data will actually be modified.',
 				'boolean' => true,
 			]);
-			/*
-			->addSubcommand('index', [
-				'help' => 'Lists current users.',
-				'parser' => $listParser,
-			])
-			->addSubcommand('create', [
-				'help' => 'Create a new user with email and password provided.',
-				'parser' => $createParser,
-			])
-			->addSubcommand('update', [
-				'help' => 'Update a specific user with a new password.',
-				'parser' => $subcommandParser,
-			])
-			->addSubcommand('password', [
-				'help' => 'Generate a hash from a given password.',
-				'parser' => $subcommandParser,
-			]);*/
 	}
 
 }
