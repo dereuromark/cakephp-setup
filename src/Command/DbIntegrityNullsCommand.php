@@ -183,7 +183,7 @@ class DbIntegrityNullsCommand extends Command {
 
 				$fieldSchema['default'] = '0';
 
-				$fields[$field] = $fieldSchema; // 'ALTER TABLE' . ' ' . $table['table_name'] . ' CHANGE `' . $name . '` `' . $name . '` ' . $type . ' NOT NULL DEFAULT \'0\';';
+				$fields[$field] = $fieldSchema;
 			}
 
 			if (!in_array($type, ['longtext', 'mediumtext', 'text', 'char', 'string'], true)) {

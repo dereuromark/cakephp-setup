@@ -56,15 +56,16 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 
 		$tables = [];
 		foreach ($res as $key => $table) {
-			if (str_starts_with($table['table_name'], '_')) {
+			$tableName = $table['table_name'] ?? $table['TABLE_NAME'];
+			if (str_starts_with($tableName, '_')) {
 				continue;
 			}
 
-			if ($whitelist && !in_array($table['table_name'], $whitelist)) {
+			if ($whitelist && !in_array($tableName, $whitelist)) {
 				continue;
 			}
 
-			$tables[] = $table['table_name'];
+			$tables[] = $tableName;
 		}
 
 		sort($tables);
