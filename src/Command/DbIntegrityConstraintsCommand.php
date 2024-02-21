@@ -52,7 +52,7 @@ class DbIntegrityConstraintsCommand extends Command {
 			}
 		}
 
-		$io->out('');
+		$io->out();
 		if ($tables) {
 			$io->warning(count($tables) . ' tables found with possible missing constraints.');
 		} else {
@@ -60,14 +60,14 @@ class DbIntegrityConstraintsCommand extends Command {
 		}
 
 		if ($tables && !$args->getOption('verbose')) {
-			$io->out('');
+			$io->out();
 			$io->info('Tip: Use verbose mode to have a ready-to-use migration file content generated for you.');
 		}
 
 		if ($tables && $args->getOption('verbose')) {
-			$io->out('');
+			$io->out();
 			$io->out('Add the following as migration to your config:');
-			$io->out('');
+			$io->out();
 
 			$result = [];
 			foreach ($tables as $table => $fields) {

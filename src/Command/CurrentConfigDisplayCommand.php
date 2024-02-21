@@ -39,7 +39,7 @@ class CurrentConfigDisplayCommand extends Command {
 		$io->info('Security Salt: ' . Security::getSalt());
 		$io->info('Full Base URL: ' . Configure::read('App.fullBaseUrl'));
 
-		$io->out('');
+		$io->out();
 
 		$time = new DateTime();
 		$timestamp = $time->getTimestamp();
@@ -47,7 +47,7 @@ class CurrentConfigDisplayCommand extends Command {
 		$io->info('Datetime: ' . $time->format(FORMAT_DB_DATETIME) . ' (' . date_default_timezone_get() . ') [GMT' . ($offset > 0 ? '+' . $offset : '-' . abs($offset)) . ']');
 		$io->info('Timestamp: ' . $timestamp . ' => ' . (new DateTime(date(FORMAT_DB_DATETIME, $timestamp)))->format(FORMAT_DB_DATETIME));
 
-		$io->out('');
+		$io->out();
 
 		$io->info('Email Config:');
 		$config = (array)Mailer::getConfig('default');
@@ -55,7 +55,7 @@ class CurrentConfigDisplayCommand extends Command {
 			$io->out(' - ' . $key . ': ' . $value);
 		}
 
-		$io->out('');
+		$io->out();
 
 		$io->info('ENV:');
 		foreach ($_ENV as $key => $value) {

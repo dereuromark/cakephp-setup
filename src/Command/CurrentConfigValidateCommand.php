@@ -43,7 +43,7 @@ class CurrentConfigValidateCommand extends Command {
 			$io->err($e->getMessage());
 		}
 
-		$io->out('');
+		$io->out();
 		$io->out('DB test:');
 		try {
 			$db = ConnectionManager::get('test');
@@ -52,7 +52,7 @@ class CurrentConfigValidateCommand extends Command {
 			$io->err($e->getMessage());
 		}
 
-		$io->out('');
+		$io->out();
 		$io->out('Cache:');
 		$io->out(print_r(Cache::getConfig('_cake_core_'), true));
 

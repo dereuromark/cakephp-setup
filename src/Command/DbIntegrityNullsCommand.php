@@ -64,15 +64,15 @@ class DbIntegrityNullsCommand extends Command {
 		$io->out(count($tables) . ' tables/fields could potentially need updating.');
 
 		if (!$args->getOption('verbose')) {
-			$io->out('');
+			$io->out();
 			$io->info('Tip: Use verbose mode to have a ready-to-use migration file content generated for you.');
 
 			return;
 		}
 
-		$io->out('');
+		$io->out();
 		$io->out('Add the following as migration to your config:');
-		$io->out('');
+		$io->out();
 
 		$result = [];
 		foreach ($tables as $table => $fields) {

@@ -49,7 +49,7 @@ class DbIntegrityBoolsCommand extends Command {
 			}
 		}
 
-		$io->out('');
+		$io->out();
 		if ($modified) {
 			$io->warning(count($modified) . ' tables found with possible bool issues.');
 			foreach ($modified as $table => $fields) {
@@ -64,7 +64,7 @@ class DbIntegrityBoolsCommand extends Command {
 		}
 
 		if ($modified && !$args->getOption('verbose')) {
-			$io->out('');
+			$io->out();
 			$io->info('Tip: Use verbose mode to have a ready-to-use migration file content generated for you.');
 		}
 
@@ -91,9 +91,9 @@ class DbIntegrityBoolsCommand extends Command {
 		}
 
 		if ($modified && $args->getOption('verbose')) {
-			$io->out('');
+			$io->out();
 			$io->out('Add the following as migration to your config:');
-			$io->out('');
+			$io->out();
 
 			$io->out($result);
 		}

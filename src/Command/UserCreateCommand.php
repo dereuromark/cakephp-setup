@@ -62,7 +62,7 @@ class UserCreateCommand extends Command {
 				$roles = $Users->Roles->find('list');
 
 				if (!empty($roles)) {
-					$io->out('');
+					$io->out();
 					$io->out(print_r($roles, true));
 				}
 
@@ -74,7 +74,7 @@ class UserCreateCommand extends Command {
 				$roles = User::roles();
 
 				if (!empty($roles)) {
-					$io->out('');
+					$io->out();
 					$io->out(print_r($roles, true));
 				}
 
@@ -99,7 +99,7 @@ class UserCreateCommand extends Command {
 			}
 		}
 
-		$io->out('');
+		$io->out();
 		$Users->addBehavior('Tools.Passwordable', ['confirm' => false]);
 
 		$data = [
@@ -142,14 +142,14 @@ class UserCreateCommand extends Command {
 		}
 
 		if (!$args->getOption('dry-run')) {
-			$io->out('');
+			$io->out();
 			$continue = $io->askChoice('Continue?', ['y', 'n'], 'n');
 			if ($continue !== 'y') {
 				$io->abort('Aborted!');
 			}
 		}
 
-		$io->out('');
+		$io->out();
 		$io->hr();
 		/** @var \App\Model\Entity\User $user */
 		$user = $Users->newEntity($data, ['validate' => false]);
