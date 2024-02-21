@@ -51,7 +51,7 @@ class DbIntegrityBoolsCommand extends Command {
 
 		$io->out('');
 		if ($modified) {
-			$io->warning(count($modified) . ' tables found with possible int issues.');
+			$io->warning(count($modified) . ' tables found with possible bool issues.');
 			foreach ($modified as $table => $fields) {
 				$io->out(' - ' . $table . ':');
 				foreach ($fields as $field => $config) {
