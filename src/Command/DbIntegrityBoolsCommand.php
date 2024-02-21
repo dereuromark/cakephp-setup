@@ -60,7 +60,7 @@ class DbIntegrityBoolsCommand extends Command {
 			}
 
 		} else {
-			$io->success('Done :) No unsigned issues around int found.');
+			$io->success('Done :) No unsigned issues around bools found.');
 		}
 
 		if ($modified && !$args->getOption('verbose')) {
