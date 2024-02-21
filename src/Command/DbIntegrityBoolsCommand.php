@@ -38,7 +38,7 @@ class DbIntegrityBoolsCommand extends Command {
 		$tables = $this->_getTables();
 
 		$io->out('Checking ' . count($tables) . ' tables:', 1, ConsoleIo::VERBOSE);
-		$modified = [];dd($tables);
+		$modified = [];
 		foreach ($tables as $table) {
 			try {
 				$modified += $this->checkTable($table, $io);
