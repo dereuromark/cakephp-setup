@@ -119,7 +119,7 @@ class DbIntegrityBoolsCommand extends Command {
 	 */
 	protected function checkTable(string $table, ConsoleIo $io): array {
 		// Structure
-		$sql = 'SHOW FULL COLUMNS from ' . $table . ';';
+		$sql = 'SHOW FULL COLUMNS from `' . $table . '`;';
 		$io->verbose('- ' . $sql);
 
 		$db = $this->_getConnection();
