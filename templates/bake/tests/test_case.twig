@@ -2,44 +2,38 @@
 /**
  * Test Case bake template
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @since         2.0.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
 {% set isController = type|lower == 'controller' %}
-{% set isShell = type|lower == 'shell' %}
 {% set isCommand = type|lower == 'command' %}
 {% if isController %}
     {%- set traitName = 'IntegrationTestTrait' %}
-{% elseif isShell or isCommand %}
+    {%- set uses = uses|merge(['Cake\\TestSuite\\IntegrationTestTrait']) %}
+{% elseif isCommand %}
     {%- set traitName = 'ConsoleIntegrationTestTrait' %}
+    {%- set uses = uses|merge(['Cake\\Console\\TestSuite\\ConsoleIntegrationTestTrait']) %}
 {% endif %}
 {%- set uses = uses|merge(["Cake\\TestSuite\\TestCase"]) %}
-{% if traitName is defined %}
-    {%- set uses = uses|merge(["Cake\\TestSuite\\#{traitName}"]) %}
-{% endif %}
 
-{%- set uses = uses|sort %}
-<?php
-declare(strict_types=1);
-
-namespace {{ baseNamespace }}\Test\TestCase\{{ subNamespace }};
-
-{% for dependency in uses %}
-use {{ dependency }};
-{% endfor %}
+{{- element('Bake.file_header', {
+    namespace: "#{baseNamespace}\\Test\\TestCase\\#{subNamespace}",
+    classImports: uses,
+}) }}
 
 /**
 {% if isController or isCommand %}
+ *
  * @uses \{{ fullClassName }}
 {% endif %}
  */
@@ -72,7 +66,7 @@ class {{ className }}Test extends TestCase
     /**
      * @var list<string>
      */
-    protected array $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
+    protected array $fixtures = {{ Bake.exportVar(fixtures|values, 1)|raw }};
 {% if construction or methods %}
 
 {% endif %}
@@ -82,7 +76,7 @@ class {{ className }}Test extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 {% if preConstruct %}
@@ -102,7 +96,7 @@ class {{ className }}Test extends TestCase
     /**
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->{{ subject }});
 
@@ -120,6 +114,7 @@ class {{ className }}Test extends TestCase
 {% endif %}
     /**
      * @return void
+     * @uses \{{ fullClassName }}::{{ method }}()
      */
     public function test{{ method|camelize }}(): void
     {
