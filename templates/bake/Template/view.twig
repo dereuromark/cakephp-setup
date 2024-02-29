@@ -72,12 +72,18 @@
 {% endif %}
 {% if groupedFields.number %}
 {% for field in groupedFields.number %}
+{% set columnData = Bake.columnData(field, schema) %}
 {% if field not in primaryKey %}
 {% if SetupBake.isEnum(field, schema, singularVar, plugin ? plugin : namespace) %}
 {% set enumMethod = SetupBake.enumMethod(field, schema) %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
                     <td><?= ${{ singularVar }}::{{ enumMethod }}(${{ singularVar }}->{{ field }}) ?></td>
+                </tr>
+{% elseif columnData.null %}
+                <tr>
+                    <th><?= __('{{ field|humanize }}') ?></th>
+                    <td><?= ${{ singularVar }}->{{ field }} === null ? '' : $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
                 </tr>
 {% else %}
                 <tr>
