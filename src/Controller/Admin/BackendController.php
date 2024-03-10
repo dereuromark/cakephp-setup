@@ -6,10 +6,12 @@ use App\Controller\AppController;
 use Cake\Cache\Cache;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use PDO;
 use Setup\Utility\Config;
+use Setup\Utility\OrmTypes;
 
 class BackendController extends AppController {
 
@@ -124,6 +126,20 @@ class BackendController extends AppController {
 		$localConfig = Config::getLocal();
 
 		$this->set(compact('envVars', 'localConfig'));
+	}
+
+	/**
+	 * @return \Cake\Http\Response|null|void
+	 */
+	public function typeMap() {
+		$plugins = Plugin::loaded();
+		if ($this->request->getQuery('all')) {
+			$plugins = array_keys((array)Configure::read('plugins'));
+		}
+		$map = OrmTypes::getMap();
+		$classes = OrmTypes::getClasses($plugins, $map);
+
+		$this->set(compact('plugins', 'classes', 'map'));
 	}
 
 }
