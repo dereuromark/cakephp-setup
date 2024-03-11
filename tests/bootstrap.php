@@ -70,15 +70,9 @@ class_alias(View::class, 'App\View\AppView');
 class_alias(UsersTable::class, 'App\Model\Table\UsersTable');
 class_alias(User::class, 'App\Model\Entity\User');
 
-mb_internal_encoding('UTF-8');
-
 class_alias(Application::class, 'App\Application');
-if (!class_exists('App\Controller\AppController')) {
-	class_alias(AppController::class, 'App\Controller\AppController');
-}
-if (!class_exists('App\View\AppView')) {
-	class_alias(View::class, 'App\View\AppView');
-}
+
+mb_internal_encoding('UTF-8');
 
 $Tmp = new Folder(TMP);
 $Tmp->create(TMP . 'cache/models', 0770);
