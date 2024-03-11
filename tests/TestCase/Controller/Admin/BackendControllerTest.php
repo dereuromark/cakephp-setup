@@ -92,4 +92,17 @@ class BackendControllerTest extends TestCase {
 		$this->assertResponseCode(200);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testTypeMap() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'typeMap']);
+
+		$this->assertResponseCode(200);
+	}
+
 }
