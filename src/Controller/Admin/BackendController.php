@@ -95,7 +95,7 @@ class BackendController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function database() {
-		$Model = TableRegistry::getTableLocator()->get('Sessions');
+		$Model = TableRegistry::getTableLocator()->get(Configure::read('Setup.defaultTable') ?: 'Sessions');
 		/** @var \Cake\Database\Connection $db */
 		$db = $Model->getConnection();
 
