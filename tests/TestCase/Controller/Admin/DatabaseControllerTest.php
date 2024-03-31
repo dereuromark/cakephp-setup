@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Controller\Admin;
+namespace Setup\Test\TestCase\Controller\Admin;
 
 use Cake\TestSuite\IntegrationTestTrait;
 use Setup\TestSuite\DriverSkipTrait;
