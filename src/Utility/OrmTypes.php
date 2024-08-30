@@ -86,7 +86,7 @@ class OrmTypes {
 	protected static function name(string $class): string {
 		$namespace = str_replace('/', '\\', static::NAMESPACE);
 		preg_match('#^(.+)\\\\' . preg_quote($namespace) . '\\\\(.+)' . preg_quote(static::SUFFIX) . '#', $class, $matches);
-		if (!$matches) {
+		if (!$matches || empty($matches[1]) || empty($matches[2])) {
 			throw new RuntimeException('Invalid type class: ' . $class);
 		}
 
