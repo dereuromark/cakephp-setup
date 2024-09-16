@@ -3,6 +3,7 @@
 namespace Setup\Test\TestCase\Command;
 
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
+use Cake\Core\Configure;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -23,6 +24,8 @@ class CliTestCommandTest extends TestCase {
 	 * @return void
 	 */
 	public function testBasic() {
+		$this->skipIf(version_compare(Configure::version(), '5.1', '<'));
+
 		$this->exec('cli_test');
 		$this->assertOutputContains('Router::url([\'controller\' => \'Test\'], true)');
 		$this->assertOutputContains('/test');
