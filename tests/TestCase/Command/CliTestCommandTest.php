@@ -15,6 +15,13 @@ class CliTestCommandTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testBasic() {
 		$this->exec('cli_test');
 		$this->assertOutputContains('Router::url([\'controller\' => \'Test\'], true)');

@@ -15,6 +15,13 @@ class ResetCommandTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testUpdate() {
 		$this->exec('reset pwd', ['123']);
 

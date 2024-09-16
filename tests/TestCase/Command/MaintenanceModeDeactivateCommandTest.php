@@ -12,6 +12,13 @@ class MaintenanceModeDeactivateCommandTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testDeactivate() {
 		$this->exec('maintenance_mode deactivate');
 		$this->assertOutputContains('Maintenance mode deactivated ...');

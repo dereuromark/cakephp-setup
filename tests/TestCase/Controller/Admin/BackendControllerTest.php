@@ -23,6 +23,15 @@ class BackendControllerTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		parent::setUp();
+
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testPhpinfo() {
 		$this->disableErrorHandlerMiddleware();
 

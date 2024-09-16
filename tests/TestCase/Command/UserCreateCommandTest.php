@@ -15,6 +15,13 @@ class UserCreateCommandTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testCreate() {
 		$this->exec('user create admin 123', ['y', 'some@email.de', 'y']);
 		$this->assertOutputContains('User inserted! ID: 1');

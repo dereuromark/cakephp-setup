@@ -15,6 +15,8 @@ class MaintenanceModeStatusCommandTest extends TestCase {
 	public function setUp(): void {
 		parent::setUp();
 
+		$this->loadPlugins(['Setup']);
+
 		unlink(TMP . 'maintenance.txt');
 	}
 

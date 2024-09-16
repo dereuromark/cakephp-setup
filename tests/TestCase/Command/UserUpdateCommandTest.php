@@ -15,6 +15,13 @@ class UserUpdateCommandTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testUpdate() {
 		$this->exec('user create admin 123', ['y', 'some@email.de', 'y']);
 

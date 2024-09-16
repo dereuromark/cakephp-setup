@@ -15,6 +15,8 @@ class MaintenanceModeWhitelistCommandTest extends TestCase {
 	public function setUp(): void {
 		parent::setUp();
 
+		$this->loadPlugins(['Setup']);
+
 		$matches = glob(TMP . 'maintenanceOverride-*\.txt');
 		if ($matches) {
 			foreach ($matches as $match) {

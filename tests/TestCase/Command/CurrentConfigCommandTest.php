@@ -15,6 +15,13 @@ class CurrentConfigCommandTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testConfigure() {
 		$this->exec('current_config configure');
 		$this->assertOutputContains('[App]');

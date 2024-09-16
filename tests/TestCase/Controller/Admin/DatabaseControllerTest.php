@@ -14,6 +14,15 @@ class DatabaseControllerTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function setUp(): void {
+		parent::setUp();
+
+		$this->loadPlugins(['Setup']);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testForeignKeys() {
 		$this->skipIfNotDriver('Mysql', 'Only for MYSQL for now');
 
