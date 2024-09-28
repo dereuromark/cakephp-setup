@@ -6,7 +6,7 @@ use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 use Setup\TestSuite\DriverSkipTrait;
 use Shim\TestSuite\TestCase;
-use Tools\View\Icon\BootstrapIcon;
+use Templating\View\Icon\BootstrapIcon;
 
 class BackendControllerTest extends TestCase {
 

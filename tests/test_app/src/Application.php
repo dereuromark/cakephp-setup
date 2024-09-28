@@ -16,6 +16,7 @@ class Application extends BaseApplication {
 		parent::bootstrap();
 
 		$this->addPlugin('Tools');
+		$this->addPlugin('Templating');
 	}
 
 	/**

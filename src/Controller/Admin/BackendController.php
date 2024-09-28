@@ -26,7 +26,12 @@ class BackendController extends AppController {
 	public function initialize(): void {
 		parent::initialize();
 
-		$this->viewBuilder()->setHelpers(['Tools.Time', 'Tools.Format', 'Tools.Progress']);
+		$this->viewBuilder()->setHelpers(['Tools.Time', 'Tools.Progress']);
+		if (Plugin::isLoaded('Templating')) {
+			$this->viewBuilder()->addHelper('Templating.IconSnippet');
+		} elseif (Plugin::isLoaded('Tools')) {
+			$this->viewBuilder()->addHelper('Tools.Format');
+		}
 	}
 
 	/**

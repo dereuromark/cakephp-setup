@@ -19,7 +19,7 @@
 					<?php echo h($envVar); ?>
 				</td>
 				<td>
-					<?php echo $this->Format->yesNo($value !== false); ?>
+					<?= $this->element('Setup.yes_no', ['value' => $value !== false]) ?>
 				</td>
 			</tr>
 		<?php } ?>
@@ -29,7 +29,7 @@
 	<br />
 	<h2>Dynamic Configs</h2>
 
-	<code>app_local.php</code>: <?php echo $this->Format->yesNo($localConfig !== null) ?>
+	<code>app_local.php</code>: <?= $this->element('Setup.yes_no', ['value' => $localConfig !== null]) ?>
 
 	<h3>Defined config keys</h3>
 	<?php
@@ -56,7 +56,7 @@
 				}
 			}
 
-			return $name . ' ' . ($hasValue ? $this->Format->yesNo($hasValue) . ' <code>' . $value .'</code>' : '<code>null</code>');
+			return $name . ' ' . ($hasValue ? $this->element('Setup.yes_no', ['value' => $hasValue]) . ' <code>' . $value .'</code>' : '<code>null</code>');
 		};
 
 		echo $this->Tree->generate($localConfig, ['callback' => $callback]);
