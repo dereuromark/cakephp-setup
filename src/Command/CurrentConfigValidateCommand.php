@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Setup\Command;
 
 use Cake\Cache\Cache;
-use Cake\Cache\Cache as CoreCache;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\CommandInterface;
@@ -36,7 +35,7 @@ class CurrentConfigValidateCommand extends Command {
 	 * @return int|null|void The exit code or null for success
 	 */
 	public function execute(Arguments $args, ConsoleIo $io) {
-		$io->out('DB default:');
+		$io->out('### DB default ###');
 		try {
 			$db = ConnectionManager::get('default');
 			$io->out(print_r($db->config(), true));
@@ -45,7 +44,7 @@ class CurrentConfigValidateCommand extends Command {
 		}
 
 		$io->out();
-		$io->out('DB test:');
+		$io->out('### DB test ###');
 		try {
 			$db = ConnectionManager::get('test');
 			$io->out(print_r($db->config(), true));
@@ -54,16 +53,12 @@ class CurrentConfigValidateCommand extends Command {
 		}
 
 		$io->out();
-		$io->out('Cache:');
+		$io->out('### Cache ###');
 
-		$key = '_cake_model_';
-		//BC with 5.0.x
-		$configured = CoreCache::getRegistry();
-		if ($configured->has('_cake_core_')) {
-			$key = '_cake_core_';
+		$configured = Cache::configured();
+		foreach ($configured as $key) {
+			$io->out(print_r(Cache::getConfig($key), true));
 		}
-
-		$io->out(print_r(Cache::getConfig($key), true));
 
 		return CommandInterface::CODE_SUCCESS;
 	}
