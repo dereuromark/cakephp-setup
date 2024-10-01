@@ -35,7 +35,7 @@ class CurrentConfigValidateCommand extends Command {
 	 * @return int|null|void The exit code or null for success
 	 */
 	public function execute(Arguments $args, ConsoleIo $io) {
-		$io->out('DB default:');
+		$io->out('### DB default ###');
 		try {
 			$db = ConnectionManager::get('default');
 			$io->out(print_r($db->config(), true));
@@ -44,7 +44,7 @@ class CurrentConfigValidateCommand extends Command {
 		}
 
 		$io->out();
-		$io->out('DB test:');
+		$io->out('### DB test ###');
 		try {
 			$db = ConnectionManager::get('test');
 			$io->out(print_r($db->config(), true));
@@ -53,8 +53,12 @@ class CurrentConfigValidateCommand extends Command {
 		}
 
 		$io->out();
-		$io->out('Cache:');
-		$io->out(print_r(Cache::getConfig('_cake_core_'), true));
+		$io->out('### Cache ###');
+
+		$configured = Cache::configured();
+		foreach ($configured as $key) {
+			$io->out(print_r(Cache::getConfig($key), true));
+		}
 
 		return CommandInterface::CODE_SUCCESS;
 	}
