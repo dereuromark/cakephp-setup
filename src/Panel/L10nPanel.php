@@ -10,7 +10,7 @@ use Cake\I18n\Time;
 use DebugKit\DebugPanel;
 
 /**
- * A panel to show authentication and authorization data for current request.
+ * A panel to show localization related data.
  */
 class L10nPanel extends DebugPanel {
 
