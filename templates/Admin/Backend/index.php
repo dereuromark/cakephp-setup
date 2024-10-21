@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  */
 use Cake\Core\Configure;
-use SetupExtra\Lib\DebugLib;
-use SetupExtra\Lib\SystemLib;
 ?>
 
 <div class="columns col-md-12">
