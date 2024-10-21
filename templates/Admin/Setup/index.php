@@ -7,7 +7,7 @@
 
 <h1>Setup Backend Tools</h1>
 
-
+	<h2>Information</h2>
 	<ul>
 		<li><?php echo $this->Html->link('Configuration', ['controller' => 'Configuration', 'action' => 'index']);?></li>
 		<li><?php echo $this->Html->link('PHP Info', ['controller' => 'Backend', 'action' => 'phpinfo']);?></li>
@@ -16,5 +16,14 @@
 		<li><?php echo $this->Html->link('Database Info', ['controller' => 'Backend', 'action' => 'database']);?></li>
 		<li><?php echo $this->Html->link('ORM Type Map', ['controller' => 'Backend', 'action' => 'typeMap']); ?></li>
 	</ul>
+
+	<h2>Healthcheck</h2>
+
+	<p>
+	<?php
+	echo $this->Html->link('Healthcheck', ['controller' => 'Uptime', 'action' => 'index']);
+	?>
+	</p>
+	<p>You can customize this route on project level and add this to your healthcheck (ping) services.</p>
 
 </div>
