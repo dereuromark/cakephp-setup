@@ -2,7 +2,6 @@
 /**
  * @var \App\View\AppView $this
  */
-use Cake\Core\Configure;
 ?>
 
 <div class="columns col-md-12">
