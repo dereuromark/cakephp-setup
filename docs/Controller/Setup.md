@@ -11,6 +11,11 @@ Also make sure that the optional Tools dependency is in this case available.
 
 ## Useful tools
 
+### Configuration Dashboard
+With useful info about server and application.
+
+See `/admin/setup/configuration`
+
 ### PHPInfo
 Lists the phpinfo() page as you know it.
 
@@ -41,7 +46,7 @@ See `/admin/setup/database/foreign-keys`
 for an overview of all possible foreign keys and get a list of possible issues and checks to run.
 
 Make sure you apply the foreign key "NULL"able part to all existing rows in your DB.
-The script contains a check to make sure your DB is clean here before you apply those. 
+The script contains a check to make sure your DB is clean here before you apply those.
 The migration will otherwise fail to apply them.
 
 This is especially important when you want to find all childs that do not have some belongsTo relation (anymore) using

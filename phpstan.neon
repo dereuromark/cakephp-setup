@@ -16,6 +16,8 @@ parameters:
 	earlyTerminatingMethodCalls:
 		Cake\Console\Shell:
 			- abort
+	dynamicConstantNames:
+			- WINDOWS
 
 	ignoreErrors:
 		- '#Parameter \#1 \$items of class .+Collection constructor expects iterable, .+StatementInterface given.#'
