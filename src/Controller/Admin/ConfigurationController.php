@@ -20,7 +20,7 @@ use Setup\Utility\System;
 class ConfigurationController extends AppController {
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
 	protected ?string $defaultTable = '';
 

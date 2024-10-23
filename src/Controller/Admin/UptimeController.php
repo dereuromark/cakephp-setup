@@ -8,7 +8,7 @@ use Cake\Event\EventInterface;
 class UptimeController extends AppController {
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
 	protected ?string $defaultTable = '';
 
