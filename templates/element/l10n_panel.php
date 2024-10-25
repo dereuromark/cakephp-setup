@@ -2,12 +2,9 @@
 /**
  * @var \App\View\AppView $this
  * @var array<string, mixed> $values
+ * @var array<string, string> $currency
+ * @var array<string, mixed> $messages
  */
-
-if (!isset($values)) {
-	$values = [];
-}
-
 ?>
 
 <section class="section-tile">
@@ -42,11 +39,16 @@ if (!isset($values)) {
 		</li>
 	</ul>
 
+	<h2>Currency</h2>
+	<ul>
+		<?php foreach ($currency as $key => $value) { ?>
+			<li>
+				<?php echo h($key); ?>: <?php echo h($value); ?>
+			</li>
+		<?php } ?>
+	</ul>
+
 	<h2>Translations</h2>
-	<?php
-	$translator = \Cake\I18n\I18n::getTranslator();
-	$messages = $translator->getPackage()->getMessages();
-	?>
 	<p><?php echo count($messages);?> translations</p>
 	<details>
 		<summary>Details</summary>

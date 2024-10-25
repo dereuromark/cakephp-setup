@@ -6,8 +6,10 @@ use Cake\Core\InstanceConfigTrait;
 use Cake\Event\EventInterface;
 use Cake\I18n\Date;
 use Cake\I18n\DateTime;
+use Cake\I18n\I18n;
 use Cake\I18n\Time;
 use DebugKit\DebugPanel;
+use Tools\I18n\Number;
 
 /**
  * A panel to show localization related data.
@@ -45,6 +47,9 @@ class L10nPanel extends DebugPanel {
 	 * @return array<string, mixed>
 	 */
 	public function data(): array {
+		$translator = I18n::getTranslator();
+		$messages = $translator->getPackage()->getMessages();
+
 		$data = [
 			'values' => [
 				'datetime' => new DateTime(),
@@ -52,6 +57,11 @@ class L10nPanel extends DebugPanel {
 				'time-noon' => Time::noon(),
 				'time-midnight' => Time::midnight(),
 			],
+			'currency' => [
+				'default currency' => Number::getDefaultCurrency(),
+				'formatted value' => Number::currency('12.34'),
+			],
+			'messages' => $messages,
 		];
 
 		return $this->_data + $data;
