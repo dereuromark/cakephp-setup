@@ -30,7 +30,7 @@ use Setup\Utility\System;
 	<h3>Application info</h3>
 	CakeVersion: <?php echo Configure::version(); ?>
 	<br />
-	Debug-Mode: <?php echo $this->element('Setup.ok', ['value' => $this->element('Setup.yes_no', ['value' => Configure::read('debug')]), 'ok' => !Configure::read('debug'), 'escape' => false]);?>  | Productive: <?php echo $this->element('Setup.ok', ['value' => $this->element('Setup.yes_no', ['value' => Configure::read('Config.live')]), 'ok' => Configure::read('Config.live'), 'escape' => false]); ?><br />
+	Debug-Mode: <?php echo $this->element('Setup.ok', ['value' => $this->element('Setup.yes_no', ['value' => (bool)Configure::read('debug')]), 'ok' => !Configure::read('debug'), 'escape' => false]);?>  | Productive: <?php echo $this->element('Setup.ok', ['value' => $this->element('Setup.yes_no', ['value' => (bool)Configure::read('Config.live')]), 'ok' => (bool)Configure::read('Config.live'), 'escape' => false]); ?><br />
 	<br />
 	Errors: <?php
 	$level = error_reporting();
