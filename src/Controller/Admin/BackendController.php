@@ -133,11 +133,38 @@ class BackendController extends AppController {
 		$this->set(compact('envVars', 'localConfig'));
 	}
 
+	/**
+	 * @return void
+	 */
 	public function ip() {
-		$ipAddress = env('REMOTE_ADDR');
+		$ipAddress = (string)env('REMOTE_ADDR');
 		$host = $ipAddress ? gethostbyaddr($ipAddress) : null;
 
-		$this->set(compact('ipAddress', 'host'));
+		$proxyHeaderKeys = [
+			'HTTP_VIA',
+			'HTTP_X_FORWARDED_FOR',
+			'HTTP_FORWARDED_FOR',
+			'HTTP_X_FORWARDED',
+			'HTTP_FORWARDED',
+			'HTTP_CLIENT_IP',
+			'HTTP_FORWARDED_FOR_IP',
+			'VIA',
+			'X_FORWARDED_FOR',
+			'FORWARDED_FOR',
+			'X_FORWARDED',
+			'FORWARDED',
+			'CLIENT_IP',
+			'FORWARDED_FOR_IP',
+			'HTTP_PROXY_CONNECTION',
+		];
+		$proxyHeaders = [];
+		foreach ($proxyHeaderKeys as $proxyHeaderKey) {
+			if (isset($_SERVER[$proxyHeaderKey])) {
+				$proxyHeaders[$proxyHeaderKey] = $_SERVER[$proxyHeaderKey];
+			}
+		}
+
+		$this->set(compact('ipAddress', 'host', 'proxyHeaders'));
 	}
 
 	/**
