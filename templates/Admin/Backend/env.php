@@ -9,7 +9,7 @@
 
 	<h1>ENV config</h1>
 
-	<table>
+	<table class="table" width="">
 		<tr>
 			<th>ENV</th><th>Value defined</th>
 		</tr>
@@ -19,7 +19,7 @@
 					<?php echo h($envVar); ?>
 				</td>
 				<td>
-					<?= $this->element('Setup.yes_no', ['value' => $value !== false]) ?>
+					<?= $this->element('Setup.ok', ['value' => $this->element('Setup.yes_no', ['value' => $value !== false]), 'ok' => $value !== false, 'escape' => false]) ?>
 				</td>
 			</tr>
 		<?php } ?>

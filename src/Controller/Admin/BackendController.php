@@ -133,6 +133,13 @@ class BackendController extends AppController {
 		$this->set(compact('envVars', 'localConfig'));
 	}
 
+	public function ip() {
+		$ipAddress = env('REMOTE_ADDR');
+		$host = $ipAddress ? gethostbyaddr($ipAddress) : null;
+
+		$this->set(compact('ipAddress', 'host'));
+	}
+
 	/**
 	 * @return \Cake\Http\Response|null|void
 	 */
