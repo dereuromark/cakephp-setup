@@ -54,6 +54,7 @@ class L10nPanel extends DebugPanel {
 			'values' => [
 				'datetime' => new DateTime(),
 				'date' => new Date(),
+				'time' => new Time(),
 				'time-noon' => Time::noon(),
 				'time-midnight' => Time::midnight(),
 			],
