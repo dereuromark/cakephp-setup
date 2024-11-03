@@ -22,7 +22,7 @@ class Config {
 			}
 			preg_match_all('#env\(\'([A-Z_)]+)\'.*\)#', $content, $matches);
 
-			$envs = $matches ? $matches[1] : [];
+			$envs = !empty($matches[1]) ? $matches[1] : [];
 			if (!$envs) {
 				continue;
 			}
