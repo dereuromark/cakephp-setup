@@ -19,7 +19,7 @@ Time: <?php echo $this->Time->niceDate($time); ?>
 <h2>Session Config</h2>
 <pre>
 <?php
-echo print_r($sessionConfig);
+echo print_r($sessionConfig, true);
 ?>
 </pre>
 
