@@ -17,11 +17,14 @@ Time: <?php echo $this->Time->niceDate($time); ?>
 
 <br />
 <h2>Session Config</h2>
-<pre>
-<?php
+<pre><?php
 echo print_r($sessionConfig, true);
-?>
-</pre>
+?></pre>
+
+<h2>Cookie Params</h2>
+<pre><?php
+echo print_r(session_get_cookie_params(), true);
+?></pre>
 
 <h2>Own Session Value</h2>
 
