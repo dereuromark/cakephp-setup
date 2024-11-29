@@ -6,6 +6,7 @@ use Bake\View\Helper\BakeHelper;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\SchemaInterface;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 class SetupBakeHelper extends BakeHelper {
@@ -169,6 +170,28 @@ class SetupBakeHelper extends BakeHelper {
 
 		/** @var \Cake\Collection\Collection $fields */
 		return $fields->toArray();
+	}
+
+	/**
+	 * @param string $currentModelName
+	 * @return array<string, mixed>
+	 */
+	public function pagination(string $currentModelName): array {
+		try {
+			$model = TableRegistry::getTableLocator()->get($currentModelName);
+			$tableSchema = $model->getSchema();
+
+			$fields = ['published', 'created', 'modified'];
+			foreach ($fields as $field) {
+				if ($tableSchema->hasColumn($field)) {
+					return ['order' => [$currentModelName . '.created' => 'DESC']];
+				}
+			}
+		} catch (\Throwable) {
+			// ignore
+		}
+
+		return [];
 	}
 
 }

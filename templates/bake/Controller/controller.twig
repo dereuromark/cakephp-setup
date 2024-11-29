@@ -38,6 +38,14 @@
  */
 class {{ name }}Controller extends AppController
 {
+{% set pagination = SetupBake.pagination(currentModelName) %}
+{% if pagination %}
+    /**
+    * @var array<string, mixed>
+    */
+    protected array $paginate = {{ Bake.exportArray(pagination, 1)|raw }};
+
+{% endif %}
 {% if components or helpers %}
     /**
      * Initialize controller
