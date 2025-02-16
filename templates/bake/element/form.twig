@@ -13,7 +13,7 @@
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-{% set fields = SetupBake.filterFields(fields, schema, modelObject) %}
+{% set fields = SetupBake.filterFields(fields, schema, modelObject, 0, [], 'form') %}
 <div class="row">
     <aside class="column large-3 medium-4 columns col-sm-4 col-12">
         <ul class="side-nav nav nav-pills flex-column">

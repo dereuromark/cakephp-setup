@@ -9,7 +9,7 @@
 
 	<h1>ENV config</h1>
 
-	<table class="table" width="">
+	<table class="table">
 		<tr>
 			<th>ENV</th><th>Value defined</th>
 		</tr>
