@@ -5,6 +5,7 @@ namespace Setup;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Routing\RouteBuilder;
+use Setup\Command\CliTestCommand;
 use Setup\Command\CurrentConfigConfigureCommand;
 use Setup\Command\CurrentConfigDisplayCommand;
 use Setup\Command\CurrentConfigPhpinfoCommand;
@@ -16,10 +17,12 @@ use Setup\Command\DbIntegrityConstraintsCommand;
 use Setup\Command\DbIntegrityIntsCommand;
 use Setup\Command\DbIntegrityKeysCommand;
 use Setup\Command\DbIntegrityNullsCommand;
+use Setup\Command\MailCheckCommand;
 use Setup\Command\MaintenanceModeActivateCommand;
 use Setup\Command\MaintenanceModeDeactivateCommand;
 use Setup\Command\MaintenanceModeStatusCommand;
 use Setup\Command\MaintenanceModeWhitelistCommand;
+use Setup\Command\ResetCommand;
 use Setup\Command\UserCreateCommand;
 use Setup\Command\UserUpdateCommand;
 
@@ -60,6 +63,10 @@ class SetupPlugin extends BasePlugin {
 
 		$commands->add('user create', UserCreateCommand::class);
 		$commands->add('user update', UserUpdateCommand::class);
+
+		$commands->add('reset', ResetCommand::class);
+		$commands->add('mail_check', MailCheckCommand::class);
+		$commands->add('cli_test', CliTestCommand::class);
 
 		return $commands;
 	}
