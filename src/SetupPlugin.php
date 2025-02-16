@@ -39,7 +39,6 @@ class SetupPlugin extends BasePlugin {
 	 * @return \Cake\Console\CommandCollection
 	 */
 	public function console(CommandCollection $commands): CommandCollection {
-		$commands = parent::console($commands);
 		$commands->add('maintenance_mode status', MaintenanceModeStatusCommand::class);
 		$commands->add('maintenance_mode activate', MaintenanceModeActivateCommand::class);
 		$commands->add('maintenance_mode deactivate', MaintenanceModeDeactivateCommand::class);
