@@ -136,8 +136,7 @@ class SetupBakeHelper extends BakeHelper {
 	 * @param \Cake\ORM\Table|null $modelObject
 	 * @return array
 	 */
-	public function getViewFieldsData(array $fields, SchemaInterface $schema, array $associations, ?Table $modelObject = null): array
-	{
+	public function getViewFieldsData(array $fields, SchemaInterface $schema, array $associations, ?Table $modelObject = null): array {
 		$fields = $this->filterFields($fields, $schema, $modelObject, 0, [], 'view');
 
 		return parent::getViewFieldsData($fields, $schema, $associations);

@@ -7,6 +7,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
+use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ModelAwareTrait;
 use Cake\Utility\Inflector;
 
@@ -55,7 +56,8 @@ class UserCreateCommand extends Command {
 			$password = $io->ask('Password');
 		}
 
-		if ($schema->getColumn('role_id')) {
+		$roleField = $this->findRoleField($schema);
+		if ($roleField) {
 			//TODO
 			/*
 			if (isset($Users->Roles) && is_object($Users->Roles)) {
@@ -89,11 +91,11 @@ class UserCreateCommand extends Command {
 			$roleIds = array_values($roles);
 
 			$io->out(print_r($roles, true));
-			while (!empty($roles) && empty($role)) {
+			while ($roles && empty($role)) {
 				$role = $io->askChoice('Role', $roleIds);
 			}
 
-			if (empty($roles)) {
+			if (!$roles) {
 				$io->out('No Role found (either no table, or no data)');
 				$role = $io->ask('Please insert a role id manually');
 			}
@@ -115,7 +117,7 @@ class UserCreateCommand extends Command {
 		$data[$displayField] = $displayFieldValue;
 
 		if (!empty($role)) {
-			$data['role_id'] = $role;
+			$data[$roleField] = $role;
 		}
 
 		$userEntity = CLASS_USER;
@@ -184,6 +186,21 @@ Make sure you configured the Passwordable behavior accordingly as per docs.')
 				'help' => 'Dry run the command, no data will actually be created.',
 				'boolean' => true,
 			]);
+	}
+
+	/**
+	 * @param \Cake\Database\Schema\TableSchemaInterface $schema
+	 * @return string|null
+	 */
+	protected function findRoleField(TableSchemaInterface $schema): ?string {
+		if ($schema->getColumn('role_id')) {
+			return 'role_id';
+		}
+		if ($schema->getColumn('role')) {
+			return 'role';
+		}
+
+		return null;
 	}
 
 }
