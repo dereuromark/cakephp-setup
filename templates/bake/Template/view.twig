@@ -20,7 +20,7 @@
  */
 ?>
 {% set associations = {'BelongsTo': [], 'HasOne': [], 'HasMany': [], 'BelongsToMany': []}|merge(associations) %}
-{% set fieldsData = Bake.getViewFieldsData(fields, schema, associations) %}
+{% set fieldsData = SetupBake.getViewFieldsData(fields, schema, associations, modelObject) %}
 {% set associationFields = fieldsData.associationFields %}
 {% set groupedFields = fieldsData.groupedFields %}
 {% set pK = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}

@@ -128,6 +128,22 @@ class SetupBakeHelper extends BakeHelper {
 	}
 
 	/**
+	 * Get fields data for view template.
+	 *
+	 * @param array $fields Fields list.
+	 * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
+	 * @param array $associations Associations data.
+	 * @param \Cake\ORM\Table|null $modelObject
+	 * @return array
+	 */
+	public function getViewFieldsData(array $fields, SchemaInterface $schema, array $associations, ?Table $modelObject = null): array
+	{
+		$fields = $this->filterFields($fields, $schema, $modelObject, 0, [], 'view');
+
+		return parent::getViewFieldsData($fields, $schema, $associations);
+	}
+
+	/**
 	 * Return list of fields to generate controls for.
 	 *
 	 * @param array $fields Fields list.
