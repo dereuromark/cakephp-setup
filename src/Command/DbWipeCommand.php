@@ -6,7 +6,6 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Setup\Command\Traits\DbBackupTrait;
 use Setup\Command\Traits\DbToolsTrait;
 
 /**
@@ -18,7 +17,6 @@ use Setup\Command\Traits\DbToolsTrait;
 class DbWipeCommand extends Command {
 
 	use DbToolsTrait;
-	use DbBackupTrait;
 
 	/**
 	 * @var \Cake\Console\Arguments
