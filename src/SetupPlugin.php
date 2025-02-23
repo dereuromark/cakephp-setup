@@ -17,6 +17,8 @@ use Setup\Command\DbIntegrityConstraintsCommand;
 use Setup\Command\DbIntegrityIntsCommand;
 use Setup\Command\DbIntegrityKeysCommand;
 use Setup\Command\DbIntegrityNullsCommand;
+use Setup\Command\DbResetCommand;
+use Setup\Command\DbWipeCommand;
 use Setup\Command\MailCheckCommand;
 use Setup\Command\MaintenanceModeActivateCommand;
 use Setup\Command\MaintenanceModeDeactivateCommand;
@@ -51,6 +53,9 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('current_config configure', CurrentConfigConfigureCommand::class);
 		$commands->add('current_config validate', CurrentConfigValidateCommand::class);
 		$commands->add('current_config phpinfo', CurrentConfigPhpinfoCommand::class);
+
+		$commands->add('db reset', DbResetCommand::class);
+		$commands->add('db wipe', DbWipeCommand::class);
 
 		$commands->add('db_integrity keys', DbIntegrityKeysCommand::class);
 		$commands->add('db_integrity constraints', DbIntegrityConstraintsCommand::class);

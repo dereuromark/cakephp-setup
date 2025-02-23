@@ -21,6 +21,18 @@ So if you are only interested in your `xdebug` settings for CLI:
 
 Very useful and quicker than any other lookup on CLI.
 
+
+## DB
+
+### Reset
+Remove all content from tables, excluding the phinx migration tables.
+Careful, make sure to have a backup before doing this.
+
+### Wipe
+Hard-reset the DB, dropping all tables.
+Careful, make sure to have a backup before doing this.
+
+
 ## DB Integrity
 
 ### Keys
