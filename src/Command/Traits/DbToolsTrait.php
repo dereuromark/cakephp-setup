@@ -15,13 +15,15 @@ use Shim\Filesystem\Folder;
 trait DbToolsTrait {
 
 	/**
-	 * @param string $name
+	 * @param string|null $name
 	 *
 	 * @return \Cake\Database\Connection
 	 */
-	protected function _getConnection(string $name = 'default') {
+	protected function _getConnection(?string $name = null) {
 		if (!empty($this->params['connection'])) {
 			$name = $this->params['connection'];
+		} elseif ($name === null) {
+			$name = 'default';
 		}
 
 		/** @var \Cake\Database\Connection $connection */
@@ -32,11 +34,12 @@ trait DbToolsTrait {
 
 	/**
 	 * @param string $prefix
+	 * @param string|null $connection
 	 *
 	 * @return array<string>
 	 */
-	protected function _getTables(string $prefix = ''): array {
-		$db = $this->_getConnection();
+	protected function _getTables(string $prefix = '', ?string $connection = null): array {
+		$db = $this->_getConnection($connection ?? 'default');
 		$config = $db->config();
 		$database = $config['database'];
 

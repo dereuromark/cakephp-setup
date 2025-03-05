@@ -46,7 +46,7 @@ class DbWipeCommand extends Command {
 		$this->args = $args;
 		$this->io = $io;
 
-		$db = $this->_getConnection();
+		$db = $this->_getConnection((string)$args->getOption('connection'));
 
 		/** @var \Cake\Database\Schema\Collection $schemaCollection */
 		$schemaCollection = $db->getSchemaCollection();
@@ -94,6 +94,11 @@ SQL;
 				'short' => 'f',
 				'help' => 'Force the command, do not ask for confirmation.',
 				'boolean' => true,
+			],
+			'connection' => [
+				'short' => 'c',
+				'help' => 'The datasource connection to use.',
+				'default' => 'default',
 			],
 		];
 
