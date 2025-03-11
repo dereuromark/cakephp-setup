@@ -78,6 +78,9 @@ class DbBackupCreateCommand extends Command {
 			'--databases ' . $config['database'],
 			'--no-create-db',
 		];
+		if ($args->getOption('no-data')) {
+			$optionStrings[] = '--no-data';
+		}
 
 		/** @var \Cake\Database\Schema\Collection $schemaCollection */
 		$schemaCollection = $db->getSchemaCollection();
@@ -197,6 +200,11 @@ class DbBackupCreateCommand extends Command {
 			'reset' => [
 				'short' => 'r',
 				'help' => 'Remove all existing backup files in the process.',
+				'boolean' => true,
+			],
+			'no-data' => [
+				'short' => 'n',
+				'help' => 'Only schema, no data.',
 				'boolean' => true,
 			],
 		];
