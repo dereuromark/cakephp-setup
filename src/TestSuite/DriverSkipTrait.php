@@ -14,9 +14,9 @@ trait DriverSkipTrait {
 	 * @param string $message
 	 * @return void
 	 */
-	protected function skipIfNotDriver($type, $message) {
+	protected function skipIfNotDriver(string $type, string $message = '') {
 		$config = ConnectionManager::getConfig('test');
-		$this->skipIf(strpos($config['driver'], $type) === false);
+		$this->skipIf(strpos($config['driver'], $type) === false, $message);
 	}
 
 	/**
@@ -24,9 +24,9 @@ trait DriverSkipTrait {
 	 * @param string $message
 	 * @return void
 	 */
-	protected function skipIfDriver($type, $message) {
+	protected function skipIfDriver(string $type, string $message = '') {
 		$config = ConnectionManager::getConfig('test');
-		$this->skipIf(strpos($config['driver'], $type) !== false);
+		$this->skipIf(strpos($config['driver'], $type) !== false, $message);
 	}
 
 }

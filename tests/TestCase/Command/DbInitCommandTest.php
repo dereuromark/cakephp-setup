@@ -4,6 +4,7 @@ namespace Setup\Test\TestCase\Command;
 
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Setup\TestSuite\DriverSkipTrait;
 
 /**
  * UserUpdate command test
@@ -11,6 +12,7 @@ use Cake\TestSuite\TestCase;
 class DbInitCommandTest extends TestCase {
 
 	use ConsoleIntegrationTestTrait;
+	use DriverSkipTrait;
 
 	/**
 	 * @return void
@@ -23,6 +25,8 @@ class DbInitCommandTest extends TestCase {
 	 * @return void
 	 */
 	public function testInit() {
+		$this->skipIfNotDriver('Sqlite');
+
 		$this->exec('db init');
 
 		$this->assertErrorContains('Using in-memory database, skipping');
