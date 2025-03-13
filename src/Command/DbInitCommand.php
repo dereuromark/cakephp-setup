@@ -57,10 +57,10 @@ class DbInitCommand extends Command {
 		}
 
 		$dsn = Text::insert('{scheme}://{username}:{password}@{host}', $config, ['before' => '{', 'after' => '}']);
-		ConnectionManager::setConfig('tmp', ['url' => $dsn]);
+		ConnectionManager::setConfig('setup', ['url' => $dsn]);
 
 		/** @var \Cake\Database\Connection $connection */
-		$connection = ConnectionManager::get('tmp');
+		$connection = ConnectionManager::get('setup');
 		$connection->execute('CREATE DATABASE IF NOT EXISTS ' . $config['database'] . ' ' .
 			'DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;');
 
