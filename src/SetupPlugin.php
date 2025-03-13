@@ -12,6 +12,7 @@ use Setup\Command\CurrentConfigPhpinfoCommand;
 use Setup\Command\CurrentConfigValidateCommand;
 use Setup\Command\DbBackupCreateCommand;
 use Setup\Command\DbBackupRestoreCommand;
+use Setup\Command\DbInitCommand;
 use Setup\Command\DbIntegrityBoolsCommand;
 use Setup\Command\DbIntegrityConstraintsCommand;
 use Setup\Command\DbIntegrityIntsCommand;
@@ -54,6 +55,7 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('current_config validate', CurrentConfigValidateCommand::class);
 		$commands->add('current_config phpinfo', CurrentConfigPhpinfoCommand::class);
 
+		$commands->add('db init', DbInitCommand::class);
 		$commands->add('db reset', DbResetCommand::class);
 		$commands->add('db wipe', DbWipeCommand::class);
 

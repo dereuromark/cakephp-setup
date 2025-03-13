@@ -24,12 +24,26 @@ Very useful and quicker than any other lookup on CLI.
 
 ## DB
 
+### Init
+Init the DB.
+```bash
+bin/cake db init
+```
+
 ### Reset
 Remove all content from tables, excluding the phinx migration tables.
+```bash
+bin/cake db reset
+```
+
 Careful, make sure to have a backup before doing this.
 
 ### Wipe
 Hard-reset the DB, dropping all tables.
+```bash
+bin/cake db wipe
+```
+
 Careful, make sure to have a backup before doing this.
 
 
