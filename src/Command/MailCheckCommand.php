@@ -46,7 +46,7 @@ TXT;
 
 		$result = $email->deliver($message);
 		$io->verbose('Result:');
-		$io->verbose(json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+		$io->verbose((string)json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
 		return static::CODE_SUCCESS;
 	}
