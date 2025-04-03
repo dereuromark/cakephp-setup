@@ -26,6 +26,8 @@ class MailCheckCommand extends Command {
 			Configure::write('Config.live', true);
 		}
 
+		$io->verbose('From email as configured: ' . Configure::read('Config.systemEmail', Configure::read('Config.adminEmail')));
+
 		$to = $io->ask('Email to send to', Configure::read('Config.adminEmail'));
 		if (!$to) {
 			return static::CODE_ERROR;
@@ -42,7 +44,9 @@ A test mail from CLI.
 Example URL: $url
 TXT;
 
-		$email->deliver($message);
+		$result = $email->deliver($message);
+		$io->verbose('Result:');
+		$io->verbose(json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
 		return static::CODE_SUCCESS;
 	}
