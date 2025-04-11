@@ -34,8 +34,8 @@
 {% set done = [] %}
         </ul>
     </aside>
-    <div class="column-responsive column-80 content large-9 medium-8 col-sm-8 col-xs-12">
-        <div class="{{ pluralVar }} view content">
+    <div class="column-responsive column-80 large-9 medium-8 col-sm-8 col-xs-12">
+        <div class="{{ pluralVar }} view">
             <h2><?= h(${{ singularVar }}->{{ displayField }}) ?></h2>
 
             <table class="table table-striped">
@@ -99,10 +99,11 @@
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
 {% set columnData = Bake.columnData(field, schema) %}
+{% set supportsLabel = Bake.enumSupportsLabel(field, schema) %}
 {% if columnData.null %}
-                <td><?= ${{ singularVar }}->{{ field }} === null ? '' : h(${{ singularVar }}->{{ field }}->label()) ?></td>
+                    <td><?= ${{ singularVar }}->{{ field }} === null ? '' : h(${{ singularVar }}->{{ field }}->{% if supportsLabel %}label(){% else %}value{% endif %}) ?></td>
 {% else %}
-                <td><?= h(${{ singularVar }}->{{ field }}->label()) ?></td>
+                    <td><?= h(${{ singularVar }}->{{ field }}->{% if supportsLabel %}label(){% else %}value{% endif %}) ?></td>
 {% endif %}
                 </tr>
 {% endfor %}
@@ -136,7 +137,7 @@
 {% endif %}
 {% set relations = associations.BelongsToMany|merge(associations.HasMany) %}
 {% for alias, details in relations %}
-{% set otherSingularVar = alias|variable %}
+{% set otherSingularVar = alias|singularize|variable %}
 {% set otherPluralHumanName = details.controller|underscore|humanize %}
             <div class="related">
                 <h4><?= __('Related {{ otherPluralHumanName }}') ?></h4>
@@ -144,15 +145,25 @@
                 <div>
                     <table class="table table-striped">
                         <tr>
+{% set snakeCase = singularVar
+    | replace({'A': '_a', 'B': '_b', 'C': '_c', 'D': '_d', 'E': '_e', 'F': '_f', 'G': '_g', 'H': '_h', 'I': '_i', 'J': '_j', 'K': '_k', 'L': '_l', 'M': '_m', 'N': '_n', 'O': '_o', 'P': '_p', 'Q': '_q', 'R': '_r', 'S': '_s', 'T': '_t', 'U': '_u', 'V': '_v', 'W': '_w', 'X': '_x', 'Y': '_y', 'Z': '_z'})
+    | lower
+%}
+{% set excludeField = snakeCase ~ '_id' %}
+{% set excludeFields = primaryKey|merge([excludeField]) %}
 {% for field in details.fields %}
+{% if field not in excludeFields %}
                             <th><?= __('{{ field|humanize }}') ?></th>
+{% endif %}
 {% endfor %}
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach (${{ singularVar }}->{{ details.property }} as ${{ otherSingularVar }}) : ?>
                         <tr>
 {% for field in details.fields %}
+{% if field not in excludeFields %}
                             <td><?= h(${{ otherSingularVar }}->{{ field }}) ?></td>
+{% endif %}
 {% endfor %}
 {% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
                             <td class="actions">
