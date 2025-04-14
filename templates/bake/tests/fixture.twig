@@ -67,7 +67,7 @@ class {{ name }}Fixture extends TestFixture
      */
     public function init(): void
     {
-        $this->records = {{ records|raw }};
+        $this->records = {{ SetupBake.fixtureRecords(records)|raw }};
         parent::init();
     }
 {% endif %}
