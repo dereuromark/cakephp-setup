@@ -214,7 +214,7 @@ class SetupBakeHelper extends BakeHelper {
 	 * @return string
 	 */
 	public function fixtureRecords(string $records): string {
-		return preg_replace("/\s*'id'\s*=>\s*\d+,/", '', $records);
+		return (string)preg_replace("/\s*'id'\s*=>\s*\d+,/", '', $records);
 	}
 
 }
