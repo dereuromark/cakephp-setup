@@ -27,7 +27,7 @@
         </li>
     </ul>
 </nav>
-<div class="{{ pluralVar }} index content large-9 medium-8 columns col-sm-8 col-12">
+<div class="{{ pluralVar }} index col-sm-8 col-12">
 {% set fields = SetupBake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text'], 'index') %}
 
 {% set done = [] %}
