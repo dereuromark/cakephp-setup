@@ -119,6 +119,16 @@ To update existing user you can use:
 
 - `bin/cake user update [user]`
 
+If you need to provide some custom defaults, you can use a callback.
+Set it in your app.php as:
+```php
+    'UserCreate.callable' => function (User $user): User {
+        ...
+
+        return $user;
+    },
+```
+
 ### Reset
 Lets you reset all emails or passwords, this is very useful when copying live data dumps to your local dev
 environment. Afterward you can login with `123` for any user, when resetting the passwords to this value, for example.

@@ -151,10 +151,28 @@ class UserCreateCommand extends Command {
 			}
 		}
 
+		$schemaColumns = $schema->columns();
+		foreach ($schemaColumns as $schemaColumn) {
+			$definition = $schema->getColumn($schemaColumn);
+			if (!$definition) {
+				continue;
+			}
+			if ($definition['null'] || !empty($definition['autoIncrement']) || isset($data[$schemaColumn])) {
+				continue;
+			}
+
+			$data[$schemaColumn] = $definition['default'] ?? '';
+		}
+
 		$io->out();
 		$io->hr();
 		/** @var \App\Model\Entity\User $user */
 		$user = $Users->newEntity($data, ['validate' => false]);
+		$callable = Configure::read('UserCreate.callable');
+		if ($callable instanceof \Closure) {
+			$user = $callable($user);
+		}
+
 		if ($args->getOption('dry-run')) {
 			$io->out('User dry-run inserted! Data: ' . print_r($user->toArray(), true));
 
