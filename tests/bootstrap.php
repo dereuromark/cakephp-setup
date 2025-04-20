@@ -40,6 +40,8 @@ define('TESTS', ROOT . DS . 'tests' . DS);
 
 define('CONFIG', TESTS . 'config' . DS);
 
+require ROOT . DS . 'config' . DS . 'bootstrap.php';
+
 if (!defined('TB')) {
 	define('TB', "\t");
 }

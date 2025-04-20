@@ -134,7 +134,6 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 	/**
 	 * Hook action for defining this command's option parser.
 	 *
-	 * @see https://book.cakephp.org/4/en/console-commands/commands.html#defining-arguments-and-options
 	 * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
 	 * @return \Cake\Console\ConsoleOptionParser The built parser.
 	 */

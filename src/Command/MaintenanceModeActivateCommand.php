@@ -43,25 +43,19 @@ class MaintenanceModeActivateCommand extends Command {
 	 * @return int|null|void The exit code or null for success
 	 */
 	public function execute(Arguments $args, ConsoleIo $io) {
-		$duration = (int)$args->getOption('duration');
-		$this->Maintenance->setMaintenanceMode($duration);
+		$this->Maintenance->setMaintenanceMode(true);
+
 		$io->out('Maintenance mode activated ...');
 	}
 
 	/**
 	 * Hook action for defining this command's option parser.
 	 *
-	 * @see https://book.cakephp.org/4/en/console-commands/commands.html#defining-arguments-and-options
 	 * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
 	 * @return \Cake\Console\ConsoleOptionParser The built parser.
 	 */
 	protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser {
 		$parser = parent::buildOptionParser($parser);
-
-		$parser->addOption('duration', [
-			'short' => 'd',
-			'help' => 'Duration in minutes - optional.',
-		]);
 
 		return $parser;
 	}

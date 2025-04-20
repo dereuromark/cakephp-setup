@@ -42,17 +42,11 @@ class MaintenanceModeDeactivateCommand extends Command {
 	public function execute(Arguments $args, ConsoleIo $io) {
 		$this->Maintenance->setMaintenanceMode(false);
 		$io->out('Maintenance mode deactivated ...');
-
-		if ($args->getOption('force')) {
-			$this->Maintenance->clearWhitelist();
-			$io->out('Whitelist cleared ...');
-		}
 	}
 
 	/**
 	 * Hook action for defining this command's option parser.
 	 *
-	 * @see https://book.cakephp.org/4/en/console-commands/commands.html#defining-arguments-and-options
 	 * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
 	 * @return \Cake\Console\ConsoleOptionParser The built parser.
 	 */

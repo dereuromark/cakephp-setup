@@ -254,18 +254,16 @@ class SetupComponent extends Component {
 	 * @param bool $maintenance
 	 * @return bool Success
 	 */
-	public function setMaintenance($maintenance) {
+	public function setMaintenance(bool $maintenance): bool {
 		$ip = (string)env('REMOTE_ADDR');
 		// optional length in minutes
-		$length = (int)$this->Controller->getRequest()->getQuery('duration');
+		//$length = (int)$this->Controller->getRequest()->getQuery('duration');
 
 		$Maintenance = new Maintenance();
-		if (!$Maintenance->setMaintenanceMode($maintenance ? $length : false)) {
+		if (!$Maintenance->setMaintenanceMode($maintenance)) {
 			return false;
 		}
-		if (!$Maintenance->whitelist([$ip])) {
-			return false;
-		}
+		$Maintenance->addToWhitelist([$ip]);
 
 		return true;
 	}

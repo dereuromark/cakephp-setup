@@ -2,8 +2,6 @@
 
 namespace Setup\Maintenance;
 
-use Cake\Core\Configure;
-
 /**
  * Handle maintenance / down-time of the application.
  *
@@ -35,32 +33,17 @@ class Maintenance {
 	 * @param string|null $ipAddress If passed it allows access when it matches whitelisted IPs.
 	 * @return bool Success
 	 */
-	public function isMaintenanceMode($ipAddress = null) {
-		if ($ipAddress) {
-			$this->enableDebugModeForWhitelist($ipAddress);
-		}
-
+	public function isMaintenanceMode(?string $ipAddress = null): bool {
 		if (!file_exists($this->file)) {
 			return false;
 		}
 
-		$content = file_get_contents($this->file);
-		if ($content === false) {
-			return false;
-		}
-
-		if ($content > 0 && $content < time()) {
-			$this->setMaintenanceMode(false);
-
-			return false;
-		}
-
 		if ($ipAddress) {
-			$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ipAddress) . '.txt';
-			if (file_exists($file)) {
-				Configure::write('Maintenance.overwrite', $ipAddress);
-
-				return false;
+			$ips = $this->whitelist();
+			foreach ($ips as $ip) {
+				if ($this->ipInRange($ipAddress, $ip)) {
+					return true;
+				}
 			}
 		}
 
@@ -68,30 +51,31 @@ class Maintenance {
 	}
 
 	/**
-	 * @param string $ipAddress
-	 * @return void
+	 * @param string $ip
+	 * @param string $range
+	 * @return bool
 	 */
-	public function enableDebugModeForWhitelist($ipAddress) {
-		if (!$ipAddress) {
-			return;
+	protected function ipInRange(string $ip, string $range): bool {
+		if (!str_contains($range, '/')) {
+			return $ip === $range; // Exact match
 		}
-		$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ipAddress) . '.txt';
-		if (!file_exists($file)) {
-			return;
-		}
-		Configure::write('debug', (bool)file_get_contents($file));
+
+		[$subnet, $bits] = explode('/', $range);
+		$ip = ip2long($ip);
+		$subnet = ip2long($subnet);
+		$mask = -1 << (32 - (int)$bits);
+		$subnet &= $mask; // Network part
+
+		return ($ip & $mask) === $subnet;
 	}
 
 	/**
 	 * Set maintenance mode.
 	 *
-	 * Integer (in minutes) to activate with timeout.
-	 * Using 0 it will have no timeout.
-	 *
-	 * @param int|false $value False to deactivate, or Integer to activate.
+	 * @param bool $value
 	 * @return bool Success
 	 */
-	public function setMaintenanceMode($value) {
+	public function setMaintenanceMode(bool $value): bool {
 		if ($value === false) {
 			if (!file_exists($this->file)) {
 				return true;
@@ -100,62 +84,68 @@ class Maintenance {
 			return unlink($this->file);
 		}
 
-		if ($value) {
-			$value = time() + $value * MINUTE;
-		}
-
-		return (bool)file_put_contents($this->file, $value);
-	}
-
-	/**
-	 * Get the whitelist or add new IPs.
-	 * Note: Expects IPs to be valid.
-	 *
-	 * @param array<string> $newIps IP addressed to be added to the whitelist.
-	 * @param bool $debugMode
-	 * @return array<string>|true Boolean Success for adding, an array of all whitelisted IPs otherwise.
-	 */
-	public function whitelist($newIps = [], bool $debugMode = false) {
-		if ($newIps) {
-			foreach ($newIps as $ip) {
-				$this->_addToWhitelist($ip, $debugMode);
-			}
-
+		if (file_exists($this->file)) {
 			return true;
 		}
 
-		/** @var array<string> $files */
-		$files = glob(TMP . 'maintenanceOverride-*.txt');
-		$ips = [];
-		foreach ($files as $file) {
-			$ip = pathinfo($file, PATHINFO_FILENAME);
-			$ip = substr($ip, strpos($ip, '-') + 1);
-			$ips[] = $this->_unslugIp($ip);
+		return (bool)file_put_contents($this->file, '');
+	}
+
+	/**
+	 * Add new IPs.
+	 * Note: Expects IPs to be valid.
+	 *
+	 * @param array<string> $newIps IP addressed to be added to the whitelist.
+	 * @return void
+	 */
+	public function addToWhitelist(array $newIps = []) {
+		if ($newIps) {
+			foreach ($newIps as $ip) {
+				$this->_addToWhitelist($ip);
+			}
+		}
+	}
+
+	/**
+	 * Get the whitelist
+	 *
+	 * @return array<string>
+	 */
+	public function whitelist(): array {
+		$content = file_get_contents($this->file);
+		if ($content === false) {
+			return [];
 		}
 
-		return $ips;
+		if (empty($content)) {
+			return [];
+		}
+
+		return explode(PHP_EOL, $content);
 	}
 
 	/**
 	 * Clear whitelist. If IPs are passed, only those will be removed, otherwise all.
 	 *
 	 * @param array<string> $ips
-	 * @return bool Success
+	 * @return void
 	 */
-	public function clearWhitelist(array $ips = []): bool {
-		/** @var array<string> $files */
-		$files = glob(TMP . 'maintenanceOverride-*.txt');
-		foreach ($files as $file) {
-			$ip = pathinfo($file, PATHINFO_FILENAME);
-			$ip = substr($ip, strpos($ip, '-') + 1);
-			if (!$ips || in_array($this->_unslugIp($ip), $ips, true)) {
-				if (!unlink($file)) {
-					return false;
-				}
+	public function clearWhitelist(array $ips = []): void {
+		if (!$ips) {
+			file_put_contents($this->file, '');
+
+			return;
+		}
+
+		$whitelistedIps = $this->whitelist();
+		foreach ($whitelistedIps as $k => $ip) {
+			if (in_array($ip, $ips, true)) {
+				unset($whitelistedIps[$k]);
 			}
 		}
 
-		return true;
+		$content = implode(PHP_EOL, $whitelistedIps);
+		file_put_contents($this->file, trim($content));
 	}
 
 	/**
@@ -166,8 +156,15 @@ class Maintenance {
 	 * @return bool Success.
 	 */
 	protected function _addToWhitelist(string $ip, bool $debugMode = false): bool {
-		$file = TMP . 'maintenanceOverride-' . $this->_slugIp($ip) . '.txt';
-		if (!file_put_contents($file, $debugMode)) {
+		$content = '';
+		if (file_exists($this->file)) {
+			$content = (string)file_get_contents($this->file);
+		}
+
+		if (!str_contains($content, $ip)) {
+			$content .= PHP_EOL . $ip;
+		}
+		if (!file_put_contents($this->file, trim($content))) {
 			return false;
 		}
 
@@ -181,7 +178,7 @@ class Maintenance {
 	 * @return string
 	 */
 	protected function _slugIp(string $ip): string {
-		return str_replace(':', '#', $ip);
+		return str_replace([':', '/'], ['#', '_'], $ip);
 	}
 
 	/**
@@ -191,7 +188,7 @@ class Maintenance {
 	 * @return string
 	 */
 	protected function _unslugIp(string $ip): string {
-		return str_replace('#', ':', $ip);
+		return str_replace(['#', '_'], [':', '/'], $ip);
 	}
 
 }

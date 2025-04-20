@@ -7,8 +7,8 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Validation\Validation;
 use Setup\Maintenance\Maintenance;
+use Setup\Utility\Validation;
 
 /**
  * Activate and deactivate "Maintenance Mode" for an application.
@@ -43,13 +43,13 @@ class MaintenanceModeWhitelistCommand extends Command {
 	public function execute(Arguments $args, ConsoleIo $io) {
 		$ip = $args->getArgument('ip');
 		if ($ip) {
-			if (!Validation::ip($ip)) {
-				$io->abort($ip . ' is not a valid IP address.');
+			if (!Validation::ipOrSubnet($ip)) {
+				$io->abort($ip . ' is not a valid IP address or subnet.');
 			}
 			if ($args->getOption('remove')) {
 				$this->Maintenance->clearWhitelist([$ip]);
 			} else {
-				$this->Maintenance->whitelist([$ip], (bool)$args->getOption('debug'));
+				$this->Maintenance->addToWhitelist([$ip]);
 			}
 			$io->out('Done!', 2);
 		} else {
@@ -73,7 +73,6 @@ class MaintenanceModeWhitelistCommand extends Command {
 	/**
 	 * Hook action for defining this command's option parser.
 	 *
-	 * @see https://book.cakephp.org/4/en/console-commands/commands.html#defining-arguments-and-options
 	 * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
 	 * @return \Cake\Console\ConsoleOptionParser The built parser.
 	 */
@@ -81,7 +80,7 @@ class MaintenanceModeWhitelistCommand extends Command {
 		$parser = parent::buildOptionParser($parser);
 
 		$parser->addArgument('ip', [
-			'help' => 'IP address to specify.',
+			'help' => 'IP address (or subnet) to specify.',
 		]);
 
 		$parser->addOption('remove', [
