@@ -33,4 +33,17 @@ class SetupControllerTest extends TestCase {
 		$this->assertResponseCode(200);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testMaintenance() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Setup', 'action' => 'maintenance']);
+
+		$this->assertResponseCode(200);
+	}
+
 }

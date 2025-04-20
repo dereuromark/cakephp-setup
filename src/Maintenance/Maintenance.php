@@ -18,10 +18,16 @@ class Maintenance {
 	/**
 	 * @var string
 	 */
+	public $whitelistFile;
+
+	/**
+	 * @var string
+	 */
 	public $template = 'maintenance.ctp';
 
 	public function __construct() {
 		$this->file = TMP . 'maintenance.txt';
+		$this->whitelistFile = TMP . 'maintenance_whitelist.txt';
 	}
 
 	/**
@@ -30,7 +36,7 @@ class Maintenance {
 	 * If overwritable, it will set Configure value 'Maintenance.overwrite' with the
 	 * corresponding IP so the SetupComponent can trigger a warning message here.
 	 *
-	 * @param string|null $ipAddress If passed it allows access when it matches whitelisted IPs.
+	 * @param string|null $ipAddress If passed, it allows access when it matches whitelisted IPs.
 	 * @return bool Success
 	 */
 	public function isMaintenanceMode(?string $ipAddress = null): bool {
@@ -39,15 +45,25 @@ class Maintenance {
 		}
 
 		if ($ipAddress) {
-			$ips = $this->whitelist();
-			foreach ($ips as $ip) {
-				if ($this->ipInRange($ipAddress, $ip)) {
-					return true;
-				}
-			}
+			return !$this->whitelisted($ipAddress);
 		}
 
 		return true;
+	}
+
+	/**
+	 * @param string $ipAddress
+	 * @return bool
+	 */
+	public function whitelisted(string $ipAddress): bool {
+		$whitelistedIps = $this->whitelist();
+		foreach ($whitelistedIps as $whitelistedIp) {
+			if ($this->ipInRange($ipAddress, $whitelistedIp)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -112,7 +128,11 @@ class Maintenance {
 	 * @return array<string>
 	 */
 	public function whitelist(): array {
-		$content = file_get_contents($this->file);
+		if (!file_exists($this->whitelistFile)) {
+			return [];
+		}
+
+		$content = file_get_contents($this->whitelistFile);
 		if ($content === false) {
 			return [];
 		}
@@ -132,7 +152,9 @@ class Maintenance {
 	 */
 	public function clearWhitelist(array $ips = []): void {
 		if (!$ips) {
-			file_put_contents($this->file, '');
+			if (file_exists($this->whitelistFile)) {
+				unlink($this->whitelistFile);
+			}
 
 			return;
 		}
@@ -145,7 +167,7 @@ class Maintenance {
 		}
 
 		$content = implode(PHP_EOL, $whitelistedIps);
-		file_put_contents($this->file, trim($content));
+		file_put_contents($this->whitelistFile, trim($content));
 	}
 
 	/**
@@ -157,38 +179,18 @@ class Maintenance {
 	 */
 	protected function _addToWhitelist(string $ip, bool $debugMode = false): bool {
 		$content = '';
-		if (file_exists($this->file)) {
-			$content = (string)file_get_contents($this->file);
+		if (file_exists($this->whitelistFile)) {
+			$content = (string)file_get_contents($this->whitelistFile);
 		}
 
 		if (!str_contains($content, $ip)) {
 			$content .= PHP_EOL . $ip;
 		}
-		if (!file_put_contents($this->file, trim($content))) {
+		if (!file_put_contents($this->whitelistFile, trim($content))) {
 			return false;
 		}
 
 		return true;
-	}
-
-	/**
-	 * Handle special chars in IPv6.
-	 *
-	 * @param string $ip
-	 * @return string
-	 */
-	protected function _slugIp(string $ip): string {
-		return str_replace([':', '/'], ['#', '_'], $ip);
-	}
-
-	/**
-	 * Handle special chars in IPv6.
-	 *
-	 * @param string $ip
-	 * @return string
-	 */
-	protected function _unslugIp(string $ip): string {
-		return str_replace(['#', '_'], [':', '/'], $ip);
 	}
 
 }

@@ -85,7 +85,7 @@ class MaintenanceTest extends TestCase {
 		$result = $this->Maintenance->whitelist();
 		$this->assertNotEmpty($result);
 
-		$result = $this->Maintenance->isMaintenanceMode('5.146.197.255');
+		$result = $this->Maintenance->whitelisted('5.146.197.255');
 		$this->assertTrue($result);
 
 		$this->Maintenance->clearWhitelist(['5.146.197.0/24']);

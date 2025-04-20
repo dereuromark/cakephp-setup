@@ -17,6 +17,14 @@
 		<li><?php echo $this->Html->link('ORM Type Map', ['controller' => 'Backend', 'action' => 'typeMap']); ?></li>
 	</ul>
 
+
+	<h2>Maintenance</h2>
+	<p>
+		<?php
+		echo $this->Html->link('Maintenance Mode', ['action' => 'maintenance']);
+		?>
+	</p>
+
 	<h2>Healthcheck</h2>
 
 	<p>
