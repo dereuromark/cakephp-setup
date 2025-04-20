@@ -19,6 +19,8 @@ class MaintenanceTest extends TestCase {
 		parent::setUp();
 
 		$this->Maintenance = new Maintenance();
+
+		unlink(TMP . 'maintenance.txt');
 	}
 
 	/**
@@ -40,21 +42,14 @@ class MaintenanceTest extends TestCase {
 		$status = $this->Maintenance->isMaintenanceMode();
 		$this->assertFalse($status);
 
-		$this->Maintenance->setMaintenanceMode(0);
+		$this->Maintenance->setMaintenanceMode(true);
 		$status = $this->Maintenance->isMaintenanceMode();
 		$this->assertTrue($status);
 
-		$this->Maintenance->setMaintenanceMode(1);
-		$status = $this->Maintenance->isMaintenanceMode();
-		$this->assertTrue($status);
-
-		$content = file_get_contents(TMP . 'maintenance.txt');
-		$this->assertWithinRange(time() + MINUTE, $content, 2);
+		$this->assertFileExists(TMP . 'maintenance.txt');
 	}
 
 	/**
-	 * MaintenanceLibTest::testWhitelist()
-	 *
 	 * @return void
 	 */
 	public function testWhitelist() {
@@ -62,16 +57,40 @@ class MaintenanceTest extends TestCase {
 		$this->assertEmpty($result);
 
 		$whitelist = ['192.168.0.1'];
-		$result = $this->Maintenance->whitelist($whitelist);
-		$this->assertTrue($result);
+		$this->Maintenance->addToWhitelist($whitelist);
+
+		$result = $this->Maintenance->whitelist();
+		$this->assertNotSame([], $result);
+
+		$this->Maintenance->clearWhitelist(['192.111.111.111']);
+		$result = $this->Maintenance->whitelist();
+
+		$this->assertSame($whitelist, $result);
+
+		$this->Maintenance->clearWhitelist();
+		$result = $this->Maintenance->whitelist();
+		$this->assertSame([], $result);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testWhitelistSubnet() {
+		$result = $this->Maintenance->whitelist();
+		$this->assertEmpty($result);
+
+		$whitelist = ['5.146.197.0/24'];
+		$this->Maintenance->addToWhitelist($whitelist);
 
 		$result = $this->Maintenance->whitelist();
 		$this->assertNotEmpty($result);
 
-		$result = $this->Maintenance->clearWhitelist(['192.111.111.111']);
+		$result = $this->Maintenance->isMaintenanceMode('5.146.197.255');
 		$this->assertTrue($result);
+
+		$this->Maintenance->clearWhitelist(['5.146.197.0/24']);
 		$result = $this->Maintenance->whitelist();
-		$this->assertSame($whitelist, $result);
+		$this->assertSame([], $result);
 
 		$this->Maintenance->clearWhitelist();
 		$result = $this->Maintenance->whitelist();

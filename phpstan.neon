@@ -5,8 +5,6 @@ parameters:
 
 	bootstrapFiles:
 		- %rootDir%/../../../tests/bootstrap.php
-		- %rootDir%/../../../tests/shim.php
-		- %rootDir%/../../../tests/config/bootstrap.php
 	checkMissingIterableValueType: false
 	checkGenericClassInNonGenericObjectType: false
 	reportUnmatchedIgnoredErrors: false
