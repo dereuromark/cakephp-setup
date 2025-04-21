@@ -33,12 +33,12 @@ class CliTestCommand extends Command {
 
 		$arrayUrl = ['controller' => 'Test'];
 		if ($args->getOption('prefix')) {
-			/** @var string $prefix */
+			/** @var non-falsy-string $prefix */
 			$prefix = $args->getOption('prefix');
 			$arrayUrl['prefix'] = $prefix;
 		}
 		if ($args->getOption('plugin')) {
-			/** @var string $plugin */
+			/** @var non-falsy-string $plugin */
 			$plugin = $args->getOption('plugin');
 			$arrayUrl['plugin'] = $plugin;
 		}

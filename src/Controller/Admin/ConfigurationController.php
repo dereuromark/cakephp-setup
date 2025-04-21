@@ -140,8 +140,7 @@ class ConfigurationController extends AppController {
 			//$this->request->data['Form']['format'] = '%A, %B %Y - %H:%M';
 		}
 
-		/** @var string $locales */
-		$locales = 0;
+		$locales = '0';
 		/** @var string $save */
 		$save = setlocale(LC_ALL, $locales);
 		if (WINDOWS) {

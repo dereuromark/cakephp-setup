@@ -41,7 +41,7 @@ class Debug {
 
 		}
 
-		if (is_array($load) && count($load) > 2) {
+		if (count($load) > 2) {
 			return [$load[1], $load[2], $load[3]];
 		}
 

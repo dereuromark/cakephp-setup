@@ -5,17 +5,20 @@ parameters:
 
 	bootstrapFiles:
 		- %rootDir%/../../../tests/bootstrap.php
-	checkMissingIterableValueType: false
-	checkGenericClassInNonGenericObjectType: false
 	reportUnmatchedIgnoredErrors: false
 	earlyTerminatingMethodCalls:
-		Cake\Console\Shell:
+		Cake\Console\BaseCommand:
 			- abort
 	dynamicConstantNames:
 			- WINDOWS
 
 	ignoreErrors:
+		- identifier: missingType.iterableValue
+		- identifier: missingType.generics
+		- identifier: include.fileNotFound
+		- identifier: trait.unused
 		- '#Parameter \#1 \$items of class .+Collection constructor expects iterable, .+StatementInterface given.#'
+		- '#Call to function method\_exists\(\) with .+Entity.+ and .+statuses.+ will always evaluate to true.#'
 		- '#Call to function property\_exists\(\) with .+Table and .+ will always evaluate to false.#'
 		-
 			message: '#If condition is always false.#'
