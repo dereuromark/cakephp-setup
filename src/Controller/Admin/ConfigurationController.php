@@ -3,12 +3,7 @@
 namespace Setup\Controller\Admin;
 
 use App\Controller\AppController;
-use Cake\Collection\Collection;
-use Cake\Event\EventInterface;
-use Cake\I18n\DateTime;
-use PDO;
 use Setup\Utility\Debug;
-use Setup\Utility\System;
 
 /**
  * @property \Tools\Controller\Component\CommonComponent $Common

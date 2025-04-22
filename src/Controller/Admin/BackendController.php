@@ -44,7 +44,6 @@ class BackendController extends AppController {
 		$this->viewBuilder()->setLayout('ajax');
 	}
 
-
 	/**
 	 * @return void
 	 */
