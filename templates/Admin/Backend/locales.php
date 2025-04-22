@@ -32,16 +32,22 @@
 <?php echo $this->Form->submit(__('Submit')); echo $this->Form->end();?>
 
 <h3>System Locales</h3>
-<?php echo pre($systemLocales);?>
+
+	<details>
+		<summary><?= count($systemLocales); ?> locales</summary>
+
+		<?php echo pre($systemLocales);?>
+	</details>
+	<br>
 
 <h3>Tryouts</h3>
 <ul>
 <?php
 	foreach ($localeSettings as $key => $settings) {
 		echo '<li>';
-		echo '<b>' . $key . '</b>' . BR . $settings['res'];
+		echo '<b>' . $key . '</b>' . '<br>' . $settings['res'];
 		echo pre($settings);
-		echo BR . BR . '</li>';
+		echo '<br><br></li>';
 	}
 ?>
 </ul>
