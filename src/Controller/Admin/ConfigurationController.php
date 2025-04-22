@@ -4,10 +4,8 @@ namespace Setup\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Collection\Collection;
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\I18n\DateTime;
-use Cake\ORM\TableRegistry;
 use PDO;
 use Setup\Utility\Debug;
 use Setup\Utility\System;
@@ -78,32 +76,6 @@ class ConfigurationController extends AppController {
 	 */
 	public function phpinfo() {
 		$this->viewBuilder()->setLayout('ajax');
-	}
-
-	/**
-	 * @return \Cake\Http\Response|null|void
-	 */
-	public function session() {
-		$timestamp = $this->request->getSession()->read('Config.time');
-
-		$time = new DateTime($timestamp);
-
-		$sessionConfig = Configure::read('Session');
-		$sessionId = $this->request->getSession()->id();
-		if ($sessionConfig['defaults'] === 'database') {
-			$sessionData = TableRegistry::getTableLocator()->get('Sessions')->get($sessionId);
-			if ($sessionData->get('data') && is_resource($sessionData->get('data'))) {
-				$sessionData->set('data', stream_get_contents($sessionData->get('data')));
-			}
-		} else {
-			$sessionData = [
-				'id' => $sessionId,
-			];
-		}
-
-		$this->set(compact('sessionData'));
-
-		$this->set(compact('time', 'sessionConfig'));
 	}
 
 	/**

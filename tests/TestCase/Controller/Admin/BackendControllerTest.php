@@ -58,6 +58,19 @@ class BackendControllerTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testCookies() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'cookies']);
+
+		$this->assertResponseCode(200);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testCache() {
 		$this->disableErrorHandlerMiddleware();
 

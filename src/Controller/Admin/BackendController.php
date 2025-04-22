@@ -68,6 +68,15 @@ class BackendController extends AppController {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function cookies() {
+		$cookies = $this->request->getCookieCollection();
+
+		$this->set(compact('cookies'));
+	}
+
+	/**
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function cache() {

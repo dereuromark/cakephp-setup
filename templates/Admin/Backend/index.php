@@ -12,6 +12,7 @@
 <ul>
 	<li><?php echo $this->Html->link(__('PHP Info (Full)'), ['action' => 'phpinfo']); ?></li>
 	<li><?php echo $this->Html->link(__('Session'), ['action' => 'session']);?></li>
+	<li><?php echo $this->Html->link(__('Cookies'), ['action' => 'cookies']);?></li>
 	<li><?php echo $this->Html->link(__('Cache'), ['action' => 'cache']);?></li>
 	<li><?php echo $this->Html->link(__('Database Size'), ['action' => 'database']);?></li>
 	<li><?php echo $this->Html->link(__('ENV Config'), ['action' => 'env']);?></li>
