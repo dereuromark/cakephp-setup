@@ -24,6 +24,8 @@ foreach ($cookies->getIterator() as $cookie) {
 
 	echo '<p>';
 	echo 'Expires: ' . ($expireDateTime ? $this->Time->nice($expireDateTime) : 'n/a');
+
+	echo ' ' . $this->Form->postLink('Delete', ['?' => ['cookie' => $cookie->getName()]], ['class' => 'btn btn-danger', 'confirm' => 'Sure?', 'block' => true]);
 	echo '</p>';
 }
 

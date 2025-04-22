@@ -68,10 +68,25 @@ class BackendController extends AppController {
 	}
 
 	/**
-	 * @return void
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function cookies() {
 		$cookies = $this->request->getCookieCollection();
+
+		if ($this->request->is('post')) {
+			$name = $this->request->getQuery('cookie');
+			if (!$this->request->getCookieCollection()->has($name)) {
+				$this->Flash->warning('Cookie already not existing anymore.');
+
+				return $this->redirect([]);
+			}
+			$cookie = $this->request->getCookieCollection()->get($name);
+			$this->response = $this->response->withExpiredCookie($cookie);
+
+			$this->Flash->success('Cookie set as expired.');
+
+			return $this->redirect([]);
+		}
 
 		$this->set(compact('cookies'));
 	}
