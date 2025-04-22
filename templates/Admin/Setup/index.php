@@ -10,12 +10,17 @@
 	<h2>Information</h2>
 	<ul>
 		<li><?php echo $this->Html->link('Configuration', ['controller' => 'Configuration', 'action' => 'index']);?></li>
-		<li><?php echo $this->Html->link('PHP Info', ['controller' => 'Backend', 'action' => 'phpinfo']);?></li>
+		<li><?php echo $this->Html->link('PHP Info (Full)', ['controller' => 'Backend', 'action' => 'phpinfo']);?></li>
 		<li><?php echo $this->Html->link('Session Info', ['controller' => 'Backend', 'action' => 'session']);?></li>
 		<li><?php echo $this->Html->link('Cookie Info', ['controller' => 'Backend', 'action' => 'cookies']);?></li>
 		<li><?php echo $this->Html->link('Cache Info and Testing', ['controller' => 'Backend', 'action' => 'cache']);?></li>
-		<li><?php echo $this->Html->link('Database Info', ['controller' => 'Backend', 'action' => 'database']);?></li>
 		<li><?php echo $this->Html->link('ORM Type Map', ['controller' => 'Backend', 'action' => 'typeMap']); ?></li>
+
+		<li><?php echo $this->Html->link(__('System'), ['controller' => 'Backend', 'action' => 'system']); ?></li>
+		<li><?php echo $this->Html->link(__('Locales'), ['controller' => 'Backend', 'action' => 'locales']);?></li>
+		<li><?php echo $this->Html->link('Database Info', ['controller' => 'Backend', 'action' => 'database']);?></li>
+		<li><?php echo $this->Html->link(__('Disk Space'), ['controller' => 'Backend', 'action' => 'diskSpace']);?></li>
+		<li><?php echo $this->Html->link(__('ENV Config'), ['controller' => 'Backend', 'action' => 'env']);?></li>
 	</ul>
 
 

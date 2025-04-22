@@ -32,20 +32,4 @@ class ConfigurationControllerTest extends TestCase {
 		$this->assertNoRedirect();
 	}
 
-	/**
-	 * @return void
-	 */
-	public function testDatabase() {
-		$this->skipIf(true, '//FIXME');
-
-		$this->disableErrorHandlerMiddleware();
-
-		$this->session(['Auth' => ['User' => ['id' => 1, 'role_id' => 9]]]);
-
-		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Configuration', 'action' => 'database']);
-
-		$this->assertResponseCode(200);
-		$this->assertNoRedirect();
-	}
-
 }

@@ -26,6 +26,16 @@ Details about the current cache config.
 
 See `/admin/setup/backend/cache`.
 
+### Session
+Details about the current session config.
+
+See `/admin/setup/backend/session`.
+
+### Cookies
+Details about the current cookies.
+
+See `/admin/setup/backend/cookies`.
+
 ### Database
 Overview about the current DB tables and size.
 

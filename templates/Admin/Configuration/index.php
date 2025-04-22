@@ -80,12 +80,7 @@ use Setup\Utility\System;
 
 <div class="actions">
 <ul>
-	<li><?php echo $this->Html->link(__('PHP Info (Full)'), ['action' => 'phpinfo']); ?></li>
-	<li><?php echo $this->Html->link(__('System'), ['action' => 'system']); ?></li>
-	<li><?php echo $this->Html->link(__('Session'), ['action' => 'session']);?></li>
-	<li><?php echo $this->Html->link(__('Locales'), ['action' => 'locales']);?></li>
-	<li><?php echo $this->Html->link(__('Disk Space'), ['action' => 'diskSpace']);?></li>
-	<li><?php echo $this->Html->link(__('Database Size'), ['action' => 'database']);?></li>
+
 </ul>
 </div>
 

@@ -5,6 +5,7 @@ namespace Setup\Controller\Admin;
 use App\Controller\AppController;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use PDO;
 
@@ -20,9 +21,7 @@ class DatabaseController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function foreignKeys($table = null) {
-		$Model = TableRegistry::getTableLocator()->get('Sessions');
-		/** @var \Cake\Database\Connection $db */
-		$db = $Model->getConnection();
+		$db = (new Table())->getConnection();
 
 		if (!$table) {
 			$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll(PDO::FETCH_ASSOC);

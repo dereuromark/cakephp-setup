@@ -8,10 +8,13 @@ use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\I18n\DateTime;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use PDO;
 use Setup\Utility\Config;
+use Setup\Utility\Debug;
 use Setup\Utility\OrmTypes;
+use Setup\Utility\System;
 
 class BackendController extends AppController {
 
@@ -39,6 +42,61 @@ class BackendController extends AppController {
 	 */
 	public function phpinfo() {
 		$this->viewBuilder()->setLayout('ajax');
+	}
+
+
+	/**
+	 * @return void
+	 */
+	public function system() {
+		$Debug = new Debug();
+		$uploadLimit = $Debug->uploadMaxSize(true);
+		$postLimit = $Debug->postMaxSize(true);
+		$memoryLimit = $Debug->memoryLimit(true);
+
+		$this->set(compact('uploadLimit', 'postLimit', 'memoryLimit'));
+	}
+
+	/**
+	 * @return \Cake\Http\Response|null|void
+	 */
+	public function locales() {
+		if ($this->request->is('post')) {
+			$dateFormat = $this->request->getData('Form.format');
+			$locale = $this->request->getData('Form.locale');
+			$res = setlocale(LC_TIME, $locale);
+			if ($res === false) {
+				$this->Flash->warning('Locale not supported');
+			}
+			$time = new DateTime();
+			$result = strftime($dateFormat, (int)$time->toUnixString());
+			$this->set(compact('result'));
+		} else {
+			//FIXME
+			//$this->request->data['Form']['format'] = '%A, %B %Y - %H:%M';
+		}
+
+		$locales = '0';
+		/** @var string $save */
+		$save = setlocale(LC_ALL, $locales);
+		if (WINDOWS) {
+			$localeOptions = ['german', 'english', 'french', 'spanish', 'russian', 'austria', 'switzerland', 'turkish']; # windows
+		} else {
+			$localeOptions = ['de_DE.utf8', 'de_CH.utf8', 'de_AT.utf8', 'de_BE.utf8', 'de_LU.utf8', 'de_LI.utf8', 'en_US.utf8', 'en_GB.utf8', 'tr_TR.utf8']; # linux
+		}
+
+		$localeSettings = [];
+		foreach ($localeOptions as $option) {
+			$res = setlocale(LC_ALL, $option);
+			$content = $res === false ? [] : localeconv();
+			$localeSettings[$option] = ['res' => $res, 'content' => $content];
+		}
+
+		$System = new System();
+		$systemLocales = $System->systemLocales();
+		$this->set(compact('localeSettings', 'systemLocales'));
+
+		setlocale(LC_ALL, $save);
 	}
 
 	/**
@@ -124,9 +182,7 @@ class BackendController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function database() {
-		$Model = TableRegistry::getTableLocator()->get(Configure::read('Setup.defaultTable') ?: 'Sessions');
-		/** @var \Cake\Database\Connection $db */
-		$db = $Model->getConnection();
+		$db = (new Table())->getConnection();
 
 		$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll(PDO::FETCH_ASSOC);
 		$dbTables = (new Collection($dbTables))->toArray();

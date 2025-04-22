@@ -1,3 +1,6 @@
 <?php
-	phpinfo(-1);
+/**
+ * @var \App\View\AppView $this
+ */
+phpinfo(-1);
 ?>
