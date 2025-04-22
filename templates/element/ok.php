@@ -17,6 +17,6 @@ if ($this->helpers()->has('Templating')) {
 } elseif ($this->helpers()->has('Format')) {
 	echo $this->Format->ok($value, $ok);
 } else {
-	echo $ok ? '<span class="yes-no yes-no-yes">' . h($value) . '</span>' : '<span class="yes-no yes-no-no">' . h($value) . '</span>';
+	echo $ok ? '<span class="yes-no yes-no-yes">' . ($escape ? h($value) : $value) . '</span>' : '<span class="yes-no yes-no-no">' . ($escape ? h($value) : $value) . '</span>';
 }
 ?>
