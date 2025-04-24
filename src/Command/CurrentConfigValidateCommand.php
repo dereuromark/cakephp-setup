@@ -57,7 +57,8 @@ class CurrentConfigValidateCommand extends Command {
 
 		$configured = Cache::configured();
 		foreach ($configured as $key) {
-			$io->out(print_r(Cache::getConfig($key), true));
+			$io->out($key . ':');
+			$io->out(json_encode(Cache::getConfig($key), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 		}
 
 		return CommandInterface::CODE_SUCCESS;
