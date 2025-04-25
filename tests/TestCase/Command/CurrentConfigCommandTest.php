@@ -50,7 +50,7 @@ class CurrentConfigCommandTest extends TestCase {
 	public function testValidate() {
 		$this->exec('current_config validate');
 		$this->assertOutputContains('[driver]');
-		$this->assertOutputContains('[className]');
+		$this->assertOutputContains('"className"');
 	}
 
 }

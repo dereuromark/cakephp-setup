@@ -20,7 +20,9 @@ class MaintenanceTest extends TestCase {
 
 		$this->Maintenance = new Maintenance();
 
-		unlink(TMP . 'maintenance.txt');
+		if (file_exists(TMP . 'maintenance.txt')) {
+			unlink(TMP . 'maintenance.txt');
+		}
 	}
 
 	/**

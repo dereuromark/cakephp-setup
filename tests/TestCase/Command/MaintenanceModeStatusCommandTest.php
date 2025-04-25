@@ -17,7 +17,9 @@ class MaintenanceModeStatusCommandTest extends TestCase {
 
 		$this->loadPlugins(['Setup']);
 
-		unlink(TMP . 'maintenance.txt');
+		if (file_exists(TMP . 'maintenance.txt')) {
+			unlink(TMP . 'maintenance.txt');
+		}
 	}
 
 	/**
