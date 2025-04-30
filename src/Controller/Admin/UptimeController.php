@@ -14,9 +14,9 @@ class UptimeController extends AppController {
 
 	/**
 	 * @param \Cake\Event\EventInterface $event
-	 * @return \Cake\Http\Response|null|void
+	 * @return void
 	 */
-	public function beforeFilter(EventInterface $event) {
+	public function beforeFilter(EventInterface $event): void {
 		parent::beforeFilter($event);
 
 		if ($this->components()->has('Auth') && method_exists($this->components()->get('Auth'), 'allow')) {

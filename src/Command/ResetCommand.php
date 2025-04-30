@@ -72,7 +72,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		if (empty($this->params['dry-run'])) {
 			$count = $Users->updateAll(['email' => $email . ''], ['email !=' => $email]);
 		} else {
-			$count = $Users->find('all', ['conditions' => [CLASS_USERS . '.email !=' => $email]])->count();
+			$count = $Users->find('all', ...['conditions' => [CLASS_USERS . '.email !=' => $email]])->count();
 		}
 		$io->out($count . ' emails resetted - DONE');
 	}
@@ -126,7 +126,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		if (empty($this->params['dry-run'])) {
 			$count = $Users->updateAll(['password' => $pwd], ['password !=' => $pwd]);
 		} else {
-			$count = $Users->find('all', ['conditions' => [CLASS_USERS . '.password !=' => $pwd]])->count();
+			$count = $Users->find('all', ...['conditions' => [CLASS_USERS . '.password !=' => $pwd]])->count();
 		}
 		$io->out($count . ' pwds resetted - DONE');
 	}

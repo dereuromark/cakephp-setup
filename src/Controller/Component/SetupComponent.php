@@ -59,9 +59,9 @@ class SetupComponent extends Component {
 	/**
 	 * @param \Cake\Event\EventInterface $event
 	 * @throws \Exception
-	 * @return \Cake\Http\Response|null|void
+	 * @return void
 	 */
-	public function beforeFilter(EventInterface $event) {
+	public function beforeFilter(EventInterface $event): void {
 		/** @var \Cake\Controller\Controller $Controller */
 		$Controller = $event->getSubject();
 		$this->Controller = $Controller;
@@ -86,7 +86,7 @@ class SetupComponent extends Component {
 
 		// The following is only allowed with proper clearance
 		if (!$this->isAuthorized()) {
-			return null;
+			return;
 		}
 
 		// maintenance mode
@@ -99,7 +99,9 @@ class SetupComponent extends Component {
 				$this->Controller->Flash->error(__d('setup', 'Maintenance mode not {0}', $mode));
 			}
 
-			return $this->Controller->redirect($this->_cleanedUrl('maintenance'));
+			$event->setResult($this->Controller->redirect($this->_cleanedUrl('maintenance')));
+
+			return;
 		}
 
 		// debug mode
@@ -111,7 +113,9 @@ class SetupComponent extends Component {
 				$this->Controller->Flash->error(__d('setup', 'debug not set'));
 			}
 
-			return $this->Controller->redirect($this->_cleanedUrl('debug'));
+			$event->setResult($this->Controller->redirect($this->_cleanedUrl('debug')));
+
+			return;
 		}
 
 		// clear cache
@@ -125,7 +129,9 @@ class SetupComponent extends Component {
 				$this->Controller->Flash->error(__d('setup', 'cache not cleared'));
 			}
 
-			return $this->Controller->redirect($this->_cleanedUrl('clearcache'));
+			$event->setResult($this->Controller->redirect($this->_cleanedUrl('clearcache')));
+
+			return;
 		}
 
 		// clear session
@@ -136,7 +142,9 @@ class SetupComponent extends Component {
 				$this->Controller->Flash->error(__d('setup', 'session not cleared'));
 			}
 
-			return $this->Controller->redirect($this->_cleanedUrl('clearsession'));
+			$event->setResult($this->Controller->redirect($this->_cleanedUrl('clearsession')));
+
+			return;
 		}
 
 		// layout switch
@@ -146,7 +154,9 @@ class SetupComponent extends Component {
 			$this->setLayout($layout);
 			$this->Controller->Flash->success(__d('setup', 'layout {0} activated', $this->Controller->getRequest()->getQuery('layout')));
 
-			return $this->Controller->redirect($this->_cleanedUrl('layout'));
+			$event->setResult($this->Controller->redirect($this->_cleanedUrl('layout')));
+
+			return;
 		}
 
 		$this->issueMailing();
