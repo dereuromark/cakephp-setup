@@ -155,7 +155,7 @@ class BackendController extends AppController {
 		if ($this->request->is(['post', 'put'])) {
 			/** @var string $cacheKey */
 			$cacheKey = $this->request->getQuery('key');
-			Cache::write('_setup_test_string_' . $cacheKey . '_', time(), $cacheKey);
+			Cache::write('_setup_test_string_', time(), $cacheKey);
 
 			$this->Flash->success('Cache written for config ' . $cacheKey);
 
@@ -171,7 +171,7 @@ class BackendController extends AppController {
 
 		$data = [];
 		foreach ($configured as $name) {
-			$data[$name] = Cache::read('_setup_test_string_' . $name . '_', $name);
+			$data[$name] = Cache::read('_setup_test_string_', $name);
 		}
 
 		$this->set(compact('caches', 'data'));
