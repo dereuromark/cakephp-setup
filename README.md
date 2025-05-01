@@ -10,7 +10,7 @@
 
 Provides useful development tools for managing a CakePHP app.
 
-Note: This branch is for **CakePHP 5.0+**. See [version map](https://github.com/dereuromark/cakephp-setup/wiki#cakephp-version-map) for details.
+Note: This branch is for **CakePHP 5.1+**. See [version map](https://github.com/dereuromark/cakephp-setup/wiki#cakephp-version-map) for details.
 
 ## What is this plugin for?
 This plugin aims to be a help for development of CakePHP applications. It extends and leverages
