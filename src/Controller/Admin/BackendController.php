@@ -15,6 +15,8 @@ use Setup\Utility\Config;
 use Setup\Utility\Debug;
 use Setup\Utility\OrmTypes;
 use Setup\Utility\System;
+use Tools\I18n\DateTime as ToolsDateTime;
+use Tools\Model\Table\TokensTable;
 
 class BackendController extends AppController {
 
@@ -122,6 +124,37 @@ class BackendController extends AppController {
 		$this->set(compact('sessionData'));
 
 		$this->set(compact('time', 'sessionConfig'));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function timezones() {
+		$timezone = date_default_timezone_get();
+
+		$time = class_exists(ToolsDateTime::class) ? new ToolsDateTime() : new DateTime();
+
+		$dateTimeString = '2025-11-06 11:12:13';
+		if (class_exists(TokensTable::class)) {
+			$tokensTable = $this->fetchTable(TokensTable::class);
+
+			$token = $tokensTable->findByTokenKey('timezone_test')->first();
+			if (!$token) {
+				$token = $tokensTable->newEntity([
+					'user_id' => '0',
+					'type' => 'timezone_test',
+					'token_key' => 'timezone_test',
+					'content' => '',
+					'created' => $dateTimeString,
+					'modified' => $dateTimeString,
+				]);
+				$tokensTable->saveOrFail($token);
+			}
+
+			$this->set(compact('token'));
+		}
+
+		$this->set(compact('time', 'timezone', 'dateTimeString'));
 	}
 
 	/**
