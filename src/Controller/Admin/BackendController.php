@@ -127,7 +127,7 @@ class BackendController extends AppController {
 	}
 
 	/**
-	 * @return void
+	 * @return \Cake\Http\Response|null|void
 	 */
 	public function timezones() {
 		$timezone = date_default_timezone_get();
@@ -150,6 +150,19 @@ class BackendController extends AppController {
 				]);
 				$tokensTable->saveOrFail($token);
 			}
+
+			if ($this->request->is(['post', 'put'])) {
+				$token = $tokensTable->patchEntity($token, $this->request->getData());
+				/** @var \Cake\I18n\DateTime $dateTime */
+				$dateTime = $token->created;
+				$tokensTable->saveOrFail($token);
+
+				$this->Flash->info('Stored in UTC as ' . $dateTime->format('Y-m-d H:i:s'));
+
+				return $this->redirect([]);
+			}
+
+			$dateTimeString = $token->created->format('Y-m-d H:i:s');
 
 			$this->set(compact('token'));
 		}
