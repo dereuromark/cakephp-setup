@@ -2,6 +2,7 @@
 
 namespace Setup\Panel;
 
+use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Event\EventInterface;
 use Cake\I18n\Date;
@@ -57,6 +58,11 @@ class L10nPanel extends DebugPanel {
 				'time' => new Time(),
 				'time-noon' => Time::noon(),
 				'time-midnight' => Time::midnight(),
+			],
+			'timezone' => [
+				'default' => Configure::read('App.defaultTimezone'),
+				'output' => Configure::read('App.defaultOutputTimezone'),
+				'current' => date_default_timezone_get(),
 			],
 			'currency' => [
 				'default currency' => Number::getDefaultCurrency(),

@@ -2,6 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var array<string, mixed> $values
+ * @var array<string, string> $timezone
  * @var array<string, string> $currency
  * @var array<string, mixed> $messages
  */
@@ -9,6 +10,15 @@
 
 <section class="section-tile">
 	<h1>Localization</h1>
+
+	<h2>Timezone</h2>
+	<ul>
+		<li>Default: <?php echo h($timezone['default']); ?></li>
+		<?php if ($timezone['output'] !== null) { ?>
+			<li>Output: <?php echo h($timezone['output']); ?></li>
+		<?php } ?>
+		<li>Current: <?php echo h($timezone['current']); ?></li>
+	</ul>
 
 	<h2>Datetime/Date/Time</h2>
 
