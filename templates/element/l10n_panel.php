@@ -36,12 +36,6 @@
 			App.defaultLocale: <code><?php echo h(\Cake\Core\Configure::read('App.defaultLocale')); ?></code>
 		</li>
 		<li>
-			App.defaultTimezone: <code><?php echo h(\Cake\Core\Configure::read('App.defaultTimezone')); ?></code>
-		</li>
-		<li>
-			date_default_timezone_get(): <code><?php echo h(date_default_timezone_get()); ?></code>
-		</li>
-		<li>
 			ini_get('intl.default_locale'): <code><?php echo h(ini_get('intl.default_locale')); ?></code>
 		</li>
 		<li>
