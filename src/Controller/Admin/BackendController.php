@@ -138,8 +138,10 @@ class BackendController extends AppController {
 		if (class_exists(TokensTable::class)) {
 			$tokensTable = $this->fetchTable(TokensTable::class);
 
-			$token = $tokensTable->findByTokenKey('timezone_test')->first();
+			/** @var \Tools\Model\Entity\Token|null $token */
+			$token = $tokensTable->find()->where(['token_key' => 'timezone_test'])->first();
 			if (!$token) {
+				/** @var \Tools\Model\Entity\Token $token */
 				$token = $tokensTable->newEntity([
 					'user_id' => '0',
 					'type' => 'timezone_test',
@@ -152,8 +154,8 @@ class BackendController extends AppController {
 			}
 
 			if ($this->request->is(['post', 'put'])) {
+				/** @var \Tools\Model\Entity\Token $token */
 				$token = $tokensTable->patchEntity($token, $this->request->getData());
-				/** @var \Cake\I18n\DateTime $dateTime */
 				$dateTime = $token->created;
 				$tokensTable->saveOrFail($token);
 
