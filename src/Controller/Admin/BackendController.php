@@ -15,6 +15,8 @@ use Setup\Utility\Config;
 use Setup\Utility\Debug;
 use Setup\Utility\OrmTypes;
 use Setup\Utility\System;
+use Tools\I18n\DateTime as ToolsDateTime;
+use Tools\Model\Table\TokensTable;
 
 class BackendController extends AppController {
 
@@ -122,6 +124,52 @@ class BackendController extends AppController {
 		$this->set(compact('sessionData'));
 
 		$this->set(compact('time', 'sessionConfig'));
+	}
+
+	/**
+	 * @return \Cake\Http\Response|null|void
+	 */
+	public function timezones() {
+		$timezone = date_default_timezone_get();
+
+		$time = class_exists(ToolsDateTime::class) ? new ToolsDateTime() : new DateTime();
+
+		$dateTimeString = '2025-11-06 11:12:13';
+		if (class_exists(TokensTable::class)) {
+			$tokensTable = $this->fetchTable(TokensTable::class);
+
+			/** @var \Tools\Model\Entity\Token|null $token */
+			$token = $tokensTable->find()->where(['token_key' => 'timezone_test'])->first();
+			if (!$token) {
+				/** @var \Tools\Model\Entity\Token $token */
+				$token = $tokensTable->newEntity([
+					'user_id' => '0',
+					'type' => 'timezone_test',
+					'token_key' => 'timezone_test',
+					'content' => '',
+					'created' => $dateTimeString,
+					'modified' => $dateTimeString,
+				]);
+				$tokensTable->saveOrFail($token);
+			}
+
+			if ($this->request->is(['post', 'put'])) {
+				/** @var \Tools\Model\Entity\Token $token */
+				$token = $tokensTable->patchEntity($token, $this->request->getData());
+				$dateTime = $token->created;
+				$tokensTable->saveOrFail($token);
+
+				$this->Flash->info('Stored in UTC as ' . $dateTime->format('Y-m-d H:i:s'));
+
+				return $this->redirect([]);
+			}
+
+			$dateTimeString = $token->created->format('Y-m-d H:i:s');
+
+			$this->set(compact('token'));
+		}
+
+		$this->set(compact('time', 'timezone', 'dateTimeString'));
 	}
 
 	/**
