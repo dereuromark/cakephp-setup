@@ -170,7 +170,7 @@ class SetupComponent extends Component {
 	 * @param \Cake\Event\EventInterface $event
 	 * @return void
 	 */
-	public function startup(EventInterface $event) {
+	public function startup(EventInterface $event): void {
 		$layout = $this->getController()->getRequest()->getSession()->read('Setup.layout');
 		if ($layout) {
 			$this->Controller->viewBuilder()->setLayout($layout);

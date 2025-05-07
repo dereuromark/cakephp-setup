@@ -95,7 +95,7 @@ if (!function_exists('vdd')) {
 }
 
 if (PHP_SAPI === 'cli') {
-	EventManager::instance()->on('Bake.initialize', function (EventInterface $event) {
+	EventManager::instance()->on('Bake.initialize', function (EventInterface $event): void {
 		$event->getSubject()->loadHelper('Setup.SetupBake');
 	});
 }
