@@ -5,6 +5,7 @@
  * @var \Cake\I18n\DateTime $time
  * @var string $timezone
  * @var \Tools\Model\Entity\Token|null $token
+ * @var array<string, mixed>|null $tokenRaw
  * @var string|null $dateTimeString
  */
 
@@ -26,7 +27,7 @@
 	<?php if (isset($token)) { ?>
 	<h3>Database</h3>
 
-		<p>String: <code><?php echo h($dateTimeString); ?></code></p>
+		<p>String in DB: <code><?php echo !empty($tokenRaw) ? h($tokenRaw['Tokens__created']) : h($dateTimeString); ?></code></p>
 
 		<ul>
 			<li>

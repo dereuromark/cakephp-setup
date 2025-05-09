@@ -153,6 +153,22 @@ class BackendController extends AppController {
 				$tokensTable->saveOrFail($token);
 			}
 
+			$sql = <<<SQL
+SELECT
+  `Tokens`.`id` AS `Tokens__id`,
+  `Tokens`.`created` AS `Tokens__created`,
+  `Tokens`.`modified` AS `Tokens__modified`
+FROM
+  `tokens` `Tokens`
+WHERE
+  `token_key` = 'timezone_test'
+ORDER BY
+  `Tokens`.`created` DESC
+LIMIT
+  1
+SQL;
+			$tokenRaw = $tokensTable->getConnection()->execute($sql)->fetchAssoc();
+
 			if ($this->request->is(['post', 'put'])) {
 				/** @var \Tools\Model\Entity\Token $token */
 				$token = $tokensTable->patchEntity($token, $this->request->getData());
@@ -166,7 +182,7 @@ class BackendController extends AppController {
 
 			$dateTimeString = $token->created->format('Y-m-d H:i:s');
 
-			$this->set(compact('token'));
+			$this->set(compact('token', 'tokenRaw'));
 		}
 
 		$this->set(compact('time', 'timezone', 'dateTimeString'));
