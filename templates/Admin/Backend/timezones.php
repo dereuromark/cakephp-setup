@@ -21,9 +21,6 @@
 		<li>
 			Default string cast: <?php echo h($time); ?>
 		</li>
-		<li>
-			localDate(): <?php echo $this->Time->localDate($time); ?>
-		</li>
 	</ul>
 
 	<?php if (isset($token)) { ?>
@@ -39,10 +36,7 @@
 				format(): <?php echo $this->Time->format($token->created); ?> (<?php echo h($token->created->timezone->getName()); ?>)
 			</li>
 			<li>
-				niceDate(): <?php echo $this->Time->niceDate($token->created); ?> (<?php echo h($token->created->timezone->getName()); ?>)
-			</li>
-			<li>
-				localDate(): <?php echo $this->Time->localDate($token->created); ?> (<?php echo \Cake\Core\Configure::read('App.defaultOutputTimezone'); ?>)
+				Tools.niceDate(): <?php echo $this->Time->niceDate($token->created); ?> (<?php echo h($token->created->timezone->getName()); ?>)
 			</li>
 		</ul>
 
