@@ -60,6 +60,8 @@
 
 		<?php echo $this->Form->submit(__('Submit')); echo $this->Form->end();?>
 
-	<?php } ?>
+	<?php } else {
+		echo '<i>Add Tools plugin to see how forms interact with timezone config.</i>';
+	} ?>
 
 </div>
