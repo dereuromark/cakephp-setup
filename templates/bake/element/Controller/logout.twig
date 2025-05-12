@@ -14,9 +14,11 @@
  */
 #}
     /**
-     * @return \Cake\Http\Response|null|void Redirects to logout URL
+     * @return \Cake\Http\Response|null
      */
     public function logout()
     {
-        return $this->redirect($this->Auth->logout());
+        $whereTo = $this->Authentication->logout() ?: ['action' => 'login'];
+
+        return $this->redirect($whereTo);
     }

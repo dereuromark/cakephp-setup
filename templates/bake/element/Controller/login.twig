@@ -18,13 +18,20 @@
      */
     public function login()
     {
-        if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if ($user) {
-                $this->Auth->setUser($user);
+{% if Bake.hasPlugin('Authorization') %}
+    $this->Authorization->skipAuthorization();
 
-                return $this->redirect($this->Auth->redirectUrl());
+{% endif %}
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
+            $this->Flash->success(__('Login successful'));
+            $redirect = $this->Authentication->getLoginRedirect();
+            if ($redirect) {
+                return $this->redirect($redirect);
             }
-            $this->Flash->error(__('Invalid credentials, try again'));
+        }
+
+        if ($this->request->is('post')) {
+            $this->Flash->error(__('Invalid credentials'));
         }
     }
