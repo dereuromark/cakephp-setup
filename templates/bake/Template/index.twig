@@ -19,15 +19,16 @@
  * @var iterable<\{{ entityClass }}> ${{ pluralVar }}
  */
 ?>
-<nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12" id="actions-sidebar">
-    <ul class="side-nav nav nav-pills flex-column">
-        <li class="nav-item heading"><?= __('Actions') ?></li>
-        <li class="nav-item">
-            <?= $this->Html->link(__('New {0}', __('{{ singularHumanName }}')), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
-        </li>
-    </ul>
-</nav>
-<div class="{{ pluralVar }} index col-sm-8 col-12">
+<div class="row">
+    <nav class="actions large-3 medium-4 columns col-sm-4 col-xs-12" id="actions-sidebar">
+        <ul class="side-nav nav nav-pills flex-column">
+            <li class="nav-item heading"><?= __('Actions') ?></li>
+            <li class="nav-item">
+                <?= $this->Html->link(__('New {0}', __('{{ singularHumanName }}')), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            </li>
+        </ul>
+    </nav>
+    <div class="{{ pluralVar }} index col-sm-8 col-12">
 {% set fields = SetupBake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text'], 'index') %}
 
 {% set done = [] %}
@@ -94,4 +95,5 @@
     </div>
 
     <?php echo $this->element('Tools.pagination'); ?>
+    </div>
 </div>
