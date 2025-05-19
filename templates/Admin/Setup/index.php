@@ -17,6 +17,7 @@
 		<li><?php echo $this->Html->link('ORM Type Map', ['controller' => 'Backend', 'action' => 'typeMap']); ?></li>
 
 		<li><?php echo $this->Html->link(__('System'), ['controller' => 'Backend', 'action' => 'system']); ?></li>
+		<li><?php echo $this->Html->link(__('Timezones'), ['controller' => 'Backend', 'action' => 'locales']);?></li>
 		<li><?php echo $this->Html->link(__('Locales'), ['controller' => 'Backend', 'action' => 'locales']);?></li>
 		<li><?php echo $this->Html->link('Database Info', ['controller' => 'Backend', 'action' => 'database']);?></li>
 		<li><?php echo $this->Html->link(__('Disk Space'), ['controller' => 'Backend', 'action' => 'diskSpace']);?></li>
