@@ -5,9 +5,9 @@
  * @var array $data
  */
 
+use Cake\Core\App;
 use Cake\Error\Debugger;
 use Cake\I18n\DateTime;
-
 ?>
 
 <div class="columns col-md-12">
@@ -17,8 +17,12 @@ use Cake\I18n\DateTime;
 <div class="actions">
 <ul>
 	<?php foreach ($caches as $key => $config) { ?>
+		<?php
+		$engineClass = $config['className'];
+		$engine = App::shortName($engineClass, 'Cache/Engine', 'Engine');
+		?>
 	<li>
-		<h2><?php echo h($key); ?></h2>
+		<h2>[<?php echo h($engine); ?>] <?php echo h($key); ?></h2>
 
 		<div>
 			Data: <?php echo Debugger::exportVar($data[$key]); ?>
@@ -30,7 +34,7 @@ use Cake\I18n\DateTime;
 			</div>
 		</div>
 
-		<details>
+		<details style="margin-bottom: 12px">
 			<summary>Details</summary>
 		<pre><?php echo print_r($config, true); ?></pre>
 		</details>
