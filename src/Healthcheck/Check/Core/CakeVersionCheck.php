@@ -78,6 +78,8 @@ class CakeVersionCheck extends Check {
 				return false;
 			}
 
+			$this->infoMessage[] = $this->cakeVersion;
+
 			return true;
 		}
 
@@ -87,6 +89,8 @@ class CakeVersionCheck extends Check {
 
 			return false;
 		}
+
+		$this->infoMessage[] = $this->cakeVersion;
 
 		return true;
 	}

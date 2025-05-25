@@ -60,6 +60,10 @@ class PhpVersionCheck extends Check {
 		$this->passed = true;
 		$this->checkJsonFile();
 		$this->checkLockFile();
+
+		if ($this->passed()) {
+			$this->infoMessage[] = $this->phpVersion;
+		}
 	}
 
 	/**
