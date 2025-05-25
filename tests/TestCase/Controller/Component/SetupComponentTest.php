@@ -72,7 +72,7 @@ class SetupComponentTest extends TestCase {
 				'text/html; charset=UTF-8',
 			],
 			'Location' => [
-				'/my-controller/my-action',
+				'https://example.com/my-controller/my-action',
 			],
 		];
 
@@ -112,7 +112,7 @@ class SetupComponentTest extends TestCase {
 				'text/html; charset=UTF-8',
 			],
 			'Location' => [
-				'/my-controller/my-action',
+				'https://example.com/my-controller/my-action',
 			],
 		];
 		$this->assertSame($expected, $result);
