@@ -4,6 +4,7 @@ namespace Setup\Healthcheck;
 
 use Cake\Core\Configure;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
+use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
 use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
 
 class HealthcheckCollector {
@@ -11,6 +12,7 @@ class HealthcheckCollector {
 	protected array $defaultChecks = [
 		PhpVersionCheck::class,
 		CakeVersionCheck::class,
+		FullBaseUrlCheck::class,
 	];
 
 	/**

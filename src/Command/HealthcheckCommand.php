@@ -8,7 +8,7 @@ use Cake\Console\Arguments;
 use Cake\Console\CommandFactoryInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Setup\Controller\Healthcheck;
+use Setup\Healthcheck\Healthcheck;
 use Setup\Healthcheck\HealthcheckCollector;
 
 /**
@@ -24,7 +24,7 @@ class HealthcheckCommand extends Command {
 	protected string $name = 'healthcheck';
 
 	/**
-	 * @var \Setup\Controller\Healthcheck
+	 * @var \Setup\Healthcheck\Healthcheck
 	 */
 	protected Healthcheck $healthcheck;
 

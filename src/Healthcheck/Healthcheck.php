@@ -1,11 +1,10 @@
 <?php
 
-namespace Setup\Controller;
+namespace Setup\Healthcheck;
 
 use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
 use Setup\Healthcheck\Check\CheckInterface;
-use Setup\Healthcheck\HealthcheckCollector;
 
 class Healthcheck {
 

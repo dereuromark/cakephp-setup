@@ -5,6 +5,7 @@ namespace Setup\Controller;
 use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Setup\Healthcheck\Healthcheck;
 use Setup\Healthcheck\HealthcheckCollector;
 
 class HealthcheckController extends AppController {
