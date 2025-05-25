@@ -90,6 +90,10 @@ class SetupPlugin extends BasePlugin {
 				$routes->fallbacks();
 			});
 		});
+
+		$routes->plugin('Setup', ['path' => '/setup'], function (RouteBuilder $routes) {
+			$routes->connect('/healthcheck', ['controller' => 'Healthcheck', 'action' => 'index']);
+		});
 	}
 
 }

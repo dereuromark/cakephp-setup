@@ -1,0 +1,19 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state"
+    ],
+    "content-hash": "a1c1a98e67e0c60608416c45d7443754",
+    "platform": {
+        "php": ">=8.3"
+    },
+    "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.3.1"
+    },
+	"packages": [
+		{
+			"name": "cakephp/cakephp",
+			"version": "5.2.1"
+		}
+	]
+}
