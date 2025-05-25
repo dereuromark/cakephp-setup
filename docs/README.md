@@ -12,8 +12,9 @@ This branch only works for **CakePHP 4.x**
 * [Setup Component](Component/Setup.md)
 * [Setup Web Backend](Controller/Setup.md)
 * [Useful Setup Commands](Console/Commands.md)
-* [Healthcheck](Maintenance/Healthcheck.md)
-
+* [Healthcheck](Healthcheck/Healthcheck.md)
+* [Uptime](Maintenance/Uptime.md)
+*
 ## Bake Templates Deluxe
 The highly advanced bake templates have been further enhanced and are part of this plugin.
 The defaults go well together with the Tools plugin, Bootstrap3+ and some other useful defaults.
