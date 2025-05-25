@@ -20,6 +20,7 @@ use Setup\Command\DbIntegrityKeysCommand;
 use Setup\Command\DbIntegrityNullsCommand;
 use Setup\Command\DbResetCommand;
 use Setup\Command\DbWipeCommand;
+use Setup\Command\HealthcheckCommand;
 use Setup\Command\MailCheckCommand;
 use Setup\Command\MaintenanceModeActivateCommand;
 use Setup\Command\MaintenanceModeDeactivateCommand;
@@ -45,6 +46,8 @@ class SetupPlugin extends BasePlugin {
 	 * @return \Cake\Console\CommandCollection
 	 */
 	public function console(CommandCollection $commands): CommandCollection {
+		$commands->add('healthcheck', HealthcheckCommand::class);
+
 		$commands->add('maintenance_mode status', MaintenanceModeStatusCommand::class);
 		$commands->add('maintenance_mode activate', MaintenanceModeActivateCommand::class);
 		$commands->add('maintenance_mode deactivate', MaintenanceModeDeactivateCommand::class);
