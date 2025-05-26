@@ -2,6 +2,7 @@
 
 namespace Setup\Command;
 
+use App\Model\Entity\User;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -58,41 +59,41 @@ class UserCreateCommand extends Command {
 
 		$roleField = $this->findRoleField($schema);
 		if ($roleField) {
-			//TODO
-			/*
 			if (isset($Users->Roles) && is_object($Users->Roles)) {
-				$roles = $Users->Roles->find('list');
+				/** @var \Cake\ORM\Table $rolesTable */
+				$rolesTable = $Users->Roles;
+				$roles = $rolesTable->find('list')->toArray();
 
-				if (!empty($roles)) {
+				if ($roles) {
 					$io->out();
 					$io->out(print_r($roles, true));
 				}
 
 				$roleIds = array_keys($roles);
-				while (!empty($roles) && empty($role)) {
-					$role = $io->ask('Role', $roleIds);
+				while ($roles && empty($role)) {
+					$role = $io->askChoice('Role', $roleIds);
 				}
-			} elseif (method_exists($this->User, 'roles')) {
+			} elseif (class_exists(User::class) && method_exists(User::class, 'roles')) {
 				$roles = User::roles();
 
-				if (!empty($roles)) {
+				if ($roles) {
 					$io->out();
 					$io->out(print_r($roles, true));
 				}
 
+				/** @var array<string> $roleIds */
 				$roleIds = array_keys($roles);
 				while (!empty($roles) && empty($role)) {
-					$role = $io->ask('Role', $roleIds);
+					$role = $io->askChoice('Role', $roleIds);
 				}
-			}
-			*/
+			} else {
+				$roles = (array)Configure::read('Roles');
+				$roleIds = array_values($roles);
 
-			$roles = (array)Configure::read('Roles');
-			$roleIds = array_values($roles);
-
-			$io->out(print_r($roles, true));
-			while ($roles && empty($role)) {
-				$role = $io->askChoice('Role', $roleIds);
+				$io->out(print_r($roles, true));
+				while ($roles && empty($role)) {
+					$role = $io->askChoice('Role', $roleIds);
+				}
 			}
 
 			if (!$roles) {
@@ -160,6 +161,10 @@ class UserCreateCommand extends Command {
 			if ($definition['null'] || !empty($definition['autoIncrement']) || isset($data[$schemaColumn])) {
 				continue;
 			}
+			if (in_array($definition['type'], ['date', 'datetime', 'time', 'timestamp'], true)) {
+				// skip these, as they are not required
+				continue;
+			}
 
 			$data[$schemaColumn] = $definition['default'] ?? '';
 		}
@@ -178,6 +183,7 @@ class UserCreateCommand extends Command {
 
 			return;
 		}
+
 		if (!$Users->save($user, ['checkRules' => false])) {
 			$io->abort('User could not be inserted (' . print_r($user->getErrors(), true) . ')');
 		}
