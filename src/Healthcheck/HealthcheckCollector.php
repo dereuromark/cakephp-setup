@@ -10,7 +10,7 @@ use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
 
 class HealthcheckCollector {
 
-	protected array $defaultChecks = [
+	protected static array $defaultChecks = [
 		PhpVersionCheck::class,
 		CakeVersionCheck::class,
 		CakeSaltCheck::class,
@@ -23,11 +23,25 @@ class HealthcheckCollector {
 	protected array $checks;
 
 	/**
+	 * @return array<class-string<\Setup\Healthcheck\Check\CheckInterface>, mixed>
+	 */
+	public static function defaultChecks(): array {
+		$checks = static::$defaultChecks;
+
+		$result = [];
+		foreach ($checks as $check) {
+			$result[$check] = [];
+		}
+
+		return $result;
+	}
+
+	/**
 	 * @param array $checks
 	 */
 	public function __construct(array $checks = []) {
 		if (!$checks) {
-			$checks = Configure::read('Setup.Healthcheck.checks', $this->defaultChecks);
+			$checks = Configure::read('Setup.Healthcheck.checks', static::defaultChecks());
 		}
 
 		$this->checks = $this->buildChecks($checks);

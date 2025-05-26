@@ -18,6 +18,22 @@ The simplest way is to use Configure `Setup.Healthcheck.checks`:
 Once defined, this will replace the defaults.
 You can also use the `Setup.Healthcheck.checks` config to add your own checks.
 
+To only replace the ones you need, you can also merge with the defaults:
+```php
+'Setup' => [
+    'Healthcheck' => [
+        'checks' => [
+            \Setup\Healthcheck\Check\Environment\PhpUploadLimitCheck::class => [
+                'min' => 64,
+            ],
+            // ...
+        ] + \Setup\Healthcheck\HealthcheckCollector::defaultChecks(),
+    ],
+],
+```
+
+
+
 If you need to pass configs to the checks, you can do so by using the `Setup.Healthcheck.checksConfig` config:
 ```php
 'Setup' => [

@@ -58,12 +58,12 @@ class HealthcheckTask extends Task implements AddInterface, AddFromBackendInterf
 	 * @param string|null $data
 	 * @return void
 	 */
-	public function add(?string $data): void
-	{
+	public function add(?string $data): void {
 		$data = [
 			'domain' => $data,
 		];
 		$this->QueuedJobs->createJob('Setup.Healthcheck', $data);
 		$this->io->success('OK, job created, now run the worker');
 	}
+
 }
