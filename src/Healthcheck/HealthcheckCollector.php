@@ -6,6 +6,8 @@ use Cake\Core\Configure;
 use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
 use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
+use Setup\Healthcheck\Check\Database\ConnectCheck;
+use Setup\Healthcheck\Check\Environment\PhpUploadLimitCheck;
 use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
 
 class HealthcheckCollector {
@@ -15,6 +17,8 @@ class HealthcheckCollector {
 		CakeVersionCheck::class,
 		CakeSaltCheck::class,
 		FullBaseUrlCheck::class,
+		PhpUploadLimitCheck::class,
+		ConnectCheck::class,
 	];
 
 	/**
@@ -80,6 +84,9 @@ class HealthcheckCollector {
 	protected function buildChecks(mixed $checks): array {
 		$checkInstances = [];
 		foreach ($checks as $class => $options) {
+			if ($options === false) {
+				continue;
+			}
 			if (is_object($options)) {
 				/** @var \Setup\Healthcheck\Check\CheckInterface $options */
 				$checkInstances[] = $options;
