@@ -6,6 +6,7 @@ namespace Setup\Test\TestCase\Command;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
 
 /**
  * Setup\Command\HealthcheckCommand Test Case
@@ -29,6 +30,10 @@ class HealthcheckCommandTest extends TestCase {
 	 * @return void
 	 */
 	public function testExecute(): void {
+		Configure::write('HealthCheck.checks', [
+			PhpVersionCheck::class,
+		]);
+
 		Configure::write('App.fullBaseUrl', 'https://example.com');
 
 		$this->exec('healthcheck -v');
