@@ -30,7 +30,7 @@ class HealthcheckCommandTest extends TestCase {
 	 * @return void
 	 */
 	public function testExecute(): void {
-		Configure::write('HealthCheck.checks', [
+		Configure::write('Setup.HealthCheck.checks', [
 			PhpVersionCheck::class,
 		]);
 
