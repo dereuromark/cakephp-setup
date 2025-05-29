@@ -33,6 +33,7 @@ class HealthcheckCommandTest extends TestCase {
 
 		$this->exec('healthcheck -v');
 
+		$this->assertExitSuccess();
 		$this->assertOutputContains('=> OK');
 	}
 
