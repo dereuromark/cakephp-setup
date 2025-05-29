@@ -31,7 +31,7 @@ class HealthcheckCommandTest extends TestCase {
 	public function testExecute(): void {
 		Configure::write('App.fullBaseUrl', 'https://example.com');
 
-		$this->exec('healthcheck');
+		$this->exec('healthcheck -v');
 
 		$this->assertOutputContains('=> OK');
 	}
