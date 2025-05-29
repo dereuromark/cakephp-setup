@@ -19,7 +19,7 @@ class PhpUploadLimitCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheck() {
-		$check = new PhpUploadLimitCheck();
+		$check = new PhpUploadLimitCheck(2);
 
 		$check->check();
 		$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
