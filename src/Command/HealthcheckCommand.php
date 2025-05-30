@@ -50,8 +50,9 @@ class HealthcheckCommand extends Command {
 	 * @param \Cake\Console\CommandFactoryInterface|null $factory
 	 */
 	public function __construct(?CommandFactoryInterface $factory = null) {
-		parent::__construct($factory);
-
+		if ($factory) {
+			parent::__construct($factory);
+		}
 		$this->healthcheck = new Healthcheck(new HealthcheckCollector());
 	}
 
