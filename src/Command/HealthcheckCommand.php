@@ -81,6 +81,8 @@ class HealthcheckCommand extends Command {
 		$passed = $this->healthcheck->run($args->getArgument('domain'));
 
 		$result = $this->healthcheck->result();
+		$totalCount = $result->unfold()->count();
+		$io->verbose($totalCount . ' check(s) in ' . count($result) . ' domains(s)');
 
 		foreach ($result as $domain => $checks) {
 			$io->out();
