@@ -113,11 +113,18 @@ class DbIntegrityConstraintsCommand extends Command {
 			if (!$relation || $relation->type() !== $relation::MANY_TO_ONE) {
 				continue;
 			}
-
 			$foreignKey = $relation->getForeignKey();
+			if (!$foreignKey) {
+				continue;
+			}
 			assert(is_string($foreignKey));
+
 			$bindingKey = $relation->getBindingKey();
+			if (!$bindingKey) {
+				continue;
+			}
 			assert(is_string($bindingKey));
+
 			$io->out('Checking: ' . $model->getAlias() . '.' . $foreignKey . ' => ' . $relation->getName() . '.' . $bindingKey);
 			$field = $schema->getColumn($foreignKey);
 			if (!$field) {
