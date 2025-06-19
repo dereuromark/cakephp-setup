@@ -7,8 +7,8 @@ use Cake\Cache\Cache;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
 use Cake\I18n\DateTime;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use PDO;
 use Setup\Utility\Config;
@@ -245,7 +245,8 @@ SQL;
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function database() {
-		$db = (new Table())->getConnection();
+		/** @var \Cake\Database\Connection $db */
+		$db = ConnectionManager::get($this->request->getQuery('connection') ?: 'default');
 
 		$dbTables = $db->execute('SHOW TABLE STATUS')->fetchAll(PDO::FETCH_ASSOC);
 		$dbTables = (new Collection($dbTables))->toArray();
