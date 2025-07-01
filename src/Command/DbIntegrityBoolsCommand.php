@@ -43,7 +43,7 @@ class DbIntegrityBoolsCommand extends Command {
 			try {
 				$modified += $this->checkTable($table, $io);
 			} catch (CakeException $e) {
-				$io->err('Skipping due to errors: ' . $e->getMessage());
+				$io->error('Skipping due to errors: ' . $e->getMessage());
 
 				continue;
 			}

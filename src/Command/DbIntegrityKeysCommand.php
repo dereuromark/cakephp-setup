@@ -50,7 +50,7 @@ class DbIntegrityKeysCommand extends Command {
 			try {
 				$tables += $this->checkModel($model, $io);
 			} catch (CakeException $e) {
-				$io->err('Skipping due to errors: ' . $e->getMessage());
+				$io->error('Skipping due to errors: ' . $e->getMessage());
 
 				continue;
 			}

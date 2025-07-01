@@ -40,7 +40,7 @@ class CurrentConfigValidateCommand extends Command {
 			$db = ConnectionManager::get('default');
 			$io->out(print_r($db->config(), true));
 		} catch (Exception $e) {
-			$io->err($e->getMessage());
+			$io->error($e->getMessage());
 		}
 
 		$io->out();
@@ -49,7 +49,7 @@ class CurrentConfigValidateCommand extends Command {
 			$db = ConnectionManager::get('test');
 			$io->out(print_r($db->config(), true));
 		} catch (Exception $e) {
-			$io->err($e->getMessage());
+			$io->error($e->getMessage());
 		}
 
 		$io->out();
