@@ -35,13 +35,13 @@ class DbIntegrityBoolsCommand extends Command {
 	 * @return int|null|void The exit code or null for success
 	 */
 	public function execute(Arguments $args, ConsoleIo $io) {
-		$tables = $this->_getTables();
+		$tables = $this->_getTables((string)$args->getOption('connection'));
 
 		$io->out('Checking ' . count($tables) . ' tables:', 1, ConsoleIo::VERBOSE);
 		$modified = [];
 		foreach ($tables as $table) {
 			try {
-				$modified += $this->checkTable($table, $io);
+				$modified += $this->checkTable($table, $io, (string)$args->getOption('connection'));
 			} catch (CakeException $e) {
 				$io->error('Skipping due to errors: ' . $e->getMessage());
 
@@ -114,15 +114,16 @@ class DbIntegrityBoolsCommand extends Command {
 	/**
 	 * @param string $table
 	 * @param \Cake\Console\ConsoleIo $io
+	 * @param string $connection
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */
-	protected function checkTable(string $table, ConsoleIo $io): array {
+	protected function checkTable(string $table, ConsoleIo $io, string $connection): array {
 		// Structure
 		$sql = 'SHOW FULL COLUMNS from `' . $table . '`;';
 		$io->verbose('- ' . $sql);
 
-		$db = $this->_getConnection();
+		$db = $this->_getConnection($connection);
 		$res = $db->execute($sql)->fetchAll(Pdo::FETCH_ASSOC);
 		$schema = (new Collection($res))->toArray();
 
@@ -155,6 +156,11 @@ class DbIntegrityBoolsCommand extends Command {
 				'short' => 'e',
 				'help' => 'Execute directly instead of generating migration file. DANGER! TODO',
 				'boolean' => true,
+			],
+			'connection' => [
+				'short' => 'c',
+				'help' => 'The datasource connection to use.',
+				'default' => 'default',
 			],
 		];
 		$arguments = [

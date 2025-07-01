@@ -69,8 +69,8 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		$io->hr();
 		$io->out('Resetting...');
 
-		if (empty($this->params['dry-run'])) {
-			$count = $Users->updateAll(['email' => $email . ''], ['email !=' => $email]);
+		if (!$args->getOption('dry-run')) {
+			$count = $Users->updateAll(['email' => $email], ['email !=' => $email]);
 		} else {
 			$count = $Users->find('all', ...['conditions' => [CLASS_USERS . '.email !=' => $email]])->count();
 		}
@@ -123,7 +123,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 			$io->abort(CLASS_USERS . ' table doesnt have a password field!');
 		}
 
-		if (empty($this->params['dry-run'])) {
+		if (!$args->getOption('dry-run')) {
 			$count = $Users->updateAll(['password' => $pwd], ['password !=' => $pwd]);
 		} else {
 			$count = $Users->find('all', ...['conditions' => [CLASS_USERS . '.password !=' => $pwd]])->count();

@@ -20,9 +20,7 @@ trait DbToolsTrait {
 	 * @return \Cake\Database\Connection
 	 */
 	protected function _getConnection(?string $name = null) {
-		if (!empty($this->params['connection'])) {
-			$name = $this->params['connection'];
-		} elseif ($name === null) {
+		if ($name === null) {
 			$name = 'default';
 		}
 
@@ -33,13 +31,13 @@ trait DbToolsTrait {
 	}
 
 	/**
+	 * @param string $connection
 	 * @param string $prefix
-	 * @param string|null $connection
 	 *
 	 * @return array<string>
 	 */
-	protected function _getTables(string $prefix = '', ?string $connection = null): array {
-		$db = $this->_getConnection($connection ?? 'default');
+	protected function _getTables(string $connection, string $prefix = ''): array {
+		$db = $this->_getConnection($connection);
 		$config = $db->config();
 		$database = $config['database'];
 

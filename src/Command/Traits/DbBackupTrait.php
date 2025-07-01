@@ -54,12 +54,6 @@ trait DbBackupTrait {
 	 */
 	protected function _path(): string {
 		$path = BACKUPS;
-		if (!empty($this->params['path'])) {
-			$customPath = realpath($this->params['path']);
-			if ($customPath) {
-				$path = $customPath;
-			}
-		}
 
 		return $path;
 	}
