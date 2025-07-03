@@ -23,9 +23,18 @@ class ResetCommandTest extends TestCase {
 	 * @return void
 	 */
 	public function testUpdate() {
+		$this->exec('reset pwd 123');
+
+		$this->assertOutputContains('0 pwds reset - DONE');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUpdatePrompt() {
 		$this->exec('reset pwd', ['123']);
 
-		$this->assertOutputContains('0 pwds resetted - DONE');
+		$this->assertOutputContains('0 pwds reset - DONE');
 	}
 
 }
