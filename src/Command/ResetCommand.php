@@ -156,7 +156,6 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		$parser->addOption('connection', [
 			'short' => 'c',
 			'help' => 'The datasource connection to use.',
-			'default' => 'default',
 		]);
 		$parser->addOption('dry-run', [
 			'short' => 'd',
