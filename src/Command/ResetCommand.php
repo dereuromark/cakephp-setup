@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Setup\Command;
 
@@ -8,6 +9,8 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validation;
 use Setup\Auth\PasswordHasherFactory;
@@ -33,6 +36,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 	/**
 	 * @param \Cake\Console\Arguments $args The command arguments.
 	 * @param \Cake\Console\ConsoleIo $io The console io
+	 *
 	 * @return int|null|void The exit code or null for success
 	 */
 	public function execute(Arguments $args, ConsoleIo $io) {
@@ -60,8 +64,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 			$email = $io->ask('New email address (must have a valid form at least)');
 		}
 
-		/** @var \App\Model\Table\UsersTable $Users */
-		$Users = TableRegistry::getTableLocator()->get(CLASS_USERS);
+		$Users = $this->table($args);
 		if (!$Users->hasField('email')) {
 			$io->abort(CLASS_USERS . ' table doesnt have an email field!');
 		}
@@ -74,7 +77,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		} else {
 			$count = $Users->find('all', ...['conditions' => [CLASS_USERS . '.email !=' => $email]])->count();
 		}
-		$io->out($count . ' emails resetted - DONE');
+		$io->out($count . ' emails reset - DONE');
 	}
 
 	/**
@@ -117,8 +120,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		$io->hr();
 		$io->out('resetting...');
 
-		/** @var \App\Model\Table\UsersTable $Users */
-		$Users = TableRegistry::getTableLocator()->get(CLASS_USERS);
+		$Users = $this->table($args);
 		if (!$Users->hasField('password')) {
 			$io->abort(CLASS_USERS . ' table doesnt have a password field!');
 		}
@@ -128,13 +130,14 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		} else {
 			$count = $Users->find('all', ...['conditions' => [CLASS_USERS . '.password !=' => $pwd]])->count();
 		}
-		$io->out($count . ' pwds resetted - DONE');
+		$io->out($count . ' pwds reset - DONE');
 	}
 
 	/**
 	 * Hook action for defining this command's option parser.
 	 *
 	 * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+	 *
 	 * @return \Cake\Console\ConsoleOptionParser The built parser.
 	 */
 	protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser {
@@ -150,6 +153,11 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 			'help' => 'Value to reset to.',
 		]);
 
+		$parser->addOption('connection', [
+			'short' => 'c',
+			'help' => 'The datasource connection to use.',
+			'default' => 'default',
+		]);
 		$parser->addOption('dry-run', [
 			'short' => 'd',
 			'help' => 'Dry run the reset command, no data will actually be modified.',
@@ -157,6 +165,22 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 		]);
 
 		return $parser;
+	}
+
+	/**
+	 * @param \Cake\Console\Arguments $args
+	 *
+	 * @return \Cake\ORM\Table
+	 */
+	protected function table(Arguments $args): Table {
+		$Users = TableRegistry::getTableLocator()->get(CLASS_USERS);
+		if ($args->getOption('connection')) {
+			/** @var \Cake\Database\Connection $connection */
+			$connection = ConnectionManager::get((string)$args->getOption('connection'));
+			$Users->setConnection($connection);
+		}
+
+		return $Users;
 	}
 
 }
