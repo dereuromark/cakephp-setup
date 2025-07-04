@@ -71,7 +71,7 @@
 {% elseif SetupBake.isDateTime(field, schema) %}
                     <td><?= $this->Time->nice(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif columnData.type in ['boolean'] %}
-                    <td><?= $this->IconSnippet->yesNo(${{ singularVar }}->{{ field }}) ?></td>
+                    <td><?= $this->Templating->yesNo(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
                     <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif columnData.null %}

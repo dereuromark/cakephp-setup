@@ -120,7 +120,7 @@
 {% for field in groupedFields.boolean %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
-                    <td><?= $this->IconSnippet->yesNo(${{ singularVar }}->{{ field }}) ?> <?= ${{ singularVar }}->{{ field }} ? __('Yes') : __('No'); ?></td>
+                    <td><?= $this->Templating->yesNo(${{ singularVar }}->{{ field }}) ?> <?= ${{ singularVar }}->{{ field }} ? __('Yes') : __('No'); ?></td>
                 </tr>
 {% endfor %}
 {% endif %}
