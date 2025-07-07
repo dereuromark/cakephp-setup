@@ -60,28 +60,4 @@ class ConnectCheck extends Check {
 		$this->infoMessage[] = 'Connected to `' . $connection->config()['database'] . '`.';
 	}
 
-	/**
-	 * @param string $val
-	 * @return int
-	 */
-	protected function toBytes(string $val): int {
-		$val = trim($val);
-		$unit = strtolower($val[strlen($val) - 1]);
-		$bytes = (int)$val;
-
-		switch ($unit) {
-			case 'g':
-				$bytes *= 1024;
-				// Continue
-			case 'm':
-				$bytes *= 1024;
-				// Continue
-			case 'k':
-				$bytes *= 1024;
-				// Continue
-		}
-
-		return $bytes;
-	}
-
 }
