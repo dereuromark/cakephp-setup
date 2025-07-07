@@ -5,6 +5,7 @@ namespace Setup;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Routing\RouteBuilder;
+use Setup\Command\BakeHealthcheckCommand;
 use Setup\Command\CliTestCommand;
 use Setup\Command\CurrentConfigConfigureCommand;
 use Setup\Command\CurrentConfigDisplayCommand;
@@ -77,6 +78,8 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('reset', ResetCommand::class);
 		$commands->add('mail_check', MailCheckCommand::class);
 		$commands->add('cli_test', CliTestCommand::class);
+
+		$commands->add('bake healthcheck', BakeHealthcheckCommand::class);
 
 		return $commands;
 	}
