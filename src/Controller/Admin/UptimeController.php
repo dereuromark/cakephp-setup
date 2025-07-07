@@ -21,6 +21,8 @@ class UptimeController extends AppController {
 
 		if ($this->components()->has('Auth') && method_exists($this->components()->get('Auth'), 'allow')) {
 			$this->components()->get('Auth')->allow();
+		} elseif ($this->components()->has('Authentication') && method_exists($this->components()->get('Authentication'), 'addUnauthenticatedActions')) {
+			$this->components()->get('Authentication')->addUnauthenticatedActions(['index']);
 		}
 	}
 
