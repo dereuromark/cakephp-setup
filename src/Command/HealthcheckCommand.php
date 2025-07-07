@@ -85,11 +85,12 @@ class HealthcheckCommand extends Command {
 		$totalCount = $result->unfold()->count();
 		$io->verbose($totalCount . ' check(s) in ' . count($result) . ' domains(s)');
 
+		/** @var iterable<\Setup\Healthcheck\Check\CheckInterface> $checks */
 		foreach ($result as $domain => $checks) {
 			$io->out();
 			$io->out('### ' . $domain);
 			foreach ($checks as $check) {
-				$passed ? $io->success($check->name()) : $io->error($check->name());
+				$check->passed() ? $io->success($check->name()) : $io->error($check->name());
 				if (!$check->passed()) {
 					if ($check->failureMessage()) {
 						$io->error(implode(', ', $check->failureMessage()));

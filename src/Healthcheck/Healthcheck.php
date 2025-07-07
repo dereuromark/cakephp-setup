@@ -48,7 +48,7 @@ class Healthcheck {
 	}
 
 	/**
-	 * @return \Cake\Collection\CollectionInterface
+	 * @return \Cake\Collection\CollectionInterface<\Setup\Healthcheck\Check\CheckInterface>
 	 */
 	public function result(): CollectionInterface {
 		return $this->result->groupBy(function (CheckInterface $result) {
