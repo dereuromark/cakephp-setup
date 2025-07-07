@@ -57,7 +57,7 @@ class ConnectCheck extends Check {
 			return;
 		}
 
-		$this->infoMessage[] = 'The PHP upload limit is set to `' . ini_get('upload_max_filesize') . '` and the post limit is set to `' . ini_get('post_max_size') . '`.';
+		$this->infoMessage[] = 'Connected to `' . $connection->config()['database'] . '`.';
 	}
 
 	/**
