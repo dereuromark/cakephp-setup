@@ -31,23 +31,21 @@ To only replace the ones you need, you can also merge with the defaults:
     ],
 ],
 ```
+If you need to pass configs to the checks, make sure the value is an array with the keys matching the param names.
 
-
-
-If you need to pass configs to the checks, you can do so by using the `Setup.Healthcheck.checksConfig` config:
+You can also pass the instance of the check class instead of the class name as a string if needed:
 ```php
 'Setup' => [
     'Healthcheck' => [
-        'checksConfig' => [
-            \Setup\Healthcheck\Check\Core\CakeVersionCheck::class => [
-                'overrideComparisonChar' => '^',
-            ],
+        'checks' => [
+            new \Setup\Healthcheck\Check\Core\CakeVersionCheck(
+                overrideComparisonChar: '^',
+            ),
             // ...
         ],
     ],
 ],
 ```
-You can also pass the instance of the check class instead of the class name as a string if needed.
 
 
 ## Usage
