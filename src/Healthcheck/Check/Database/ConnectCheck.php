@@ -42,6 +42,7 @@ class ConnectCheck extends Check {
 	 * @return void
 	 */
 	protected function assertConnection(): void {
+		$connection = null;
 		try {
 			/** @var \Cake\Database\Connection $connection */
 			$connection = ConnectionManager::get($this->connection);
@@ -57,7 +58,8 @@ class ConnectCheck extends Check {
 			return;
 		}
 
-		$this->infoMessage[] = 'Connected to `' . $connection->config()['database'] . '`.';
+		$db = $connection?->config()['database'];
+		$this->infoMessage[] = 'Connected to `' . $db . '`.';
 	}
 
 }
