@@ -49,24 +49,24 @@ You can also pass the instance of the check class instead of the class name as a
 
 You can set a priority (1...10) for each check to control the order of execution.
 ```php
-	protected int $priority = 6;
+    protected int $priority = 6;
 ```
 The higher (towards 1), the earlier it will be executed.
 
 If you want to set a specific scope, you can do that by either adjusting the property directly, or set the method.
 The latter is needed for a dynamic scope through closure:
 ```php
-	/**
-	 * @return array<string|callable>
-	 */
-	public function scope(): array {
-		return [
-		    // Only run in debug mode
+    /**
+     * @return array<string|callable>
+     */
+    public function scope(): array {
+        return [
+            // Only run in debug mode
             function () {
                 return Configure::read('debug');
             },
         ];
-	}
+    }
 ```
 
 In case you need to adjust an existing check at runtime, you need to instantiate it first:
