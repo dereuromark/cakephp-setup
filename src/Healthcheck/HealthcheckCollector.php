@@ -3,6 +3,7 @@
 namespace Setup\Healthcheck;
 
 use Cake\Core\Configure;
+use Setup\Healthcheck\Check\CheckInterface;
 use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
 use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
@@ -106,7 +107,45 @@ class HealthcheckCollector {
 			$checkInstances[] = new $class(...$options);
 		}
 
+		foreach ($checkInstances as $key => $checkInstance) {
+			if (!$this->isScope($checkInstance)) {
+				unset($checkInstances[$key]);
+			}
+		}
+
+		usort($checkInstances, function (CheckInterface $a, CheckInterface $b) {
+			return $a->priority() <=> $b->priority();
+		});
+
 		return $checkInstances;
+	}
+
+	/**
+	 * @param \Setup\Healthcheck\Check\CheckInterface $checkInstance
+	 *
+	 * @return bool
+	 */
+	protected function isScope(CheckInterface $checkInstance): bool {
+		$scope = $checkInstance->scope();
+		if (!$scope) {
+			return false;
+		}
+
+		foreach ($scope as $condition) {
+			if (in_array($condition, [CheckInterface::SCOPE_CLI, CheckInterface::SCOPE_WEB], true)) {
+				if (PHP_SAPI === 'cli' && $condition === CheckInterface::SCOPE_CLI) {
+					return true;
+				}
+				if (PHP_SAPI !== 'cli' && $condition === CheckInterface::SCOPE_WEB) {
+					return true;
+				}
+			}
+			if (is_callable($condition) && $condition()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

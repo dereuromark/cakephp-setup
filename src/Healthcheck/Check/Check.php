@@ -7,31 +7,6 @@ use RuntimeException;
 abstract class Check implements CheckInterface {
 
 	/**
-	 * @var string
-	 */
-	public const SCOPE_WEB = 'web';
-
-	/**
-	 * @var string
-	 */
-	public const SCOPE_CLI = 'cli';
-
-	/**
-	 * @var string
-	 */
-	public const LEVEL_ERROR = 'error';
-
-	/**
-	 * @var string
-	 */
-	public const LEVEL_WARNING = 'warning';
-
-	/**
-	 * @var string
-	 */
-	public const LEVEL_INFO = 'info';
-
-	/**
 	 * @var bool|null
 	 */
 	protected ?bool $passed = null;
@@ -49,7 +24,7 @@ abstract class Check implements CheckInterface {
 	protected int $priority = 5;
 
 	/**
-	 * @var array<string>
+	 * @var array<string|callable>
 	 */
 	protected array $scope = [
 		self::SCOPE_WEB,
@@ -84,10 +59,32 @@ abstract class Check implements CheckInterface {
 	}
 
 	/**
-	 * @return string[]
+	 * @return array<string|callable>
 	 */
 	public function scope(): array {
 		return $this->scope;
+	}
+
+	/**
+	 * @param int $priority
+	 * @return $this
+	 */
+	public function adjustPriority(int $priority) {
+		assert($this->priority > 0 && $this->priority < 10);
+
+		$this->priority = $priority;
+
+		return $this;
+	}
+
+	/**
+	 * @param array<string|callable> $scope
+	 * @return $this
+	 */
+	public function adjustScope(array $scope) {
+		$this->scope = $scope;
+
+		return $this;
 	}
 
 	/**

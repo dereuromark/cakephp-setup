@@ -6,6 +6,31 @@ namespace Setup\Healthcheck\Check;
 interface CheckInterface {
 
 	/**
+	 * @var string
+	 */
+	public const SCOPE_WEB = 'web';
+
+	/**
+	 * @var string
+	 */
+	public const SCOPE_CLI = 'cli';
+
+	/**
+	 * @var string
+	 */
+	public const LEVEL_ERROR = 'error';
+
+	/**
+	 * @var string
+	 */
+	public const LEVEL_WARNING = 'warning';
+
+	/**
+	 * @var string
+	 */
+	public const LEVEL_INFO = 'info';
+
+	/**
 	 * Performs the actual check.
 	 *
 	 * @return void
@@ -32,6 +57,11 @@ interface CheckInterface {
 	 * @return string
 	 */
 	public function level(): string;
+
+	/**
+	 * @return int
+	 */
+	public function priority(): int;
 
 	/**
 	 * The scope of this check.
