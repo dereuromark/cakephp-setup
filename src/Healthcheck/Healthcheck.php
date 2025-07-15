@@ -37,7 +37,7 @@ class Healthcheck {
 			}
 
 			$check->check();
-			if (!$check->passed()) {
+			if (!$check->passed() && $check->level() === CheckInterface::LEVEL_ERROR) {
 				$this->passed = false;
 			}
 

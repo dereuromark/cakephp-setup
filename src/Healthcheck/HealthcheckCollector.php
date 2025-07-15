@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use Setup\Healthcheck\Check\CheckInterface;
 use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
+use Setup\Healthcheck\Check\Core\DebugModeDisabledCheck;
 use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
 use Setup\Healthcheck\Check\Database\ConnectCheck;
 use Setup\Healthcheck\Check\Environment\PhpExtensionsCheck;
@@ -22,6 +23,7 @@ class HealthcheckCollector {
 		PhpUploadLimitCheck::class,
 		PhpExtensionsCheck::class,
 		ConnectCheck::class,
+		DebugModeDisabledCheck::class,
 	];
 
 	/**
