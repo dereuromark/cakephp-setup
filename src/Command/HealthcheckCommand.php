@@ -85,22 +85,31 @@ class HealthcheckCommand extends Command {
 		$totalCount = $result->unfold()->count();
 		$io->verbose($totalCount . ' check(s) in ' . count($result) . ' domains(s)');
 
+		$errors = $this->healthcheck->errors();
+		if ($errors) {
+			$io->error($errors . ' error(s) found');
+		}
+		$warnings = $this->healthcheck->warnings();
+		if ($warnings) {
+			$io->warning($warnings . ' warnings(s) found');
+		}
+
 		/** @var iterable<\Setup\Healthcheck\Check\CheckInterface> $checks */
 		foreach ($result as $domain => $checks) {
 			$io->out();
 			$io->out('### ' . $domain);
 			foreach ($checks as $check) {
-				$check->passed() ? $io->success($check->name()) : $io->error($check->name());
+				$check->passed() ? $io->success($check->name()) : ($check->level() === $check::LEVEL_ERROR ? $io->error($check->name()) : $io->warning($check->name()));
 				if (!$check->passed()) {
 					if ($check->failureMessage()) {
-						$io->error(implode(', ', $check->failureMessage()));
+						$io->error('└ ' . implode(', ', $check->failureMessage()));
 					}
 					if ($check->warningMessage()) {
-						$io->warning(implode(', ', $check->warningMessage()));
+						$io->warning('└ ' . implode(', ', $check->warningMessage()));
 					}
 				} else {
 					if ($check->successMessage()) {
-						$io->success(implode(', ', $check->successMessage()));
+						$io->success('└ ' . implode(', ', $check->successMessage()));
 					}
 				}
 
