@@ -4,11 +4,14 @@
  * @var bool $passed
  * @var array $result
  * @var array<string> $domains
+ * @var int $errors
+ * @var int $warnings
  */
 
 // Make sure to noindex,nofollow this page
 
 use Cake\Utility\Inflector;
+
 ?>
 
 <h1>
@@ -31,6 +34,16 @@ use Cake\Utility\Inflector;
 </div>
 
 	<h2>Result</h2>
+
+<p>
+	<?php if ($errors) { ?>
+		<span class="text-danger" style="margin-right: 10px">Errors: <?php echo h($errors); ?></span>
+	<?php } ?>
+	<?php if ($warnings) { ?>
+		<span class="text-warning" style="margin-right: 10px">Warnings: <?php echo h($warnings); ?></span>
+	<?php } ?>
+</p>
+
 <?php
 /**
  * @var string $domain

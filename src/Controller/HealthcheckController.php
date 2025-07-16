@@ -58,7 +58,9 @@ class HealthcheckController extends AppController {
 
 		$result = $healthcheck->result();
 		$domains = $healthcheck->domains();
-		$this->set(compact('passed', 'result', 'domains'));
+		$errors = $healthcheck->errors();
+		$warnings = $healthcheck->warnings();
+		$this->set(compact('passed', 'result', 'domains', 'errors', 'warnings'));
 	}
 
 }

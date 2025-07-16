@@ -48,6 +48,24 @@ class Healthcheck {
 	}
 
 	/**
+	 * @return int
+	 */
+	public function errors(): int {
+		return $this->result->filter(function (CheckInterface $check) {
+			return !$check->passed() && $check->level() === CheckInterface::LEVEL_ERROR;
+		})->count();
+	}
+
+	/**
+	 * @return int
+	 */
+	public function warnings(): int {
+		return $this->result->filter(function (CheckInterface $check) {
+			return !$check->passed() && $check->level() === CheckInterface::LEVEL_WARNING;
+		})->count();
+	}
+
+	/**
 	 * @return \Cake\Collection\CollectionInterface<\Setup\Healthcheck\Check\CheckInterface>
 	 */
 	public function result(): CollectionInterface {
