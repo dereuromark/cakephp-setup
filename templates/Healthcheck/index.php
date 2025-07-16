@@ -55,7 +55,7 @@ foreach ($result as $domain => $checks) {
 		<h3><?php echo h(Inflector::humanize(Inflector::underscore($domain))); ?></h3>
 		<ul>
 			<?php foreach ($checks as $check) { ?>
-				<li class="<?php echo h($check->passed() ? 'passed' : 'failed'); ?>">
+				<li class="<?php echo h($check->passed() ? 'passed' : ($check->level() === $check::LEVEL_ERROR ? 'failed' : 'warn')); ?>">
 					<b><?php echo h($check->name()); ?></b>
 					<?php if (!$check->passed()) { ?>
 						<?php if ($check->failureMessage()) { ?>
@@ -92,9 +92,12 @@ foreach ($result as $domain => $checks) {
 
 <style>
 	li.passed b {
-	background-color: #ddf3e0;
+		background-color: #ddf3e0;
 	}
 	li.failed b {
-	background-color: #ffbca4;
+		background-color: #ffbca4;
+	}
+	li.warn b {
+		background-color: #fff3cd;
 	}
 </style>
