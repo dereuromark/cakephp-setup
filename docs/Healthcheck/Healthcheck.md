@@ -2,11 +2,20 @@
 This plugin provides a healthcheck stack that can be used to check the status
 of your application and its services.
 
-Web:
-![Healthcheck](screenshot_web.png)
-
-CLI:
-![Healthcheck](screenshot_cli.png)
+<table style="vertical-align: top">
+    <tr>
+        <td>Web</td>
+        <td>CLI</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">
+            <img src="screenshot_web.png" alt="Healthcheck"/>
+        </td>
+        <td style="vertical-align: top">
+            <img src="screenshot_cli.png" alt="Healthcheck CLI"/>
+        </td>
+    </tr>
+</table>
 
 With -v in CLI you can also see all the info details.
 
