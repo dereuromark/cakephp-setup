@@ -8,10 +8,10 @@ of your application and its services.
         <td>CLI</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">
-            <img src="screenshot_web.png" alt="Healthcheck"/>
+        <td>
+            <a href="screenshot_web_full.png"><img src="screenshot_web.png" alt="Healthcheck"/></a>
         </td>
-        <td style="vertical-align: top">
+        <td>
             <img src="screenshot_cli.png" alt="Healthcheck CLI"/>
         </td>
     </tr>
