@@ -2,6 +2,14 @@
 This plugin provides a healthcheck stack that can be used to check the status
 of your application and its services.
 
+Web:
+![Healthcheck](screenshot_web.png)
+
+CLI:
+![Healthcheck](screenshot_cli.png)
+
+With -v in CLI you can also see all the info details.
+
 ## Config/Setup
 The simplest way is to use Configure `Setup.Healthcheck.checks`:
 ```php
