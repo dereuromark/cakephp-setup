@@ -2,6 +2,7 @@
 
 namespace Setup;
 
+use Bake\Command\SimpleBakeCommand;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Routing\RouteBuilder;
@@ -79,7 +80,9 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('mail_check', MailCheckCommand::class);
 		$commands->add('cli_test', CliTestCommand::class);
 
-		$commands->add('bake healthcheck', BakeHealthcheckCommand::class);
+		if (class_exists(SimpleBakeCommand::class)) {
+			$commands->add('bake healthcheck', BakeHealthcheckCommand::class);
+		}
 
 		return $commands;
 	}
