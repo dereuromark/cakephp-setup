@@ -66,7 +66,7 @@ interface CheckInterface {
 	/**
 	 * The scope of this check.
 	 *
-	 * @return array<string>
+	 * @return array<string|callable>
 	 */
 	public function scope(): array;
 
