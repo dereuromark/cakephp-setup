@@ -60,4 +60,45 @@ class PhpVersionCheckTest extends TestCase {
 		$this->assertNotEmpty($check->failureMessage());
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testCheckTooHighMinorWithMajorConfig() {
+		// With failOnHigher = 'major', minor version differences should fail with warning level
+		$check = new PhpVersionCheck('8.4.0', $this->testFiles . 'PhpVersionCheck' . DS . 'basic' . DS, null, 'major');
+
+		$check->check();
+		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
+
+		$this->assertEmpty($check->failureMessage());
+		$this->assertNotEmpty($check->warningMessage());
+		$this->assertSame($check::LEVEL_WARNING, $check->level());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCheckTooHighMajorAlwaysFails() {
+		// Major version differences should always fail regardless of config
+		$check = new PhpVersionCheck('9.0.0', $this->testFiles . 'PhpVersionCheck' . DS . 'basic' . DS, null, 'major');
+
+		$check->check();
+		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
+
+		$this->assertNotEmpty($check->failureMessage());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCheckTooLowAlwaysFails() {
+		// Lower versions should always fail regardless of config
+		$check = new PhpVersionCheck('8.3.0', $this->testFiles . 'PhpVersionCheck' . DS . 'basic' . DS, null, 'major');
+
+		$check->check();
+		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
+
+		$this->assertNotEmpty($check->failureMessage());
+	}
+
 }
