@@ -86,7 +86,7 @@ class HealthcheckCollector {
 	 * @param array $checks
 	 * @return array<\Setup\Healthcheck\Check\CheckInterface>
 	 */
-	protected function buildChecks(mixed $checks): array {
+	protected function buildChecks(array $checks): array {
 		$checkInstances = [];
 		foreach ($checks as $class => $options) {
 			if ($options === false) {

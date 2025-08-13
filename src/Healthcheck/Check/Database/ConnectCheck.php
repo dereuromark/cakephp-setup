@@ -43,6 +43,7 @@ class ConnectCheck extends Check {
 	 */
 	protected function assertConnection(): void {
 		$connection = null;
+		$errorMessage = '';
 		try {
 			/** @var \Cake\Database\Connection $connection */
 			$connection = ConnectionManager::get($this->connection);
@@ -50,10 +51,11 @@ class ConnectCheck extends Check {
 			$this->passed = true;
 		} catch (Exception $connectionError) {
 			$this->passed = false;
+			$errorMessage = $connectionError->getMessage();
 		}
 
 		if (!$this->passed) {
-			$this->failureMessage[] = 'Cannot connect to database on connection `' . $this->connection . '`: ' . $connectionError->getMessage();
+			$this->failureMessage[] = 'Cannot connect to database on connection `' . $this->connection . '`: ' . $errorMessage;
 
 			return;
 		}
