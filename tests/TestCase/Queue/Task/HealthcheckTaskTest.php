@@ -8,7 +8,7 @@ use Setup\Queue\Task\HealthcheckTask;
 class HealthcheckTaskTest extends TestCase {
 
 	/**
-	 * @var list<string>
+	 * @var array<string>
 	 */
 	protected array $fixtures = [
 	];

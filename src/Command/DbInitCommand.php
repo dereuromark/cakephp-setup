@@ -61,6 +61,15 @@ class DbInitCommand extends Command {
 
 		/** @var \Cake\Database\Connection $connection */
 		$connection = ConnectionManager::get('setup');
+
+		// Check if database already exists
+		$result = $connection->execute("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . $config['database'] . "'")->fetch();
+		if ($result) {
+			$this->io->info('Database already exists: ' . $config['database']);
+
+			return;
+		}
+
 		$connection->execute('CREATE DATABASE IF NOT EXISTS ' . $config['database'] . ' ' .
 			'DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;');
 
