@@ -112,7 +112,6 @@ class System {
 			'total' => 0,
 			'used' => 0,
 			'available' => 0,
-
 		];
 		$command = sprintf('df');
 		exec($command, $output, $status);
@@ -202,7 +201,6 @@ class System {
 				'size' => $size,
 				'path' => $url,
 				'pieces' => $pieces,
-
 			];
 		}
 	}
@@ -247,7 +245,6 @@ class System {
 			'size' => $sizeOfRoot,
 			'url' => $urlToRoot,
 			'children' => [],
-
 		];
 
 		for ($i = $root; $i >= 0; $i--) {
