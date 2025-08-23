@@ -6,8 +6,7 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Datasource\ConnectionManager;
-use Cake\Utility\Text;
+use Cake\Database\Connection;
 use Setup\Command\Traits\DbToolsTrait;
 
 /**
@@ -48,6 +47,9 @@ class DbInitCommand extends Command {
 
 		$connection = $this->_getConnection((string)$args->getOption('connection'));
 		$config = $connection->config();
+		$dbName = $config['database'];
+
+		// For SQLite
 		$name = substr($config['driver'], strrpos($config['driver'], '\\') + 1);
 		$config['scheme'] = strtolower($name);
 		if ($config['scheme'] === 'sqlite' && $config['database'] === ':memory:') {
@@ -56,24 +58,29 @@ class DbInitCommand extends Command {
 			return;
 		}
 
-		$dsn = Text::insert('{scheme}://{username}:{password}@{host}', $config, ['before' => '{', 'after' => '}']);
-		ConnectionManager::setConfig('setup', ['url' => $dsn]);
+		// Create a new config without database for checking/creating
+		$tempConfig = $config;
+		$tempConfig['database'] = ''; // Set to empty string instead of unsetting
 
-		/** @var \Cake\Database\Connection $connection */
-		$connection = ConnectionManager::get('setup');
+		$tempConnection = new Connection($tempConfig);
 
-		// Check if database already exists
-		$result = $connection->execute("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . $config['database'] . "'")->fetch();
+		$quotedDbName = $tempConnection->getDriver()->quote($dbName);
+		$result = $tempConnection->execute('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ' . $quotedDbName)->fetch();
 		if ($result) {
-			$this->io->info('Database already exists: ' . $config['database']);
+			$this->io->info('Database already exists: ' . $dbName);
 
 			return;
 		}
 
-		$connection->execute('CREATE DATABASE IF NOT EXISTS ' . $config['database'] . ' ' .
-			'DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;');
+		$sql = 'CREATE DATABASE IF NOT EXISTS ' . $tempConnection->getDriver()->quoteIdentifier($dbName) . ' ' .
+			'DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;';
+		if ($args->getOption('dry-run')) {
+			$this->io->info($sql);
+		} else {
+			$tempConnection->execute($sql);
+		}
 
-		$this->io->success('Done: ' . $config['database']);
+		$this->io->success('Done: ' . $dbName);
 	}
 
 	/**
@@ -85,6 +92,11 @@ class DbInitCommand extends Command {
 				'short' => 'c',
 				'help' => 'The datasource connection to use.',
 				'default' => 'default',
+			],
+			'dry-run' => [
+				'short' => 'd',
+				'help' => 'Dry-Run it.',
+				'boolean' => true,
 			],
 		];
 
