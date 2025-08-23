@@ -67,7 +67,8 @@ class System {
 			'E_USER_ERROR',
 			'E_USER_WARNING',
 			'E_USER_NOTICE',
-			'E_ALL'];
+			'E_ALL',
+		];
 		if (defined('E_STRICT')) {
 			$levelNames[] = 'E_STRICT';
 		}
@@ -110,7 +111,9 @@ class System {
 			'percent_available' => 0,
 			'total' => 0,
 			'used' => 0,
-			'available' => 0];
+			'available' => 0,
+
+		];
 		$command = sprintf('df');
 		exec($command, $output, $status);
 		if ($status !== 0) { # zero => success
@@ -198,7 +201,9 @@ class System {
 			$data[$key] = [
 				'size' => $size,
 				'path' => $url,
-				'pieces' => $pieces];
+				'pieces' => $pieces,
+
+			];
 		}
 	}
 
@@ -241,7 +246,9 @@ class System {
 		$res[DS] = [
 			'size' => $sizeOfRoot,
 			'url' => $urlToRoot,
-			'children' => []];
+			'children' => [],
+
+		];
 
 		for ($i = $root; $i >= 0; $i--) {
 			$sizeAndPath = explode("\t", $data[$i]);

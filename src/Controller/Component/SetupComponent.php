@@ -191,10 +191,10 @@ class SetupComponent extends Component {
 		}
 		$referer = $this->Controller->referer();
 		if (strlen($referer) > 2 && (int)$this->getController()->getRequest()->getSession()->read('Report.404') < time() - 5 * MINUTE) {
-			$text = '404:' . TB . TB . $this->Controller->getRequest()->getRequestTarget() .
-			NL . 'Referer:' . TB . '' . $referer .
-			NL . NL . 'Browser: ' . env('HTTP_USER_AGENT') .
-			NL . 'IP: ' . env('REMOTE_ADDR');
+			$text = '404:' . TB . TB . $this->Controller->getRequest()->getRequestTarget()
+			. NL . 'Referer:' . TB . '' . $referer
+			. NL . NL . 'Browser: ' . env('HTTP_USER_AGENT')
+			. NL . 'IP: ' . env('REMOTE_ADDR');
 			$uid = $this->getController()->getRequest()->getSession()->read('Auth.User.id');
 			if ($uid) {
 				$text .= NL . NL . 'UID: ' . $uid;

@@ -29,8 +29,7 @@ class L10nPanel extends DebugPanel {
 	/**
 	 * @var array<string, mixed>
 	 */
-	protected array $_defaultConfig = [
-	];
+	protected array $_defaultConfig = [];
 
 	/**
 	 * Data collection callback.

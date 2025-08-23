@@ -1,2 +1,2 @@
 <?php
-require dirname(dirname(__DIR__)) . DS . 'config' . DS . 'bootstrap.php';
+require dirname(__DIR__, 2) . DS . 'config' . DS . 'bootstrap.php';

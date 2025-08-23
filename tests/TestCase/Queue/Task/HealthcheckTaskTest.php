@@ -10,8 +10,7 @@ class HealthcheckTaskTest extends TestCase {
 	/**
 	 * @var array<string>
 	 */
-	protected array $fixtures = [
-	];
+	protected array $fixtures = [];
 
 	/**
 	 * @return void

@@ -72,8 +72,8 @@ class DbInitCommand extends Command {
 			return;
 		}
 
-		$sql = 'CREATE DATABASE IF NOT EXISTS ' . $tempConnection->getDriver()->quoteIdentifier($dbName) . ' ' .
-			'DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;';
+		$sql = 'CREATE DATABASE IF NOT EXISTS ' . $tempConnection->getDriver()->quoteIdentifier($dbName)
+			. ' ' . 'DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;';
 		if ($args->getOption('dry-run')) {
 			$this->io->info($sql);
 		} else {
