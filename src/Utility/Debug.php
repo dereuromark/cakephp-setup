@@ -38,14 +38,10 @@ class Debug {
 		$res = (string)exec('uptime');
 		// last 1 minute : last 5 minutes : last 15 minutes
 		if (preg_match("/averages?: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/", $res, $load) <= 0) {
-
+			return [];
 		}
 
-		if (count($load) > 2) {
-			return [$load[1], $load[2], $load[3]];
-		}
-
-		return [];
+		return [$load[1], $load[2], $load[3]];
 	}
 
 	/**
