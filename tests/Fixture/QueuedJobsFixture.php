@@ -16,7 +16,7 @@ class QueuedJobsFixture extends TestFixture {
 	 *
 	 * @var array
 	 */
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     public array $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'job_task' => ['type' => 'string', 'length' => 90, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
@@ -40,7 +40,7 @@ class QueuedJobsFixture extends TestFixture {
             'engine' => 'InnoDB',
         ],
     ];
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
 	/**
 	 * Init method
