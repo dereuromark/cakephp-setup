@@ -19,6 +19,14 @@ class SessionLifetimeCheckTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testScope(): void {
+		$check = new SessionLifetimeCheck();
+		$this->assertSame(['web'], $check->scope());
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testCheck() {
 		Configure::delete('Session.timeout');
 

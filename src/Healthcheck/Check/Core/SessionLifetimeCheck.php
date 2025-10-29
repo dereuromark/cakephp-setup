@@ -20,6 +20,13 @@ class SessionLifetimeCheck extends Check {
 	protected int $minLifetime;
 
 	/**
+	 * @var array<string>
+	 */
+	protected array $scope = [
+		self::SCOPE_WEB,
+	];
+
+	/**
 	 * @param int|null $minLifetime Minimum session lifetime in minutes
 	 */
 	public function __construct(?int $minLifetime = null) {
@@ -72,10 +79,6 @@ class SessionLifetimeCheck extends Check {
 			}
 		} else {
 			$this->infoMessage[] = 'CakePHP Session.timeout is not explicitly configured, using CakePHP defaults.';
-		}
-
-		if ($this->passed) {
-			$this->successMessage[] = 'Session lifetime is properly configured. PHP session.gc_maxlifetime is set to `' . $phpGcMaxlifetime . '` seconds (' . $phpGcMaxlifetimeMinutes . ' minutes).';
 		}
 	}
 
