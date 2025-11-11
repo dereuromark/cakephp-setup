@@ -69,8 +69,14 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 		$templateName = $this->getConfig('templateFileName');
 		$templatePath = $this->getConfig('templatePath');
 
-		$builder->setClass($this->getConfig('className'))
-			->setTemplatePath(Inflector::camelize($templatePath));
+		if (method_exists($builder, 'setClass')) {
+			$builder->setClass($this->getConfig('className'));
+		} else {
+			// @codeCoverageIgnoreStart
+			$builder->setClassName($this->getConfig('className'));
+			// @codeCoverageIgnoreEnd
+		}
+		$builder->setTemplatePath(Inflector::camelize($templatePath));
 		if (!$this->getConfig('templateLayout')) {
 			$builder->disableAutoLayout();
 		} else {
