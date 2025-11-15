@@ -39,9 +39,14 @@
 			ini_get('intl.default_locale'): <code><?php echo h(ini_get('intl.default_locale')); ?></code>
 		</li>
 		<li>
-
+			Session value: <code><?php echo h($this->request->getSession()->read('Config.language')); ?></code>
 		</li>
 	</ul>
+
+	<div style="margin-top: 10px;">
+		<p>Test: <code>Error</code> (cake domain) translates currently to: <?php echo __d('cake', 'Error'); ?></p>
+	</div>
+
 
 	<h2>Currency</h2>
 	<ul>
