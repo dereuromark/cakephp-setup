@@ -39,6 +39,9 @@
 			ini_get('intl.default_locale'): <code><?php echo h(ini_get('intl.default_locale')); ?></code>
 		</li>
 		<li>
+			Configured in I18n::getLocale(): <code><?php echo h(\Cake\I18n\I18n::getLocale()); ?></code>
+		</li>
+		<li>
 			Session value: <code><?php echo h($this->request->getSession()->read('Config.language')); ?></code>
 		</li>
 	</ul>
