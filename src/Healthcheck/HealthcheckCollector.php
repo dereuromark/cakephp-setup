@@ -8,6 +8,7 @@ use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
 use Setup\Healthcheck\Check\Core\DebugModeDisabledCheck;
 use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
+use Setup\Healthcheck\Check\Core\SessionCleanupCheck;
 use Setup\Healthcheck\Check\Core\SessionLifetimeCheck;
 use Setup\Healthcheck\Check\Database\ConnectCheck;
 use Setup\Healthcheck\Check\Environment\PhpExtensionsCheck;
@@ -22,6 +23,7 @@ class HealthcheckCollector {
 		CakeSaltCheck::class,
 		FullBaseUrlCheck::class,
 		SessionLifetimeCheck::class,
+		SessionCleanupCheck::class,
 		PhpUploadLimitCheck::class,
 		PhpExtensionsCheck::class,
 		ConnectCheck::class,

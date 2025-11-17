@@ -4,6 +4,7 @@ namespace Setup\Test\TestCase\Healthcheck\Check;
 
 use Cake\TestSuite\TestCase;
 use Setup\Healthcheck\Check\CheckInterface;
+use Setup\Healthcheck\Check\Core\SessionCleanupCheck;
 use Setup\Healthcheck\Check\Database\ConnectCheck;
 use Setup\Healthcheck\Check\Environment\PhpExtensionsCheck;
 use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
@@ -43,6 +44,15 @@ class HealthcheckCollectorTest extends TestCase {
 		$this->assertCount(2, $result);
 		$this->assertInstanceOf(PhpExtensionsCheck::class, $result[0]);
 		$this->assertInstanceOf(PhpVersionCheck::class, $result[1]);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSessionCleanupCheckIncluded(): void {
+		$checks = HealthcheckCollector::defaultChecks();
+
+		$this->assertArrayHasKey(SessionCleanupCheck::class, $checks);
 	}
 
 }

@@ -34,11 +34,10 @@
 
 	<h2>Healthcheck</h2>
 
-	<p>
-	<?php
-	echo $this->Html->link('Healthcheck', ['controller' => 'Uptime', 'action' => 'index']);
-	?>
-	</p>
-	<p>You can customize this route on project level and add this to your healthcheck (ping) services.</p>
+	<ul>
+		<li><?php echo $this->Html->link('Healthcheck (Detailed)', ['controller' => 'Healthcheck', 'action' => 'index']); ?></li>
+		<li><?php echo $this->Html->link('Healthcheck (Uptime)', ['prefix' => false, 'controller' => 'Healthcheck', 'action' => 'index']); ?> - public endpoint, in debug mode also shows details</li>
+	</ul>
+	<p>You can customize the public route on project level and add it to your healthcheck (ping) services.</p>
 
 </div>
