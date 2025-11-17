@@ -29,9 +29,9 @@ class DebugModeDisabledCheck extends Check {
 		if (!$this->passed) {
 			$this->warningMessage[] = 'Debug mode is enabled. This must be disabled in production environments.';
 			$this->addFixInstructions();
-		}
 
-		$this->infoMessage[] = 'For local development and non-public test servers, debug mode is fine.';
+			$this->infoMessage[] = 'Note: For local development and non-public test servers, debug mode is fine.';
+		}
 	}
 
 	/**
