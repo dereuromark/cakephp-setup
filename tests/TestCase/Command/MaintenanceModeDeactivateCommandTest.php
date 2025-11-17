@@ -5,6 +5,9 @@ namespace Setup\Test\TestCase\Command;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
+/**
+ * @uses \Setup\Command\MaintenanceModeDeactivateCommand
+ */
 class MaintenanceModeDeactivateCommandTest extends TestCase {
 
 	use ConsoleIntegrationTestTrait;

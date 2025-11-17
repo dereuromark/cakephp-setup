@@ -7,6 +7,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * UserUpdate command test
+ *
+ * @uses \Setup\Command\DbResetCommand
  */
 class DbResetCommandTest extends TestCase {
 

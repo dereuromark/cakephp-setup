@@ -33,6 +33,7 @@ if (!defined('WINDOWS')) {
  *
  * @author Mark Scherer
  * @license MIT
+ * @method \App\Controller\AppController getController()
  */
 class SetupComponent extends Component {
 

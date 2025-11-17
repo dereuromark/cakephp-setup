@@ -6,6 +6,9 @@ use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 use Shim\TestSuite\TestCase;
 
+/**
+ * @uses \Setup\Controller\HealthcheckController
+ */
 class HealthcheckControllerTest extends TestCase {
 
 	use IntegrationTestTrait;

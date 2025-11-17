@@ -5,6 +5,9 @@ namespace Setup\Test\TestCase\Controller\Admin;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
+/**
+ * @uses \Setup\Controller\Admin\ConfigurationController
+ */
 class ConfigurationControllerTest extends TestCase {
 
 	use IntegrationTestTrait;

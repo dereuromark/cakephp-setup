@@ -1,3 +1,13 @@
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var mixed $dateTimeString
+ * @var mixed $result
+ * @var mixed $time
+ * @var object $token
+ * @var array $tokenRaw
+ */
+?>
 
 <?php
 /**

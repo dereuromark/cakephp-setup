@@ -7,6 +7,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * ResetCommand command test
+ *
+ * @uses \Setup\Command\ResetCommand
  */
 class ResetCommandTest extends TestCase {
 

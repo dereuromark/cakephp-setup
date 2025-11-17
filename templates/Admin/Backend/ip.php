@@ -1,3 +1,11 @@
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var mixed $host
+ * @var mixed $ipAddress
+ * @var mixed $proxyHeaders
+ */
+?>
 
 <?php
 /**

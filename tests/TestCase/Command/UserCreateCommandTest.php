@@ -7,6 +7,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * UserCreate command test
+ *
+ * @uses \Setup\Command\UserCreateCommand
  */
 class UserCreateCommandTest extends TestCase {
 

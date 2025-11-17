@@ -6,6 +6,9 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Setup\TestSuite\DriverSkipTrait;
 use Shim\TestSuite\TestCase;
 
+/**
+ * @uses \Setup\Controller\Admin\DatabaseController
+ */
 class DatabaseControllerTest extends TestCase {
 
 	use DriverSkipTrait;

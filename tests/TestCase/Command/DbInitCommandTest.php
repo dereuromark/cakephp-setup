@@ -8,6 +8,8 @@ use Setup\TestSuite\DriverSkipTrait;
 
 /**
  * UserUpdate command test
+ *
+ * @uses \Setup\Command\DbInitCommand
  */
 class DbInitCommandTest extends TestCase {
 

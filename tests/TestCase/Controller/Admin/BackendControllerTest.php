@@ -8,6 +8,9 @@ use Setup\TestSuite\DriverSkipTrait;
 use Shim\TestSuite\TestCase;
 use Templating\View\Icon\BootstrapIcon;
 
+/**
+ * @uses \Setup\Controller\Admin\BackendController
+ */
 class BackendControllerTest extends TestCase {
 
 	use DriverSkipTrait;

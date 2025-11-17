@@ -9,6 +9,9 @@ use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 
+/**
+ * @uses \Setup\Command\CliTestCommand
+ */
 class CliTestCommandTest extends TestCase {
 
 	use ConsoleIntegrationTestTrait;

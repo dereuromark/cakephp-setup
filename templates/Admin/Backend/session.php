@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var array $sessionConfig
  * @var \Cake\I18n\DateTime $time
+ * @var array $sessionData
  */
 
 use Cake\I18n\DateTime;
