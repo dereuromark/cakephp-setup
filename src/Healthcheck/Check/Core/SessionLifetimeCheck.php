@@ -60,6 +60,8 @@ class SessionLifetimeCheck extends Check {
 			$this->failureMessage[] = 'The PHP session.gc_maxlifetime is too short. It is currently set to `' . $phpGcMaxlifetime . '` seconds (' . $phpGcMaxlifetimeMinutes . ' minutes), but at least ' . $this->minLifetime . ' minutes is recommended.';
 			$this->failureMessage[] = 'This setting often gets reset to a low default value after PHP updates.';
 
+			$this->addFixInstructions();
+
 			$this->passed = false;
 		}
 
@@ -74,11 +76,38 @@ class SessionLifetimeCheck extends Check {
 				$this->warningMessage[] = 'The PHP session.gc_maxlifetime (' . $phpGcMaxlifetimeMinutes . ' minutes) is shorter than CakePHP Session.timeout (' . $cakeSessionTimeout . ' minutes). Sessions may expire earlier than expected in PHP.';
 
 				if ($this->passed) {
+					$this->addFixInstructions();
 					$this->passed = false;
 				}
 			}
 		} else {
 			$this->infoMessage[] = 'CakePHP Session.timeout is not explicitly configured, using CakePHP defaults.';
+		}
+	}
+
+	/**
+	 * Add helpful information about how to fix the session lifetime issue.
+	 *
+	 * @return void
+	 */
+	protected function addFixInstructions(): void {
+		$phpIniPath = php_ini_loaded_file();
+		$recommendedSeconds = $this->minLifetime * 60;
+
+		if ($phpIniPath) {
+			$this->infoMessage[] = 'Loaded Configuration File: `' . $phpIniPath . '`';
+
+			$scannedFiles = php_ini_scanned_files();
+			if ($scannedFiles) {
+				$scannedFilesList = array_map('trim', explode(',', $scannedFiles));
+				$this->infoMessage[] = 'Additional .ini files parsed: ' . count($scannedFilesList) . ' file(s)';
+			}
+
+			$this->infoMessage[] = 'Edit the file and set: session.gc_maxlifetime = ' . $recommendedSeconds;
+			$this->infoMessage[] = 'Quick fix using sed: sed -i "s/^session.gc_maxlifetime = .*/session.gc_maxlifetime = ' . $recommendedSeconds . '/" ' . escapeshellarg($phpIniPath);
+			$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
+		} else {
+			$this->infoMessage[] = 'PHP configuration file location not found. Run `php --ini` to locate your php.ini file.';
 		}
 	}
 

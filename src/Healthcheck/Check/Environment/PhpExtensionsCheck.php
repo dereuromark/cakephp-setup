@@ -68,9 +68,38 @@ class PhpExtensionsCheck extends Check {
 		if ($missing) {
 			$this->passed = false;
 			$this->failureMessage[] = 'PHP extensions missing: ' . implode(', ', $missing);
+			$this->addFixInstructions($missing);
 		}
 
-		$this->infoMessage[] = implode(', ', $loaded);
+		$this->infoMessage[] = 'Loaded extensions: ' . implode(', ', $loaded);
+	}
+
+	/**
+	 * Add helpful information about how to install missing extensions.
+	 *
+	 * @param array<string> $missing Missing extensions
+	 * @return void
+	 */
+	protected function addFixInstructions(array $missing): void {
+		$phpVersion = 'php' . PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
+
+		$this->infoMessage[] = 'To install missing PHP extensions:';
+
+		// Debian/Ubuntu
+		$debianPackages = array_map(fn ($ext) => $phpVersion . '-' . $ext, $missing);
+		$this->infoMessage[] = 'Debian/Ubuntu: sudo apt-get install ' . implode(' ', $debianPackages);
+
+		// RHEL/CentOS/Fedora
+		$rhelPackages = array_map(fn ($ext) => $phpVersion . '-' . $ext, $missing);
+		$this->infoMessage[] = 'RHEL/CentOS/Fedora: sudo yum install ' . implode(' ', $rhelPackages);
+
+		// macOS
+		$this->infoMessage[] = 'macOS: brew install ' . implode(' ', array_map(fn ($ext) => 'php-' . $ext, $missing));
+
+		// PECL
+		$this->infoMessage[] = 'Or via PECL: sudo pecl install ' . implode(' ', $missing);
+
+		$this->infoMessage[] = 'After installation, restart your web server (Apache/Nginx) or PHP-FPM.';
 	}
 
 	/**
