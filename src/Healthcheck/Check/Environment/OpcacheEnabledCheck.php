@@ -90,7 +90,7 @@ class OpcacheEnabledCheck extends Check {
 			);
 
 			if ($wastedPercent > 10) {
-				$this->warningMessage[] = 'OPcache has high memory waste (' . round($wastedPercent, 2) . '%). Consider increasing opcache.memory_consumption or restarting PHP.';
+				$this->infoMessage[] = 'OPcache has high memory waste (' . round($wastedPercent, 2) . '%). Consider increasing opcache.memory_consumption or restarting PHP.';
 			}
 		}
 
@@ -105,7 +105,7 @@ class OpcacheEnabledCheck extends Check {
 				$this->infoMessage[] = sprintf('Hit rate: %.2f%% (%d hits, %d misses)', $hitRate, $stats['hits'], $stats['misses']);
 
 				if ($hitRate < 90) {
-					$this->warningMessage[] = 'OPcache hit rate is below 90%. This may indicate the cache is being cleared frequently or memory is insufficient.';
+					$this->infoMessage[] = 'OPcache hit rate is below 90%. This may indicate the cache is being cleared frequently or memory is insufficient.';
 				}
 			}
 		}
@@ -123,7 +123,7 @@ class OpcacheEnabledCheck extends Check {
 			$this->infoMessage[] = 'Memory consumption: ' . $memoryMB . ' MB';
 
 			if ($memoryMB < 256) {
-				$this->warningMessage[] = 'opcache.memory_consumption is ' . $memoryMB . ' MB. For large applications, consider 256-512 MB.';
+				$this->infoMessage[] = 'opcache.memory_consumption is ' . $memoryMB . ' MB. For large applications, consider 256-512 MB.';
 			}
 		}
 
@@ -132,7 +132,7 @@ class OpcacheEnabledCheck extends Check {
 			$this->infoMessage[] = 'Interned strings buffer: ' . $stringBufferMB . ' MB';
 
 			if ($stringBufferMB < 16) {
-				$this->warningMessage[] = 'opcache.interned_strings_buffer is ' . $stringBufferMB . ' MB. Consider increasing to 16-32 MB for better string optimization.';
+				$this->infoMessage[] = 'opcache.interned_strings_buffer is ' . $stringBufferMB . ' MB. Consider increasing to 16-32 MB for better string optimization.';
 			}
 		}
 	}
@@ -149,13 +149,13 @@ class OpcacheEnabledCheck extends Check {
 			$this->infoMessage[] = 'Max accelerated files: ' . $maxFiles;
 
 			if ($maxFiles < 20000) {
-				$this->warningMessage[] = 'opcache.max_accelerated_files is ' . $maxFiles . '. For large applications, consider 20000+.';
+				$this->infoMessage[] = 'opcache.max_accelerated_files is ' . $maxFiles . '. For large applications, consider 20000+.';
 			}
 		}
 
 		if (isset($directives['opcache.enable_file_override'])) {
 			if (!$directives['opcache.enable_file_override']) {
-				$this->warningMessage[] = 'opcache.enable_file_override is disabled. Enable it for better performance with file_exists(), is_file(), etc.';
+				$this->infoMessage[] = 'opcache.enable_file_override is disabled. Enable it for better performance with file_exists(), is_file(), etc.';
 			}
 		}
 	}
@@ -173,7 +173,7 @@ class OpcacheEnabledCheck extends Check {
 				$this->warningMessage[] = 'opcache.validate_timestamps is enabled. For production, set to 0 for best performance (requires cache clear on deploy).';
 
 				if ($revalidateFreq < 60) {
-					$this->warningMessage[] = 'opcache.revalidate_freq is ' . $revalidateFreq . ' seconds. If keeping timestamps enabled, increase to 60+ seconds.';
+					$this->infoMessage[] = 'opcache.revalidate_freq is ' . $revalidateFreq . ' seconds. If keeping timestamps enabled, increase to 60+ seconds.';
 				}
 			} else {
 				$this->infoMessage[] = 'Timestamp validation is disabled (optimal for production).';
@@ -197,7 +197,7 @@ class OpcacheEnabledCheck extends Check {
 		}
 
 		if (!$jitEnabled) {
-			$this->warningMessage[] = 'JIT (Just-In-Time compilation) is disabled. For PHP 8.0+, enable with opcache.jit=1255 for significant performance gains.';
+			$this->infoMessage[] = 'JIT (Just-In-Time compilation) is disabled. Enable with opcache.jit=1255 for significant performance gains.';
 			$this->infoMessage[] = 'JIT can provide 2-3x performance improvement for CPU-intensive operations.';
 
 			return;
@@ -219,7 +219,7 @@ class OpcacheEnabledCheck extends Check {
 			$this->infoMessage[] = 'JIT buffer size: ' . $jitBufferMB . ' MB';
 
 			if ($jitBufferMB < 128) {
-				$this->warningMessage[] = 'opcache.jit_buffer_size is ' . $jitBufferMB . ' MB. Consider 128-256 MB for optimal JIT performance.';
+				$this->infoMessage[] = 'opcache.jit_buffer_size is ' . $jitBufferMB . ' MB. Consider 128-256 MB for optimal JIT performance.';
 			}
 		}
 
@@ -229,7 +229,7 @@ class OpcacheEnabledCheck extends Check {
 			if ($jitModeNum === 1205 || $jitModeNum === 1255) {
 				$this->infoMessage[] = 'JIT mode ' . $jitModeNum . ' is recommended for most applications.';
 			} elseif ($jitModeNum < 1200) {
-				$this->warningMessage[] = 'JIT mode ' . $jitModeNum . ' may not be optimal. Consider 1255 (tracing JIT) or 1205 for most applications.';
+				$this->infoMessage[] = 'JIT mode ' . $jitModeNum . ' may not be optimal. Consider 1255 (tracing JIT) or 1205 for most applications.';
 			}
 		}
 	}
@@ -290,7 +290,7 @@ class OpcacheEnabledCheck extends Check {
 		$this->infoMessage[] = '  opcache.revalidate_freq=0 (if validate_timestamps=1, use 60+)';
 		$this->infoMessage[] = '  opcache.enable_file_override=1 (optimization for file functions)';
 
-		$this->infoMessage[] = 'JIT settings (PHP 8.0+):';
+		$this->infoMessage[] = 'JIT settings:';
 		$this->infoMessage[] = '  opcache.jit=1255 (tracing JIT, recommended for most apps)';
 		$this->infoMessage[] = '  opcache.jit_buffer_size=128M (128-256 MB recommended)';
 		$this->infoMessage[] = 'JIT modes: 1205 (function JIT) or 1255 (tracing JIT) are recommended';
