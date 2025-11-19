@@ -68,24 +68,10 @@ class OpcacheEnabledCheck extends Check {
 		if (isset($config['directives'])) {
 			$directives = $config['directives'];
 
-			if (isset($directives['opcache.memory_consumption'])) {
-				$this->infoMessage[] = 'Memory consumption: ' . ($directives['opcache.memory_consumption'] / 1024 / 1024) . ' MB';
-			}
-
-			if (isset($directives['opcache.max_accelerated_files'])) {
-				$this->infoMessage[] = 'Max accelerated files: ' . $directives['opcache.max_accelerated_files'];
-			}
-
-			if (isset($directives['opcache.validate_timestamps']) && $directives['opcache.validate_timestamps']) {
-				$revalidateFreq = $directives['opcache.revalidate_freq'] ?? 2;
-				if ($revalidateFreq < 60) {
-					$this->warningMessage[] = 'opcache.revalidate_freq is set to ' . $revalidateFreq . ' seconds. For production, consider increasing to 60+ seconds for better performance.';
-				}
-			}
-
-			if (isset($directives['opcache.validate_timestamps']) && !$directives['opcache.validate_timestamps']) {
-				$this->infoMessage[] = 'Timestamp validation is disabled (optimal for production).';
-			}
+			$this->checkMemoryConfiguration($directives);
+			$this->checkFileConfiguration($directives);
+			$this->checkTimestampConfiguration($directives);
+			$this->checkJitConfiguration($directives);
 		}
 
 		// Display usage statistics
@@ -126,6 +112,152 @@ class OpcacheEnabledCheck extends Check {
 	}
 
 	/**
+	 * Check memory-related configuration.
+	 *
+	 * @param array $directives OPcache directives
+	 * @return void
+	 */
+	protected function checkMemoryConfiguration(array $directives): void {
+		if (isset($directives['opcache.memory_consumption'])) {
+			$memoryMB = $directives['opcache.memory_consumption'] / 1024 / 1024;
+			$this->infoMessage[] = 'Memory consumption: ' . $memoryMB . ' MB';
+
+			if ($memoryMB < 256) {
+				$this->warningMessage[] = 'opcache.memory_consumption is ' . $memoryMB . ' MB. For large applications, consider 256-512 MB.';
+			}
+		}
+
+		if (isset($directives['opcache.interned_strings_buffer'])) {
+			$stringBufferMB = $directives['opcache.interned_strings_buffer'];
+			$this->infoMessage[] = 'Interned strings buffer: ' . $stringBufferMB . ' MB';
+
+			if ($stringBufferMB < 16) {
+				$this->warningMessage[] = 'opcache.interned_strings_buffer is ' . $stringBufferMB . ' MB. Consider increasing to 16-32 MB for better string optimization.';
+			}
+		}
+	}
+
+	/**
+	 * Check file-related configuration.
+	 *
+	 * @param array $directives OPcache directives
+	 * @return void
+	 */
+	protected function checkFileConfiguration(array $directives): void {
+		if (isset($directives['opcache.max_accelerated_files'])) {
+			$maxFiles = $directives['opcache.max_accelerated_files'];
+			$this->infoMessage[] = 'Max accelerated files: ' . $maxFiles;
+
+			if ($maxFiles < 20000) {
+				$this->warningMessage[] = 'opcache.max_accelerated_files is ' . $maxFiles . '. For large applications, consider 20000+.';
+			}
+		}
+
+		if (isset($directives['opcache.enable_file_override'])) {
+			if (!$directives['opcache.enable_file_override']) {
+				$this->warningMessage[] = 'opcache.enable_file_override is disabled. Enable it for better performance with file_exists(), is_file(), etc.';
+			}
+		}
+	}
+
+	/**
+	 * Check timestamp validation configuration.
+	 *
+	 * @param array $directives OPcache directives
+	 * @return void
+	 */
+	protected function checkTimestampConfiguration(array $directives): void {
+		if (isset($directives['opcache.validate_timestamps'])) {
+			if ($directives['opcache.validate_timestamps']) {
+				$revalidateFreq = $directives['opcache.revalidate_freq'] ?? 2;
+				$this->warningMessage[] = 'opcache.validate_timestamps is enabled. For production, set to 0 for best performance (requires cache clear on deploy).';
+
+				if ($revalidateFreq < 60) {
+					$this->warningMessage[] = 'opcache.revalidate_freq is ' . $revalidateFreq . ' seconds. If keeping timestamps enabled, increase to 60+ seconds.';
+				}
+			} else {
+				$this->infoMessage[] = 'Timestamp validation is disabled (optimal for production).';
+			}
+		}
+	}
+
+	/**
+	 * Check JIT configuration.
+	 *
+	 * @param array $directives OPcache directives
+	 * @return void
+	 */
+	protected function checkJitConfiguration(array $directives): void {
+		$jitEnabled = false;
+		$jitMode = null;
+
+		if (isset($directives['opcache.jit'])) {
+			$jitMode = $directives['opcache.jit'];
+			$jitEnabled = !empty($jitMode) && $jitMode !== 'disable' && $jitMode !== '0' && $jitMode !== 0;
+		}
+
+		if (!$jitEnabled) {
+			$this->warningMessage[] = 'JIT (Just-In-Time compilation) is disabled. For PHP 8.0+, enable with opcache.jit=1255 for significant performance gains.';
+			$this->infoMessage[] = 'JIT can provide 2-3x performance improvement for CPU-intensive operations.';
+
+			return;
+		}
+
+		$this->infoMessage[] = 'JIT is enabled with mode: ' . $jitMode;
+
+		if (isset($directives['opcache.jit_buffer_size'])) {
+			$jitBufferSize = $directives['opcache.jit_buffer_size'];
+
+			// Convert to MB if it's a numeric value
+			if (is_numeric($jitBufferSize)) {
+				$jitBufferMB = $jitBufferSize / 1024 / 1024;
+			} else {
+				// Parse size strings like "64M"
+				$jitBufferMB = $this->parseMemorySize($jitBufferSize);
+			}
+
+			$this->infoMessage[] = 'JIT buffer size: ' . $jitBufferMB . ' MB';
+
+			if ($jitBufferMB < 128) {
+				$this->warningMessage[] = 'opcache.jit_buffer_size is ' . $jitBufferMB . ' MB. Consider 128-256 MB for optimal JIT performance.';
+			}
+		}
+
+		// Validate JIT mode
+		if (is_numeric($jitMode) || (is_string($jitMode) && ctype_digit($jitMode))) {
+			$jitModeNum = (int)$jitMode;
+			if ($jitModeNum === 1205 || $jitModeNum === 1255) {
+				$this->infoMessage[] = 'JIT mode ' . $jitModeNum . ' is recommended for most applications.';
+			} elseif ($jitModeNum < 1200) {
+				$this->warningMessage[] = 'JIT mode ' . $jitModeNum . ' may not be optimal. Consider 1255 (tracing JIT) or 1205 for most applications.';
+			}
+		}
+	}
+
+	/**
+	 * Parse memory size string (e.g., "64M", "128K") to MB.
+	 *
+	 * @param string|int $size Memory size
+	 * @return float Size in MB
+	 */
+	protected function parseMemorySize(string|int $size): float {
+		if (is_numeric($size)) {
+			return $size / 1024 / 1024;
+		}
+
+		$size = trim($size);
+		$unit = strtoupper(substr($size, -1));
+		$value = (float)substr($size, 0, -1);
+
+		return match ($unit) {
+			'G' => $value * 1024,
+			'M' => $value,
+			'K' => $value / 1024,
+			default => $value / 1024 / 1024,
+		};
+	}
+
+	/**
 	 * Add helpful information about how to enable OPcache.
 	 *
 	 * @return void
@@ -151,13 +283,20 @@ class OpcacheEnabledCheck extends Check {
 		$this->infoMessage[] = '2. Enable OPcache: opcache.enable=1';
 		$this->infoMessage[] = '3. For CLI scripts: opcache.enable_cli=1 (optional)';
 		$this->infoMessage[] = 'Recommended production settings:';
-		$this->infoMessage[] = '  opcache.memory_consumption=128 (or higher based on your app size)';
-		$this->infoMessage[] = '  opcache.interned_strings_buffer=8';
-		$this->infoMessage[] = '  opcache.max_accelerated_files=10000';
+		$this->infoMessage[] = '  opcache.memory_consumption=256 (256-512 MB for large apps)';
+		$this->infoMessage[] = '  opcache.interned_strings_buffer=16 (16-32 MB recommended)';
+		$this->infoMessage[] = '  opcache.max_accelerated_files=20000 (20000+ for large apps)';
 		$this->infoMessage[] = '  opcache.validate_timestamps=0 (disable for best performance, requires cache clear on deploy)';
-		$this->infoMessage[] = '  opcache.revalidate_freq=60 (if validate_timestamps=1)';
+		$this->infoMessage[] = '  opcache.revalidate_freq=0 (if validate_timestamps=1, use 60+)';
+		$this->infoMessage[] = '  opcache.enable_file_override=1 (optimization for file functions)';
+
+		$this->infoMessage[] = 'JIT settings (PHP 8.0+):';
+		$this->infoMessage[] = '  opcache.jit=1255 (tracing JIT, recommended for most apps)';
+		$this->infoMessage[] = '  opcache.jit_buffer_size=128M (128-256 MB recommended)';
+		$this->infoMessage[] = 'JIT modes: 1205 (function JIT) or 1255 (tracing JIT) are recommended';
+
 		$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
-		$this->infoMessage[] = 'Performance impact: OPcache can improve PHP performance by 2-3x in production.';
+		$this->infoMessage[] = 'Performance impact: OPcache can improve PHP performance by 2-3x, JIT adds another 2-3x for CPU-intensive code.';
 	}
 
 }
