@@ -11,6 +11,7 @@ use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
 use Setup\Healthcheck\Check\Core\SessionCleanupCheck;
 use Setup\Healthcheck\Check\Core\SessionLifetimeCheck;
 use Setup\Healthcheck\Check\Database\ConnectCheck;
+use Setup\Healthcheck\Check\Environment\OpcacheEnabledCheck;
 use Setup\Healthcheck\Check\Environment\PhpExtensionsCheck;
 use Setup\Healthcheck\Check\Environment\PhpUploadLimitCheck;
 use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
@@ -30,6 +31,7 @@ class HealthcheckCollector {
 		ConnectCheck::class,
 		DebugModeDisabledCheck::class,
 		XdebugDisabledCheck::class,
+		OpcacheEnabledCheck::class,
 	];
 
 	/**

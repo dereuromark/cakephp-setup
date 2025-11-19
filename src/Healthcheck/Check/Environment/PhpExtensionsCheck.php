@@ -120,13 +120,100 @@ class PhpExtensionsCheck extends Check {
 		foreach ($composer['require'] as $key => $value) {
 			if (str_starts_with($key, 'ext-')) {
 				$extension = substr($key, 4);
-				if (Semver::satisfies(phpversion(), $value)) {
+				if ($this->satisfiesVersion($value)) {
 					$extensions[] = $extension;
 				}
 			}
 		}
 
 		return $extensions;
+	}
+
+	/**
+	 * Check if the current PHP version satisfies the version constraint.
+	 *
+	 * @param string $constraint Version constraint from composer.json
+	 * @return bool
+	 */
+	protected function satisfiesVersion(string $constraint): bool {
+		if (class_exists(Semver::class)) {
+			return Semver::satisfies(phpversion(), $constraint);
+		}
+
+		// Fallback: simple version comparison for common cases
+		$phpVersion = phpversion();
+
+		// Handle wildcard "*"
+		if ($constraint === '*') {
+			return true;
+		}
+
+		// Handle simple version constraints like "^8.0", ">=7.4", "~8.1"
+		// Remove spaces
+		$constraint = str_replace(' ', '', $constraint);
+
+		// Handle "^" (caret) operator - allows updates that do not modify the left-most non-zero digit
+		if (str_starts_with($constraint, '^')) {
+			$minVersion = substr($constraint, 1);
+			$parts = explode('.', $minVersion);
+
+			// Caret allows changes that do not modify the left-most non-zero element
+			// ^1.2.3 means >=1.2.3 <2.0.0
+			// ^0.2.3 means >=0.2.3 <0.3.0
+			// ^0.0.3 means >=0.0.3 <0.0.4
+			if (!version_compare($phpVersion, $minVersion, '>=')) {
+				return false;
+			}
+
+			// Determine the upper bound based on the left-most non-zero digit
+			if ((int)$parts[0] > 0) {
+				// Major version is non-zero: increment major version
+				$maxVersion = ((int)$parts[0] + 1) . '.0.0';
+			} elseif (isset($parts[1]) && (int)$parts[1] > 0) {
+				// Major is 0, minor is non-zero: increment minor version
+				$maxVersion = '0.' . ((int)$parts[1] + 1) . '.0';
+			} else {
+				// Major and minor are 0: increment patch version
+				$patchVersion = isset($parts[2]) ? (int)$parts[2] : 0;
+				$maxVersion = '0.0.' . ($patchVersion + 1);
+			}
+
+			return version_compare($phpVersion, $maxVersion, '<');
+		}
+
+		// Handle "~" (tilde) operator - allows patch-level changes
+		if (str_starts_with($constraint, '~')) {
+			$minVersion = substr($constraint, 1);
+			$parts = explode('.', $minVersion);
+
+			// Tilde allows patch-level changes
+			// ~1.2.3 means >=1.2.3 <1.3.0
+			// ~1.2 means >=1.2.0 <2.0.0
+			if (!version_compare($phpVersion, $minVersion, '>=')) {
+				return false;
+			}
+
+			// If only major.minor specified, increment major
+			if (count($parts) === 2) {
+				$maxVersion = ((int)$parts[0] + 1) . '.0.0';
+			} else {
+				// If major.minor.patch specified, increment minor
+				$maxVersion = $parts[0] . '.' . ((int)$parts[1] + 1) . '.0';
+			}
+
+			return version_compare($phpVersion, $maxVersion, '<');
+		}
+
+		// Handle comparison operators (>=, <=, >, <, !=)
+		if (preg_match('/^([><=!]+)(.+)$/', $constraint, $matches)) {
+			$operator = $matches[1];
+			$version = $matches[2];
+
+			return version_compare($phpVersion, $version, $operator);
+		}
+
+		// Exact version match
+		return version_compare($phpVersion, $constraint, '>=');
 	}
 
 }
