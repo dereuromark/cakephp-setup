@@ -14,6 +14,7 @@ use Setup\Healthcheck\Check\Database\ConnectCheck;
 use Setup\Healthcheck\Check\Environment\PhpExtensionsCheck;
 use Setup\Healthcheck\Check\Environment\PhpUploadLimitCheck;
 use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
+use Setup\Healthcheck\Check\Environment\XdebugDisabledCheck;
 
 class HealthcheckCollector {
 
@@ -28,6 +29,7 @@ class HealthcheckCollector {
 		PhpExtensionsCheck::class,
 		ConnectCheck::class,
 		DebugModeDisabledCheck::class,
+		XdebugDisabledCheck::class,
 	];
 
 	/**
