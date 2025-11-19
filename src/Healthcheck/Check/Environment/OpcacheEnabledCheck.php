@@ -188,15 +188,17 @@ class OpcacheEnabledCheck extends Check {
 	 * @return void
 	 */
 	protected function checkJitConfiguration(array $directives): void {
-		$jitEnabled = false;
-		$jitMode = null;
+		if (!isset($directives['opcache.jit'])) {
+			$this->infoMessage[] = 'JIT (Just-In-Time compilation) is disabled. Enable with opcache.jit=1255 for significant performance gains.';
+			$this->infoMessage[] = 'JIT can provide 2-3x performance improvement for CPU-intensive operations.';
 
-		if (isset($directives['opcache.jit'])) {
-			$jitMode = $directives['opcache.jit'];
-			$jitEnabled = !empty($jitMode) && $jitMode !== 'disable' && $jitMode !== '0' && $jitMode !== 0;
+			return;
 		}
 
-		if (!$jitEnabled) {
+		$jitMode = $directives['opcache.jit'];
+
+		// Check if JIT is effectively disabled
+		if (!$jitMode || $jitMode === 'disable') {
 			$this->infoMessage[] = 'JIT (Just-In-Time compilation) is disabled. Enable with opcache.jit=1255 for significant performance gains.';
 			$this->infoMessage[] = 'JIT can provide 2-3x performance improvement for CPU-intensive operations.';
 
