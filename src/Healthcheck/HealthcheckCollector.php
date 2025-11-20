@@ -6,15 +6,21 @@ use Cake\Core\Configure;
 use Setup\Healthcheck\Check\CheckInterface;
 use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
+use Setup\Healthcheck\Check\Core\ComposerOptimizationCheck;
 use Setup\Healthcheck\Check\Core\DebugModeDisabledCheck;
+use Setup\Healthcheck\Check\Core\FilePermissionsCheck;
 use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
+use Setup\Healthcheck\Check\Core\SecurityHeadersCheck;
 use Setup\Healthcheck\Check\Core\SessionCleanupCheck;
 use Setup\Healthcheck\Check\Core\SessionLifetimeCheck;
 use Setup\Healthcheck\Check\Database\ConnectCheck;
+use Setup\Healthcheck\Check\Environment\MaxExecutionTimeCheck;
+use Setup\Healthcheck\Check\Environment\MemoryLimitCheck;
 use Setup\Healthcheck\Check\Environment\OpcacheEnabledCheck;
 use Setup\Healthcheck\Check\Environment\PhpExtensionsCheck;
 use Setup\Healthcheck\Check\Environment\PhpUploadLimitCheck;
 use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
+use Setup\Healthcheck\Check\Environment\RealpathCacheCheck;
 use Setup\Healthcheck\Check\Environment\XdebugDisabledCheck;
 
 class HealthcheckCollector {
@@ -32,6 +38,12 @@ class HealthcheckCollector {
 		DebugModeDisabledCheck::class,
 		XdebugDisabledCheck::class,
 		OpcacheEnabledCheck::class,
+		RealpathCacheCheck::class,
+		MemoryLimitCheck::class,
+		MaxExecutionTimeCheck::class,
+		ComposerOptimizationCheck::class,
+		FilePermissionsCheck::class,
+		SecurityHeadersCheck::class,
 	];
 
 	/**
