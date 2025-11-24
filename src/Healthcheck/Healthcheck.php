@@ -37,6 +37,19 @@ class Healthcheck {
 			}
 
 			$check->check();
+
+			// If check passed but has warnings, treat it as a warning-level failure
+			if ($check->passed() && $check->warningMessage()) {
+				$reflection = new \ReflectionClass($check);
+				$passedProperty = $reflection->getProperty('passed');
+				$passedProperty->setAccessible(true);
+				$passedProperty->setValue($check, false);
+
+				$levelProperty = $reflection->getProperty('level');
+				$levelProperty->setAccessible(true);
+				$levelProperty->setValue($check, CheckInterface::LEVEL_WARNING);
+			}
+
 			if (!$check->passed() && $check->level() === CheckInterface::LEVEL_ERROR) {
 				$this->passed = false;
 			}
