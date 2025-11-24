@@ -30,8 +30,11 @@ class FullBaseUrlCheck extends Check {
 
 		$this->infoMessage[] = $fullBaseUrl;
 
+		$isDebug = Configure::read('debug');
+
 		// Web-only runtime check: Test if fullBaseUrl is being set from HTTP_HOST
-		if (PHP_SAPI !== 'cli' && $this->isVulnerableToHostHeaderInjection($fullBaseUrl)) {
+		// Skip in debug mode to avoid false positives in development environments
+		if (!$isDebug && PHP_SAPI !== 'cli' && $this->isVulnerableToHostHeaderInjection($fullBaseUrl)) {
 			$this->failureMessage[] = 'CRITICAL: App.fullBaseUrl appears to be dynamically set from the HTTP Host header!';
 			$this->failureMessage[] = 'This makes your application vulnerable to Host Header Injection attacks.';
 			$this->failureMessage[] = 'Hardcode App.fullBaseUrl in config/app.php or set APP_FULL_BASE_URL environment variable.';
@@ -41,7 +44,6 @@ class FullBaseUrlCheck extends Check {
 			return;
 		}
 
-		$isDebug = Configure::read('debug');
 		if (!$isDebug) {
 			if (!str_starts_with($fullBaseUrl, 'https://')) {
 				$this->warningMessage[] = 'App.fullBaseUrl should use HTTPS in production: ' . $fullBaseUrl;
