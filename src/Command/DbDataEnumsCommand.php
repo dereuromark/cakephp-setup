@@ -140,25 +140,20 @@ class DbDataEnumsCommand extends Command {
 						continue;
 					}
 
-					try {
-						$typeObject = TypeFactory::build($columnType);
-					} catch (CakeException) {
-						continue;
-					}
-
+					$typeObject = TypeFactory::build($columnType);
 					if (!$typeObject instanceof EnumType) {
 						continue;
 					}
 
 					$enumClassName = $typeObject->getEnumClassName();
-					if (!class_exists($enumClassName) || !is_subclass_of($enumClassName, BackedEnum::class)) {
+					if (!class_exists($enumClassName)) {
 						continue;
 					}
 
 					$io->verbose('- ' . $table . '.' . $column . ' (' . $enumClassName . ')');
 
 					$validValues = array_map(
-						fn(BackedEnum $case): string|int => $case->value,
+						fn (BackedEnum $case): string|int => $case->value,
 						$enumClassName::cases(),
 					);
 
@@ -249,7 +244,7 @@ class DbDataEnumsCommand extends Command {
 
 		$valuesString = $matches[1];
 		// Split by ',' but handle escaped quotes
-		$values = preg_split("/','/" , $valuesString);
+		$values = preg_split("/','/", $valuesString);
 
 		return $values ?: [];
 	}
@@ -267,7 +262,7 @@ class DbDataEnumsCommand extends Command {
 		$db = $this->_getConnection($connection);
 
 		// Build NOT IN clause
-		$quotedValues = array_map(fn($v) => "'" . addslashes((string)$v) . "'", $validValues);
+		$quotedValues = array_map(fn ($v) => "'" . addslashes((string)$v) . "'", $validValues);
 		$notInClause = implode(',', $quotedValues);
 
 		// Find distinct invalid values with counts
