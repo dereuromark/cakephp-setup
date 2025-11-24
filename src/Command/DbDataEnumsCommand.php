@@ -132,7 +132,9 @@ class DbDataEnumsCommand extends Command {
 				$io->warning('Cannot load models due to invalid enum data in database:');
 				$io->error($e->getMessage());
 				$io->out();
-				$io->info('Fix the invalid enum data manually or use db_data enums with a specific model.');
+
+				// Try to extract enum class and provide helpful info
+				$this->outputEnumErrorHelp($e, $io, $connection);
 			} else {
 				$io->error('Cannot load models: ' . $e->getMessage());
 			}
@@ -210,6 +212,56 @@ class DbDataEnumsCommand extends Command {
 		}
 
 		return $issues;
+	}
+
+	/**
+	 * Output helpful information when an enum ValueError is caught.
+	 *
+	 * @param \Throwable $e The exception
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param string $connection Connection name
+	 * @return void
+	 */
+	protected function outputEnumErrorHelp(Throwable $e, ConsoleIo $io, string $connection): void {
+		$message = $e->getMessage();
+
+		// Try to extract enum class from error message like:
+		// '"" is not a valid backing value for enum App\Model\Enum\PccApiFieldMappingType'
+		if (preg_match('/for enum ([A-Za-z0-9\\\\]+)/', $message, $matches)) {
+			$enumClass = $matches[1];
+
+			$io->info('Enum class: ' . $enumClass);
+
+			// Show valid values if class exists
+			if (class_exists($enumClass) && is_subclass_of($enumClass, BackedEnum::class)) {
+				$validValues = array_map(fn (BackedEnum $case): string|int => $case->value, $enumClass::cases());
+				$io->out('Valid values: ' . implode(', ', array_map(fn ($v) => "'" . $v . "'", $validValues)));
+			}
+
+			// Extract the invalid value from message
+			if (preg_match('/^"([^"]*)"/', $message, $valueMatches)) {
+				$invalidValue = $valueMatches[1];
+				$io->out('Invalid value found: ' . ($invalidValue === '' ? '(empty string)' : "'{$invalidValue}'"));
+			}
+
+			$io->out();
+			$io->info('To find and fix this issue:');
+			$io->out();
+
+			// Try to find which table/column by scanning type map (simplified approach)
+			$io->out('1. Find the table/column using this enum by checking your Table classes');
+			$io->out('   Look for: ->setColumnType(\'column\', EnumType::from(' . $enumClass . '::class))');
+			$io->out();
+			$io->out('2. Once found, run SQL to identify invalid records:');
+			$io->out('   SELECT * FROM `your_table` WHERE `your_column` NOT IN ('
+				. implode(',', array_map(fn ($v) => "'" . addslashes((string)$v) . "'", $validValues ?? [])) . ')');
+			$io->out();
+			$io->out('3. Fix with UPDATE or DELETE as appropriate:');
+			$io->out('   UPDATE `your_table` SET `your_column` = NULL WHERE `your_column` = \'\'');
+			$io->out('   -- or set to a valid value instead of NULL');
+		} else {
+			$io->info('Fix the invalid enum data manually or use db_data enums with a specific model.');
+		}
 	}
 
 	/**
