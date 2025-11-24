@@ -80,8 +80,7 @@ class DbDataDatesCommand extends Command {
 
 			foreach ($issues as $table => $columns) {
 				foreach ($columns as $column => $data) {
-					$zeroValue = $data['type'] === 'date' ? '0000-00-00' : '0000-00-00 00:00:00';
-					$io->out("UPDATE `{$table}` SET `{$column}` = NULL WHERE `{$column}` = '{$zeroValue}';");
+					$io->out("UPDATE `{$table}` SET `{$column}` = NULL WHERE CAST(`{$column}` AS CHAR(19)) LIKE '0000-00-00%';");
 				}
 			}
 		} else {
@@ -99,8 +98,7 @@ class DbDataDatesCommand extends Command {
 			$fixed = 0;
 			foreach ($issues as $table => $columns) {
 				foreach ($columns as $column => $data) {
-					$zeroValue = $data['type'] === 'date' ? '0000-00-00' : '0000-00-00 00:00:00';
-					$sql = "UPDATE `{$table}` SET `{$column}` = NULL WHERE `{$column}` = '{$zeroValue}'";
+					$sql = "UPDATE `{$table}` SET `{$column}` = NULL WHERE CAST(`{$column}` AS CHAR(19)) LIKE '0000-00-00%'";
 					$statement = $db->execute($sql);
 					$fixed += $statement->rowCount();
 				}
@@ -143,9 +141,8 @@ class DbDataDatesCommand extends Command {
 			$column = $columnData['COLUMN_NAME'];
 			$type = $columnData['DATA_TYPE'];
 
-			$zeroValue = $type === 'date' ? '0000-00-00' : '0000-00-00 00:00:00';
-
-			$countSql = "SELECT COUNT(*) as cnt FROM `{$table}` WHERE `{$column}` = '{$zeroValue}'";
+			// Use CAST to avoid strict SQL mode issues when comparing zero dates
+			$countSql = "SELECT COUNT(*) as cnt FROM `{$table}` WHERE CAST(`{$column}` AS CHAR(19)) LIKE '0000-00-00%'";
 			$result = $db->execute($countSql)->fetch(PDO::FETCH_ASSOC);
 			$count = (int)($result['cnt'] ?? 0);
 
