@@ -59,11 +59,12 @@ class FilePermissionsCheck extends Check {
 			$perms = fileperms($path);
 			$octalPerms = substr(sprintf('%o', $perms), -4);
 
-			$this->infoMessage[] = 'Directory `' . $directory . '` is writable (permissions: ' . $octalPerms . ')';
-
 			// Warn if directory is world-writable (777)
 			if (($perms & 0x0002) && ($perms & 0x0001)) {
-				$this->warningMessage[] = 'Directory `' . $directory . '` is world-writable (' . $octalPerms . '): `chmod 775 ' . $path . '`';
+				$this->warningMessage[] = 'Directory `' . $directory . '` is world-writable';
+				$this->infoMessage[] = 'Directory `' . $directory . '` is writable (permissions: ' . $octalPerms . '): Run `chmod 775 ' . $path . '`';
+			} else {
+				$this->infoMessage[] = 'Directory `' . $directory . '` is writable (permissions: ' . $octalPerms . ')';
 			}
 		}
 
@@ -98,12 +99,13 @@ class FilePermissionsCheck extends Check {
 
 			// Check if world-writable (dangerous for config files)
 			if ($perms & 0x0002) {
-				$this->warningMessage[] = 'Config file `' . $configFile . '` is world-writable (' . $octalPerms . '): `chmod 644 ' . $path . '`';
+				$this->warningMessage[] = 'Config file `' . $configFile . '` is world-writable';
+				$this->infoMessage[] = 'Config file `' . $configFile . '` permissions: ' . $octalPerms . ': Consider `chmod 644 ' . $path . '`';
 			}
 
 			// Check if world-readable for sensitive files
 			if (str_contains($configFile, 'app_local.php') && ($perms & 0x0004)) {
-				$this->infoMessage[] = 'Config file `' . $configFile . '` is world-readable. Consider chmod 640 for sensitive configuration.';
+				$this->infoMessage[] = 'Config file `' . $configFile . '` is world-readable (' . $octalPerms . '): Consider `chmod 640 ' . $path . '`';
 			}
 		}
 	}
