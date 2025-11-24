@@ -33,11 +33,17 @@ class FullBaseUrlCheck extends Check {
 		$isDebug = Configure::read('debug');
 		if (!$isDebug) {
 			if (!str_starts_with($fullBaseUrl, 'https://')) {
-				$this->warningMessage[] = 'App.fullBaseUrl should use HTTPS in production: ' . $fullBaseUrl;
+				$this->failureMessage[] = 'App.fullBaseUrl should use HTTPS in production: ' . $fullBaseUrl;
+				$this->passed = false;
+
+				return;
 			}
 
 			if (preg_match('#^https?://(localhost|127\.0\.0\.1|0\.0\.0\.0)(:|/|$)#i', $fullBaseUrl)) {
-				$this->warningMessage[] = 'App.fullBaseUrl is using localhost in production. This should be your actual domain.';
+				$this->failureMessage[] = 'App.fullBaseUrl is using localhost in production. This should be your actual domain.';
+				$this->passed = false;
+
+				return;
 			}
 		}
 

@@ -53,9 +53,9 @@ class FullBaseUrlCheckTest extends TestCase {
 		Configure::write('App.fullBaseUrl', 'http://example.com');
 
 		$check->check();
-		$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
-		$this->assertNotEmpty($check->warningMessage());
-		$this->assertStringContainsString('HTTPS', implode(' ', $check->warningMessage()));
+		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
+		$this->assertNotEmpty($check->failureMessage());
+		$this->assertStringContainsString('HTTPS', implode(' ', $check->failureMessage()));
 	}
 
 	/**
@@ -68,9 +68,9 @@ class FullBaseUrlCheckTest extends TestCase {
 		Configure::write('App.fullBaseUrl', 'https://localhost');
 
 		$check->check();
-		$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
-		$this->assertNotEmpty($check->warningMessage());
-		$this->assertStringContainsString('localhost', implode(' ', $check->warningMessage()));
+		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
+		$this->assertNotEmpty($check->failureMessage());
+		$this->assertStringContainsString('localhost', implode(' ', $check->failureMessage()));
 	}
 
 	/**
@@ -84,7 +84,7 @@ class FullBaseUrlCheckTest extends TestCase {
 
 		$check->check();
 		$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
-		$this->assertEmpty($check->warningMessage());
+		$this->assertEmpty($check->failureMessage());
 	}
 
 }
