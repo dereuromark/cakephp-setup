@@ -104,10 +104,14 @@ class HealthcheckCommand extends Command {
 					if ($check->failureMessage()) {
 						$io->error('└ ' . implode(', ', $check->failureMessage()));
 					}
-					if ($check->warningMessage()) {
-						$io->warning('└ ' . implode(', ', $check->warningMessage()));
-					}
-				} else {
+				}
+
+				// Always show warnings, even when check passes
+				if ($check->warningMessage()) {
+					$io->warning('└ ' . implode(', ', $check->warningMessage()));
+				}
+
+				if ($check->passed()) {
 					if ($check->successMessage()) {
 						$io->success('└ ' . implode(', ', $check->successMessage()));
 					}

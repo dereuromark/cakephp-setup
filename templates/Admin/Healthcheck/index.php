@@ -59,10 +59,11 @@ foreach ($result as $domain => $checks) {
 						<?php if ($check->failureMessage()) { ?>
 							<div class="alert alert-danger"><?php echo h(implode(', ', $check->failureMessage())); ?></div>
 						<?php } ?>
-						<?php if ($check->warningMessage()) { ?>
-							<div class="alert alert-warning"><?php echo h(implode(', ', $check->warningMessage())); ?></div>
-						<?php } ?>
-					<?php } else { ?>
+					<?php } ?>
+					<?php if ($check->warningMessage()) { ?>
+						<div class="alert alert-warning"><?php echo h(implode(', ', $check->warningMessage())); ?></div>
+					<?php } ?>
+					<?php if ($check->passed()) { ?>
 						<?php if ($check->successMessage()) { ?>
 							<div class="alert alert-success"><?php echo h(implode(', ', $check->successMessage())); ?></div>
 						<?php } ?>
