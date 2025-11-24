@@ -31,19 +31,6 @@ class FullBaseUrlCheck extends Check {
 		$this->infoMessage[] = $fullBaseUrl;
 
 		$isDebug = Configure::read('debug');
-
-		// Web-only runtime check: Test if fullBaseUrl is being set from HTTP_HOST
-		// Skip in debug mode to avoid false positives in development environments
-		if (!$isDebug && PHP_SAPI !== 'cli' && $this->isVulnerableToHostHeaderInjection($fullBaseUrl)) {
-			$this->failureMessage[] = 'CRITICAL: App.fullBaseUrl appears to be dynamically set from the HTTP Host header!';
-			$this->failureMessage[] = 'This makes your application vulnerable to Host Header Injection attacks.';
-			$this->failureMessage[] = 'Hardcode App.fullBaseUrl in config/app.php or set APP_FULL_BASE_URL environment variable.';
-			$this->passed = false;
-			$this->addFixInstructions();
-
-			return;
-		}
-
 		if (!$isDebug) {
 			if (!str_starts_with($fullBaseUrl, 'https://')) {
 				$this->warningMessage[] = 'App.fullBaseUrl should use HTTPS in production: ' . $fullBaseUrl;
@@ -55,44 +42,6 @@ class FullBaseUrlCheck extends Check {
 		}
 
 		$this->passed = true;
-	}
-
-	/**
-	 * Runtime check to detect if fullBaseUrl is being set from HTTP_HOST header
-	 *
-	 * @param string $fullBaseUrl The configured fullBaseUrl
-	 * @return bool True if vulnerable (fullBaseUrl matches HTTP_HOST)
-	 */
-	protected function isVulnerableToHostHeaderInjection(string $fullBaseUrl): bool {
-		$httpHost = env('HTTP_HOST');
-		if (!$httpHost || !is_string($httpHost)) {
-			return false;
-		}
-
-		// Extract host from fullBaseUrl
-		$parsedUrl = parse_url($fullBaseUrl);
-		if (!$parsedUrl || !isset($parsedUrl['host'])) {
-			return false;
-		}
-
-		// Build the host string from parsed URL (with port if present)
-		$configuredHost = $parsedUrl['host'];
-		if (isset($parsedUrl['port'])) {
-			$scheme = $parsedUrl['scheme'] ?? 'http';
-			$isDefaultPort = ($scheme === 'https' && $parsedUrl['port'] === 443) ||
-			($scheme === 'http' && $parsedUrl['port'] === 80);
-
-			if (!$isDefaultPort) {
-				$configuredHost .= ':' . $parsedUrl['port'];
-			}
-		}
-
-		// If the configured host exactly matches HTTP_HOST, it's likely being set dynamically
-		if (strcasecmp($configuredHost, $httpHost) === 0) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
