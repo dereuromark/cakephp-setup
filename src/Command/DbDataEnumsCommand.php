@@ -8,9 +8,11 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Exception\CakeException;
+use Cake\Core\Plugin;
 use Cake\Database\Type\EnumType;
 use Cake\Database\TypeFactory;
 use Cake\ORM\Table;
+use Cake\Utility\Inflector;
 use PDO;
 use Setup\Command\Traits\DbToolsTrait;
 use Throwable;
@@ -257,11 +259,11 @@ class DbDataEnumsCommand extends Command {
 		}
 
 		$io->out();
-		$io->info('Scanning database for columns containing invalid values...');
+		$io->info('Scanning Table classes for columns using this enum...');
 		$io->out();
 
-		// Scan all varchar columns for the invalid value
-		$found = $this->scanForInvalidEnumColumns($connection, $validValues, $invalidValue, $io);
+		// Scan Table class files to find which column uses this enum
+		$found = $this->scanForInvalidEnumColumns($connection, $validValues, $invalidValue, $enumClass, $io);
 
 		if (!$found) {
 			$io->warning('Could not automatically locate the column. Check your Table classes for:');
@@ -279,55 +281,147 @@ class DbDataEnumsCommand extends Command {
 	}
 
 	/**
-	 * Scan database for varchar columns containing invalid enum values.
+	 * Scan Table class files to find which column uses the enum class.
 	 *
 	 * @param string $connection Connection name
 	 * @param array<string|int> $validValues Valid enum values
 	 * @param string|null $invalidValue Specific invalid value to search for
+	 * @param string $enumClass The enum class to search for
 	 * @param \Cake\Console\ConsoleIo $io Console IO
 	 * @return array<array<string, mixed>> Found columns with issues
 	 */
-	protected function scanForInvalidEnumColumns(string $connection, array $validValues, ?string $invalidValue, ConsoleIo $io): array {
-		$db = $this->_getConnection($connection);
-		$config = $db->config();
-		$database = $config['database'];
+	protected function scanForInvalidEnumColumns(string $connection, array $validValues, ?string $invalidValue, string $enumClass, ConsoleIo $io): array {
+		// Search Table class files for the enum registration
+		$tableLocations = [
+			APP . 'Model' . DS . 'Table',
+		];
 
-		// Get all varchar columns
-		$sql = "SELECT TABLE_NAME, COLUMN_NAME, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH
-			FROM INFORMATION_SCHEMA.COLUMNS
-			WHERE TABLE_SCHEMA = '{$database}'
-			AND DATA_TYPE IN ('varchar', 'char')
-			AND CHARACTER_MAXIMUM_LENGTH <= 100";
+		// Add plugin paths
+		foreach (Plugin::loaded() as $plugin) {
+			$pluginPath = Plugin::path($plugin) . 'src' . DS . 'Model' . DS . 'Table';
+			if (is_dir($pluginPath)) {
+				$tableLocations[] = $pluginPath;
+			}
+		}
 
-		$columns = $db->execute($sql)->fetchAll(PDO::FETCH_ASSOC);
 		$found = [];
+		$shortEnumClass = substr($enumClass, (int)strrpos($enumClass, '\\') + 1);
 
-		foreach ($columns as $columnData) {
-			$table = $columnData['TABLE_NAME'];
-			$column = $columnData['COLUMN_NAME'];
-			$nullable = $columnData['IS_NULLABLE'] === 'YES';
+		foreach ($tableLocations as $location) {
+			if (!is_dir($location)) {
+				continue;
+			}
 
-			// Check if this column has the invalid value
-			if ($invalidValue !== null) {
-				$checkSql = "SELECT COUNT(*) as cnt FROM `{$table}` WHERE `{$column}` = '" . addslashes($invalidValue) . "'";
-				$result = $db->execute($checkSql)->fetch(PDO::FETCH_ASSOC);
-				$count = (int)($result['cnt'] ?? 0);
+			$files = glob($location . DS . '*Table.php');
+			if (!$files) {
+				continue;
+			}
 
-				if ($count > 0) {
-					$io->out("Found in {$table}.{$column}: {$count} records" . ($nullable ? ' (nullable)' : ' (NOT NULL)'));
-					$found[] = [
-						'table' => $table,
-						'column' => $column,
-						'nullable' => $nullable,
-						'invalid_value' => $invalidValue,
-						'count' => $count,
-						'valid_values' => $validValues,
-					];
+			foreach ($files as $file) {
+				$content = file_get_contents($file);
+				if ($content === false) {
+					continue;
+				}
+
+				// Look for setColumnType('column', EnumType::from(EnumClass::class))
+				// or getSchema()->setColumnType('column', 'enum-EnumClass')
+				if (strpos($content, $enumClass) === false && strpos($content, $shortEnumClass) === false) {
+					continue;
+				}
+
+				// Try to extract column name from patterns like:
+				// ->setColumnType('column_name', EnumType::from(EnumClass::class))
+				if (preg_match("/setColumnType\s*\(\s*['\"]([^'\"]+)['\"]\s*,\s*EnumType::from\s*\(\s*{$shortEnumClass}::class/", $content, $matches)) {
+					$column = $matches[1];
+					$tableName = $this->extractTableName($file, $content);
+
+					if ($tableName) {
+						$result = $this->checkColumnForInvalidValue($connection, $tableName, $column, $invalidValue, $validValues, $io);
+						if ($result) {
+							$found[] = $result;
+						}
+					}
 				}
 			}
 		}
 
 		return $found;
+	}
+
+	/**
+	 * Extract table name from a Table class file.
+	 *
+	 * @param string $file File path
+	 * @param string $content File content
+	 * @return string|null Table name
+	 */
+	protected function extractTableName(string $file, string $content): ?string {
+		// Try to find explicit table name in initialize()
+		if (preg_match("/setTable\s*\(\s*['\"]([^'\"]+)['\"]\s*\)/", $content, $matches)) {
+			return $matches[1];
+		}
+
+		// Fall back to convention: UsersTable.php -> users
+		$className = basename($file, '.php');
+		if (str_ends_with($className, 'Table')) {
+			$className = substr($className, 0, -5);
+
+			return Inflector::underscore($className);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check a specific column for the invalid value.
+	 *
+	 * @param string $connection Connection name
+	 * @param string $table Table name
+	 * @param string $column Column name
+	 * @param string|null $invalidValue Invalid value to check
+	 * @param array<string|int> $validValues Valid enum values
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @return array<string, mixed>|null Issue data or null
+	 */
+	protected function checkColumnForInvalidValue(string $connection, string $table, string $column, ?string $invalidValue, array $validValues, ConsoleIo $io): ?array {
+		$db = $this->_getConnection($connection);
+		$config = $db->config();
+		$database = $config['database'];
+
+		// Get nullability info
+		$sql = "SELECT IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS
+			WHERE TABLE_SCHEMA = '{$database}'
+			AND TABLE_NAME = '{$table}'
+			AND COLUMN_NAME = '{$column}'";
+
+		$result = $db->execute($sql)->fetch(PDO::FETCH_ASSOC);
+		if (!$result) {
+			return null;
+		}
+
+		$nullable = $result['IS_NULLABLE'] === 'YES';
+
+		// Check for invalid value
+		if ($invalidValue !== null) {
+			$checkSql = "SELECT COUNT(*) as cnt FROM `{$table}` WHERE `{$column}` = '" . addslashes($invalidValue) . "'";
+			$countResult = $db->execute($checkSql)->fetch(PDO::FETCH_ASSOC);
+			$count = (int)($countResult['cnt'] ?? 0);
+
+			if ($count > 0) {
+				$io->out("Found in {$table}.{$column}: {$count} records" . ($nullable ? ' (nullable)' : ' (NOT NULL)'));
+
+				return [
+					'table' => $table,
+					'column' => $column,
+					'nullable' => $nullable,
+					'invalid_value' => $invalidValue,
+					'count' => $count,
+					'valid_values' => $validValues,
+				];
+			}
+		}
+
+		return null;
 	}
 
 	/**
