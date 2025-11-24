@@ -14,6 +14,9 @@ use Setup\Command\CurrentConfigPhpinfoCommand;
 use Setup\Command\CurrentConfigValidateCommand;
 use Setup\Command\DbBackupCreateCommand;
 use Setup\Command\DbBackupRestoreCommand;
+use Setup\Command\DbDataDatesCommand;
+use Setup\Command\DbDataEnumsCommand;
+use Setup\Command\DbDataOrphansCommand;
 use Setup\Command\DbInitCommand;
 use Setup\Command\DbIntegrityBoolsCommand;
 use Setup\Command\DbIntegrityConstraintsCommand;
@@ -69,6 +72,10 @@ class SetupPlugin extends BasePlugin {
 		$commands->add('db_integrity nulls', DbIntegrityNullsCommand::class);
 		$commands->add('db_integrity bools', DbIntegrityBoolsCommand::class);
 		$commands->add('db_integrity ints', DbIntegrityIntsCommand::class);
+
+		$commands->add('db_data dates', DbDataDatesCommand::class);
+		$commands->add('db_data enums', DbDataEnumsCommand::class);
+		$commands->add('db_data orphans', DbDataOrphansCommand::class);
 
 		$commands->add('db_backup create', DbBackupCreateCommand::class);
 		$commands->add('db_backup restore', DbBackupRestoreCommand::class);
