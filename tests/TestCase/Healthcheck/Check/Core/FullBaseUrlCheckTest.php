@@ -40,6 +40,51 @@ class FullBaseUrlCheckTest extends TestCase {
 		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
 
 		$this->assertNotEmpty($check->failureMessage());
+		$this->assertStringContainsString('Host Header Injection', implode(' ', $check->failureMessage()));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCheckHttpInProduction() {
+		$check = new FullBaseUrlCheck();
+
+		Configure::write('debug', false);
+		Configure::write('App.fullBaseUrl', 'http://example.com');
+
+		$check->check();
+		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
+		$this->assertNotEmpty($check->failureMessage());
+		$this->assertStringContainsString('HTTPS', implode(' ', $check->failureMessage()));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCheckLocalhostInProduction() {
+		$check = new FullBaseUrlCheck();
+
+		Configure::write('debug', false);
+		Configure::write('App.fullBaseUrl', 'https://localhost');
+
+		$check->check();
+		$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
+		$this->assertNotEmpty($check->failureMessage());
+		$this->assertStringContainsString('localhost', implode(' ', $check->failureMessage()));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCheckValidHttpsProduction() {
+		$check = new FullBaseUrlCheck();
+
+		Configure::write('debug', false);
+		Configure::write('App.fullBaseUrl', 'https://example.com');
+
+		$check->check();
+		$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
+		$this->assertEmpty($check->failureMessage());
 	}
 
 }

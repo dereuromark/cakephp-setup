@@ -20,7 +20,8 @@ class FullBaseUrlCheck extends Check {
 	protected function checkFullBaseUrl(): void {
 		$fullBaseUrl = Configure::read('App.fullBaseUrl');
 		if (!$fullBaseUrl) {
-			$this->failureMessage[] = 'App.fullBaseUrl is not set. Please configure it in your app.php or .env file.';
+			$this->failureMessage[] = 'App.fullBaseUrl is not set. This leaves your application vulnerable to Host Header Injection attacks!';
+			$this->failureMessage[] = 'Attackers can hijack password reset tokens and other sensitive URL-based operations.';
 			$this->passed = false;
 			$this->addFixInstructions();
 
@@ -28,6 +29,23 @@ class FullBaseUrlCheck extends Check {
 		}
 
 		$this->infoMessage[] = $fullBaseUrl;
+
+		$isDebug = Configure::read('debug');
+		if (!$isDebug) {
+			if (!str_starts_with($fullBaseUrl, 'https://')) {
+				$this->failureMessage[] = 'App.fullBaseUrl should use HTTPS in production: ' . $fullBaseUrl;
+				$this->passed = false;
+
+				return;
+			}
+
+			if (preg_match('#^https?://(localhost|127\.0\.0\.1|0\.0\.0\.0)(:|/|$)#i', $fullBaseUrl)) {
+				$this->failureMessage[] = 'App.fullBaseUrl is using localhost in production. This should be your actual domain.';
+				$this->passed = false;
+
+				return;
+			}
+		}
 
 		$this->passed = true;
 	}
@@ -38,6 +56,7 @@ class FullBaseUrlCheck extends Check {
 	 * @return void
 	 */
 	protected function addFixInstructions(): void {
+		$this->infoMessage[] = 'SECURITY: Setting App.fullBaseUrl prevents Host Header Injection attacks that can compromise password resets.';
 		$this->infoMessage[] = 'Set App.fullBaseUrl in one of these locations:';
 		$this->infoMessage[] = '1. In .env file: APP_FULL_BASE_URL=https://example.com';
 		$this->infoMessage[] = '2. In config/app.php or config/app_local.php: \'App\' => [\'fullBaseUrl\' => \'https://example.com\']';
