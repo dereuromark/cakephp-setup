@@ -64,6 +64,7 @@ class FilePermissionsCheck extends Check {
 			// Warn if directory is world-writable (777)
 			if (($perms & 0x0002) && ($perms & 0x0001)) {
 				$this->warningMessage[] = 'Directory `' . $directory . '` is world-writable (' . $octalPerms . '). Consider using 0755 or 0775 instead.';
+				$this->warningMessage[] = 'Run: chmod 775 ' . $path;
 			}
 		}
 
