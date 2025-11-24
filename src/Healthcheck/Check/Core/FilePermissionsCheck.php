@@ -63,8 +63,7 @@ class FilePermissionsCheck extends Check {
 
 			// Warn if directory is world-writable (777)
 			if (($perms & 0x0002) && ($perms & 0x0001)) {
-				$this->warningMessage[] = 'Directory `' . $directory . '` is world-writable (' . $octalPerms . '). Consider using 0755 or 0775 instead.';
-				$this->warningMessage[] = 'Run: chmod 775 ' . $path;
+				$this->warningMessage[] = 'Directory `' . $directory . '` is world-writable (' . $octalPerms . '): `chmod 775 ' . $path . '`';
 			}
 		}
 
@@ -99,8 +98,7 @@ class FilePermissionsCheck extends Check {
 
 			// Check if world-writable (dangerous for config files)
 			if ($perms & 0x0002) {
-				$this->warningMessage[] = 'Config file `' . $configFile . '` is world-writable (' . $octalPerms . '). This is a security risk!';
-				$this->warningMessage[] = 'Run: chmod 644 ' . $path;
+				$this->warningMessage[] = 'Config file `' . $configFile . '` is world-writable (' . $octalPerms . '): `chmod 644 ' . $path . '`';
 			}
 
 			// Check if world-readable for sensitive files
