@@ -8,6 +8,7 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use PDO;
 use Setup\Command\Traits\DbToolsTrait;
+use Throwable;
 
 /**
  * Check and fix invalid date/datetime values in the database.
@@ -96,14 +97,39 @@ class DbDataDatesCommand extends Command {
 
 			$db = $this->_getConnection($connection);
 			$fixed = 0;
+			$failed = [];
 			foreach ($issues as $table => $columns) {
 				foreach ($columns as $column => $data) {
 					$sql = "UPDATE `{$table}` SET `{$column}` = NULL WHERE CAST(`{$column}` AS CHAR(19)) LIKE '0000-00-00%'";
-					$statement = $db->execute($sql);
-					$fixed += $statement->rowCount();
+					try {
+						$statement = $db->execute($sql);
+						$fixed += $statement->rowCount();
+					} catch (Throwable $e) {
+						// Likely NOT NULL constraint - show the records that can't be fixed
+						$failed[] = "{$table}.{$column}";
+						$io->warning("Cannot fix {$table}.{$column}: " . $e->getMessage());
+						$io->out('Records that need manual fixing:');
+
+						$selectSql = "SELECT * FROM `{$table}` WHERE CAST(`{$column}` AS CHAR(19)) LIKE '0000-00-00%' LIMIT 10";
+						$records = $db->execute($selectSql)->fetchAll(PDO::FETCH_ASSOC);
+						foreach ($records as $record) {
+							$io->out('  ' . json_encode($record, JSON_UNESCAPED_UNICODE));
+						}
+						if ($data['count'] > 10) {
+							$io->out('  ... and ' . ($data['count'] - 10) . ' more records');
+						}
+						$io->out();
+					}
 				}
 			}
-			$io->success('Fixed ' . $fixed . ' records.');
+
+			if ($fixed > 0) {
+				$io->success('Fixed ' . $fixed . ' records.');
+			}
+			if ($failed) {
+				$io->warning('Could not fix ' . count($failed) . ' columns due to constraints: ' . implode(', ', $failed));
+				$io->info('These columns likely have NOT NULL constraints. Consider setting a default date instead of NULL.');
+			}
 		}
 
 		return static::CODE_SUCCESS;

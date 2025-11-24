@@ -10,8 +10,11 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Exception\CakeException;
 use Cake\Database\Type\EnumType;
 use Cake\Database\TypeFactory;
+use Cake\ORM\Table;
 use PDO;
 use Setup\Command\Traits\DbToolsTrait;
+use Throwable;
+use ValueError;
 
 /**
  * Check and fix invalid enum values in the database.
@@ -121,54 +124,89 @@ class DbDataEnumsCommand extends Command {
 	 * @return array<string, array<string, mixed>> Issues found
 	 */
 	protected function checkPhpEnums(?string $modelName, ?string $plugin, ConsoleIo $io, string $connection): array {
-		$models = $this->_getModels($modelName, $plugin);
+		try {
+			$models = $this->_getModels($modelName, $plugin);
+		} catch (Throwable $e) {
+			// Invalid enum data prevents model loading - extract info from error
+			if ($e instanceof ValueError || $e->getPrevious() instanceof ValueError) {
+				$io->warning('Cannot load models due to invalid enum data in database:');
+				$io->error($e->getMessage());
+				$io->out();
+				$io->info('Fix the invalid enum data manually or use db_data enums with a specific model.');
+			} else {
+				$io->error('Cannot load models: ' . $e->getMessage());
+			}
+
+			return [];
+		}
+
 		$issues = [];
 
 		foreach ($models as $model) {
-			try {
-				$table = $model->getTable();
-				if (!$table) {
+			$issues = $this->checkModel($model, $io, $connection, $issues);
+		}
+
+		return $issues;
+	}
+
+	/**
+	 * Check a single model for invalid enum values.
+	 *
+	 * @param \Cake\ORM\Table $model The model to check
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param string $connection Connection name
+	 * @param array<string, array<string, mixed>> $issues Existing issues
+	 * @return array<string, array<string, mixed>> Updated issues
+	 */
+	protected function checkModel(Table $model, ConsoleIo $io, string $connection, array $issues): array {
+		try {
+			$table = $model->getTable();
+			if (!$table) {
+				return $issues;
+			}
+
+			$schema = $model->getSchema();
+			$columns = $schema->columns();
+
+			foreach ($columns as $column) {
+				$columnType = $schema->getColumnType($column);
+				if (!$columnType || !str_starts_with($columnType, 'enum-')) {
 					continue;
 				}
 
-				$schema = $model->getSchema();
-				$columns = $schema->columns();
-
-				foreach ($columns as $column) {
-					$columnType = $schema->getColumnType($column);
-					if (!$columnType || !str_starts_with($columnType, 'enum-')) {
-						continue;
-					}
-
-					$typeObject = TypeFactory::build($columnType);
-					if (!$typeObject instanceof EnumType) {
-						continue;
-					}
-
-					$enumClassName = $typeObject->getEnumClassName();
-					if (!class_exists($enumClassName)) {
-						continue;
-					}
-
-					$io->verbose('- ' . $table . '.' . $column . ' (' . $enumClassName . ')');
-
-					$validValues = array_map(
-						fn (BackedEnum $case): string|int => $case->value,
-						$enumClassName::cases(),
-					);
-
-					$invalidValues = $this->findInvalidValues($table, $column, $validValues, $connection);
-					if ($invalidValues) {
-						$issues[$table][$column] = [
-							'enum_class' => $enumClassName,
-							'valid_values' => $validValues,
-							'invalid_values' => $invalidValues,
-						];
-					}
+				$typeObject = TypeFactory::build($columnType);
+				if (!$typeObject instanceof EnumType) {
+					continue;
 				}
-			} catch (CakeException $e) {
-				$io->error('Skipping model due to errors: ' . $e->getMessage());
+
+				$enumClassName = $typeObject->getEnumClassName();
+				if (!class_exists($enumClassName)) {
+					continue;
+				}
+
+				$io->verbose('- ' . $table . '.' . $column . ' (' . $enumClassName . ')');
+
+				$validValues = array_map(
+					fn (BackedEnum $case): string|int => $case->value,
+					$enumClassName::cases(),
+				);
+
+				$invalidValues = $this->findInvalidValues($table, $column, $validValues, $connection);
+				if ($invalidValues) {
+					$issues[$table][$column] = [
+						'enum_class' => $enumClassName,
+						'valid_values' => $validValues,
+						'invalid_values' => $invalidValues,
+					];
+				}
 			}
+		} catch (ValueError $e) {
+			// Invalid enum data in this model - report it
+			$io->warning('Model ' . $model->getAlias() . ' has invalid enum data: ' . $e->getMessage());
+		} catch (CakeException $e) {
+			$io->error('Skipping model due to errors: ' . $e->getMessage());
+		} catch (Throwable $e) {
+			$io->error('Skipping model ' . $model->getAlias() . ': ' . $e->getMessage());
 		}
 
 		return $issues;
