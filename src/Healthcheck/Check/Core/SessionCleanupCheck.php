@@ -56,11 +56,6 @@ class SessionCleanupCheck extends Check {
 			return;
 		}
 
-		// Check if gc_probability is greater than 1 (recommended for better cleanup)
-		if ($gcProbability === 1) {
-			$this->warningMessage[] = 'The session.gc_probability is set to only `1`. While this enables garbage collection, a higher value (e.g., 1-100) may be more appropriate depending on your gc_divisor setting.';
-		}
-
 		// Calculate and display effective probability
 		$effectiveProbability = ($gcProbability / $gcDivisor) * 100;
 		$this->infoMessage[] = sprintf(
