@@ -8,10 +8,15 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Exception\CakeException;
+use Cake\Core\Plugin;
 use Cake\Database\Type\EnumType;
 use Cake\Database\TypeFactory;
+use Cake\ORM\Table;
+use Cake\Utility\Inflector;
 use PDO;
 use Setup\Command\Traits\DbToolsTrait;
+use Throwable;
+use ValueError;
 
 /**
  * Check and fix invalid enum values in the database.
@@ -48,7 +53,7 @@ class DbDataEnumsCommand extends Command {
 		$io->out('Checking PHP BackedEnum columns...', 1, ConsoleIo::VERBOSE);
 
 		// Check PHP BackedEnum columns
-		$phpEnumIssues = $this->checkPhpEnums($modelName, $plugin, $io, $connection);
+		$phpEnumIssues = $this->checkPhpEnums($modelName, $plugin, $io, $connection, (bool)$args->getOption('fix'));
 
 		// Check MySQL ENUM columns (with deprecation warning)
 		$io->out();
@@ -118,60 +123,349 @@ class DbDataEnumsCommand extends Command {
 	 * @param string|null $plugin Plugin name
 	 * @param \Cake\Console\ConsoleIo $io Console IO
 	 * @param string $connection Connection name
+	 * @param bool $fix Whether to attempt fixing
 	 * @return array<string, array<string, mixed>> Issues found
 	 */
-	protected function checkPhpEnums(?string $modelName, ?string $plugin, ConsoleIo $io, string $connection): array {
-		$models = $this->_getModels($modelName, $plugin);
+	protected function checkPhpEnums(?string $modelName, ?string $plugin, ConsoleIo $io, string $connection, bool $fix = false): array {
+		try {
+			$models = $this->_getModels($modelName, $plugin);
+		} catch (Throwable $e) {
+			// Invalid enum data prevents model loading - extract info from error
+			if ($e instanceof ValueError || $e->getPrevious() instanceof ValueError) {
+				$io->warning('Cannot load models due to invalid enum data in database:');
+				$io->error($e->getMessage());
+				$io->out();
+
+				// Try to find and fix the invalid enum data directly
+				$this->tryFixEnumFromError($e, $io, $connection, $fix);
+			} else {
+				$io->error('Cannot load models: ' . $e->getMessage());
+			}
+
+			return [];
+		}
+
 		$issues = [];
 
 		foreach ($models as $model) {
-			try {
-				$table = $model->getTable();
-				if (!$table) {
-					continue;
-				}
-
-				$schema = $model->getSchema();
-				$columns = $schema->columns();
-
-				foreach ($columns as $column) {
-					$columnType = $schema->getColumnType($column);
-					if (!$columnType || !str_starts_with($columnType, 'enum-')) {
-						continue;
-					}
-
-					$typeObject = TypeFactory::build($columnType);
-					if (!$typeObject instanceof EnumType) {
-						continue;
-					}
-
-					$enumClassName = $typeObject->getEnumClassName();
-					if (!class_exists($enumClassName)) {
-						continue;
-					}
-
-					$io->verbose('- ' . $table . '.' . $column . ' (' . $enumClassName . ')');
-
-					$validValues = array_map(
-						fn (BackedEnum $case): string|int => $case->value,
-						$enumClassName::cases(),
-					);
-
-					$invalidValues = $this->findInvalidValues($table, $column, $validValues, $connection);
-					if ($invalidValues) {
-						$issues[$table][$column] = [
-							'enum_class' => $enumClassName,
-							'valid_values' => $validValues,
-							'invalid_values' => $invalidValues,
-						];
-					}
-				}
-			} catch (CakeException $e) {
-				$io->error('Skipping model due to errors: ' . $e->getMessage());
-			}
+			$issues = $this->checkModel($model, $io, $connection, $issues);
 		}
 
 		return $issues;
+	}
+
+	/**
+	 * Check a single model for invalid enum values.
+	 *
+	 * @param \Cake\ORM\Table $model The model to check
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param string $connection Connection name
+	 * @param array<string, array<string, mixed>> $issues Existing issues
+	 * @return array<string, array<string, mixed>> Updated issues
+	 */
+	protected function checkModel(Table $model, ConsoleIo $io, string $connection, array $issues): array {
+		try {
+			$table = $model->getTable();
+			if (!$table) {
+				return $issues;
+			}
+
+			$schema = $model->getSchema();
+			$columns = $schema->columns();
+
+			foreach ($columns as $column) {
+				$columnType = $schema->getColumnType($column);
+				if (!$columnType || !str_starts_with($columnType, 'enum-')) {
+					continue;
+				}
+
+				$typeObject = TypeFactory::build($columnType);
+				if (!$typeObject instanceof EnumType) {
+					continue;
+				}
+
+				$enumClassName = $typeObject->getEnumClassName();
+				if (!class_exists($enumClassName)) {
+					continue;
+				}
+
+				$io->verbose('- ' . $table . '.' . $column . ' (' . $enumClassName . ')');
+
+				$validValues = array_map(
+					fn (BackedEnum $case): string|int => $case->value,
+					$enumClassName::cases(),
+				);
+
+				$invalidValues = $this->findInvalidValues($table, $column, $validValues, $connection);
+				if ($invalidValues) {
+					$issues[$table][$column] = [
+						'enum_class' => $enumClassName,
+						'valid_values' => $validValues,
+						'invalid_values' => $invalidValues,
+					];
+				}
+			}
+		} catch (ValueError $e) {
+			// Invalid enum data in this model - report it
+			$io->warning('Model ' . $model->getAlias() . ' has invalid enum data: ' . $e->getMessage());
+		} catch (CakeException $e) {
+			$io->error('Skipping model due to errors: ' . $e->getMessage());
+		} catch (Throwable $e) {
+			$io->error('Skipping model ' . $model->getAlias() . ': ' . $e->getMessage());
+		}
+
+		return $issues;
+	}
+
+	/**
+	 * Try to find and fix invalid enum data when models can't be loaded.
+	 *
+	 * Scans all varchar columns in the database to find columns containing the invalid value.
+	 *
+	 * @param \Throwable $e The exception
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param string $connection Connection name
+	 * @param bool $fix Whether to attempt fixing
+	 * @return void
+	 */
+	protected function tryFixEnumFromError(Throwable $e, ConsoleIo $io, string $connection, bool $fix): void {
+		$message = $e->getMessage();
+
+		// Try to extract enum class from error message like:
+		// '"" is not a valid backing value for enum App\Model\Enum\PccApiFieldMappingType'
+		if (!preg_match('/for enum ([A-Za-z0-9\\\\]+)/', $message, $matches)) {
+			$io->info('Fix the invalid enum data manually or use db_data enums with a specific model.');
+
+			return;
+		}
+
+		$enumClass = $matches[1];
+		$io->info('Enum class: ' . $enumClass);
+
+		if (!class_exists($enumClass) || !is_subclass_of($enumClass, BackedEnum::class)) {
+			$io->error('Cannot load enum class: ' . $enumClass);
+
+			return;
+		}
+
+		$validValues = array_map(fn (BackedEnum $case): string|int => $case->value, $enumClass::cases());
+		$io->out('Valid values: ' . implode(', ', array_map(fn ($v) => "'" . $v . "'", $validValues)));
+
+		// Extract the invalid value from message
+		$invalidValue = null;
+		if (preg_match('/^"([^"]*)"/', $message, $valueMatches)) {
+			$invalidValue = $valueMatches[1];
+			$io->out('Invalid value found: ' . ($invalidValue === '' ? '(empty string)' : "'{$invalidValue}'"));
+		}
+
+		$io->out();
+		$io->info('Scanning Table classes for columns using this enum...');
+		$io->out();
+
+		// Scan Table class files to find which column uses this enum
+		$found = $this->scanForInvalidEnumColumns($connection, $validValues, $invalidValue, $enumClass, $io);
+
+		if (!$found) {
+			$io->warning('Could not automatically locate the column. Check your Table classes for:');
+			$io->out('  ->setColumnType(\'column\', EnumType::from(' . $enumClass . '::class))');
+
+			return;
+		}
+
+		if ($fix) {
+			$this->fixFoundEnumIssues($found, $connection, $io);
+		} else {
+			$io->out();
+			$io->info('Run with --fix to automatically fix these issues.');
+		}
+	}
+
+	/**
+	 * Scan Table class files to find which column uses the enum class.
+	 *
+	 * @param string $connection Connection name
+	 * @param array<string|int> $validValues Valid enum values
+	 * @param string|null $invalidValue Specific invalid value to search for
+	 * @param string $enumClass The enum class to search for
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @return array<array<string, mixed>> Found columns with issues
+	 */
+	protected function scanForInvalidEnumColumns(string $connection, array $validValues, ?string $invalidValue, string $enumClass, ConsoleIo $io): array {
+		// Search Table class files for the enum registration
+		$tableLocations = [
+			APP . 'Model' . DS . 'Table',
+		];
+
+		// Add plugin paths
+		foreach (Plugin::loaded() as $plugin) {
+			$pluginPath = Plugin::path($plugin) . 'src' . DS . 'Model' . DS . 'Table';
+			if (is_dir($pluginPath)) {
+				$tableLocations[] = $pluginPath;
+			}
+		}
+
+		$found = [];
+		$shortEnumClass = substr($enumClass, (int)strrpos($enumClass, '\\') + 1);
+
+		foreach ($tableLocations as $location) {
+			if (!is_dir($location)) {
+				continue;
+			}
+
+			$files = glob($location . DS . '*Table.php');
+			if (!$files) {
+				continue;
+			}
+
+			foreach ($files as $file) {
+				$content = file_get_contents($file);
+				if ($content === false) {
+					continue;
+				}
+
+				// Look for setColumnType('column', EnumType::from(EnumClass::class))
+				// or getSchema()->setColumnType('column', 'enum-EnumClass')
+				if (strpos($content, $enumClass) === false && strpos($content, $shortEnumClass) === false) {
+					continue;
+				}
+
+				// Try to extract column name from patterns like:
+				// ->setColumnType('column_name', EnumType::from(EnumClass::class))
+				if (preg_match("/setColumnType\s*\(\s*['\"]([^'\"]+)['\"]\s*,\s*EnumType::from\s*\(\s*{$shortEnumClass}::class/", $content, $matches)) {
+					$column = $matches[1];
+					$tableName = $this->extractTableName($file, $content);
+
+					if ($tableName) {
+						$result = $this->checkColumnForInvalidValue($connection, $tableName, $column, $invalidValue, $validValues, $io);
+						if ($result) {
+							$found[] = $result;
+						}
+					}
+				}
+			}
+		}
+
+		return $found;
+	}
+
+	/**
+	 * Extract table name from a Table class file.
+	 *
+	 * @param string $file File path
+	 * @param string $content File content
+	 * @return string|null Table name
+	 */
+	protected function extractTableName(string $file, string $content): ?string {
+		// Try to find explicit table name in initialize()
+		if (preg_match("/setTable\s*\(\s*['\"]([^'\"]+)['\"]\s*\)/", $content, $matches)) {
+			return $matches[1];
+		}
+
+		// Fall back to convention: UsersTable.php -> users
+		$className = basename($file, '.php');
+		if (str_ends_with($className, 'Table')) {
+			$className = substr($className, 0, -5);
+
+			return Inflector::underscore($className);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check a specific column for the invalid value.
+	 *
+	 * @param string $connection Connection name
+	 * @param string $table Table name
+	 * @param string $column Column name
+	 * @param string|null $invalidValue Invalid value to check
+	 * @param array<string|int> $validValues Valid enum values
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @return array<string, mixed>|null Issue data or null
+	 */
+	protected function checkColumnForInvalidValue(string $connection, string $table, string $column, ?string $invalidValue, array $validValues, ConsoleIo $io): ?array {
+		$db = $this->_getConnection($connection);
+		$config = $db->config();
+		$database = $config['database'];
+
+		// Get nullability info
+		$sql = "SELECT IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS
+			WHERE TABLE_SCHEMA = '{$database}'
+			AND TABLE_NAME = '{$table}'
+			AND COLUMN_NAME = '{$column}'";
+
+		$result = $db->execute($sql)->fetch(PDO::FETCH_ASSOC);
+		if (!$result) {
+			return null;
+		}
+
+		$nullable = $result['IS_NULLABLE'] === 'YES';
+
+		// Check for invalid value
+		if ($invalidValue !== null) {
+			$checkSql = "SELECT COUNT(*) as cnt FROM `{$table}` WHERE `{$column}` = '" . addslashes($invalidValue) . "'";
+			$countResult = $db->execute($checkSql)->fetch(PDO::FETCH_ASSOC);
+			$count = (int)($countResult['cnt'] ?? 0);
+
+			if ($count > 0) {
+				$io->out("Found in {$table}.{$column}: {$count} records" . ($nullable ? ' (nullable)' : ' (NOT NULL)'));
+
+				return [
+					'table' => $table,
+					'column' => $column,
+					'nullable' => $nullable,
+					'invalid_value' => $invalidValue,
+					'count' => $count,
+					'valid_values' => $validValues,
+				];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Fix found enum issues by setting invalid values to NULL or a valid value.
+	 *
+	 * @param array<array<string, mixed>> $found Found issues
+	 * @param string $connection Connection name
+	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @return void
+	 */
+	protected function fixFoundEnumIssues(array $found, string $connection, ConsoleIo $io): void {
+		$db = $this->_getConnection($connection);
+		$fixed = 0;
+
+		foreach ($found as $issue) {
+			$table = $issue['table'];
+			$column = $issue['column'];
+			$nullable = $issue['nullable'];
+			$invalidValue = $issue['invalid_value'];
+			$validValues = $issue['valid_values'];
+
+			if ($nullable) {
+				// Set to NULL
+				$sql = "UPDATE `{$table}` SET `{$column}` = NULL WHERE `{$column}` = '" . addslashes($invalidValue) . "'";
+				$io->out("Setting {$table}.{$column} = NULL where value = '{$invalidValue}'");
+			} else {
+				// Column is NOT NULL - ask for a valid value or use first valid value
+				$defaultValue = $validValues[0] ?? null;
+				if ($defaultValue === null) {
+					$io->warning("Cannot fix {$table}.{$column}: NOT NULL and no valid values defined");
+
+					continue;
+				}
+				$io->warning("{$table}.{$column} is NOT NULL - setting to first valid value: '{$defaultValue}'");
+				$sql = "UPDATE `{$table}` SET `{$column}` = '" . addslashes((string)$defaultValue) . "' WHERE `{$column}` = '" . addslashes($invalidValue) . "'";
+			}
+
+			$statement = $db->execute($sql);
+			$fixed += $statement->rowCount();
+		}
+
+		if ($fixed > 0) {
+			$io->success('Fixed ' . $fixed . ' records. Please re-run the command to check for more issues.');
+		}
 	}
 
 	/**
