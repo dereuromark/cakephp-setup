@@ -34,7 +34,7 @@ class AllowUrlIncludeCheck extends Check {
 			$this->infoMessage[] = 'Set allow_url_include = Off in php.ini. This setting is disabled by default since PHP 5.2.';
 		} else {
 			$this->passed = true;
-			$this->successMessage[] = 'allow_url_include is disabled.';
+			$this->infoMessage[] = 'allow_url_include is disabled.';
 		}
 	}
 

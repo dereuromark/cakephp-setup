@@ -46,7 +46,7 @@ class TimezoneCheck extends Check {
 		}
 
 		$this->passed = true;
-		$this->successMessage[] = 'date.timezone is set to "' . $timezone . '".';
+		$this->infoMessage[] = 'date.timezone is set to "' . $timezone . '".';
 	}
 
 }
