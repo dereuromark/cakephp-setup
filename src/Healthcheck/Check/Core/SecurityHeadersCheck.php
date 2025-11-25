@@ -121,6 +121,16 @@ class SecurityHeadersCheck extends Check {
 		if (!isset($headerMap['x-xss-protection'])) {
 			$this->infoMessage[] = 'X-XSS-Protection header not set. Consider setting to "1; mode=block" for older browsers.';
 		}
+
+		// Check for Referrer-Policy
+		if (!isset($headerMap['referrer-policy'])) {
+			$this->infoMessage[] = 'Referrer-Policy header not set. Consider setting to "strict-origin-when-cross-origin" or "no-referrer" to control referrer information.';
+		}
+
+		// Check for Permissions-Policy (formerly Feature-Policy)
+		if (!isset($headerMap['permissions-policy'])) {
+			$this->infoMessage[] = 'Permissions-Policy header not set. Consider restricting browser features like camera, microphone, geolocation.';
+		}
 	}
 
 	/**
@@ -140,6 +150,8 @@ class SecurityHeadersCheck extends Check {
 		$this->infoMessage[] = '   Strict-Transport-Security: max-age=31536000; includeSubDomains';
 		$this->infoMessage[] = '   Content-Security-Policy: default-src \'self\'';
 		$this->infoMessage[] = '   X-XSS-Protection: 1; mode=block';
+		$this->infoMessage[] = '   Referrer-Policy: strict-origin-when-cross-origin';
+		$this->infoMessage[] = '   Permissions-Policy: geolocation=(), camera=(), microphone=()';
 		$this->infoMessage[] = '3. For CakePHP, use SecurityHeadersMiddleware or configure in app.php';
 	}
 
