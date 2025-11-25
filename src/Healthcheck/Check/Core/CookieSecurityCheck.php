@@ -1,0 +1,145 @@
+<?php
+
+namespace Setup\Healthcheck\Check\Core;
+
+use Cake\Core\Configure;
+use Setup\Healthcheck\Check\Check;
+
+class CookieSecurityCheck extends Check {
+
+	/**
+	 * @var string
+	 */
+	public const INFO = 'Checks if session cookies are configured with security best practices (HttpOnly, Secure, SameSite).';
+
+	protected string $level = self::LEVEL_WARNING;
+
+	protected bool $isDebug;
+
+	/**
+	 * @var array<string>
+	 */
+	protected array $scope = [
+		self::SCOPE_WEB,
+		self::SCOPE_CLI,
+	];
+
+	public function __construct() {
+		$this->isDebug = (bool)Configure::read('debug');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function check(): void {
+		$this->passed = true;
+
+		$this->checkHttpOnly();
+		$this->checkSecure();
+		$this->checkSameSite();
+
+		if (!$this->passed && !$this->isDebug) {
+			$this->addFixInstructions();
+		}
+	}
+
+	/**
+	 * Check if session.cookie_httponly is enabled.
+	 *
+	 * @return void
+	 */
+	protected function checkHttpOnly(): void {
+		$httpOnly = ini_get('session.cookie_httponly');
+
+		if ($httpOnly === false || $httpOnly === '' || $httpOnly === '0') {
+			$this->warningMessage[] = 'session.cookie_httponly is disabled. Enable it to prevent JavaScript access to session cookies (XSS mitigation).';
+			$this->passed = false;
+		} else {
+			$this->successMessage[] = 'session.cookie_httponly is enabled.';
+		}
+	}
+
+	/**
+	 * Check if session.cookie_secure is enabled.
+	 *
+	 * @return void
+	 */
+	protected function checkSecure(): void {
+		$secure = ini_get('session.cookie_secure');
+		$isEnabled = $secure !== false && $secure !== '' && $secure !== '0';
+
+		// In debug mode, secure cookies are optional (local dev often uses HTTP)
+		if ($this->isDebug) {
+			if ($isEnabled) {
+				$this->infoMessage[] = 'session.cookie_secure is enabled.';
+			} else {
+				$this->infoMessage[] = 'session.cookie_secure is disabled (acceptable in development).';
+			}
+
+			return;
+		}
+
+		if (!$isEnabled) {
+			$this->warningMessage[] = 'session.cookie_secure is disabled. Enable it in production to ensure cookies are only sent over HTTPS.';
+			$this->passed = false;
+		} else {
+			$this->successMessage[] = 'session.cookie_secure is enabled.';
+		}
+	}
+
+	/**
+	 * Check if session.cookie_samesite is configured.
+	 *
+	 * @return void
+	 */
+	protected function checkSameSite(): void {
+		$sameSite = ini_get('session.cookie_samesite');
+
+		if (!$sameSite) {
+			$this->warningMessage[] = 'session.cookie_samesite is not set. Consider setting to "Lax" or "Strict" for CSRF protection.';
+			$this->passed = false;
+
+			return;
+		}
+
+		$sameSite = ucfirst(strtolower($sameSite));
+
+		if ($sameSite === 'None') {
+			if ($this->isDebug) {
+				$this->infoMessage[] = 'session.cookie_samesite is set to "None" (acceptable in development).';
+			} else {
+				$this->warningMessage[] = 'session.cookie_samesite is set to "None". Consider using "Lax" or "Strict" unless cross-site requests are required.';
+				$this->passed = false;
+			}
+		} elseif ($sameSite === 'Strict') {
+			$this->successMessage[] = 'session.cookie_samesite is set to "Strict" (maximum CSRF protection).';
+		} elseif ($sameSite === 'Lax') {
+			$this->successMessage[] = 'session.cookie_samesite is set to "Lax" (good balance of security and usability).';
+		} else {
+			$this->warningMessage[] = 'session.cookie_samesite has an unrecognized value: "' . $sameSite . '". Use "Strict", "Lax", or "None".';
+			$this->passed = false;
+		}
+	}
+
+	/**
+	 * Add helpful information about how to fix cookie security issues.
+	 *
+	 * @return void
+	 */
+	protected function addFixInstructions(): void {
+		$this->infoMessage[] = 'To configure secure session cookies:';
+		$this->infoMessage[] = '1. In php.ini:';
+		$this->infoMessage[] = '   session.cookie_httponly = 1';
+		$this->infoMessage[] = '   session.cookie_secure = 1';
+		$this->infoMessage[] = '   session.cookie_samesite = "Lax"';
+		$this->infoMessage[] = '2. Or in CakePHP config/app.php:';
+		$this->infoMessage[] = '   \'Session\' => [';
+		$this->infoMessage[] = '       \'ini\' => [';
+		$this->infoMessage[] = '           \'session.cookie_httponly\' => true,';
+		$this->infoMessage[] = '           \'session.cookie_secure\' => true,';
+		$this->infoMessage[] = '           \'session.cookie_samesite\' => \'Lax\',';
+		$this->infoMessage[] = '       ],';
+		$this->infoMessage[] = '   ],';
+	}
+
+}

@@ -7,6 +7,7 @@ use Setup\Healthcheck\Check\CheckInterface;
 use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
 use Setup\Healthcheck\Check\Core\ComposerOptimizationCheck;
+use Setup\Healthcheck\Check\Core\CookieSecurityCheck;
 use Setup\Healthcheck\Check\Core\DebugModeDisabledCheck;
 use Setup\Healthcheck\Check\Core\FilePermissionsCheck;
 use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
@@ -44,6 +45,7 @@ class HealthcheckCollector {
 		ComposerOptimizationCheck::class,
 		FilePermissionsCheck::class,
 		SecurityHeadersCheck::class,
+		CookieSecurityCheck::class,
 	];
 
 	/**
