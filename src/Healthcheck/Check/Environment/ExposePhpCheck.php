@@ -21,7 +21,6 @@ class ExposePhpCheck extends Check {
 	 */
 	protected array $scope = [
 		self::SCOPE_WEB,
-		self::SCOPE_CLI,
 	];
 
 	public function __construct() {
