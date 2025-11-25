@@ -286,8 +286,13 @@ class OpcacheEnabledCheck extends Check {
 
 		$this->infoMessage[] = 'To enable OPcache:';
 		$this->infoMessage[] = '1. Ensure the OPcache extension is loaded: zend_extension=opcache.so (or opcache.dll on Windows)';
-		$this->infoMessage[] = '2. Enable OPcache: opcache.enable=1';
-		$this->infoMessage[] = '3. For CLI scripts: opcache.enable_cli=1 (optional)';
+
+		if ($this->isCli) {
+			$this->infoMessage[] = '2. Enable OPcache for CLI: opcache.enable_cli=1';
+		} else {
+			$this->infoMessage[] = '2. Enable OPcache: opcache.enable=1';
+		}
+
 		$this->infoMessage[] = 'Recommended production settings:';
 		$this->infoMessage[] = '  opcache.memory_consumption=256 (256-512 MB for large apps)';
 		$this->infoMessage[] = '  opcache.interned_strings_buffer=16 (16-32 MB recommended)';
@@ -301,7 +306,9 @@ class OpcacheEnabledCheck extends Check {
 		$this->infoMessage[] = '  opcache.jit_buffer_size=128M (128-256 MB recommended)';
 		$this->infoMessage[] = 'JIT modes: 1205 (function JIT) or 1255 (tracing JIT) are recommended';
 
-		$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
+		if (!$this->isCli) {
+			$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
+		}
 		$this->infoMessage[] = 'Performance impact: OPcache can improve PHP performance by 2-3x, JIT adds another 2-3x for CPU-intensive code.';
 	}
 
