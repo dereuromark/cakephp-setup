@@ -1,27 +1,27 @@
 <?php
 
-namespace Setup\Test\TestCase\Healthcheck\Check\Core;
+namespace Setup\Test\TestCase\Healthcheck\Check\Environment;
 
 use Cake\Core\Configure;
-use Setup\Healthcheck\Check\Core\CookieSecurityCheck;
+use Setup\Healthcheck\Check\Environment\PhpErrorDisplayCheck;
 use Shim\TestSuite\TestCase;
 
-class CookieSecurityCheckTest extends TestCase {
+class PhpErrorDisplayCheckTest extends TestCase {
 
 	/**
 	 * @return void
 	 */
 	public function testDomain(): void {
-		$check = new CookieSecurityCheck();
-		$this->assertSame('Core', $check->domain());
+		$check = new PhpErrorDisplayCheck();
+		$this->assertSame('Environment', $check->domain());
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testScope(): void {
-		$check = new CookieSecurityCheck();
-		$this->assertSame(['web'], $check->scope());
+		$check = new PhpErrorDisplayCheck();
+		$this->assertSame(['web', 'cli'], $check->scope());
 	}
 
 	/**
@@ -32,11 +32,10 @@ class CookieSecurityCheckTest extends TestCase {
 
 		Configure::write('debug', true);
 
-		$check = new CookieSecurityCheck();
+		$check = new PhpErrorDisplayCheck();
 		$check->check();
 
-		// In development mode, secure cookie check is relaxed
-		$this->assertIsBool($check->passed());
+		$this->assertTrue($check->passed());
 
 		Configure::write('debug', $originalDebug);
 	}
@@ -45,10 +44,9 @@ class CookieSecurityCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheck(): void {
-		$check = new CookieSecurityCheck();
+		$check = new PhpErrorDisplayCheck();
 		$check->check();
 
-		// Test should run without errors
 		$this->assertIsBool($check->passed());
 	}
 
@@ -56,7 +54,7 @@ class CookieSecurityCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testLevel(): void {
-		$check = new CookieSecurityCheck();
+		$check = new PhpErrorDisplayCheck();
 		$this->assertSame('warning', $check->level());
 	}
 

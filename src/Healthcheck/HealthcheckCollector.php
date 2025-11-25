@@ -8,6 +8,7 @@ use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
 use Setup\Healthcheck\Check\Core\ComposerOptimizationCheck;
 use Setup\Healthcheck\Check\Core\CookieSecurityCheck;
+use Setup\Healthcheck\Check\Core\DebugKitDisabledCheck;
 use Setup\Healthcheck\Check\Core\DebugModeDisabledCheck;
 use Setup\Healthcheck\Check\Core\FilePermissionsCheck;
 use Setup\Healthcheck\Check\Core\FullBaseUrlCheck;
@@ -15,13 +16,18 @@ use Setup\Healthcheck\Check\Core\SecurityHeadersCheck;
 use Setup\Healthcheck\Check\Core\SessionCleanupCheck;
 use Setup\Healthcheck\Check\Core\SessionLifetimeCheck;
 use Setup\Healthcheck\Check\Database\ConnectCheck;
+use Setup\Healthcheck\Check\Database\DatabaseCharsetCheck;
+use Setup\Healthcheck\Check\Environment\AllowUrlIncludeCheck;
+use Setup\Healthcheck\Check\Environment\ExposePhpCheck;
 use Setup\Healthcheck\Check\Environment\MaxExecutionTimeCheck;
 use Setup\Healthcheck\Check\Environment\MemoryLimitCheck;
 use Setup\Healthcheck\Check\Environment\OpcacheEnabledCheck;
+use Setup\Healthcheck\Check\Environment\PhpErrorDisplayCheck;
 use Setup\Healthcheck\Check\Environment\PhpExtensionsCheck;
 use Setup\Healthcheck\Check\Environment\PhpUploadLimitCheck;
 use Setup\Healthcheck\Check\Environment\PhpVersionCheck;
 use Setup\Healthcheck\Check\Environment\RealpathCacheCheck;
+use Setup\Healthcheck\Check\Environment\TimezoneCheck;
 use Setup\Healthcheck\Check\Environment\XdebugDisabledCheck;
 
 class HealthcheckCollector {
@@ -36,12 +42,18 @@ class HealthcheckCollector {
 		PhpUploadLimitCheck::class,
 		PhpExtensionsCheck::class,
 		ConnectCheck::class,
+		DatabaseCharsetCheck::class,
 		DebugModeDisabledCheck::class,
+		DebugKitDisabledCheck::class,
 		XdebugDisabledCheck::class,
 		OpcacheEnabledCheck::class,
 		RealpathCacheCheck::class,
 		MemoryLimitCheck::class,
 		MaxExecutionTimeCheck::class,
+		TimezoneCheck::class,
+		PhpErrorDisplayCheck::class,
+		ExposePhpCheck::class,
+		AllowUrlIncludeCheck::class,
 		ComposerOptimizationCheck::class,
 		FilePermissionsCheck::class,
 		SecurityHeadersCheck::class,
