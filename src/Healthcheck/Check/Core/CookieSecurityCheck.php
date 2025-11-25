@@ -51,7 +51,7 @@ class CookieSecurityCheck extends Check {
 			$this->infoMessage[] = 'Set in php.ini: session.cookie_httponly = 1 or in CakePHP config: \'Session\' => [\'ini\' => [\'session.cookie_httponly\' => true]]';
 			$this->passed = false;
 		} else {
-			$this->successMessage[] = 'session.cookie_httponly is enabled.';
+			$this->infoMessage[] = 'session.cookie_httponly is enabled.';
 		}
 	}
 
@@ -80,7 +80,7 @@ class CookieSecurityCheck extends Check {
 			$this->infoMessage[] = 'Set in php.ini: session.cookie_secure = 1 or in CakePHP config: \'Session\' => [\'ini\' => [\'session.cookie_secure\' => true]]';
 			$this->passed = false;
 		} else {
-			$this->successMessage[] = 'session.cookie_secure is enabled.';
+			$this->infoMessage[] = 'session.cookie_secure is enabled.';
 		}
 	}
 
@@ -110,9 +110,9 @@ class CookieSecurityCheck extends Check {
 				$this->passed = false;
 			}
 		} elseif ($sameSite === 'Strict') {
-			$this->successMessage[] = 'session.cookie_samesite is set to "Strict" (maximum CSRF protection).';
+			$this->infoMessage[] = 'session.cookie_samesite is set to "Strict" (maximum CSRF protection).';
 		} elseif ($sameSite === 'Lax') {
-			$this->successMessage[] = 'session.cookie_samesite is set to "Lax" (good balance of security and usability).';
+			$this->infoMessage[] = 'session.cookie_samesite is set to "Lax" (good balance of security and usability).';
 		} else {
 			$this->warningMessage[] = 'session.cookie_samesite has an unrecognized value: "' . $sameSite . '". Use "Strict", "Lax", or "None".';
 			$this->passed = false;

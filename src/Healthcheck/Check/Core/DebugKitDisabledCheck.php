@@ -53,7 +53,7 @@ class DebugKitDisabledCheck extends Check {
 			$this->infoMessage[] = '  if (Configure::read(\'debug\')) { $this->addPlugin(\'DebugKit\'); }';
 		} else {
 			$this->passed = true;
-			$this->successMessage[] = 'DebugKit is not loaded in production.';
+			$this->infoMessage[] = 'DebugKit is not loaded in production.';
 		}
 	}
 
