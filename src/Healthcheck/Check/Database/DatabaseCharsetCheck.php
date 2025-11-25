@@ -76,7 +76,7 @@ class DatabaseCharsetCheck extends Check {
 
 		if (strtolower($encoding) === 'utf8mb4') {
 			$this->passed = true;
-			$this->successMessage[] = 'Database is configured to use utf8mb4 encoding.';
+			$this->infoMessage[] = 'Database is configured to use utf8mb4 encoding.';
 
 			return;
 		}

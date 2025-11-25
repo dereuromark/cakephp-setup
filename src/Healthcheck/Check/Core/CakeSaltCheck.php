@@ -41,7 +41,7 @@ class CakeSaltCheck extends Check {
 		}
 
 		$this->passed = true;
-		$this->successMessage[] = 'Security.salt is configured (' . $length . ' characters).';
+		$this->infoMessage[] = 'Security.salt is configured (' . $length . ' characters).';
 	}
 
 }
