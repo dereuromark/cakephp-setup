@@ -43,7 +43,7 @@ class ExposePhpCheck extends Check {
 
 		if ($isEnabled) {
 			$this->passed = true;
-			$this->infoMessage[] = 'expose_php is enabled. PHP version is exposed in X-Powered-By header. Consider disabling to reduce information disclosure.';
+			$this->warningMessage[] = 'expose_php is enabled. PHP version is exposed in X-Powered-By header. Consider disabling to reduce information disclosure.';
 			$this->infoMessage[] = 'Set expose_php = Off in php.ini (requires restart, cannot be changed at runtime).';
 		} else {
 			$this->passed = true;

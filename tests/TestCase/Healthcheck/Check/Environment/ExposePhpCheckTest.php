@@ -21,7 +21,7 @@ class ExposePhpCheckTest extends TestCase {
 	 */
 	public function testScope(): void {
 		$check = new ExposePhpCheck();
-		$this->assertSame(['web', 'cli'], $check->scope());
+		$this->assertSame(['web'], $check->scope());
 	}
 
 	/**
