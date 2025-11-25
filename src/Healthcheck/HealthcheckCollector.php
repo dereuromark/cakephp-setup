@@ -18,8 +18,11 @@ use Setup\Healthcheck\Check\Core\SessionLifetimeCheck;
 use Setup\Healthcheck\Check\Database\ConnectCheck;
 use Setup\Healthcheck\Check\Database\DatabaseCharsetCheck;
 use Setup\Healthcheck\Check\Environment\AllowUrlIncludeCheck;
+use Setup\Healthcheck\Check\Environment\AssertionsCheck;
+use Setup\Healthcheck\Check\Environment\DisableFunctionsCheck;
 use Setup\Healthcheck\Check\Environment\ExposePhpCheck;
 use Setup\Healthcheck\Check\Environment\MaxExecutionTimeCheck;
+use Setup\Healthcheck\Check\Environment\MaxInputVarsCheck;
 use Setup\Healthcheck\Check\Environment\MemoryLimitCheck;
 use Setup\Healthcheck\Check\Environment\OpcacheEnabledCheck;
 use Setup\Healthcheck\Check\Environment\PhpErrorDisplayCheck;
@@ -46,14 +49,17 @@ class HealthcheckCollector {
 		DebugModeDisabledCheck::class,
 		DebugKitDisabledCheck::class,
 		XdebugDisabledCheck::class,
+		AssertionsCheck::class,
 		OpcacheEnabledCheck::class,
 		RealpathCacheCheck::class,
 		MemoryLimitCheck::class,
 		MaxExecutionTimeCheck::class,
+		MaxInputVarsCheck::class,
 		TimezoneCheck::class,
 		PhpErrorDisplayCheck::class,
 		ExposePhpCheck::class,
 		AllowUrlIncludeCheck::class,
+		DisableFunctionsCheck::class,
 		ComposerOptimizationCheck::class,
 		FilePermissionsCheck::class,
 		SecurityHeadersCheck::class,
