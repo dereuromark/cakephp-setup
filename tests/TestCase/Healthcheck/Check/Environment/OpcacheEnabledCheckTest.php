@@ -48,17 +48,18 @@ class OpcacheEnabledCheckTest extends TestCase {
 		$check = new OpcacheEnabledCheck();
 		$check->check();
 
+		// Check runtime status for current SAPI (CLI when running tests)
 		$opcacheEnabled = function_exists('opcache_get_status') && opcache_get_status() !== false;
 
 		if ($opcacheEnabled) {
-			// In production with opcache enabled, check should pass
+			// In production with opcache enabled for current SAPI, check should pass
 			$this->assertTrue($check->passed(), 'Check should pass when opcache is enabled in production mode');
 			$this->assertNotEmpty($check->infoMessage());
 		} else {
-			// In production without opcache, check should fail
+			// In production without opcache for current SAPI, check should fail
 			$this->assertFalse($check->passed(), 'Check should fail when opcache is disabled in production mode');
 			$this->assertNotEmpty($check->warningMessage());
-			$this->assertStringContainsString('OPcache is disabled in production mode', $check->warningMessage()[0]);
+			$this->assertStringContainsString('OPcache is disabled for CLI in production mode', $check->warningMessage()[0]);
 			$this->assertNotEmpty($check->infoMessage());
 		}
 

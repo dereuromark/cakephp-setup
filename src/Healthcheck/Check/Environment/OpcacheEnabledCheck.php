@@ -16,10 +16,13 @@ class OpcacheEnabledCheck extends Check {
 
 	protected bool $opcacheEnabled;
 
+	protected bool $isCli;
+
 	protected string $level = self::LEVEL_WARNING;
 
 	public function __construct() {
 		$this->isDebug = (bool)Configure::read('debug');
+		$this->isCli = PHP_SAPI === 'cli';
 		$this->opcacheEnabled = function_exists('opcache_get_status') && opcache_get_status() !== false;
 	}
 
@@ -41,9 +44,10 @@ class OpcacheEnabledCheck extends Check {
 
 		// In production mode (debug off), opcache should be enabled
 		$this->passed = $this->opcacheEnabled;
+		$context = $this->isCli ? 'CLI' : 'web';
 
 		if (!$this->passed) {
-			$this->warningMessage[] = 'OPcache is disabled in production mode. This significantly impacts performance and should be enabled.';
+			$this->warningMessage[] = 'OPcache is disabled for ' . $context . ' in production mode. This significantly impacts performance and should be enabled.';
 			$this->addFixInstructions();
 		} else {
 			$this->addOpcacheInfo();
