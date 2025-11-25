@@ -48,7 +48,7 @@ class ExposePhpCheck extends Check {
 			$this->infoMessage[] = 'Set expose_php = Off in php.ini (requires restart, cannot be changed at runtime).';
 		} else {
 			$this->passed = true;
-			$this->successMessage[] = 'expose_php is disabled.';
+			$this->infoMessage[] = 'expose_php is disabled.';
 		}
 	}
 

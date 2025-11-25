@@ -52,7 +52,7 @@ class PhpErrorDisplayCheck extends Check {
 			$this->infoMessage[] = 'Set display_errors = Off in php.ini or use ini_set(\'display_errors\', \'0\') in bootstrap.';
 		} else {
 			$this->passed = true;
-			$this->successMessage[] = 'display_errors is disabled in production.';
+			$this->infoMessage[] = 'display_errors is disabled in production.';
 		}
 	}
 
