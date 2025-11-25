@@ -36,6 +36,7 @@ class CookieSecurityCheck extends Check {
 		$this->checkHttpOnly();
 		$this->checkSecure();
 		$this->checkSameSite();
+		$this->checkStrictMode();
 	}
 
 	/**
@@ -116,6 +117,23 @@ class CookieSecurityCheck extends Check {
 		} else {
 			$this->warningMessage[] = 'session.cookie_samesite has an unrecognized value: "' . $sameSite . '". Use "Strict", "Lax", or "None".';
 			$this->passed = false;
+		}
+	}
+
+	/**
+	 * Check if session.use_strict_mode is enabled.
+	 *
+	 * @return void
+	 */
+	protected function checkStrictMode(): void {
+		$strictMode = ini_get('session.use_strict_mode');
+
+		if ($strictMode === false || $strictMode === '' || $strictMode === '0') {
+			$this->warningMessage[] = 'session.use_strict_mode is disabled. Enable it to reject uninitialized session IDs (session fixation mitigation).';
+			$this->infoMessage[] = 'Set in php.ini: session.use_strict_mode = 1 or in CakePHP config: \'Session\' => [\'ini\' => [\'session.use_strict_mode\' => true]]';
+			$this->passed = false;
+		} else {
+			$this->infoMessage[] = 'session.use_strict_mode is enabled.';
 		}
 	}
 
