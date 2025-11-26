@@ -5,6 +5,7 @@ namespace Setup;
 use Bake\Command\SimpleBakeCommand;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
 use Cake\Routing\RouteBuilder;
 use Setup\Command\BakeHealthcheckCommand;
 use Setup\Command\CliTestCommand;
@@ -23,6 +24,7 @@ use Setup\Command\DbIntegrityNullsCommand;
 use Setup\Command\DbResetCommand;
 use Setup\Command\DbWipeCommand;
 use Setup\Command\HealthcheckCommand;
+use Setup\Command\HelpCommand;
 use Setup\Command\MailCheckCommand;
 use Setup\Command\MaintenanceModeActivateCommand;
 use Setup\Command\MaintenanceModeDeactivateCommand;
@@ -48,6 +50,12 @@ class SetupPlugin extends BasePlugin {
 	 * @return \Cake\Console\CommandCollection
 	 */
 	public function console(CommandCollection $commands): CommandCollection {
+		// Enable compact help command if configured
+		if (Configure::read('Setup.compactHelp')) {
+			$commands->remove('help');
+			$commands->add('help', HelpCommand::class);
+		}
+
 		$commands->add('healthcheck', HealthcheckCommand::class);
 
 		$commands->add('maintenance_mode status', MaintenanceModeStatusCommand::class);
