@@ -80,6 +80,71 @@ In order to not lose this sometimes important meta info, they can be written (an
 
 - Adds length field info to comment as prefix (`[schema] length: x`).
 
+## DB Data Validation
+
+These commands help detect and fix invalid data in the database.
+
+### Dates
+Check for invalid zero date/datetime values (`0000-00-00` or `0000-00-00 00:00:00`).
+
+```bash
+bin/cake db_data dates
+```
+
+Options:
+- `-f, --fix`: Fix invalid dates by setting them to NULL
+- `-c, --connection`: Database connection to use (default: `default`)
+- Use `-v` for verbose output including SQL fix statements
+
+You can also check a specific table:
+```bash
+bin/cake db_data dates users
+```
+
+### Enums
+Check for invalid enum values against PHP BackedEnum definitions.
+
+```bash
+bin/cake db_data enums
+```
+
+This command:
+- Validates values against PHP BackedEnum class definitions
+- Detects MySQL ENUM columns and suggests migration to VARCHAR + PHP BackedEnum
+- Shows mismatches between PHP and MySQL enum definitions
+
+Options:
+- `-f, --fix`: Fix invalid enum values by setting them to NULL
+- `-p, --plugin`: Plugin to check
+- `-c, --connection`: Database connection to use (default: `default`)
+- Use `-v` for verbose output including SQL fix statements
+
+You can also check a specific model:
+```bash
+bin/cake db_data enums Users
+```
+
+### Orphans
+Check for orphaned foreign key records (FK values pointing to non-existent parents).
+
+```bash
+bin/cake db_data orphans
+```
+
+This is useful when constraints weren't enforced historically or after data migrations.
+
+Options:
+- `-f, --fix`: Fix orphaned records by setting FK to NULL
+- `-d, --delete`: Delete orphaned records instead of nullifying (use with `--fix`)
+- `-p, --plugin`: Plugin to check
+- `-c, --connection`: Database connection to use (default: `default`)
+- Use `-v` for verbose output including SQL statements
+
+You can also check a specific model:
+```bash
+bin/cake db_data orphans Users
+```
+
 ## Backup create and restore
 
 ### Create

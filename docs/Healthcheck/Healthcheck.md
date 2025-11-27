@@ -109,3 +109,84 @@ on errors directly alert the admin(s).
 Using [QueueScheduler plugin](https://github.com/dereuromark/cakephp-queue-scheduler) you can directly
 add a scheduled task for it in the backend, e.g. every hour.
 
+## Default Checks
+
+The following checks are included by default:
+
+### Environment Checks
+- **PhpVersionCheck**: Validates PHP version meets requirements
+- **PhpExtensionsCheck**: Checks required PHP extensions are loaded
+- **PhpUploadLimitCheck**: Validates upload_max_filesize setting
+- **MemoryLimitCheck**: Checks PHP memory_limit is adequate
+- **MaxExecutionTimeCheck**: Validates max_execution_time setting
+- **MaxInputVarsCheck**: Checks max_input_vars limit
+- **TimezoneCheck**: Validates timezone configuration
+- **OpcacheEnabledCheck**: Checks OPcache is enabled in production
+- **RealpathCacheCheck**: Validates realpath cache settings
+- **XdebugDisabledCheck**: Warns if Xdebug is enabled in production
+- **AssertionsCheck**: Checks assertion settings for production
+- **PhpErrorDisplayCheck**: Validates display_errors is off in production
+- **ExposePhpCheck**: Checks expose_php is disabled
+- **AllowUrlIncludeCheck**: Validates allow_url_include is off
+- **DisableFunctionsCheck**: Checks dangerous functions are disabled
+
+### Core/Application Checks
+- **CakeVersionCheck**: Validates CakePHP version
+- **CakeSaltCheck**: Ensures security salt is properly configured
+- **FullBaseUrlCheck**: Validates App.fullBaseUrl configuration
+- **DebugModeDisabledCheck**: Warns if debug mode is on in production
+- **DebugKitDisabledCheck**: Checks DebugKit is disabled in production
+- **SessionLifetimeCheck**: Validates session lifetime settings
+- **SessionCleanupCheck**: Checks session garbage collection settings
+- **FilePermissionsCheck**: Validates tmp/ and logs/ are writable
+- **ComposerOptimizationCheck**: Checks composer autoloader is optimized
+- **SecurityHeadersCheck**: Validates security-related HTTP headers
+- **CookieSecurityCheck**: Checks cookie security settings (Secure, HttpOnly, SameSite)
+
+### Database Checks
+- **ConnectCheck**: Validates database connection
+- **DatabaseCharsetCheck**: Checks database charset/collation settings
+
+## Creating Custom Checks
+
+You can create your own checks by implementing `Setup\Healthcheck\Check\CheckInterface`:
+
+```php
+namespace App\Healthcheck\Check;
+
+use Setup\Healthcheck\Check\AbstractCheck;
+use Setup\Healthcheck\HealthcheckResult;
+
+class MyCustomCheck extends AbstractCheck {
+
+    public function run(): HealthcheckResult {
+        // Your check logic here
+        if ($everythingOk) {
+            return HealthcheckResult::success('All good!');
+        }
+
+        return HealthcheckResult::error('Something is wrong');
+    }
+
+    public function name(): string {
+        return 'My Custom Check';
+    }
+
+    public function domain(): string {
+        return 'Application';
+    }
+
+}
+```
+
+Then add it to your configuration:
+```php
+'Setup' => [
+    'Healthcheck' => [
+        'checks' => [
+            \App\Healthcheck\Check\MyCustomCheck::class,
+        ] + \Setup\Healthcheck\HealthcheckCollector::defaultChecks(),
+    ],
+],
+```
+
