@@ -8,6 +8,7 @@ use Cake\Datasource\SchemaInterface;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Throwable;
 
 class SetupBakeHelper extends BakeHelper {
 
@@ -202,7 +203,7 @@ class SetupBakeHelper extends BakeHelper {
 					return ['order' => [$currentModelName . '.created' => 'DESC']];
 				}
 			}
-		} catch (\Throwable) {
+		} catch (Throwable) {
 			// ignore
 		}
 

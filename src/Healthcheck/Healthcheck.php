@@ -4,6 +4,7 @@ namespace Setup\Healthcheck;
 
 use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
+use ReflectionClass;
 use Setup\Healthcheck\Check\CheckInterface;
 
 class Healthcheck {
@@ -40,7 +41,7 @@ class Healthcheck {
 
 			// If check passed but has warnings, treat it as a warning-level failure
 			if ($check->passed() && $check->warningMessage()) {
-				$reflection = new \ReflectionClass($check);
+				$reflection = new ReflectionClass($check);
 				$passedProperty = $reflection->getProperty('passed');
 				$passedProperty->setAccessible(true);
 				$passedProperty->setValue($check, false);

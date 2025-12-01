@@ -11,6 +11,7 @@ use Cake\Core\Configure;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ModelAwareTrait;
 use Cake\Utility\Inflector;
+use Closure;
 
 if (!defined('CLASS_USERS')) {
 	define('CLASS_USERS', 'Users');
@@ -174,7 +175,7 @@ class UserCreateCommand extends Command {
 		/** @var \App\Model\Entity\User $user */
 		$user = $Users->newEntity($data, ['validate' => false]);
 		$callable = Configure::read('UserCreate.callable');
-		if ($callable instanceof \Closure) {
+		if ($callable instanceof Closure) {
 			$user = $callable($user);
 		}
 
