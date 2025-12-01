@@ -306,6 +306,17 @@ class OpcacheEnabledCheck extends Check {
 		$this->infoMessage[] = '  opcache.jit_buffer_size=128M (128-256 MB recommended)';
 		$this->infoMessage[] = 'JIT modes: 1205 (function JIT) or 1255 (tracing JIT) are recommended';
 
+		if ($phpIniPath) {
+			$this->infoMessage[] = 'Quick fix via sed:';
+			if ($this->isCli) {
+				$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?opcache.enable_cli.*/opcache.enable_cli = 1/\' ' . $phpIniPath . '`';
+			} else {
+				$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?opcache.enable.*/opcache.enable = 1/\' ' . $phpIniPath . '`';
+			}
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?opcache.memory_consumption.*/opcache.memory_consumption = 256/\' ' . $phpIniPath . '`';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?opcache.validate_timestamps.*/opcache.validate_timestamps = 0/\' ' . $phpIniPath . '`';
+		}
+
 		if (!$this->isCli) {
 			$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
 		}

@@ -32,6 +32,10 @@ class AllowUrlIncludeCheck extends Check {
 			$this->passed = false;
 			$this->warningMessage[] = 'allow_url_include is enabled. This is a serious security risk that can allow remote file inclusion (RFI) attacks.';
 			$this->infoMessage[] = 'Set allow_url_include = Off in php.ini. This setting is disabled by default since PHP 5.2.';
+			$phpIniPath = php_ini_loaded_file();
+			if ($phpIniPath) {
+				$this->infoMessage[] = 'Quick fix: `sudo sed -i \'s/^;\\?allow_url_include.*/allow_url_include = Off/\' ' . $phpIniPath . '`';
+			}
 		} else {
 			$this->passed = true;
 			$this->infoMessage[] = 'allow_url_include is disabled.';

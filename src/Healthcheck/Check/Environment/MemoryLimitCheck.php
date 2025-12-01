@@ -93,6 +93,12 @@ class MemoryLimitCheck extends Check {
 		$this->infoMessage[] = '1. Set memory_limit in php.ini: memory_limit=' . ($this->minMemoryMB * 2) . 'M (recommended for most apps)';
 		$this->infoMessage[] = '2. For large applications: memory_limit=' . ($this->minMemoryMB * 4) . 'M';
 		$this->infoMessage[] = '3. Avoid unlimited (-1) as it can cause server instability';
+
+		if ($phpIniPath) {
+			$this->infoMessage[] = 'Quick fix via sed:';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?memory_limit.*/memory_limit = ' . ($this->minMemoryMB * 2) . 'M/\' ' . $phpIniPath . '`';
+		}
+
 		$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
 		$this->infoMessage[] = 'Note: CLI scripts can have different limits set in php-cli.ini';
 	}

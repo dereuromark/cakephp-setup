@@ -86,6 +86,12 @@ class MaxExecutionTimeCheck extends Check {
 		$this->infoMessage[] = '1. For web requests: max_execution_time=' . ($this->maxSeconds / 5) . ' (' . $this->minSeconds . '-' . ($this->maxSeconds / 2) . ' seconds recommended)';
 		$this->infoMessage[] = '2. For CLI scripts: Use php-cli.ini with higher/unlimited values';
 		$this->infoMessage[] = '3. Move long-running tasks to background jobs (queue system)';
+
+		if ($phpIniPath) {
+			$this->infoMessage[] = 'Quick fix via sed:';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?max_execution_time.*/max_execution_time = ' . (int)($this->maxSeconds / 5) . '/\' ' . $phpIniPath . '`';
+		}
+
 		$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
 		$this->infoMessage[] = 'Note: This check only runs for web requests (not CLI).';
 	}

@@ -50,6 +50,10 @@ class PhpErrorDisplayCheck extends Check {
 			$this->passed = false;
 			$this->warningMessage[] = 'display_errors is enabled in production. This can expose sensitive information (stack traces, file paths, database details) to attackers.';
 			$this->infoMessage[] = 'Set display_errors = Off in php.ini or use ini_set(\'display_errors\', \'0\') in bootstrap.';
+			$phpIniPath = php_ini_loaded_file();
+			if ($phpIniPath) {
+				$this->infoMessage[] = 'Quick fix: `sudo sed -i \'s/^;\\?display_errors.*/display_errors = Off/\' ' . $phpIniPath . '`';
+			}
 		} else {
 			$this->passed = true;
 			$this->infoMessage[] = 'display_errors is disabled in production.';

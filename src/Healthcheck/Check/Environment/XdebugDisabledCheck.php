@@ -71,6 +71,11 @@ class XdebugDisabledCheck extends Check {
 		$this->infoMessage[] = '1. Comment out or remove the xdebug extension line in your php.ini or conf.d/*.ini files';
 		$this->infoMessage[] = '   Example: Change `zend_extension=xdebug.so` to `;zend_extension=xdebug.so`';
 		$this->infoMessage[] = '2. Or disable xdebug mode: xdebug.mode=off';
+
+		if ($phpIniPath) {
+			$this->infoMessage[] = 'Quick fix: `sudo sed -i \'s/^;\\?xdebug.mode.*/xdebug.mode = off/\' ' . $phpIniPath . '`';
+		}
+
 		$this->infoMessage[] = '3. After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
 		$this->infoMessage[] = 'Performance impact: Xdebug can slow down PHP execution by 2-10x even when not actively debugging.';
 	}

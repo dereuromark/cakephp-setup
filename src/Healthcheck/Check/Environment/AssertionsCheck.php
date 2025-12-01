@@ -74,8 +74,8 @@ class AssertionsCheck extends Check {
 
 		if ($phpIniPath) {
 			$this->infoMessage[] = 'Quick fix for ' . $phpIniPath . ':';
-			$this->infoMessage[] = '  `sudo sed -i "s/^zend.assertions.*/zend.assertions = 1/" ' . escapeshellarg($phpIniPath) . '`';
-			$this->infoMessage[] = '  `sudo sed -i "s/^assert.active.*/assert.active = 1/" ' . escapeshellarg($phpIniPath) . '`';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?zend.assertions.*/zend.assertions = 1/\' ' . $phpIniPath . '`';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?assert.active.*/assert.active = 1/\' ' . $phpIniPath . '`';
 		}
 
 		$this->infoMessage[] = 'After editing php.ini, restart PHP-FPM: `sudo systemctl restart php-fpm` or Apache: `sudo systemctl restart apache2`';
@@ -95,8 +95,8 @@ class AssertionsCheck extends Check {
 
 		if ($phpIniPath) {
 			$this->infoMessage[] = 'Quick fix for ' . $phpIniPath . ':';
-			$this->infoMessage[] = '  `sudo sed -i "s/^zend.assertions.*/zend.assertions = -1/" ' . escapeshellarg($phpIniPath) . '`';
-			$this->infoMessage[] = '  `sudo sed -i "s/^assert.active.*/assert.active = 0/" ' . escapeshellarg($phpIniPath) . '`';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?zend.assertions.*/zend.assertions = -1/\' ' . $phpIniPath . '`';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?assert.active.*/assert.active = 0/\' ' . $phpIniPath . '`';
 		}
 
 		$this->infoMessage[] = 'Note: zend.assertions can only be set in php.ini, not at runtime.';

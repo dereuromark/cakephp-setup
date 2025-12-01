@@ -106,6 +106,13 @@ class RealpathCacheCheck extends Check {
 		$this->infoMessage[] = 'To optimize realpath cache:';
 		$this->infoMessage[] = '1. Increase cache size: realpath_cache_size=4096K (4M for large apps)';
 		$this->infoMessage[] = '2. Increase TTL for production: realpath_cache_ttl=3600 (1 hour or more)';
+
+		if ($phpIniPath) {
+			$this->infoMessage[] = 'Quick fix via sed:';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?realpath_cache_size.*/realpath_cache_size = 4096K/\' ' . $phpIniPath . '`';
+			$this->infoMessage[] = '  `sudo sed -i \'s/^;\\?realpath_cache_ttl.*/realpath_cache_ttl = 3600/\' ' . $phpIniPath . '`';
+		}
+
 		$this->infoMessage[] = 'After editing, restart your web server (Apache/Nginx) or PHP-FPM to apply changes.';
 		$this->infoMessage[] = 'Impact: Realpath cache reduces file system calls for path resolution, improving performance by 5-15%.';
 		$this->infoMessage[] = 'Note: In development, lower values allow for faster file change detection.';

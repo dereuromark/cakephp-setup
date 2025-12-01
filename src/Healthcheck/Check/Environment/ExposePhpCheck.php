@@ -45,6 +45,10 @@ class ExposePhpCheck extends Check {
 			$this->passed = true;
 			$this->warningMessage[] = 'expose_php is enabled. PHP version is exposed in X-Powered-By header. Consider disabling to reduce information disclosure.';
 			$this->infoMessage[] = 'Set expose_php = Off in php.ini (requires restart, cannot be changed at runtime).';
+			$phpIniPath = php_ini_loaded_file();
+			if ($phpIniPath) {
+				$this->infoMessage[] = 'Quick fix: `sudo sed -i \'s/^;\\?expose_php.*/expose_php = Off/\' ' . $phpIniPath . '`';
+			}
 		} else {
 			$this->passed = true;
 			$this->infoMessage[] = 'expose_php is disabled.';

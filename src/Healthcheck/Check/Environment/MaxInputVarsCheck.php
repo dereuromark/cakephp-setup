@@ -53,7 +53,7 @@ class MaxInputVarsCheck extends Check {
 
 		if ($phpIniPath) {
 			$this->infoMessage[] = 'Loaded Configuration File: `' . $phpIniPath . '`';
-			$this->infoMessage[] = 'Quick fix: `sudo sed -i "s/^max_input_vars.*/max_input_vars = ' . static::RECOMMENDED_MIN . '/" ' . escapeshellarg($phpIniPath) . '`';
+			$this->infoMessage[] = 'Quick fix: `sudo sed -i \'s/^;\\?max_input_vars.*/max_input_vars = ' . static::RECOMMENDED_MIN . '/\' ' . $phpIniPath . '`';
 		}
 
 		$this->infoMessage[] = 'Common values: 3000 (most apps), 5000 (complex admin), 10000 (bulk editing)';
