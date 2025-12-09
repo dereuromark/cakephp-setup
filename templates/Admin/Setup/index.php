@@ -22,6 +22,7 @@
 		<li><?php echo $this->Html->link('Database Info', ['controller' => 'Backend', 'action' => 'database']);?></li>
 		<li><?php echo $this->Html->link(__('Disk Space'), ['controller' => 'Backend', 'action' => 'diskSpace']);?></li>
 		<li><?php echo $this->Html->link(__('ENV Config'), ['controller' => 'Backend', 'action' => 'env']);?></li>
+		<li><?php echo $this->Html->link(__('IP Info'), ['controller' => 'Backend', 'action' => 'ip']);?></li>
 	</ul>
 
 

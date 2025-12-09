@@ -281,9 +281,29 @@ SQL;
 	 * @return void
 	 */
 	public function ip() {
+		// Client IP info
 		$ipAddress = (string)env('REMOTE_ADDR');
 		$host = $ipAddress ? gethostbyaddr($ipAddress) : null;
 
+		// Server IP info
+		$serverIp = (string)env('SERVER_ADDR');
+		$serverHost = $serverIp ? gethostbyaddr($serverIp) : null;
+		$serverName = (string)env('SERVER_NAME');
+		$serverPort = (string)env('SERVER_PORT');
+
+		// Request info
+		$requestInfo = [
+			'User Agent' => $this->request->getHeaderLine('User-Agent') ?: (string)env('HTTP_USER_AGENT'),
+			'Request Method' => $this->request->getMethod(),
+			'Request Scheme' => $this->request->scheme(),
+			'Server Protocol' => (string)env('SERVER_PROTOCOL'),
+			'Request URI' => (string)env('REQUEST_URI'),
+			'Accept Language' => $this->request->getHeaderLine('Accept-Language'),
+			'Accept Encoding' => $this->request->getHeaderLine('Accept-Encoding'),
+		];
+		$requestInfo = array_filter($requestInfo);
+
+		// Proxy headers
 		$proxyHeaderKeys = [
 			'HTTP_VIA',
 			'HTTP_X_FORWARDED_FOR',
@@ -308,7 +328,34 @@ SQL;
 			}
 		}
 
-		$this->set(compact('ipAddress', 'host', 'proxyHeaders'));
+		// Network interfaces (server side)
+		$networkInterfaces = [];
+		if (function_exists('net_get_interfaces')) {
+			$interfaces = @net_get_interfaces();
+			if ($interfaces !== false) {
+				foreach ($interfaces as $name => $info) {
+					if (!empty($info['unicast'])) {
+						foreach ($info['unicast'] as $unicast) {
+							if (!empty($unicast['address'])) {
+								$networkInterfaces[$name][] = $unicast['address'];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		$this->set(compact(
+			'ipAddress',
+			'host',
+			'serverIp',
+			'serverHost',
+			'serverName',
+			'serverPort',
+			'requestInfo',
+			'proxyHeaders',
+			'networkInterfaces',
+		));
 	}
 
 	/**
