@@ -3,6 +3,7 @@
 namespace Setup\Test\TestCase\Queue\Task;
 
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use Setup\Queue\Task\HealthcheckTask;
 
 class HealthcheckTaskTest extends TestCase {
@@ -15,7 +16,7 @@ class HealthcheckTaskTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	#[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+	#[DoesNotPerformAssertions]
 	public function testRun(): void {
 		$task = new HealthcheckTask();
 
