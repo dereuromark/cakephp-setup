@@ -196,7 +196,8 @@ class SetupComponent extends Component {
 			. NL . 'Referer:' . TB . '' . $referer
 			. NL . NL . 'Browser: ' . env('HTTP_USER_AGENT')
 			. NL . 'IP: ' . env('REMOTE_ADDR');
-			$uid = $this->getController()->getRequest()->getSession()->read('Auth.User.id');
+			$sessionKey = Configure::read('Setup.sessionKey') ?? 'Auth.User';
+			$uid = $this->getController()->getRequest()->getSession()->read($sessionKey . '.id');
 			if ($uid) {
 				$text .= NL . NL . 'UID: ' . $uid;
 			}
