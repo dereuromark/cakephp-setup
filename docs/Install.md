@@ -15,16 +15,7 @@ Maintenance Mode and additional SetupComponent functionality would also not be a
 
 Details @ https://packagist.org/packages/dereuromark/cakephp-setup
 
-This will load the plugin (within your boostrap file):
-```php
-Plugin::load('Setup');
+Then load the plugin:
 ```
-or
-```php
-Plugin::loadAll();
-```
-
-The recommendation is to also include the bootstrap file to leverage the debug output functions:
-```php
-Plugin::load('Setup', ['bootstrap' => true]);
+bin/cake plugin load Setup
 ```
