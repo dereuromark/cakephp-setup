@@ -5,6 +5,7 @@ namespace Setup\Test\TestCase\Controller\Component;
 use App\Controller\AppController;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Route\DashedRoute;
@@ -40,6 +41,15 @@ class SetupComponentTest extends TestCase {
 		$builder->scope('/', function (RouteBuilder $routes): void {
 			$routes->fallbacks();
 		});
+	}
+
+	/**
+	 * @return void
+	 */
+	public function tearDown(): void {
+		parent::tearDown();
+
+		Configure::delete('Setup.sessionKey');
 	}
 
 	/**
@@ -116,6 +126,84 @@ class SetupComponentTest extends TestCase {
 			],
 		];
 		$this->assertSame($expected, $result);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testIssueMailingDefaultSessionKey(): void {
+		$controller = $this->getMockBuilder(Controller::class)
+			->onlyMethods(['getName', 'referer'])
+			->setConstructorArgs([new ServerRequest()])
+			->getMock();
+		$controller->method('getName')->willReturn('CakeError');
+		$controller->method('referer')->willReturn('https://example.com/previous-page');
+		$controller->loadComponent('Flash');
+
+		$session = $controller->getRequest()->getSession();
+		$session->write('Auth.User.id', 123);
+
+		$component = $this->getMockBuilder(SetupComponent::class)
+			->onlyMethods(['_notification'])
+			->setConstructorArgs([new ComponentRegistry($controller)])
+			->getMock();
+		$component->notifications = ['404' => true];
+		$component->Controller = $controller;
+
+		$component->expects($this->once())
+			->method('_notification')
+			->with(
+				'404!',
+				$this->stringContains('UID: 123'),
+			)
+			->willReturn(true);
+
+		putenv('REMOTE_ADDR=192.168.1.1');
+		Configure::write('debug', 0);
+
+		$component->issueMailing();
+
+		putenv('REMOTE_ADDR');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testIssueMailingCustomSessionKey(): void {
+		$controller = $this->getMockBuilder(Controller::class)
+			->onlyMethods(['getName', 'referer'])
+			->setConstructorArgs([new ServerRequest()])
+			->getMock();
+		$controller->method('getName')->willReturn('CakeError');
+		$controller->method('referer')->willReturn('https://example.com/previous-page');
+		$controller->loadComponent('Flash');
+
+		$session = $controller->getRequest()->getSession();
+		$session->write('Auth.id', 456);
+
+		Configure::write('Setup.sessionKey', 'Auth');
+
+		$component = $this->getMockBuilder(SetupComponent::class)
+			->onlyMethods(['_notification'])
+			->setConstructorArgs([new ComponentRegistry($controller)])
+			->getMock();
+		$component->notifications = ['404' => true];
+		$component->Controller = $controller;
+
+		$component->expects($this->once())
+			->method('_notification')
+			->with(
+				'404!',
+				$this->stringContains('UID: 456'),
+			)
+			->willReturn(true);
+
+		putenv('REMOTE_ADDR=192.168.1.1');
+		Configure::write('debug', 0);
+
+		$component->issueMailing();
+
+		putenv('REMOTE_ADDR');
 	}
 
 }
