@@ -58,6 +58,7 @@ TXT;
 	 */
 	public function getOptionParser(): ConsoleOptionParser {
 		$parser = parent::getOptionParser();
+		$parser->setDescription('Send a test email from CLI to verify mail config.');
 
 		return $parser;
 	}
