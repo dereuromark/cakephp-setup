@@ -34,8 +34,7 @@ use Setup\Utility\System;
 	<br />
 	Errors: <?php
 	$level = error_reporting();
-	//App::uses('SystemLib', 'Setup.Lib');
-	$errorString = System::error2string($level);
+	$errorString = System::error2string($level, true);
 	echo $errorString;
 	?>
 

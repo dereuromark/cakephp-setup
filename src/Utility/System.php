@@ -14,9 +14,10 @@ class System {
 	 * Turn bitmasked level into readable string
 	 *
 	 * @param int $value Error levels as bitmask
+	 * @param bool $showDisabled Whether to also show disabled levels (formatted for HTML display)
 	 * @return string Errors separated by pipe (|)
 	 */
-	public static function error2string($value) {
+	public static function error2string(int $value, bool $showDisabled = false): string {
 		$levelNames = [
 			E_ERROR => 'E_ERROR',
 			E_WARNING => 'E_WARNING',
@@ -34,6 +35,7 @@ class System {
 			E_USER_DEPRECATED => 'E_USER_DEPRECATED',
 		];
 
+		$originalValue = $value;
 		$levels = [];
 		if (($value & E_ALL) === E_ALL) {
 			$levels[] = 'E_ALL';
@@ -45,7 +47,23 @@ class System {
 			}
 		}
 
-		return implode(' | ', $levels);
+		if (!$showDisabled) {
+			return implode(' | ', $levels);
+		}
+
+		$disabled = [];
+		foreach ($levelNames as $level => $name) {
+			if (($originalValue & $level) != $level) {
+				$disabled[] = $name;
+			}
+		}
+
+		$result = implode(' | ', $levels);
+		if ($disabled) {
+			$result .= ' | <span style="color:#999;text-decoration:line-through">' . implode(' | ', $disabled) . '</span>';
+		}
+
+		return $result;
 	}
 
 	/**

@@ -31,11 +31,24 @@ class Debug {
 	/**
 	 * Determines the server load (last 1 minute - last 5 minutes - last 15 minutes)
 	 *
-	 * @return array
+	 * @return array<string>
 	 */
-	public function getServerLoad() {
+	public function getServerLoad(): array {
+		// Use PHP's built-in function (works in FrankenPHP worker mode, etc.)
+		if (function_exists('sys_getloadavg')) {
+			$load = sys_getloadavg();
+			if ($load !== false) {
+				return [
+					sprintf('%.2f', $load[0]),
+					sprintf('%.2f', $load[1]),
+					sprintf('%.2f', $load[2]),
+				];
+			}
+		}
+
+		// Fallback to exec if sys_getloadavg is not available
 		$load = [];
-		$res = (string)exec('uptime');
+		$res = (string)@exec('uptime');
 		// last 1 minute : last 5 minutes : last 15 minutes
 		if (preg_match("/averages?: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/", $res, $load) <= 0) {
 			return [];
