@@ -16,6 +16,13 @@ use Tools\Mailer\Mailer;
 class MailCheckCommand extends Command {
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Send a test email from CLI to verify mail config.';
+	}
+
+	/**
 	 * @param \Cake\Console\Arguments $args The command arguments.
 	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int
@@ -58,7 +65,6 @@ TXT;
 	 */
 	public function getOptionParser(): ConsoleOptionParser {
 		$parser = parent::getOptionParser();
-		$parser->setDescription('Send a test email from CLI to verify mail config.');
 
 		return $parser;
 	}
