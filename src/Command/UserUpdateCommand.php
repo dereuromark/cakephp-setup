@@ -27,6 +27,13 @@ class UserUpdateCommand extends Command {
 	use ModelAwareTrait;
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Update user password from CLI.';
+	}
+
+	/**
 	 * Creates a new user including a freshly hashed password.
 	 *
 	 * @param \Cake\Console\Arguments $args The command arguments.

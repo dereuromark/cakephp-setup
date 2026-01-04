@@ -20,6 +20,13 @@ use Setup\Utility\Validation;
 class MaintenanceModeWhitelistCommand extends Command {
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Manage maintenance mode IP whitelist.';
+	}
+
+	/**
 	 * @var \Setup\Maintenance\Maintenance
 	 */
 	protected $Maintenance;
