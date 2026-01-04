@@ -41,6 +41,16 @@ Overview about the current DB tables and size.
 
 See `/admin/setup/backend/database`.
 
+You can exclude tables from this overview by configuring `blacklistedTables`:
+```php
+'Setup' => [
+    'blacklistedTables' => [
+        'phinxlog',
+        'sessions',
+    ],
+],
+```
+
 ### Foreign Keys
 
 Many applications for sure forgot to add proper constraints/handling around foreign keys:

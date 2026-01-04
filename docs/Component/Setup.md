@@ -22,3 +22,18 @@ public function initialize() {
     $this->loadComponent('Setup.Setup');
 }
 ```
+
+## Configuration
+
+### Session Key
+The component uses the session to identify users for 404 notifications. By default, it reads from `Auth.User`.
+
+If you're using the CakeDC/Users plugin or a different session structure, configure the session key:
+```php
+// In your app.php or app_local.php
+'Setup' => [
+    'sessionKey' => 'Auth', // For CakeDC/Users plugin
+],
+```
+
+The component will then read the user ID from `Auth.id` instead of `Auth.User.id`.

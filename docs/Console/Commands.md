@@ -2,6 +2,33 @@
 
 You can run any command from the ROOT dir as `bin/cake [command]`.
 
+## Compact Help Command
+
+The plugin provides an optional compact help command that replaces the core help with a more readable format using bracket notation for subcommands.
+
+Enable it in your configuration:
+```php
+'Setup' => [
+    'compactHelp' => true,
+],
+```
+
+When enabled, `bin/cake help` will display commands in a compact format:
+```
+Available Commands:
+
+ - bake [controller|model|template|...]
+ - cache [clear|clear_all|list]
+ - migrations [migrate|rollback|status|...]
+```
+
+Use `bin/cake help -v` for verbose output with descriptions and plugin grouping.
+
+You can also filter by command prefix:
+```bash
+bin/cake help bake
+```
+
 
 ## Application Maintenance
 
