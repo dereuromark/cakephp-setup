@@ -19,6 +19,13 @@ use Setup\Maintenance\Maintenance;
 class MaintenanceModeDeactivateCommand extends Command {
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Deactivate maintenance mode.';
+	}
+
+	/**
 	 * @var \Setup\Maintenance\Maintenance
 	 */
 	protected $Maintenance;

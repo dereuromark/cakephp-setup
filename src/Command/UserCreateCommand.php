@@ -31,6 +31,13 @@ class UserCreateCommand extends Command {
 	use ModelAwareTrait;
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Create a new user from CLI.';
+	}
+
+	/**
 	 * Creates a new user including a freshly hashed password.
 	 *
 	 * @param \Cake\Console\Arguments $args The command arguments.

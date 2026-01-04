@@ -19,6 +19,13 @@ use Setup\Maintenance\Maintenance;
 class MaintenanceModeStatusCommand extends Command {
 
 	/**
+	 * @return string
+	 */
+	public static function getDescription(): string {
+		return 'Show maintenance mode status.';
+	}
+
+	/**
 	 * @var \Setup\Maintenance\Maintenance
 	 */
 	protected $Maintenance;
