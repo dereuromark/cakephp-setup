@@ -283,6 +283,7 @@ SQL;
 	public function ip() {
 		// Client IP info
 		$ipAddress = (string)env('REMOTE_ADDR');
+		$requestClientIp = $this->request->clientIp();
 		$host = $ipAddress ? gethostbyaddr($ipAddress) : null;
 
 		// Server IP info
@@ -347,6 +348,7 @@ SQL;
 
 		$this->set(compact(
 			'ipAddress',
+			'requestClientIp',
 			'host',
 			'serverIp',
 			'serverHost',

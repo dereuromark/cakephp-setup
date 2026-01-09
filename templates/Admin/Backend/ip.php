@@ -2,6 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var string $ipAddress
+ * @var string|null $requestClientIp
  * @var string|null $host
  * @var string $serverIp
  * @var string|null $serverHost
@@ -19,8 +20,12 @@
 	<h2>Your Address (Client)</h2>
 	<table class="table">
 		<tr>
-			<td>IP</td>
+			<td>IP (env REMOTE_ADDR)</td>
 			<td><?php echo h($ipAddress); ?></td>
+		</tr>
+		<tr>
+			<td>IP (Request::clientIp)</td>
+			<td><?php echo h($requestClientIp); ?><?php if ($requestClientIp !== $ipAddress) { ?> <span class="text-warning">(differs!)</span><?php } ?></td>
 		</tr>
 		<tr>
 			<td>Host</td>
