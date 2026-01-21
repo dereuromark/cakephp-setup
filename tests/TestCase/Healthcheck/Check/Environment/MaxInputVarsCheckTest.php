@@ -41,7 +41,24 @@ class MaxInputVarsCheckTest extends TestCase {
 	 */
 	public function testLevel(): void {
 		$check = new MaxInputVarsCheck();
-		$this->assertSame('info', $check->level());
+		$this->assertSame('warning', $check->level());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCustomRequiredMin(): void {
+		$maxInputVars = (int)ini_get('max_input_vars');
+
+		// Set required min higher than current value to force failure
+		$check = new MaxInputVarsCheck($maxInputVars + 1000);
+		$check->check();
+		$this->assertFalse($check->passed());
+
+		// Set required min lower than current value to force pass
+		$check = new MaxInputVarsCheck(1);
+		$check->check();
+		$this->assertTrue($check->passed());
 	}
 
 }
