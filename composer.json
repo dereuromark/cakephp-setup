@@ -26,7 +26,7 @@
 		"source": "https://github.com/dereuromark/cakephp-setup"
 	},
 	"require": {
-		"php": ">=8.1",
+		"php": ">=8.2",
 		"cakephp/cakephp": "^5.1.1"
 	},
 	"require-dev": {
@@ -37,7 +37,7 @@
 		"dereuromark/cakephp-queue": "^8.2.0",
 		"dereuromark/cakephp-templating": "^0.2.5",
 		"fig-r/psr2r-sniffer": "dev-master",
-		"phpunit/phpunit": "^10.5 || ^11.5 || ^12.1",
+		"phpunit/phpunit": "^11.5 || ^12.1",
 		"composer/semver": "^3.4"
 	},
 	"minimum-stability": "stable",
