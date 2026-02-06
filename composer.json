@@ -37,7 +37,7 @@
 		"dereuromark/cakephp-queue": "^8.2.0",
 		"dereuromark/cakephp-templating": "^0.2.5",
 		"fig-r/psr2r-sniffer": "dev-master",
-		"phpunit/phpunit": "^11.5 || ^12.1",
+		"phpunit/phpunit": "^11.5 || ^12.1 || ^13.0",
 		"composer/semver": "^3.4"
 	},
 	"minimum-stability": "stable",
