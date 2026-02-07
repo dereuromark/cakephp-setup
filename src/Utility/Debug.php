@@ -369,10 +369,7 @@ class Debug {
 	 * @return mixed True on success, string error otherwise
 	 */
 	public function wgetAllowed() {
-		$transport = 'wget';
-		//$return_var = null;
-		//passthru("wget --version", $return_var);
-		$returnVar = `wget --version`;
+		$returnVar = shell_exec('wget --version');
 		if ($returnVar) {
 			return true;
 		}
