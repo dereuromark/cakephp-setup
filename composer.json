@@ -11,7 +11,8 @@
 		"maintenance",
 		"backup",
 		"bake",
-		"templates"
+		"templates",
+		"admin-panel"
 	],
 	"authors": [
 		{
