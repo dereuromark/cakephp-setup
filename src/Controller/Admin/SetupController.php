@@ -22,7 +22,7 @@ class SetupController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function maintenance() {
-		$ip = (string)env('REMOTE_ADDR');
+		$ip = $this->request->clientIp();
 
 		$maintenance = new Maintenance();
 		if ($this->request->is('post')) {
