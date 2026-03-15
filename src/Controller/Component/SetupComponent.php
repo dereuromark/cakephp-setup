@@ -187,7 +187,7 @@ class SetupComponent extends Component {
 		if ($this->Controller->getName() !== 'CakeError' || empty($this->notifications['404'])) {
 			return;
 		}
-		if (env('REMOTE_ADDR') === '127.0.0.1' || Configure::read('debug') > 0) {
+		if ($this->getController()->getRequest()->clientIp() === '127.0.0.1' || Configure::read('debug') > 0) {
 			return;
 		}
 		$referer = $this->Controller->referer();
@@ -195,7 +195,7 @@ class SetupComponent extends Component {
 			$text = '404:' . TB . TB . $this->Controller->getRequest()->getRequestTarget()
 			. NL . 'Referer:' . TB . '' . $referer
 			. NL . NL . 'Browser: ' . env('HTTP_USER_AGENT')
-			. NL . 'IP: ' . env('REMOTE_ADDR');
+			. NL . 'IP: ' . $this->getController()->getRequest()->clientIp();
 			$sessionKey = Configure::read('Setup.sessionKey') ?? 'Auth.User';
 			$uid = $this->getController()->getRequest()->getSession()->read($sessionKey . '.id');
 			if ($uid) {
@@ -267,7 +267,7 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	public function setMaintenance(bool $maintenance): bool {
-		$ip = (string)env('REMOTE_ADDR');
+		$ip = $this->getController()->getRequest()->clientIp();
 		// optional length in minutes
 		//$length = (int)$this->Controller->getRequest()->getQuery('duration');
 
@@ -313,8 +313,7 @@ class SetupComponent extends Component {
 			$id = $_COOKIE[$cookieName] ?? '';
 
 		} elseif ($type === 'ip') {
-			/** @var string|null $ip */
-			$ip = env('REMOTE_ADDR');
+			$ip = $this->getController()->getRequest()->clientIp();
 			$host = 'unknown';
 			if ($ip) {
 				/** @var string $host */
