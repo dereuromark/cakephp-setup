@@ -208,7 +208,9 @@ class Debug {
 
 					break;
 				case 'revision': // for PPC arch
-					$results[$processors]['model'] .= ' ( rev: ' . $value . ')';
+					if (isset($results[$processors]['model'])) {
+						$results[$processors]['model'] .= ' ( rev: ' . $value . ')';
+					}
 
 					break;
 				case 'cache size':
