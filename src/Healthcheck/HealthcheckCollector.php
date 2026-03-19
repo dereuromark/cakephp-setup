@@ -3,7 +3,10 @@
 namespace Setup\Healthcheck;
 
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use DirectoryIterator;
 use Setup\Healthcheck\Check\CheckInterface;
+use Setup\Healthcheck\Check\Core\CakeCacheCheck;
 use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
 use Setup\Healthcheck\Check\Core\ComposerOptimizationCheck;
@@ -39,6 +42,7 @@ class HealthcheckCollector {
 		PhpVersionCheck::class,
 		CakeVersionCheck::class,
 		CakeSaltCheck::class,
+		CakeCacheCheck::class,
 		FullBaseUrlCheck::class,
 		SessionLifetimeCheck::class,
 		SessionCleanupCheck::class,
@@ -120,6 +124,57 @@ class HealthcheckCollector {
 		}
 
 		return $domains;
+	}
+
+	/**
+	 * Returns all available check classes by scanning the Check directories.
+	 *
+	 * @return array<class-string<\Setup\Healthcheck\Check\CheckInterface>>
+	 */
+	public static function availableChecks(): array {
+		$checks = [];
+		$basePath = Plugin::path('Setup') . 'src' . DIRECTORY_SEPARATOR . 'Healthcheck' . DIRECTORY_SEPARATOR . 'Check';
+
+		foreach (new DirectoryIterator($basePath) as $domainDir) {
+			if (!$domainDir->isDir() || $domainDir->isDot()) {
+				continue;
+			}
+
+			$domainName = $domainDir->getFilename();
+			$domainPath = $domainDir->getPathname();
+
+			foreach (new DirectoryIterator($domainPath) as $file) {
+				if (!$file->isFile() || $file->getExtension() !== 'php') {
+					continue;
+				}
+
+				$className = $file->getBasename('.php');
+				if ($className === 'Check' || str_ends_with($className, 'Interface')) {
+					continue;
+				}
+
+				$fqcn = 'Setup\\Healthcheck\\Check\\' . $domainName . '\\' . $className;
+				if (class_exists($fqcn) && is_subclass_of($fqcn, CheckInterface::class)) {
+					$checks[] = $fqcn;
+				}
+			}
+		}
+
+		sort($checks);
+
+		return $checks;
+	}
+
+	/**
+	 * Returns check classes that are available but not currently enabled.
+	 *
+	 * @return array<class-string<\Setup\Healthcheck\Check\CheckInterface>>
+	 */
+	public function getOptInChecks(): array {
+		$available = static::availableChecks();
+		$enabled = array_map(fn ($check) => $check::class, $this->checks);
+
+		return array_values(array_diff($available, $enabled));
 	}
 
 	/**

@@ -29,6 +29,8 @@ class HealthcheckController extends AppController {
 	public function index() {
 		$data = $this->Healthcheck->run($this->request->getQuery('domain'));
 
+		$this->set('optInChecks', $data['healthcheck']->collector()->getOptInChecks());
+
 		return $this->Healthcheck->handleResponse($data, true);
 	}
 
