@@ -129,7 +129,6 @@ The following checks are included by default:
 - **ExposePhpCheck**: Checks expose_php is disabled
 - **AllowUrlIncludeCheck**: Validates allow_url_include is off
 - **DisableFunctionsCheck**: Checks dangerous functions are disabled
-- **DiskSpaceCheck**: Monitors disk usage with configurable thresholds (warning at 80%, error at 95%)
 
 ### Core/Application Checks
 - **CakeVersionCheck**: Validates CakePHP version
@@ -152,6 +151,24 @@ The following checks are included by default:
 ## Opt-in Checks
 
 The following checks are available but not enabled by default due to specific requirements or potential side effects:
+
+### Environment Checks
+- **DiskSpaceCheck**: Monitors disk usage with configurable thresholds (warning at 80%, error at 95%). Not enabled by default as disk paths and thresholds are environment-specific.
+
+```php
+'Setup' => [
+    'Healthcheck' => [
+        'checks' => [
+            \Setup\Healthcheck\Check\Environment\DiskSpaceCheck::class => [],
+            // Or with custom thresholds and paths:
+            \Setup\Healthcheck\Check\Environment\DiskSpaceCheck::class => [
+                'warningThresholdPercent' => 70,
+                'errorThresholdPercent' => 90,
+            ],
+        ] + \Setup\Healthcheck\HealthcheckCollector::defaultChecks(),
+    ],
+],
+```
 
 ### Network Checks
 - **SslCertificateExpiryCheck**: Checks SSL certificate expiry for the application's host. Web-only (not available in CLI). Not enabled by default as it requires network access and may not be applicable for local/non-SSL environments.
