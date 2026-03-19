@@ -52,7 +52,7 @@ class SslCertificateExpiryCheck extends Check {
 
 		if (!extension_loaded('openssl')) {
 			$this->passed = false;
-			$this->level = self::LEVEL_ERROR;
+			$this->level = static::LEVEL_ERROR;
 			$this->failureMessage[] = 'OpenSSL extension is not loaded. Cannot perform SSL certificate check.';
 
 			return;
@@ -113,7 +113,7 @@ class SslCertificateExpiryCheck extends Check {
 
 		if (!$socket) {
 			$this->passed = false;
-			$this->level = self::LEVEL_ERROR;
+			$this->level = static::LEVEL_ERROR;
 			$this->failureMessage[] = "Cannot connect to `{$host}:443`: {$errstr} (errno: {$errno})";
 
 			return null;
@@ -124,7 +124,7 @@ class SslCertificateExpiryCheck extends Check {
 
 		if (!isset($params['options']['ssl']['peer_certificate'])) {
 			$this->passed = false;
-			$this->level = self::LEVEL_ERROR;
+			$this->level = static::LEVEL_ERROR;
 			$this->failureMessage[] = "No SSL certificate found for `{$host}`.";
 
 			return null;
@@ -133,7 +133,7 @@ class SslCertificateExpiryCheck extends Check {
 		$cert = openssl_x509_parse($params['options']['ssl']['peer_certificate']);
 		if (!$cert || !isset($cert['validTo_time_t'])) {
 			$this->passed = false;
-			$this->level = self::LEVEL_ERROR;
+			$this->level = static::LEVEL_ERROR;
 			$this->failureMessage[] = 'Unable to parse SSL certificate.';
 
 			return null;
@@ -162,7 +162,7 @@ class SslCertificateExpiryCheck extends Check {
 
 		if ($daysUntilExpiry <= 0) {
 			$this->passed = false;
-			$this->level = self::LEVEL_ERROR;
+			$this->level = static::LEVEL_ERROR;
 			$this->failureMessage[] = "SSL certificate for `{$host}` has EXPIRED!";
 
 			return;
@@ -170,7 +170,7 @@ class SslCertificateExpiryCheck extends Check {
 
 		if ($daysUntilExpiry <= $this->errorDays) {
 			$this->passed = false;
-			$this->level = self::LEVEL_ERROR;
+			$this->level = static::LEVEL_ERROR;
 			$this->failureMessage[] = "SSL certificate for `{$host}` expires in {$daysUntilExpiry} days!";
 
 			return;
@@ -178,7 +178,7 @@ class SslCertificateExpiryCheck extends Check {
 
 		if ($daysUntilExpiry <= $this->warningDays) {
 			$this->passed = false;
-			$this->level = self::LEVEL_WARNING;
+			$this->level = static::LEVEL_WARNING;
 			$this->warningMessage[] = "SSL certificate for `{$host}` expires in {$daysUntilExpiry} days.";
 
 			return;

@@ -62,10 +62,10 @@ class DiskSpaceCheck extends Check {
 
 		if ($hasError) {
 			$this->passed = false;
-			$this->level = self::LEVEL_ERROR;
+			$this->level = static::LEVEL_ERROR;
 		} elseif ($hasWarning) {
 			$this->passed = false;
-			$this->level = self::LEVEL_WARNING;
+			$this->level = static::LEVEL_WARNING;
 		}
 	}
 
