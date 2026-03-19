@@ -4,6 +4,7 @@ namespace Setup\Healthcheck;
 
 use Cake\Core\Configure;
 use Setup\Healthcheck\Check\CheckInterface;
+use Setup\Healthcheck\Check\Core\CakeCacheCheck;
 use Setup\Healthcheck\Check\Core\CakeSaltCheck;
 use Setup\Healthcheck\Check\Core\CakeVersionCheck;
 use Setup\Healthcheck\Check\Core\ComposerOptimizationCheck;
@@ -40,6 +41,7 @@ class HealthcheckCollector {
 		PhpVersionCheck::class,
 		CakeVersionCheck::class,
 		CakeSaltCheck::class,
+		CakeCacheCheck::class,
 		FullBaseUrlCheck::class,
 		SessionLifetimeCheck::class,
 		SessionCleanupCheck::class,

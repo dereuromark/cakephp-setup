@@ -129,10 +129,12 @@ The following checks are included by default:
 - **ExposePhpCheck**: Checks expose_php is disabled
 - **AllowUrlIncludeCheck**: Validates allow_url_include is off
 - **DisableFunctionsCheck**: Checks dangerous functions are disabled
+- **DiskSpaceCheck**: Monitors disk usage with configurable thresholds (warning at 80%, error at 95%)
 
 ### Core/Application Checks
 - **CakeVersionCheck**: Validates CakePHP version
 - **CakeSaltCheck**: Ensures security salt is properly configured
+- **CakeCacheCheck**: Validates cache configurations are set up
 - **FullBaseUrlCheck**: Validates App.fullBaseUrl configuration
 - **DebugModeDisabledCheck**: Warns if debug mode is on in production
 - **DebugKitDisabledCheck**: Checks DebugKit is disabled in production
@@ -146,6 +148,29 @@ The following checks are included by default:
 ### Database Checks
 - **ConnectCheck**: Validates database connection
 - **DatabaseCharsetCheck**: Checks database charset/collation settings
+
+## Opt-in Checks
+
+The following checks are available but not enabled by default due to specific requirements or potential side effects:
+
+### Network Checks
+- **SslCertificateExpiryCheck**: Checks SSL certificate expiry for the application's host. Web-only (not available in CLI). Not enabled by default as it requires network access and may not be applicable for local/non-SSL environments.
+
+```php
+'Setup' => [
+    'Healthcheck' => [
+        'checks' => [
+            \Setup\Healthcheck\Check\Network\SslCertificateExpiryCheck::class => [],
+            // Or with custom thresholds:
+            \Setup\Healthcheck\Check\Network\SslCertificateExpiryCheck::class => [
+                'warningDays' => 60,
+                'errorDays' => 14,
+                'host' => 'api.example.com',
+            ],
+        ] + \Setup\Healthcheck\HealthcheckCollector::defaultChecks(),
+    ],
+],
+```
 
 ## Creating Custom Checks
 
