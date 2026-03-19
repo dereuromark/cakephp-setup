@@ -4,6 +4,7 @@ namespace Setup\Test\TestCase\Controller;
 
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
+use Setup\Controller\Component\HealthcheckComponent;
 use Shim\TestSuite\TestCase;
 
 /**
@@ -55,7 +56,7 @@ class HealthcheckControllerTest extends TestCase {
 		$this->assertArrayHasKey('passed', $response);
 		$this->assertArrayHasKey('metadata', $response);
 		$this->assertArrayHasKey('result', $response);
-		$this->assertContains($response['status'], ['healthy', 'degraded', 'unhealthy']);
+		$this->assertContains($response['status'], [HealthcheckComponent::STATUS_HEALTHY, HealthcheckComponent::STATUS_DEGRADED, HealthcheckComponent::STATUS_UNHEALTHY]);
 
 		// Check metadata structure
 		$metadata = $response['metadata'];
@@ -175,7 +176,7 @@ class HealthcheckControllerTest extends TestCase {
 		$this->assertArrayHasKey('passed', $response);
 		$this->assertArrayHasKey('metadata', $response);
 		$this->assertArrayHasKey('result', $response);
-		$this->assertContains($response['status'], ['healthy', 'degraded', 'unhealthy']);
+		$this->assertContains($response['status'], [HealthcheckComponent::STATUS_HEALTHY, HealthcheckComponent::STATUS_DEGRADED, HealthcheckComponent::STATUS_UNHEALTHY]);
 
 		// Verify it has the same structure as regular JSON request
 		$metadata = $response['metadata'];

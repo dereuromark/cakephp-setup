@@ -18,6 +18,21 @@ use Setup\Healthcheck\HealthcheckCollector;
 class HealthcheckComponent extends Component {
 
 	/**
+	 * @var string
+	 */
+	public const STATUS_HEALTHY = 'healthy';
+
+	/**
+	 * @var string
+	 */
+	public const STATUS_DEGRADED = 'degraded';
+
+	/**
+	 * @var string
+	 */
+	public const STATUS_UNHEALTHY = 'unhealthy';
+
+	/**
 	 * Run healthcheck and prepare data for controller.
 	 *
 	 * @param string|null $domain Optional domain filter
@@ -55,9 +70,9 @@ class HealthcheckComponent extends Component {
 		// JSON response
 		if ($request->is('json') || $request->getParam('_ext') === 'json') {
 			$status = match (true) {
-				!$data['passed'] => 'unhealthy',
-				$data['warnings'] > 0 => 'degraded',
-				default => 'healthy',
+				!$data['passed'] => static::STATUS_UNHEALTHY,
+				$data['warnings'] > 0 => static::STATUS_DEGRADED,
+				default => static::STATUS_HEALTHY,
 			};
 
 			$jsonData = [
