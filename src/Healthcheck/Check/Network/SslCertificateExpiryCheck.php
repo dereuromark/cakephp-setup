@@ -16,6 +16,13 @@ class SslCertificateExpiryCheck extends Check {
 
 	protected string $level = self::LEVEL_WARNING;
 
+	/**
+	 * @var array<string|callable>
+	 */
+	protected array $scope = [
+		self::SCOPE_WEB,
+	];
+
 	protected int $warningDays;
 
 	protected int $errorDays;

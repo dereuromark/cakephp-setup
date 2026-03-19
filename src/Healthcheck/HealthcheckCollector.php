@@ -20,6 +20,7 @@ use Setup\Healthcheck\Check\Database\DatabaseCharsetCheck;
 use Setup\Healthcheck\Check\Environment\AllowUrlIncludeCheck;
 use Setup\Healthcheck\Check\Environment\AssertionsCheck;
 use Setup\Healthcheck\Check\Environment\DisableFunctionsCheck;
+use Setup\Healthcheck\Check\Environment\DiskSpaceCheck;
 use Setup\Healthcheck\Check\Environment\ExposePhpCheck;
 use Setup\Healthcheck\Check\Environment\MaxExecutionTimeCheck;
 use Setup\Healthcheck\Check\Environment\MaxInputVarsCheck;
@@ -60,6 +61,7 @@ class HealthcheckCollector {
 		ExposePhpCheck::class,
 		AllowUrlIncludeCheck::class,
 		DisableFunctionsCheck::class,
+		DiskSpaceCheck::class,
 		ComposerOptimizationCheck::class,
 		FilePermissionsCheck::class,
 		SecurityHeadersCheck::class,
