@@ -6,6 +6,7 @@
  * @var array<string> $domains
  * @var int $errors
  * @var int $warnings
+ * @var array<class-string> $optInChecks
  */
 
 use Cake\Utility\Inflector;
@@ -89,9 +90,18 @@ foreach ($result as $domain => $checks) {
 	<p class="empty">No checks found.</p>
 <?php } ?>
 
-<p class="text-muted small">
-	<em>Note: Additional opt-in checks available (DiskSpaceCheck, SslCertificateExpiryCheck). See <a href="https://github.com/dereuromark/cakephp-setup/blob/master/docs/Healthcheck/Healthcheck.md#opt-in-checks" target="_blank">documentation</a>.</em>
-</p>
+<?php
+if (!empty($optInChecks)) {
+	$names = array_map(function ($class) {
+		$parts = explode('\\', $class);
+
+		return end($parts);
+	}, $optInChecks);
+	?>
+	<p class="text-muted small">
+		<em>Note: Additional opt-in checks available (<?php echo h(implode(', ', $names)); ?>). See <a href="https://github.com/dereuromark/cakephp-setup/blob/master/docs/Healthcheck/Healthcheck.md#opt-in-checks" target="_blank">documentation</a>.</em>
+	</p>
+<?php } ?>
 
 <style>
 	li.passed b {
