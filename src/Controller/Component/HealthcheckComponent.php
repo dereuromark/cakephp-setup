@@ -22,7 +22,7 @@ class HealthcheckComponent extends Component {
 	 *
 	 * @param string|null $domain Optional domain filter
 	 * @param bool $alwaysShowDetails Always show detailed results (for admin)
-	 * @return array{passed: bool, result: \Cake\Collection\CollectionInterface, domains: array<string>, errors: int, warnings: int, executionTime: float}
+	 * @return array{passed: bool, result: \Cake\Collection\CollectionInterface, domains: array<string>, errors: int, warnings: int, executionTime: float, healthcheck: \Setup\Healthcheck\Healthcheck}
 	 */
 	public function run(?string $domain = null, bool $alwaysShowDetails = false): array {
 		$healthcheck = new Healthcheck(new HealthcheckCollector());
