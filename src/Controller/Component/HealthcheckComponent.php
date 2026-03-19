@@ -18,6 +18,21 @@ use Setup\Healthcheck\HealthcheckCollector;
 class HealthcheckComponent extends Component {
 
 	/**
+	 * @var string
+	 */
+	public const STATUS_HEALTHY = 'healthy';
+
+	/**
+	 * @var string
+	 */
+	public const STATUS_DEGRADED = 'degraded';
+
+	/**
+	 * @var string
+	 */
+	public const STATUS_UNHEALTHY = 'unhealthy';
+
+	/**
 	 * Run healthcheck and prepare data for controller.
 	 *
 	 * @param string|null $domain Optional domain filter
@@ -54,7 +69,14 @@ class HealthcheckComponent extends Component {
 
 		// JSON response
 		if ($request->is('json') || $request->getParam('_ext') === 'json') {
+			$status = match (true) {
+				!$data['passed'] => static::STATUS_UNHEALTHY,
+				$data['warnings'] > 0 => static::STATUS_DEGRADED,
+				default => static::STATUS_HEALTHY,
+			};
+
 			$jsonData = [
+				'status' => $status,
 				'passed' => $data['passed'],
 				'metadata' => [
 					'timestamp' => date('c'),
@@ -70,14 +92,17 @@ class HealthcheckComponent extends Component {
 				$jsonData['result'] = $this->formatJsonResult($data['result']);
 			}
 
+			$httpStatus = $data['passed'] ? 200 : 503;
+
 			return $response->withType('application/json')
+				->withStatus($httpStatus)
 				->withStringBody(json_encode($jsonData, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 		}
 
 		// Simple text response (non-debug, non-admin)
 		if (!$alwaysShowDetails && !Configure::read('debug')) {
 			return $response->withStringBody($data['passed'] ? 'OK' : 'FAIL')
-				->withStatus($data['passed'] ? 200 : 500);
+				->withStatus($data['passed'] ? 200 : 503);
 		}
 
 		// Detailed HTML response
