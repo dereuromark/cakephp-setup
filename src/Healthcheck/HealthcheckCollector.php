@@ -166,15 +166,15 @@ class HealthcheckCollector {
 	}
 
 	/**
-	 * Returns check classes that are available but not enabled by default.
+	 * Returns check classes that are available but not currently enabled.
 	 *
 	 * @return array<class-string<\Setup\Healthcheck\Check\CheckInterface>>
 	 */
-	public static function optInChecks(): array {
+	public function getOptInChecks(): array {
 		$available = static::availableChecks();
-		$defaults = static::$defaultChecks;
+		$enabled = array_map(fn ($check) => $check::class, $this->checks);
 
-		return array_values(array_diff($available, $defaults));
+		return array_values(array_diff($available, $enabled));
 	}
 
 	/**

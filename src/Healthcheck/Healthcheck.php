@@ -95,4 +95,11 @@ class Healthcheck {
 		return $this->collector->getDomains();
 	}
 
+	/**
+	 * @return \Setup\Healthcheck\HealthcheckCollector
+	 */
+	public function collector(): HealthcheckCollector {
+		return $this->collector;
+	}
+
 }
