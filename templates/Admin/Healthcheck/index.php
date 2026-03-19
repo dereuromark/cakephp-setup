@@ -89,6 +89,10 @@ foreach ($result as $domain => $checks) {
 	<p class="empty">No checks found.</p>
 <?php } ?>
 
+<p class="text-muted small">
+	<em>Note: Additional opt-in checks available (DiskSpaceCheck, SslCertificateExpiryCheck). See <a href="https://github.com/dereuromark/cakephp-setup/blob/master/docs/Healthcheck/Healthcheck.md#opt-in-checks" target="_blank">documentation</a>.</em>
+</p>
+
 <style>
 	li.passed b {
 		background-color: #ddf3e0;
