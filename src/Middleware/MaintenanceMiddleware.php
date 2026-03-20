@@ -19,7 +19,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 	use InstanceConfigTrait;
 
 	/**
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected array $_defaultConfig = [
 		'className' => View::class,
@@ -29,6 +29,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 		'templateFileName' => 'maintenance',
 		'templateExtension' => '.php',
 		'contentType' => 'text/html',
+		'pathWhitelist' => [],
 	];
 
 	/**
@@ -45,10 +46,14 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+		$response = $handler->handle($request);
+
+		if ($this->isPathWhitelisted($request->getUri()->getPath())) {
+			return $response;
+		}
+
 		$ip = $request->clientIp();
 		$maintenance = new Maintenance();
-
-		$response = $handler->handle($request);
 		if (!$maintenance->isMaintenanceMode($ip)) {
 			return $response;
 		}
@@ -56,6 +61,24 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 		$response = $this->build($response);
 
 		return $response;
+	}
+
+	/**
+	 * Check if the given path is whitelisted from maintenance mode.
+	 *
+	 * @param string $path The request path to check.
+	 * @return bool
+	 */
+	protected function isPathWhitelisted(string $path): bool {
+		/** @var array<string> $whitelist */
+		$whitelist = $this->getConfig('pathWhitelist');
+		foreach ($whitelist as $pattern) {
+			if ($path === $pattern || str_starts_with($path, rtrim($pattern, '/') . '/')) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
