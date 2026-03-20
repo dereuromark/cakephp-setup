@@ -66,7 +66,7 @@ Those can be used to adjust the content of the maintenance mode page.
 ### Path Whitelist
 You can exclude certain paths from maintenance mode using the `pathWhitelist` option.
 This is useful for healthcheck endpoints that need to remain accessible during maintenance
-to prevent load balancers from cycling out containers:
+to prevent load balancers from cycling out servers:
 
 ```php
 $middlewareQueue->add(new MaintenanceMiddleware([
