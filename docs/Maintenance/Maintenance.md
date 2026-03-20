@@ -58,9 +58,23 @@ Configs:
 - 'templateLayout' => false,
 - 'templateFileName' => 'maintenance',
 - 'templateExtension' => '.php',
-- 'contentType' => 'text/html'
+- 'contentType' => 'text/html',
+- 'pathWhitelist' => []
 
 Those can be used to adjust the content of the maintenance mode page.
+
+### Path Whitelist
+You can exclude certain paths from maintenance mode using the `pathWhitelist` option.
+This is useful for healthcheck endpoints that need to remain accessible during maintenance
+to prevent load balancers from cycling out containers:
+
+```php
+$middlewareQueue->add(new MaintenanceMiddleware([
+    'pathWhitelist' => ['/setup/healthcheck', '/health'],
+]));
+```
+
+Paths are matched exactly or as prefixes, so `/health` also matches `/health/detailed`.
 
 
 ## Maintenance Component
