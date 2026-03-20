@@ -50,4 +50,42 @@ class MaintenanceMiddlewareTest extends TestCase {
 		$this->assertStringContainsString('<h1>We are working right now</h1>', $body);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testIsPathWhitelistedExactMatch(): void {
+		$middleware = new MaintenanceMiddleware([
+			'pathWhitelist' => ['/health', '/setup/healthcheck'],
+		]);
+
+		$this->assertTrue($this->invokeMethod($middleware, 'isPathWhitelisted', ['/health']));
+		$this->assertTrue($this->invokeMethod($middleware, 'isPathWhitelisted', ['/setup/healthcheck']));
+		$this->assertFalse($this->invokeMethod($middleware, 'isPathWhitelisted', ['/other']));
+		$this->assertFalse($this->invokeMethod($middleware, 'isPathWhitelisted', ['/']));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testIsPathWhitelistedPrefixMatch(): void {
+		$middleware = new MaintenanceMiddleware([
+			'pathWhitelist' => ['/api/health'],
+		]);
+
+		$this->assertTrue($this->invokeMethod($middleware, 'isPathWhitelisted', ['/api/health']));
+		$this->assertTrue($this->invokeMethod($middleware, 'isPathWhitelisted', ['/api/health/detailed']));
+		$this->assertFalse($this->invokeMethod($middleware, 'isPathWhitelisted', ['/api/healthcheck']));
+		$this->assertFalse($this->invokeMethod($middleware, 'isPathWhitelisted', ['/api']));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testIsPathWhitelistedEmptyList(): void {
+		$middleware = new MaintenanceMiddleware();
+
+		$this->assertFalse($this->invokeMethod($middleware, 'isPathWhitelisted', ['/health']));
+		$this->assertFalse($this->invokeMethod($middleware, 'isPathWhitelisted', ['/']));
+	}
+
 }
