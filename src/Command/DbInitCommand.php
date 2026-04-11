@@ -19,15 +19,9 @@ class DbInitCommand extends Command {
 
 	use DbToolsTrait;
 
-	/**
-	 * @var \Cake\Console\Arguments
-	 */
-	protected $args;
+	protected Arguments $args;
 
-	/**
-	 * @var \Cake\Console\ConsoleIo
-	 */
-	protected $io;
+	protected ConsoleIo $io;
 
 	/**
 	 * @return string

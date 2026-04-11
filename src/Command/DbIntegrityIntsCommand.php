@@ -26,10 +26,7 @@ class DbIntegrityIntsCommand extends Command {
 
 	use DbToolsTrait;
 
-	/**
-	 * @var \Cake\Console\Arguments
-	 */
-	protected $args;
+	protected Arguments $args;
 
 	/**
 	 * @return string
