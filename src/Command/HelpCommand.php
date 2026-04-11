@@ -7,6 +7,7 @@ use Cake\Console\Arguments;
 use Cake\Console\BaseCommand;
 use Cake\Console\CommandCollection;
 use Cake\Console\CommandCollectionAwareInterface;
+use Cake\Console\CommandHiddenInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\ConsoleOutput;
@@ -21,7 +22,7 @@ use SimpleXMLElement;
  * Provides a super-compact command list with bracket notation for subcommands.
  * Replaces core help command when Setup.compactHelp config is enabled.
  */
-class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface {
+class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface, CommandHiddenInterface {
 
 	/**
 	 * The command collection to get help on.
@@ -50,6 +51,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 			$commands->ksort();
 		}
 
+		$commands = $this->filterHidden($commands);
+
 		// Filter by command prefix if provided
 		$filter = $args->getArgument('command');
 		if ($filter) {
@@ -66,6 +69,25 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 		$this->asText($io, $commands, $verbose);
 
 		return static::CODE_SUCCESS;
+	}
+
+	/**
+	 * Filter out commands implementing CommandHiddenInterface.
+	 *
+	 * @param iterable<string, string|object> $commands The command collection.
+	 * @return array<string, string|object> Filtered commands.
+	 */
+	protected function filterHidden(iterable $commands): array {
+		$filtered = [];
+		foreach ($commands as $name => $class) {
+			$className = is_object($class) ? $class::class : $class;
+			if (is_subclass_of($className, CommandHiddenInterface::class)) {
+				continue;
+			}
+			$filtered[$name] = $class;
+		}
+
+		return $filtered;
 	}
 
 	/**
