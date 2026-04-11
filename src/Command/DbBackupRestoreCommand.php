@@ -23,15 +23,9 @@ class DbBackupRestoreCommand extends Command {
 	use DbToolsTrait;
 	use DbBackupTrait;
 
-	/**
-	 * @var \Cake\Console\Arguments
-	 */
-	protected $args;
+	protected Arguments $args;
 
-	/**
-	 * @var \Cake\Console\ConsoleIo
-	 */
-	protected $io;
+	protected ConsoleIo $io;
 
 	/**
 	 * @return string
