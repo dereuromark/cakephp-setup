@@ -90,7 +90,7 @@ if (!function_exists('vdd')) {
 
 		$backtrace = debug_backtrace(false, 1);
 		pr('vdd-location: ' . $backtrace[0]['file'] . ':' . $backtrace[0]['line']);
-		exit();
+		exit;
 	}
 }
 
