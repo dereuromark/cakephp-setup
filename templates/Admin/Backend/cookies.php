@@ -25,10 +25,26 @@ foreach ($cookies->getIterator() as $cookie) {
 	echo '<p>';
 	echo 'Expires: ' . ($expireDateTime ? $this->Time->nice($expireDateTime) : 'n/a');
 
-	echo ' ' . $this->Form->postLink('Delete', ['?' => ['cookie' => $cookie->getName()]], ['class' => 'btn btn-danger', 'confirm' => 'Sure?', 'block' => true]);
+	echo ' ' . $this->Form->postButton('Delete', ['?' => ['cookie' => $cookie->getName()]], [
+		'class' => 'btn btn-danger',
+		'form' => [
+			'class' => 'd-inline',
+			'data-confirm-message' => 'Sure?',
+		],
+	]);
 	echo '</p>';
 }
 
 ?>
 
 </div>
+<?php $cspNonce = (string)$this->getRequest()->getAttribute('cspNonce', ''); ?>
+<script<?= $cspNonce !== '' ? ' nonce="' . h($cspNonce) . '"' : '' ?>>
+document.querySelectorAll('form[data-confirm-message]').forEach(function(form) {
+	form.addEventListener('submit', function(e) {
+		if (!confirm(this.dataset.confirmMessage)) {
+			e.preventDefault();
+		}
+	});
+});
+</script>

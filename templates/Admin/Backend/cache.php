@@ -30,7 +30,7 @@ use Cake\I18n\DateTime;
 				<small>(<?php echo $this->Time->timeAgoInWords(new DateTime($data[$key])); ?>)</small>
 			<?php } ?>
 			<div>
-			<?php echo $this->Form->postLink('Store current time for testing', ['?' => ['key' => $key]], ['class' => 'button primary btn btn-primary']); ?>
+			<?php echo $this->Form->postButton('Store current time for testing', ['?' => ['key' => $key]], ['class' => 'button primary btn btn-primary', 'form' => ['class' => 'd-inline']]); ?>
 			</div>
 		</div>
 
