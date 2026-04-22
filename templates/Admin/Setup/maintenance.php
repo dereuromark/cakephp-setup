@@ -24,9 +24,9 @@
 	<p>
 		<?php
 		if (!$isMaintenanceModeEnabled) {
-			echo $this->Form->postLink('Go to Maintenance mode', ['action' => 'maintenance', '?' => ['maintenance' => 1]], ['class' => 'btn btn-danger']);
+			echo $this->Form->postButton('Go to Maintenance mode', ['action' => 'maintenance', '?' => ['maintenance' => 1]], ['class' => 'btn btn-danger', 'form' => ['class' => 'd-inline']]);
 		} else {
-			echo $this->Form->postLink('Leave Maintenance mode', ['action' => 'maintenance', '?' => ['maintenance' => 0]], ['class' => 'btn btn-warning']);
+			echo $this->Form->postButton('Leave Maintenance mode', ['action' => 'maintenance', '?' => ['maintenance' => 0]], ['class' => 'btn btn-warning', 'form' => ['class' => 'd-inline']]);
 		}
 		?>
 
