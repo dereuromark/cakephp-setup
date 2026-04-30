@@ -30,13 +30,13 @@ class UptimeController extends AppController {
 	 * @return \Cake\Http\Response|null
 	 */
 	public function index() {
-		$response = '';
-		if (!isset($_REQUEST['key'])) {
+		$key = $this->request->getQuery('key');
+		if ($key === null) {
 			$response = 'OK';
+		} elseif (is_string($key) && preg_match('/^[a-f0-9]{32}$/', $key)) {
+			$response = $key;
 		} else {
-			if (preg_match('/^[a-f0-9]{32}$/', $_REQUEST['key'])) {
-				$response = $_REQUEST['key'];
-			}
+			$response = '';
 		}
 
 		return $this->response->withStringBody($response);
