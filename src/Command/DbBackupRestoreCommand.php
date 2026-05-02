@@ -71,11 +71,11 @@ class DbBackupRestoreCommand extends Command {
 		}
 
 		$optionStrings = [
-			'--user="' . $config['username'] . '"',
-			'--password="' . $config['password'] . '"',
-			'--default-character-set=' . ($config['encoding'] ?? 'utf-8'),
-			'--host=' . $config['host'],
-			'' . $config['database'],
+			'--user=' . escapeshellarg((string)($config['username'] ?? '')),
+			'--password=' . escapeshellarg((string)($config['password'] ?? '')),
+			'--default-character-set=' . escapeshellarg((string)($config['encoding'] ?? 'utf-8')),
+			'--host=' . escapeshellarg((string)($config['host'] ?? 'localhost')),
+			escapeshellarg((string)$config['database']),
 		];
 
 		if ($this->args->getOption('verbose')) {
@@ -95,6 +95,15 @@ class DbBackupRestoreCommand extends Command {
 			$file = realpath($path);
 			if (!$file || !file_exists($file)) {
 				$this->io->abort(sprintf('Invalid file (path) `%s`', $path));
+			}
+			$baseReal = realpath(BACKUPS);
+			$base = $baseReal !== false ? $baseReal : rtrim(BACKUPS, DS);
+			if (!str_starts_with($file, rtrim($base, DS) . DS)) {
+				$this->io->abort(sprintf('Path `%s` is outside the allowed backup directory.', $path));
+			}
+			$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+			if (!in_array($ext, ['sql', 'gz'], true)) {
+				$this->io->abort(sprintf('File `%s` does not have a valid extension (.sql or .gz).', $path));
 			}
 
 			return $file;
@@ -146,9 +155,9 @@ class DbBackupRestoreCommand extends Command {
 		$command = $this->_command('mysql');
 
 		if (str_contains($file, '.gz') || $this->args->getOption('compress')) {
-			$command = $this->_command('gunzip') . ' < ' . $file . ' | ' . $command;
+			$command = $this->_command('gunzip') . ' < ' . escapeshellarg($file) . ' | ' . $command;
 		} else {
-			$optionStrings[] = '< ' . $file;
+			$optionStrings[] = '< ' . escapeshellarg($file);
 		}
 
 		if (!empty($optionStrings)) {
