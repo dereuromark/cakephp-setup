@@ -65,11 +65,11 @@ class DbBackupCreateCommand extends Command {
 		$file = $this->_path() . 'backup_' . date('Y-m-d--H-i-s');
 
 		$optionStrings = [
-			'--user="' . ($config['username'] ?? '') . '"',
-			'--password="' . ($config['password'] ?? '') . '"',
-			'--default-character-set=' . ($config['encoding'] ?? 'utf8'),
-			'--host=' . ($config['host'] ?? 'localhost'),
-			'--databases ' . $config['database'],
+			'--user=' . escapeshellarg((string)($config['username'] ?? '')),
+			'--password=' . escapeshellarg((string)($config['password'] ?? '')),
+			'--default-character-set=' . escapeshellarg((string)($config['encoding'] ?? 'utf8')),
+			'--host=' . escapeshellarg((string)($config['host'] ?? 'localhost')),
+			'--databases ' . escapeshellarg((string)$config['database']),
 			'--no-create-db',
 		];
 		if ($args->getOption('no-data')) {
@@ -91,7 +91,7 @@ class DbBackupCreateCommand extends Command {
 			foreach ($sources as $key => $val) {
 				$sources[$key] = $usePrefix . $val;
 			}
-			$optionStrings[] = '--tables ' . implode(' ', $sources);
+			$optionStrings[] = '--tables ' . implode(' ', array_map('escapeshellarg', $sources));
 			$file .= '_custom';
 		} elseif ($usePrefix) {
 			foreach ($sources as $key => $source) {
@@ -99,7 +99,7 @@ class DbBackupCreateCommand extends Command {
 					unset($sources[$key]);
 				}
 			}
-			$optionStrings[] = '--tables ' . implode(' ', $sources);
+			$optionStrings[] = '--tables ' . implode(' ', array_map('escapeshellarg', $sources));
 			$file .= '_' . rtrim($usePrefix, '_');
 		}
 		$file .= '.sql';
@@ -107,7 +107,7 @@ class DbBackupCreateCommand extends Command {
 			$optionStrings[] = '| gzip';
 			$file .= '.gz';
 		}
-		$optionStrings[] = '> ' . $file;
+		$optionStrings[] = '> ' . escapeshellarg($file);
 
 		$this->io->out('Backup will be written to:');
 		$this->io->out(' - ' . $this->_path());
