@@ -96,7 +96,7 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 			$pwdToHash = $pwd;
 		}
 		while (!$pwdToHash || mb_strlen($pwdToHash) < 2) {
-			$pwdToHash = $io->ask(__('Password to Hash (2 characters at least)'));
+			$pwdToHash = $io->ask(__d('setup', 'Password to Hash (2 characters at least)'));
 		}
 		$io->hr();
 		$io->out('Password:');

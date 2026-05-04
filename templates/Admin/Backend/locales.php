@@ -8,28 +8,28 @@
 ?>
 <div class="index col-md-12">
 
-<h2><?php echo __('Locale');?></h2>
+<h2><?php echo __d('setup', 'Locale');?></h2>
 
 <h3>Test Locale</h3>
 <?php echo $this->Form->create();?>
 	<fieldset>
-		<legend><?php echo __('Chose desired result'); ?></legend>
+		<legend><?php echo __d('setup', 'Chose desired result'); ?></legend>
 	<?php
 		echo $this->Form->control('Form.format');
 
-		echo $this->Form->control('Form.locale', ['placeholder' => __('e.g. de_DE.utf8')]);
+		echo $this->Form->control('Form.locale', ['placeholder' => __d('setup', 'e.g. de_DE.utf8')]);
 	?>
 	</fieldset>
 <?php if (isset($result)) { ?>
 	<fieldset>
-		<legend><?php echo __('Result');?></legend>
+		<legend><?php echo __d('setup', 'Result');?></legend>
 		<?php
 			echo pre($result);
 		?>
 	</fieldset>
 <?php } ?>
 
-<?php echo $this->Form->submit(__('Submit')); echo $this->Form->end();?>
+<?php echo $this->Form->submit(__d('setup', 'Submit')); echo $this->Form->end();?>
 
 <h3>System Locales</h3>
 

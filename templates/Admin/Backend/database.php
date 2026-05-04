@@ -8,7 +8,7 @@
 ?>
 <div class="columns col-md-12">
 
-<h1><?php echo count($dbTables); ?> <?php echo __('DB Tables');?></h1>
+<h1><?php echo count($dbTables); ?> <?php echo __d('setup', 'DB Tables');?></h1>
 <p>Excluding phinxlog migration tables</p>
 <p>Database size: <?php echo $this->Number->toReadableSize($dbSize); ?></p>
 
