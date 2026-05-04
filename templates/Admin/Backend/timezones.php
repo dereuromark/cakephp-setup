@@ -54,21 +54,21 @@
 
 		<?php echo $this->Form->create($token);?>
 		<fieldset>
-			<legend><?php echo __('Test forms'); ?></legend>
+			<legend><?php echo __d('setup', 'Test forms'); ?></legend>
 			<?php
 			echo $this->Form->control('created', ['label' => 'DateTime']);
 			?>
 		</fieldset>
 		<?php if (isset($result)) { ?>
 			<fieldset>
-				<legend><?php echo __('Result');?></legend>
+				<legend><?php echo __d('setup', 'Result');?></legend>
 				<?php
 				echo pre($result);
 				?>
 			</fieldset>
 		<?php } ?>
 
-		<?php echo $this->Form->submit(__('Submit')); echo $this->Form->end();?>
+		<?php echo $this->Form->submit(__d('setup', 'Submit')); echo $this->Form->end();?>
 
 	<?php } else {
 		echo '<i>Add Tools plugin to see how forms interact with timezone config.</i>';

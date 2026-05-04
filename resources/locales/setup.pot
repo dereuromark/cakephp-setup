@@ -1,0 +1,106 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2026-05-04 03:25+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+msgid "Password to Hash (2 characters at least)"
+msgstr ""
+
+msgid "Maintenance mode active - your IP {0} is in the whitelist."
+msgstr ""
+
+msgid "activated"
+msgstr ""
+
+msgid "deactivated"
+msgstr ""
+
+msgid "Maintenance mode {0}"
+msgstr ""
+
+msgid "Maintenance mode not {0}"
+msgstr ""
+
+msgid "debug set to {0}"
+msgstr ""
+
+msgid "debug not set"
+msgstr ""
+
+msgid "cache cleared"
+msgstr ""
+
+msgid "cache not cleared"
+msgstr ""
+
+msgid "session cleared"
+msgstr ""
+
+msgid "session not cleared"
+msgstr ""
+
+msgid "layout {0} activated"
+msgstr ""
+
+msgid "DB Tables"
+msgstr ""
+
+msgid "Disk Space"
+msgstr ""
+
+msgid "Locale"
+msgstr ""
+
+msgid "Chose desired result"
+msgstr ""
+
+msgid "e.g. de_DE.utf8"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Test forms"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Hours"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "Memory"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "Timezones"
+msgstr ""
+
+msgid "Locales"
+msgstr ""
+
+msgid "ENV Config"
+msgstr ""
+
+msgid "IP Info"
+msgstr ""
+

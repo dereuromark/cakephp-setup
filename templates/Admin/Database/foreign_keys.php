@@ -9,7 +9,7 @@ use Cake\Utility\Inflector;
 ?>
 <div class="columns col-md-12">
 
-<h1><?php echo count($tables); ?> <?php echo __('DB Tables');?></h1>
+<h1><?php echo count($tables); ?> <?php echo __d('setup', 'DB Tables');?></h1>
 
 <p>The following infos are just guesses based on CakePHP conventions.</p>
 

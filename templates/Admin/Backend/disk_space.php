@@ -7,7 +7,7 @@
 ?>
 <div class="col-md-12">
 
-<h2><?php echo __('Disk Space'); ?></h2>
+<h2><?php echo __d('setup', 'Disk Space'); ?></h2>
 
 <?php
 	$pos = count($space['app']) - 1;

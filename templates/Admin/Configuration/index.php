@@ -17,13 +17,13 @@ use Setup\Utility\System;
 	<h3>Server info</h3>
 	Server-Uptime:
 	<?php if (!empty($uptime)) { ?>
-		<?php echo $uptime['days'];?> <?php echo __('Days'); ?>, <?php echo $uptime['hours'];?> <?php echo __('Hours'); ?>, <?php echo $uptime['mins'];?> <?php echo __('Minutes'); ?>
+		<?php echo $uptime['days'];?> <?php echo __d('setup', 'Days'); ?>, <?php echo $uptime['hours'];?> <?php echo __d('setup', 'Hours'); ?>, <?php echo $uptime['mins'];?> <?php echo __d('setup', 'Minutes'); ?>
 	<?php } else { ?>
 		<i>n/a (only for unix/linux server)</i>
 	<?php } ?>
 	<br /><br />
 	Load averages for server: <?php echo ($serverLoad); ?><br />
-	<?php echo __('Memory'); ?>: <?php echo ($memory); ?>
+	<?php echo __d('setup', 'Memory'); ?>: <?php echo ($memory); ?>
 	<br />
 	Current Memory Usage (Single User): <?php echo $this->Number->toReadableSize(Debug::memoryUsage()).' (Peak: '.$this->Number->toReadableSize(Debug::peakMemoryUsage()).')'; ?>
 
@@ -57,24 +57,24 @@ use Setup\Utility\System;
 
 
 <?php /*
-		<li><?php echo $this->Html->link(__('Disk Space'), ['action'=>'disk_space']); ?></li>
-		<li><?php echo $this->Html->link(__('Environment & Database'), ['action'=>'environment']); ?></li>
-		<li><?php echo $this->Html->link(__('Setup (Folder and Rights)'), ['action'=>'setup']); ?></li>
-		<li><?php echo $this->Html->link(__('Check Mail'), ['action'=>'check_mail']); ?></li>
-		<li><?php echo $this->Html->link(__('Configuration Parameters (Status)'), ['action'=>'status']); ?></li>
-		<li><?php echo $this->Html->link(__('All Set Constants'), ['action'=>'constants']); ?></li>
-		<li><?php echo $this->Html->link(__('Superglobals (GET, POST, SESSION etc)'), ['action'=>'superglobals']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Disk Space'), ['action'=>'disk_space']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Environment & Database'), ['action'=>'environment']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Setup (Folder and Rights)'), ['action'=>'setup']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Check Mail'), ['action'=>'check_mail']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Configuration Parameters (Status)'), ['action'=>'status']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'All Set Constants'), ['action'=>'constants']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Superglobals (GET, POST, SESSION etc)'), ['action'=>'superglobals']); ?></li>
 
-		<li><?php echo $this->Html->link(__('Session Infos (Duration)'), ['action'=>'session']); ?></li>
-		<li><?php echo $this->Html->link(__('Clear Session (Interactive)'), ['action'=>'clearsession']); ?></li>
-		<li><?php echo $this->Html->link(__('Clear Cookies (Interactive)'), ['action'=>'clearcookies']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Session Infos (Duration)'), ['action'=>'session']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Clear Session (Interactive)'), ['action'=>'clearsession']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Clear Cookies (Interactive)'), ['action'=>'clearcookies']); ?></li>
 
-		<li><?php echo $this->Html->link(__('Sql Dump, Backup, Restore'), ['action'=>'sql']); ?></li>
-		<li><?php echo $this->Html->link(__('Cache'), ['action'=>'cache']); ?></li>
-		<li><?php echo $this->Html->link(__('Clear Cache (With full output)'), ['action'=>'clearcache']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Sql Dump, Backup, Restore'), ['action'=>'sql']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Cache'), ['action'=>'cache']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Clear Cache (With full output)'), ['action'=>'clearcache']); ?></li>
 
-		<li><?php echo $this->Html->link(__('Log Files'), ['action'=>'logs']); ?></li>
-		<li><?php echo $this->Html->link(__('Server Log Files'), ['action'=>'serverlogs']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Log Files'), ['action'=>'logs']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Server Log Files'), ['action'=>'serverlogs']); ?></li>
 */ ?>
 
 <div class="actions">

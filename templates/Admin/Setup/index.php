@@ -16,13 +16,13 @@
 		<li><?php echo $this->Html->link('Cache Info and Testing', ['controller' => 'Backend', 'action' => 'cache']);?></li>
 		<li><?php echo $this->Html->link('ORM Type Map', ['controller' => 'Backend', 'action' => 'typeMap']); ?></li>
 
-		<li><?php echo $this->Html->link(__('System'), ['controller' => 'Backend', 'action' => 'system']); ?></li>
-		<li><?php echo $this->Html->link(__('Timezones'), ['controller' => 'Backend', 'action' => 'timezones']);?></li>
-		<li><?php echo $this->Html->link(__('Locales'), ['controller' => 'Backend', 'action' => 'locales']);?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'System'), ['controller' => 'Backend', 'action' => 'system']); ?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Timezones'), ['controller' => 'Backend', 'action' => 'timezones']);?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Locales'), ['controller' => 'Backend', 'action' => 'locales']);?></li>
 		<li><?php echo $this->Html->link('Database Info', ['controller' => 'Backend', 'action' => 'database']);?></li>
-		<li><?php echo $this->Html->link(__('Disk Space'), ['controller' => 'Backend', 'action' => 'diskSpace']);?></li>
-		<li><?php echo $this->Html->link(__('ENV Config'), ['controller' => 'Backend', 'action' => 'env']);?></li>
-		<li><?php echo $this->Html->link(__('IP Info'), ['controller' => 'Backend', 'action' => 'ip']);?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'Disk Space'), ['controller' => 'Backend', 'action' => 'diskSpace']);?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'ENV Config'), ['controller' => 'Backend', 'action' => 'env']);?></li>
+		<li><?php echo $this->Html->link(__d('setup', 'IP Info'), ['controller' => 'Backend', 'action' => 'ip']);?></li>
 	</ul>
 
 
