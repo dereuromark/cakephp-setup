@@ -9,6 +9,7 @@ use Cake\Cache\Engine\ApcuEngine;
 use Cake\Cache\Engine\FileEngine;
 use Cake\Cache\Engine\MemcachedEngine;
 use Cake\Cache\Engine\RedisEngine;
+use InvalidArgumentException;
 use Throwable;
 
 /**
@@ -27,6 +28,16 @@ class CacheBenchmark {
 	];
 
 	/**
+	 * @var int
+	 */
+	protected const READ_OPS = 1000;
+
+	/**
+	 * @var int
+	 */
+	protected const WRITE_OPS = 1000;
+
+	/**
 	 * Returns availability info for each known cache engine.
 	 *
 	 * @return array<string, array{available: bool, className: string, reason?: string}>
@@ -39,16 +50,6 @@ class CacheBenchmark {
 
 		return $result;
 	}
-
-	/**
-	 * @var int
-	 */
-	protected const READ_OPS = 1000;
-
-	/**
-	 * @var int
-	 */
-	protected const WRITE_OPS = 1000;
 
 	/**
 	 * @param array<string> $engineNames Subset of keys from availableEngines() where available === true
@@ -130,9 +131,14 @@ class CacheBenchmark {
 
 	/**
 	 * @param string $engine
+	 * @throws \InvalidArgumentException If $engine is not a known engine name
 	 * @return array<string, mixed>
 	 */
 	protected function buildConfig(string $engine): array {
+		if (!isset(static::ENGINE_CLASSES[$engine])) {
+			throw new InvalidArgumentException(sprintf('Unknown cache engine: %s', $engine));
+		}
+
 		$base = [
 			'className' => static::ENGINE_CLASSES[$engine],
 			'prefix' => 'setup_benchmark_',

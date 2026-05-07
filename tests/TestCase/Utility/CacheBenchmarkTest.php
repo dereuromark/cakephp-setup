@@ -85,4 +85,17 @@ class CacheBenchmarkTest extends TestCase {
 		$this->assertNotContains('_setup_benchmark_File', Cache::configured());
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testRunWithUnknownEngineReturnsErrorSentinel(): void {
+		$bench = new CacheBenchmark();
+		$results = $bench->run(['NotAnEngine']);
+
+		$this->assertArrayHasKey('NotAnEngine', $results);
+		$this->assertArrayHasKey('error', $results['NotAnEngine']['read']);
+		$this->assertArrayHasKey('error', $results['NotAnEngine']['write']);
+		$this->assertStringContainsString('Unknown cache engine', $results['NotAnEngine']['read']['error']);
+	}
+
 }
