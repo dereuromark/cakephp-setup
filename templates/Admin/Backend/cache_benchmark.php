@@ -24,7 +24,7 @@ $unavailable = array_filter($availability, fn (array $entry): bool => !$entry['a
 	then time 1000 reads. Then time 1000 writes into a separate "write" keyspace, so the read measurement is not tainted by warm engine state from a write loop.
 </p>
 
-<div class="actions" style="margin: 12px 0">
+<div class="actions">
 	<?php echo $this->Form->postButton(
 		$results === null ? 'Run benchmark' : 'Run again',
 		[],
