@@ -11,6 +11,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use PDO;
+use Setup\Utility\CacheBenchmark;
 use Setup\Utility\Config;
 use Setup\Utility\Debug;
 use Setup\Utility\OrmTypes;
@@ -239,6 +240,25 @@ SQL;
 		}
 
 		$this->set(compact('caches', 'data'));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function cacheBenchmark(): void {
+		$bench = new CacheBenchmark();
+		$availability = $bench->availableEngines();
+
+		$results = null;
+		if ($this->request->is(['post', 'put'])) {
+			$availableNames = array_keys(array_filter(
+				$availability,
+				fn (array $entry): bool => $entry['available'],
+			));
+			$results = $bench->run($availableNames);
+		}
+
+		$this->set(compact('availability', 'results'));
 	}
 
 	/**
