@@ -32,7 +32,7 @@ class CacheBenchmarkTest extends TestCase {
 		$availability = $bench->availableEngines();
 
 		$this->assertSame(
-			['File', 'Apcu', 'Memcached', 'Redis', 'Wincache'],
+			['File', 'Apcu', 'Memcached', 'Redis'],
 			array_keys($availability),
 		);
 	}

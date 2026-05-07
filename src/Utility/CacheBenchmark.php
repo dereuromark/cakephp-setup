@@ -8,7 +8,6 @@ use Cake\Cache\Engine\ApcuEngine;
 use Cake\Cache\Engine\FileEngine;
 use Cake\Cache\Engine\MemcachedEngine;
 use Cake\Cache\Engine\RedisEngine;
-use Cake\Cache\Engine\WincacheEngine;
 
 /**
  * Benchmark CakePHP cache engines and detect their availability.
@@ -23,7 +22,6 @@ class CacheBenchmark {
 		'Apcu' => ApcuEngine::class,
 		'Memcached' => MemcachedEngine::class,
 		'Redis' => RedisEngine::class,
-		'Wincache' => WincacheEngine::class,
 	];
 
 	/**
@@ -52,18 +50,15 @@ class CacheBenchmark {
 
 		return match ($name) {
 			'File' => $base + ['available' => true],
-			'Apcu' => extension_loaded('apcu') && (bool)ini_get('apc.enabled')
+			'Apcu' => extension_loaded('apcu')
 				? $base + ['available' => true]
-				: $base + ['available' => false, 'reason' => 'ext-apcu missing or apc.enabled=0'],
+				: $base + ['available' => false, 'reason' => 'ext-apcu missing'],
 			'Memcached' => extension_loaded('memcached')
 				? $base + ['available' => true]
 				: $base + ['available' => false, 'reason' => 'ext-memcached missing'],
 			'Redis' => extension_loaded('redis')
 				? $base + ['available' => true]
 				: $base + ['available' => false, 'reason' => 'ext-redis missing'],
-			'Wincache' => extension_loaded('wincache') && (bool)ini_get('wincache.ucenabled')
-				? $base + ['available' => true]
-				: $base + ['available' => false, 'reason' => 'ext-wincache missing or wincache.ucenabled=0'],
 			default => $base + ['available' => false, 'reason' => 'unknown engine'],
 		};
 	}
