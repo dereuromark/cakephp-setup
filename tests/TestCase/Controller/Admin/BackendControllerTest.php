@@ -143,4 +143,31 @@ class BackendControllerTest extends TestCase {
 		$this->assertResponseCode(200);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testCacheBenchmarkGet() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'cacheBenchmark']);
+
+		$this->assertResponseCode(200);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCacheBenchmarkPost() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->post(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'cacheBenchmark'], []);
+
+		$this->assertResponseCode(200);
+		$this->assertResponseContains('File');
+	}
+
 }
