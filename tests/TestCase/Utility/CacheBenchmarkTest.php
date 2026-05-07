@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setup\Test\TestCase\Utility;
 
+use Cake\Cache\Cache;
 use PHPUnit\Framework\TestCase;
 use Setup\Utility\CacheBenchmark;
 
@@ -50,6 +51,38 @@ class CacheBenchmarkTest extends TestCase {
 				$this->assertNotSame('', $entry['reason']);
 			}
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testRunFileEngineProducesReadAndWriteResults(): void {
+		$bench = new CacheBenchmark();
+		$results = $bench->run(['File']);
+
+		$this->assertArrayHasKey('File', $results);
+		$this->assertArrayHasKey('read', $results['File']);
+		$this->assertArrayHasKey('write', $results['File']);
+
+		$this->assertArrayHasKey('ms', $results['File']['read']);
+		$this->assertArrayHasKey('opsPerSec', $results['File']['read']);
+		$this->assertGreaterThan(0.0, $results['File']['read']['ms']);
+		$this->assertGreaterThan(0.0, $results['File']['read']['opsPerSec']);
+
+		$this->assertArrayHasKey('ms', $results['File']['write']);
+		$this->assertArrayHasKey('opsPerSec', $results['File']['write']);
+		$this->assertGreaterThan(0.0, $results['File']['write']['ms']);
+		$this->assertGreaterThan(0.0, $results['File']['write']['opsPerSec']);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testRunDoesNotLeaveBehindBenchmarkConfigs(): void {
+		$bench = new CacheBenchmark();
+		$bench->run(['File']);
+
+		$this->assertNotContains('_setup_benchmark_File', Cache::configured());
 	}
 
 }
