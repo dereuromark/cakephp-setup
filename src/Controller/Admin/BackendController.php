@@ -243,28 +243,22 @@ SQL;
 	}
 
 	/**
-	 * @return \Cake\Http\Response|null|void
+	 * @return void
 	 */
-	public function cacheBenchmark() {
+	public function cacheBenchmark(): void {
 		$bench = new CacheBenchmark();
 		$availability = $bench->availableEngines();
 
-		$availableNames = [];
-		$unavailable = [];
-		foreach ($availability as $name => $entry) {
-			if ($entry['available']) {
-				$availableNames[] = $name;
-			} else {
-				$unavailable[$name] = $entry['reason'] ?? '';
-			}
-		}
-
 		$results = null;
 		if ($this->request->is(['post', 'put'])) {
+			$availableNames = array_keys(array_filter(
+				$availability,
+				fn (array $entry): bool => $entry['available'],
+			));
 			$results = $bench->run($availableNames);
 		}
 
-		$this->set(compact('availability', 'availableNames', 'unavailable', 'results'));
+		$this->set(compact('availability', 'results'));
 	}
 
 	/**
