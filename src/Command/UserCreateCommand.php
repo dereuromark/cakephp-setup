@@ -9,7 +9,6 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Database\Schema\TableSchemaInterface;
-use Cake\Datasource\ModelAwareTrait;
 use Cake\Utility\Inflector;
 use Closure;
 
@@ -27,8 +26,6 @@ if (!defined('CLASS_USER')) {
  * @license MIT
  */
 class UserCreateCommand extends Command {
-
-	use ModelAwareTrait;
 
 	/**
 	 * @return string
@@ -49,7 +46,7 @@ class UserCreateCommand extends Command {
 		$password = $args->getArgument('password');
 
 		/** @var \App\Model\Table\UsersTable $Users */
-		$Users = $this->fetchModel(CLASS_USERS);
+		$Users = $this->fetchTable(CLASS_USERS);
 		$schema = $Users->getSchema();
 
 		$displayField = $Users->getDisplayField();

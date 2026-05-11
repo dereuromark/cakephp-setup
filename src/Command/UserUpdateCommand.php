@@ -6,7 +6,6 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Datasource\ModelAwareTrait;
 use Cake\Utility\Inflector;
 
 if (!defined('CLASS_USERS')) {
@@ -24,8 +23,6 @@ if (!defined('CLASS_USER')) {
  */
 class UserUpdateCommand extends Command {
 
-	use ModelAwareTrait;
-
 	/**
 	 * @return string
 	 */
@@ -42,7 +39,7 @@ class UserUpdateCommand extends Command {
 	 */
 	public function execute(Arguments $args, ConsoleIo $io) {
 		/** @var \App\Model\Table\UsersTable $Users */
-		$Users = $this->fetchModel(CLASS_USERS);
+		$Users = $this->fetchTable(CLASS_USERS);
 
 		$displayField = $Users->getDisplayField();
 		if (!is_string($displayField)) {

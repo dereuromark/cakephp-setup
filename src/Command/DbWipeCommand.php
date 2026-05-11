@@ -6,6 +6,10 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Postgres;
+use Cake\Database\Driver\Sqlite;
+use Cake\Database\Driver\Sqlserver;
 use Setup\Command\Traits\DbToolsTrait;
 
 /**
@@ -46,15 +50,26 @@ class DbWipeCommand extends Command {
 		$schemaCollection = $db->getSchemaCollection();
 		$sources = $schemaCollection->listTables();
 
-		$tableTruncates = 'DROP TABLE ' . implode(';' . PHP_EOL . 'DROP TABLE ', $sources) . ';';
+		// FK-check disabling is driver-specific. The previous command emitted
+		// `SET FOREIGN_KEY_CHECKS` unconditionally, which is MySQL syntax and
+		// blows up on Postgres / SQLite / SQL Server. Map each driver to its
+		// equivalent off/on toggle.
+		$driver = $db->getDriver();
+		[$fkOff, $fkOn] = match (true) {
+			$driver instanceof Mysql => ['SET FOREIGN_KEY_CHECKS = 0;', 'SET FOREIGN_KEY_CHECKS = 1;'],
+			$driver instanceof Postgres => ["SET session_replication_role = 'replica';", "SET session_replication_role = 'origin';"],
+			$driver instanceof Sqlite => ['PRAGMA foreign_keys = OFF;', 'PRAGMA foreign_keys = ON;'],
+			$driver instanceof Sqlserver => ['EXEC sp_MSforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT ALL";', 'EXEC sp_MSforeachtable "ALTER TABLE ? CHECK CONSTRAINT ALL";'],
+			default => ['', ''],
+		};
 
-		$sql = <<<SQL
-SET FOREIGN_KEY_CHECKS = 0;
+		// On SQLite, prefer DROP TABLE IF EXISTS so a transient inconsistency
+		// (e.g. another connection already dropped a table) doesn't abort the
+		// whole wipe.
+		$dropPrefix = $driver instanceof Sqlite ? 'DROP TABLE IF EXISTS ' : 'DROP TABLE ';
+		$tableTruncates = $dropPrefix . implode(';' . PHP_EOL . $dropPrefix, $sources) . ';';
 
-$tableTruncates
-
-SET FOREIGN_KEY_CHECKS = 1;
-SQL;
+		$sql = trim(implode("\n\n", array_filter([$fkOff, $tableTruncates, $fkOn]))) . "\n";
 		$this->io->out('--------', 1, ConsoleIo::VERBOSE);
 		$this->io->out($sql, 1, ConsoleIo::VERBOSE);
 		$this->io->out('--------', 1, ConsoleIo::VERBOSE);

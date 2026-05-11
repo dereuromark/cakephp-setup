@@ -6,6 +6,7 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use RuntimeException;
 use Setup\Command\Traits\DbBackupTrait;
 use Setup\Command\Traits\DbToolsTrait;
 
@@ -28,6 +29,15 @@ class DbBackupCreateCommand extends Command {
 	protected Arguments $args;
 
 	protected ConsoleIo $io;
+
+	/**
+	 * Path to a temp .my.cnf-shaped credentials file passed to mysqldump via
+	 * --defaults-extra-file so the password is never visible in argv. Cleaned up
+	 * by {@see create()} in a finally block.
+	 *
+	 * @var string|null
+	 */
+	protected ?string $credentialsFile = null;
 
 	/**
 	 * @return string
@@ -64,11 +74,18 @@ class DbBackupCreateCommand extends Command {
 
 		$file = $this->_path() . 'backup_' . date('Y-m-d--H-i-s');
 
+		// Don't interpolate the password into argv — `ps auxf` would surface it for
+		// any process on the box during the dump. Write it into a 0600 temp ini
+		// file and reference via --defaults-extra-file, then unlink in the finally
+		// block of create(). The username and host are not sensitive in the same
+		// way, but routing them through the same file keeps argv clean and the
+		// temp-file shape compatible with mysqldump's documented `[mysqldump]`
+		// section.
+		$this->credentialsFile = $this->writeCredentialsFile($config);
+
 		$optionStrings = [
-			'--user=' . escapeshellarg((string)($config['username'] ?? '')),
-			'--password=' . escapeshellarg((string)($config['password'] ?? '')),
+			'--defaults-extra-file=' . escapeshellarg($this->credentialsFile),
 			'--default-character-set=' . escapeshellarg((string)($config['encoding'] ?? 'utf8')),
-			'--host=' . escapeshellarg((string)($config['host'] ?? 'localhost')),
 			'--databases ' . escapeshellarg((string)$config['database']),
 			'--no-create-db',
 		];
@@ -133,14 +150,60 @@ class DbBackupCreateCommand extends Command {
 		if ($optionStrings) {
 			$command .= ' ' . implode(' ', $optionStrings);
 		}
-		if ($this->args->getOption('dry-run')) {
-			$this->io->out($command);
-			$ret = static::CODE_SUCCESS;
-		} else {
+
+		try {
+			if ($this->args->getOption('dry-run')) {
+				$this->io->out($command);
+
+				return true;
+			}
+
 			exec($command, $output, $ret);
+
+			return $ret === static::CODE_SUCCESS;
+		} finally {
+			// Always clean up the temp credentials file, even on a thrown exception
+			// from exec() or a forced abort. Leaving a 0600 cnf in /tmp is not
+			// terribly leaky, but the process owns it and should drop it.
+			if ($this->credentialsFile !== null && is_file($this->credentialsFile)) {
+				@unlink($this->credentialsFile);
+				$this->credentialsFile = null;
+			}
+		}
+	}
+
+	/**
+	 * Write a `[mysqldump]`-section credentials file to a 0600-perm temp path.
+	 *
+	 * Returns the file path; the caller is responsible for unlinking it after
+	 * the mysqldump invocation completes. Used in place of the previous
+	 * `--user=...` / `--password=...` argv interpolation, which exposed the
+	 * password to anyone able to read `ps`.
+	 *
+	 * @param array<string, mixed> $config Cake connection config (host, username, password).
+	 * @return string Absolute path to the written credentials file.
+	 */
+	protected function writeCredentialsFile(array $config): string {
+		$path = tempnam(sys_get_temp_dir(), 'cake-setup-mycnf-');
+		if ($path === false) {
+			throw new RuntimeException('Failed to create temp file for mysqldump credentials');
 		}
 
-		return $ret === static::CODE_SUCCESS;
+		$content = "[mysqldump]\n";
+		if (isset($config['username'])) {
+			$content .= 'user="' . addslashes((string)$config['username']) . "\"\n";
+		}
+		if (isset($config['password'])) {
+			$content .= 'password="' . addslashes((string)$config['password']) . "\"\n";
+		}
+		if (isset($config['host'])) {
+			$content .= 'host="' . addslashes((string)$config['host']) . "\"\n";
+		}
+
+		file_put_contents($path, $content);
+		chmod($path, 0600);
+
+		return $path;
 	}
 
 	/**
