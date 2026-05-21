@@ -21,10 +21,11 @@
 			"role": "Author"
 		}
 	],
-	"homepage": "https://github.com/dereuromark/cakephp-setup",
+	"homepage": "https://dereuromark.github.io/cakephp-setup/",
 	"support": {
 		"issues": "https://github.com/dereuromark/cakephp-setup/issues",
-		"source": "https://github.com/dereuromark/cakephp-setup"
+		"source": "https://github.com/dereuromark/cakephp-setup",
+		"docs": "https://dereuromark.github.io/cakephp-setup/"
 	},
 	"require": {
 		"php": ">=8.2",

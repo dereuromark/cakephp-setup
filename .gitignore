@@ -8,3 +8,6 @@
 .idea/
 .phpunit.result.cache
 .phpcs.cache
+/docs/node_modules/
+/docs/.vitepress/cache/
+/docs/.vitepress/dist/

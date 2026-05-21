@@ -99,7 +99,7 @@ if (!empty($optInChecks)) {
 	}, $optInChecks);
 	?>
 	<p class="text-muted small">
-		<em>Note: Additional opt-in checks available (<?php echo h(implode(', ', $names)); ?>). See <a href="https://github.com/dereuromark/cakephp-setup/blob/master/docs/Healthcheck/Healthcheck.md#opt-in-checks" target="_blank">documentation</a>.</em>
+		<em>Note: Additional opt-in checks available (<?php echo h(implode(', ', $names)); ?>). See <a href="https://dereuromark.github.io/cakephp-setup/healthcheck/#opt-in-checks" target="_blank">documentation</a>.</em>
 	</p>
 <?php } ?>
 
