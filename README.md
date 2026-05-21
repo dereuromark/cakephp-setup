@@ -22,9 +22,19 @@ Currently, this plugin contains only the parts I managed to migrate yet:
 * Maintenance Mode (dynamic activation and deactivation incl. dynamic IP whitelisting)
 * Some very useful development tools and debugging shells
 
-## Installation & Docs
+## Documentation
 
-- [Documentation](docs/README.md)
+Full documentation lives at **[dereuromark.github.io/cakephp-setup](https://dereuromark.github.io/cakephp-setup/)**.
+
+A few good entry points:
+
+* [Getting started](https://dereuromark.github.io/cakephp-setup/guide/)
+* [Installation](https://dereuromark.github.io/cakephp-setup/guide/installation)
+* [Maintenance Mode](https://dereuromark.github.io/cakephp-setup/maintenance/)
+* [Healthcheck](https://dereuromark.github.io/cakephp-setup/healthcheck/)
+* [Console Commands](https://dereuromark.github.io/cakephp-setup/console/)
+
+The Markdown sources live in the [docs](docs/) directory of this repository.
 
 Possible dependencies: [Tools](https://github.com/dereuromark/cakephp-tools) Plugin
 
