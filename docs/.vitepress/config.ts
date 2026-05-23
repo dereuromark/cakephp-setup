@@ -17,6 +17,12 @@ function guideSidebar() {
       ],
     },
     {
+      text: 'Middleware',
+      items: [
+        { text: 'security.txt', link: '/middleware/security-txt' },
+      ],
+    },
+    {
       text: 'Healthcheck',
       items: [
         { text: 'Overview', link: '/healthcheck/' },
@@ -81,6 +87,7 @@ export default defineConfig({
     sidebar: {
       '/guide/': guideSidebar(),
       '/maintenance/': guideSidebar(),
+      '/middleware/': guideSidebar(),
       '/healthcheck/': guideSidebar(),
       '/panel/': guideSidebar(),
       '/console/': guideSidebar(),

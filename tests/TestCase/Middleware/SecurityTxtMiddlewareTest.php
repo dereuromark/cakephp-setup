@@ -1,0 +1,232 @@
+<?php
+
+namespace Setup\Test\TestCase\Middleware;
+
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Setup\Middleware\SecurityTxtMiddleware;
+use Shim\TestSuite\TestCase;
+
+class SecurityTxtMiddlewareTest extends TestCase {
+
+	/**
+	 * @return void
+	 */
+	public function testServesAtWellKnownPath(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => 'https://example.com/security'],
+		]);
+
+		$response = $middleware->process($this->request('/.well-known/security.txt'), $this->handler());
+
+		$this->assertSame(200, $response->getStatusCode());
+		$this->assertStringContainsString('text/plain', $response->getHeaderLine('Content-Type'));
+
+		$body = (string)$response->getBody();
+		$this->assertStringContainsString('Contact: https://example.com/security', $body);
+		$this->assertStringContainsString('Expires:', $body);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testExpiresInFuture(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$response = $middleware->process($this->request('/.well-known/security.txt'), $this->handler());
+
+		$body = (string)$response->getBody();
+		preg_match('/^Expires: (.+)$/m', $body, $matches);
+		$this->assertNotEmpty($matches);
+		$this->assertGreaterThan(time(), (int)strtotime($matches[1]));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testRootFallbackServed(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$response = $middleware->process($this->request('/security.txt'), $this->handler());
+
+		$this->assertSame(200, $response->getStatusCode());
+		$this->assertStringNotContainsString('PASSTHROUGH', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testRootFallbackDisabledPassesThrough(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'serveRootFallback' => false,
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$response = $middleware->process($this->request('/security.txt'), $this->handler());
+
+		$this->assertSame('PASSTHROUGH', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUnrelatedPathPassesThrough(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$response = $middleware->process($this->request('/foo'), $this->handler());
+
+		$this->assertSame('PASSTHROUGH', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testMissingContactPassesThrough(): void {
+		$middleware = new SecurityTxtMiddleware();
+
+		$response = $middleware->process($this->request('/.well-known/security.txt'), $this->handler());
+
+		$this->assertSame('PASSTHROUGH', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testMultipleContacts(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => ['https://example.com/s', 'mailto:security@example.com']],
+		]);
+
+		$body = (string)$middleware->process($this->request('/.well-known/security.txt'), $this->handler())->getBody();
+
+		$this->assertSame(1, substr_count($body, 'Contact: https://example.com/s'));
+		$this->assertSame(1, substr_count($body, 'Contact: mailto:security@example.com'));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testNonGetMethodPassesThrough(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$response = $middleware->process($this->request('/.well-known/security.txt', 'POST'), $this->handler());
+
+		$this->assertSame('PASSTHROUGH', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testContactFirstAndExpiresLast(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => [
+				'Policy' => 'https://example.com/policy',
+				'Contact' => 'mailto:security@example.com',
+				'Preferred-Languages' => 'en, de',
+			],
+		]);
+
+		$body = (string)$middleware->process($this->request('/.well-known/security.txt'), $this->handler())->getBody();
+
+		$this->assertStringStartsWith('Contact: mailto:security@example.com', $body);
+		$this->assertStringContainsString('Policy: https://example.com/policy', $body);
+		$this->assertStringContainsString('Preferred-Languages: en, de', $body);
+
+		$lines = explode("\n", trim($body));
+		$this->assertStringStartsWith('Expires:', (string)end($lines));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testHeadRequestHasHeadersButNoBody(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$response = $middleware->process($this->request('/.well-known/security.txt', 'HEAD'), $this->handler());
+
+		$this->assertSame(200, $response->getStatusCode());
+		$this->assertStringContainsString('text/plain', $response->getHeaderLine('Content-Type'));
+		$this->assertSame('', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testServedUnderApplicationBasePath(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$request = new ServerRequest([
+			'url' => '/myapp/.well-known/security.txt',
+			'base' => '/myapp',
+			'environment' => ['REQUEST_METHOD' => 'GET'],
+		]);
+		$response = $middleware->process($request, $this->handler());
+
+		$this->assertSame(200, $response->getStatusCode());
+		$this->assertStringContainsString('Contact: mailto:security@example.com', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCacheControlHeader(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'cacheMaxAge' => 3600,
+			'fields' => ['Contact' => 'mailto:security@example.com'],
+		]);
+
+		$response = $middleware->process($this->request('/.well-known/security.txt'), $this->handler());
+
+		$this->assertSame('max-age=3600', $response->getHeaderLine('Cache-Control'));
+	}
+
+	/**
+	 * Build a request for the given path and method.
+	 *
+	 * @param string $path
+	 * @param string $method
+	 *
+	 * @return \Cake\Http\ServerRequest
+	 */
+	protected function request(string $path, string $method = 'GET'): ServerRequest {
+		return new ServerRequest([
+			'url' => $path,
+			'environment' => ['REQUEST_METHOD' => $method],
+		]);
+	}
+
+	/**
+	 * A pass-through handler returning a sentinel response.
+	 *
+	 * @return \Psr\Http\Server\RequestHandlerInterface
+	 */
+	protected function handler(): RequestHandlerInterface {
+		return new class implements RequestHandlerInterface {
+
+			/**
+			 * @param \Psr\Http\Message\ServerRequestInterface $request
+			 * @return \Psr\Http\Message\ResponseInterface
+			 */
+			public function handle(ServerRequestInterface $request): ResponseInterface {
+				return (new Response())->withStringBody('PASSTHROUGH');
+			}
+
+		};
+	}
+
+}
