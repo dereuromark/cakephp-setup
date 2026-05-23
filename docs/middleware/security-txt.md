@@ -16,22 +16,22 @@ Because it answers before routing/auth, add it **early** in the queue.
 
 ## Setup
 
-Register it in your `Application::middleware()`:
+Describe the document with the `SecurityTxt` value object and register it in your
+`Application::middleware()`:
 
 ```php
+use Setup\Middleware\SecurityTxt;
 use Setup\Middleware\SecurityTxtMiddleware;
 
 public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
 {
     $middlewareQueue
-        ->add(new SecurityTxtMiddleware([
-            'fields' => [
-                'Contact' => 'https://github.com/owner/repo/security/advisories/new',
-                'Canonical' => 'https://example.com/.well-known/security.txt',
-                'Policy' => 'https://github.com/owner/repo/security/policy',
-                'Preferred-Languages' => 'en, de',
-            ],
-        ]))
+        ->add(new SecurityTxtMiddleware(new SecurityTxt(
+            contact: 'https://github.com/owner/repo/security/advisories/new',
+            canonical: 'https://example.com/.well-known/security.txt',
+            policy: 'https://github.com/owner/repo/security/policy',
+            preferredLanguages: 'en, de',
+        )))
         // ... the rest of your stack
     ;
 
@@ -43,41 +43,67 @@ It is then served at `https://example.com/.well-known/security.txt` (and, by
 default, at `/security.txt`).
 
 ::: warning Contact is required
-RFC 9116 requires a `Contact` field. If you do not configure one, the middleware
-passes through and serves nothing rather than emit an invalid file.
+RFC 9116 requires a `Contact`. It is the only non-optional parameter of
+`SecurityTxt`, and constructing a document (or the middleware) without a non-empty
+contact throws an `InvalidArgumentException` — so misconfiguration fails at boot
+rather than serving an invalid file.
 :::
 
-## Options
+## The `SecurityTxt` document
+
+Each parameter maps to an RFC 9116 field. A value may be a single string or a list
+of strings (repeated lines, e.g. multiple `Contact`). `null` fields are omitted.
+
+| Parameter | Field | Notes |
+|-----------|-------|-------|
+| `contact` *(required)* | `Contact` | `https:`, `mailto:`, or `tel:` URI(s). |
+| `canonical` | `Canonical` | Canonical URI(s) of this file. |
+| `encryption` | `Encryption` | Encryption key URI(s). |
+| `acknowledgments` | `Acknowledgments` | Hall-of-fame URI(s). |
+| `preferredLanguages` | `Preferred-Languages` | RFC 5646 tags, e.g. `en, de`. |
+| `policy` | `Policy` | Security policy URI(s). |
+| `hiring` | `Hiring` | Security-related job URI(s). |
+| `csaf` | `CSAF` | `provider-metadata.json` URI(s). |
+| `expiresInterval` | `Expires` | `strtotime`-relative interval (default `+1 year`). |
+
+::: info Expires is managed for you
+`Expires` is always computed from `expiresInterval`, so it stays in the future.
+Output order is: all `Contact` lines first, then the other fields, then `Expires`
+last.
+:::
+
+## Behavior options
+
+Transport/behavior knobs are passed as a second array argument (they are distinct
+from the document content):
+
+```php
+new SecurityTxtMiddleware($document, [
+    'cacheMaxAge' => WEEK,
+    'serveRootFallback' => false,
+]);
+```
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `path` | `/.well-known/security.txt` | Canonical path served. |
+| `path` | `/.well-known/security.txt` | Canonical path served (base-path aware). |
 | `serveRootFallback` | `true` | Also answer the legacy `/security.txt` path. |
-| `expiresInterval` | `'+1 year'` | `strtotime`-relative interval used to compute the always-future `Expires`. |
 | `cacheMaxAge` | `DAY` | `Cache-Control: max-age` in seconds. Set to `0` to omit the header. |
-| `fields` | `[]` | Field map (see below). |
 
-### `fields`
+## Array escape hatch
 
-An associative array of RFC 9116 field names to values. A value may be a string
-(one line) or an array of strings (repeated lines, e.g. multiple `Contact`):
+A raw config array is still accepted — useful for fields the value object does not
+cover, or fully dynamic config. The same `Contact` requirement applies:
 
 ```php
-'fields' => [
-    'Contact' => [
-        'https://github.com/owner/repo/security/advisories/new',
-        'mailto:security@example.com',
+new SecurityTxtMiddleware([
+    'cacheMaxAge' => 0,
+    'fields' => [
+        'Contact' => ['https://example.com/report', 'mailto:security@example.com'],
+        'Canonical' => 'https://example.com/.well-known/security.txt',
     ],
-    'Canonical' => 'https://example.com/.well-known/security.txt',
-    'Preferred-Languages' => 'en, de',
-],
+]);
 ```
-
-::: info Expires is managed for you
-`Expires` is always computed from `expiresInterval`. Any `Expires` you put in
-`fields` is ignored. Output order is: all `Contact` lines first, then the other
-fields in the order you declare them, then `Expires` last.
-:::
 
 ## Example output
 
@@ -90,6 +116,6 @@ Expires: 2027-05-23T00:00:00.000Z
 ```
 
 > [!TIP]
-> Pair the `Policy` field with a `SECURITY.md` in your repository (root, `.github/`,
+> Pair the `policy` field with a `SECURITY.md` in your repository (root, `.github/`,
 > or `docs/`). GitHub renders it at `/security/policy` and links it from the repo's
 > Security tab.

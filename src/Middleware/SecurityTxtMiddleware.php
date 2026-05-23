@@ -4,6 +4,7 @@ namespace Setup\Middleware;
 
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Response;
+use InvalidArgumentException;
 use Laminas\Diactoros\CallbackStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,18 +15,30 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Serves an RFC 9116 `security.txt` file.
  *
  * The `Expires` field is computed on every request from `expiresInterval`, so it
- * never goes stale. `Contact` is required by the RFC; if none is configured the
- * middleware passes through instead of emitting an invalid file.
+ * never goes stale. `Contact` is required by the RFC; constructing the middleware
+ * without one throws an `InvalidArgumentException` (fail fast at boot rather than
+ * serving an invalid file).
  *
- * Add it early in the middleware queue (before routing/auth):
+ * Add it early in the middleware queue (before routing/auth). Pass a
+ * {@see \Setup\Middleware\SecurityTxt} document (preferred):
+ *
+ * ```php
+ * $middlewareQueue->add(new \Setup\Middleware\SecurityTxtMiddleware(
+ *     new \Setup\Middleware\SecurityTxt(
+ *         contact: 'https://github.com/owner/repo/security/advisories/new',
+ *         canonical: 'https://example.com/.well-known/security.txt',
+ *         preferredLanguages: 'en, de',
+ *     ),
+ *     // optional behavior: ['path' => ..., 'serveRootFallback' => ..., 'cacheMaxAge' => ...]
+ * ));
+ * ```
+ *
+ * A raw config array is still accepted as an escape hatch (e.g. for fields not
+ * covered by the value object):
  *
  * ```php
  * $middlewareQueue->add(new \Setup\Middleware\SecurityTxtMiddleware([
- *     'fields' => [
- *         'Contact' => 'https://github.com/owner/repo/security/advisories/new',
- *         'Canonical' => 'https://example.com/.well-known/security.txt',
- *         'Preferred-Languages' => 'en, de',
- *     ],
+ *     'fields' => ['Contact' => 'mailto:security@example.com'],
  * ]));
  * ```
  */
@@ -45,10 +58,28 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 	];
 
 	/**
-	 * @param array<string, mixed> $config
+	 * @param \Setup\Middleware\SecurityTxt|array<string, mixed> $config A security.txt document (preferred), or a raw config array (escape hatch).
+	 * @param array<string, mixed> $options Behavior options (`path`, `serveRootFallback`, `cacheMaxAge`) when passing a document; ignored for the array form.
+	 *
+	 * @throws \InvalidArgumentException If no non-empty `Contact` is configured.
 	 */
-	public function __construct(array $config = []) {
+	public function __construct(SecurityTxt|array $config = [], array $options = []) {
+		if ($config instanceof SecurityTxt) {
+			$config = $options + [
+				'fields' => $config->toFields(),
+				'expiresInterval' => $config->expiresInterval,
+			];
+		}
+
 		$this->setConfig($config);
+
+		/** @var array<string, mixed> $fields */
+		$fields = (array)$this->getConfig('fields');
+		if (SecurityTxt::normalize($fields['Contact'] ?? null) === []) {
+			throw new InvalidArgumentException(
+				'SecurityTxtMiddleware requires at least one non-empty `Contact` field (RFC 9116).',
+			);
+		}
 	}
 
 	/**
@@ -69,10 +100,7 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 
 		/** @var array<string, mixed> $fields */
 		$fields = (array)$this->getConfig('fields');
-		$contacts = $this->normalizeValues($fields['Contact'] ?? null);
-		if (!$contacts) {
-			return $handler->handle($request);
-		}
+		$contacts = SecurityTxt::normalize($fields['Contact'] ?? null);
 
 		$response = $this->build($fields, $contacts);
 
@@ -128,7 +156,7 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 			if ($name === 'Contact' || $name === 'Expires') {
 				continue;
 			}
-			foreach ($this->normalizeValues($value) as $item) {
+			foreach (SecurityTxt::normalize($value) as $item) {
 				$lines[] = $name . ': ' . $item;
 			}
 		}
@@ -161,29 +189,6 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 		}
 
 		return gmdate('Y-m-d\TH:i:s.000\Z', $timestamp);
-	}
-
-	/**
-	 * Normalize a field value (string or list) into a list of non-empty trimmed strings.
-	 *
-	 * @param mixed $value
-	 * @return array<string>
-	 */
-	protected function normalizeValues($value): array {
-		if ($value === null || $value === '' || $value === []) {
-			return [];
-		}
-
-		$values = is_array($value) ? $value : [$value];
-		$result = [];
-		foreach ($values as $item) {
-			$item = trim((string)$item);
-			if ($item !== '') {
-				$result[] = $item;
-			}
-		}
-
-		return $result;
 	}
 
 }

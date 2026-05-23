@@ -4,9 +4,11 @@ namespace Setup\Test\TestCase\Middleware;
 
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Setup\Middleware\SecurityTxt;
 use Setup\Middleware\SecurityTxtMiddleware;
 use Shim\TestSuite\TestCase;
 
@@ -90,12 +92,65 @@ class SecurityTxtMiddlewareTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testMissingContactPassesThrough(): void {
-		$middleware = new SecurityTxtMiddleware();
+	public function testThrowsWhenContactMissing(): void {
+		$this->expectException(InvalidArgumentException::class);
+
+		new SecurityTxtMiddleware();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testThrowsWhenContactEmptyInArray(): void {
+		$this->expectException(InvalidArgumentException::class);
+
+		new SecurityTxtMiddleware(['fields' => ['Contact' => '']]);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testAcceptsSecurityTxtDocument(): void {
+		$middleware = new SecurityTxtMiddleware(new SecurityTxt(
+			contact: 'https://example.com/security/advisories/new',
+			canonical: 'https://example.com/.well-known/security.txt',
+			preferredLanguages: 'en, de',
+		));
+
+		$body = (string)$middleware->process($this->request('/.well-known/security.txt'), $this->handler())->getBody();
+
+		$this->assertStringContainsString('Contact: https://example.com/security/advisories/new', $body);
+		$this->assertStringContainsString('Canonical: https://example.com/.well-known/security.txt', $body);
+		$this->assertStringContainsString('Preferred-Languages: en, de', $body);
+		$this->assertStringContainsString('Expires:', $body);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDocumentBehaviorOptionsDisableRootFallback(): void {
+		$middleware = new SecurityTxtMiddleware(
+			new SecurityTxt(contact: 'mailto:security@example.com'),
+			['serveRootFallback' => false],
+		);
+
+		$response = $middleware->process($this->request('/security.txt'), $this->handler());
+
+		$this->assertSame('PASSTHROUGH', (string)$response->getBody());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDocumentBehaviorOptionsCacheMaxAge(): void {
+		$middleware = new SecurityTxtMiddleware(
+			new SecurityTxt(contact: 'mailto:security@example.com'),
+			['cacheMaxAge' => 60],
+		);
 
 		$response = $middleware->process($this->request('/.well-known/security.txt'), $this->handler());
 
-		$this->assertSame('PASSTHROUGH', (string)$response->getBody());
+		$this->assertSame('max-age=60', $response->getHeaderLine('Cache-Control'));
 	}
 
 	/**
