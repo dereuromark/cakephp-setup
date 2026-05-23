@@ -20,6 +20,7 @@ my Tools Plugin.
 Currently, this plugin contains only the parts I managed to migrate yet:
 
 * Maintenance Mode (dynamic activation and deactivation incl. dynamic IP whitelisting)
+* security.txt middleware (RFC 9116, with an always-future `Expires`)
 * Some very useful development tools and debugging shells
 
 ## Documentation
@@ -31,6 +32,7 @@ A few good entry points:
 * [Getting started](https://dereuromark.github.io/cakephp-setup/guide/)
 * [Installation](https://dereuromark.github.io/cakephp-setup/guide/installation)
 * [Maintenance Mode](https://dereuromark.github.io/cakephp-setup/maintenance/)
+* [security.txt Middleware](https://dereuromark.github.io/cakephp-setup/middleware/security-txt)
 * [Healthcheck](https://dereuromark.github.io/cakephp-setup/healthcheck/)
 * [Console Commands](https://dereuromark.github.io/cakephp-setup/console/)
 
