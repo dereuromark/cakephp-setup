@@ -47,13 +47,20 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 	use InstanceConfigTrait;
 
 	/**
+	 * Default `Cache-Control` max-age in seconds (1 day).
+	 *
+	 * @var int
+	 */
+	protected const DEFAULT_CACHE_MAX_AGE = 86400;
+
+	/**
 	 * @var array<string, mixed>
 	 */
 	protected array $_defaultConfig = [
 		'path' => '/.well-known/security.txt',
 		'serveRootFallback' => true,
 		'expiresInterval' => '+1 year',
-		'cacheMaxAge' => DAY,
+		'cacheMaxAge' => self::DEFAULT_CACHE_MAX_AGE,
 		'fields' => [],
 	];
 
