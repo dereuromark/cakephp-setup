@@ -66,10 +66,17 @@ of strings (repeated lines, e.g. multiple `Contact`). `null` fields are omitted.
 | `csaf` | `CSAF` | `provider-metadata.json` URI(s). |
 | `expiresInterval` | `Expires` | `strtotime`-relative interval (default `+1 year`). |
 
+::: info Field order
+RFC 9116 does not give field order any meaning, so the value object emits a fixed,
+readable order: actionable fields first (`Contact`, `Encryption`, `Policy`, …),
+then file metadata (`Canonical`, `Preferred-Languages`), then the computed
+`Expires` last. (Multiple values of the same field keep their given order — for
+`Contact` that is the RFC's preference order.) The array escape hatch instead
+preserves the order in which you declare the fields.
+:::
+
 ::: info Expires is managed for you
 `Expires` is always computed from `expiresInterval`, so it stays in the future.
-Output order is: all `Contact` lines first, then the other fields, then `Expires`
-last.
 :::
 
 ## Behavior options
@@ -109,8 +116,8 @@ new SecurityTxtMiddleware([
 
 ```text
 Contact: https://github.com/owner/repo/security/advisories/new
-Canonical: https://example.com/.well-known/security.txt
 Policy: https://github.com/owner/repo/security/policy
+Canonical: https://example.com/.well-known/security.txt
 Preferred-Languages: en, de
 Expires: 2027-05-23T00:00:00.000Z
 ```

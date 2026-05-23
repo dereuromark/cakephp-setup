@@ -128,6 +128,27 @@ class SecurityTxtMiddlewareTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testDocumentFieldOrder(): void {
+		$middleware = new SecurityTxtMiddleware(new SecurityTxt(
+			contact: 'mailto:security@example.com',
+			canonical: 'https://example.com/.well-known/security.txt',
+			preferredLanguages: 'en, de',
+			policy: 'https://example.com/policy',
+		));
+
+		$body = trim((string)$middleware->process($this->request('/.well-known/security.txt'), $this->handler())->getBody());
+		$keys = array_map(fn (string $line): string => explode(':', $line, 2)[0], explode("\n", $body));
+
+		// Actionable fields first, file metadata next, computed Expires last.
+		$this->assertSame(
+			['Contact', 'Policy', 'Canonical', 'Preferred-Languages', 'Expires'],
+			$keys,
+		);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testDocumentBehaviorOptionsDisableRootFallback(): void {
 		$middleware = new SecurityTxtMiddleware(
 			new SecurityTxt(contact: 'mailto:security@example.com'),

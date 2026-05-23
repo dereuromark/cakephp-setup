@@ -21,7 +21,7 @@ class SecurityTxtTest extends TestCase {
 		$fields = $document->toFields();
 
 		$this->assertSame(
-			['Contact', 'Preferred-Languages', 'Canonical'],
+			['Contact', 'Canonical', 'Preferred-Languages'],
 			array_keys($fields),
 		);
 		$this->assertArrayNotHasKey('Policy', $fields);

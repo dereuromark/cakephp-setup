@@ -50,18 +50,23 @@ class SecurityTxt {
 	/**
 	 * Ordered RFC 9116 field map, excluding the computed `Expires`.
 	 *
+	 * Field order is not significant per RFC 9116; this emits actionable fields
+	 * first (how to report) and file metadata last (`Canonical`,
+	 * `Preferred-Languages`) for readability. `Expires` is appended last by the
+	 * middleware.
+	 *
 	 * @return array<string, string|array<string>>
 	 */
 	public function toFields(): array {
 		$fields = [
 			'Contact' => $this->contact,
 			'Encryption' => $this->encryption,
-			'Acknowledgments' => $this->acknowledgments,
-			'Preferred-Languages' => $this->preferredLanguages,
-			'Canonical' => $this->canonical,
 			'Policy' => $this->policy,
-			'Hiring' => $this->hiring,
+			'Acknowledgments' => $this->acknowledgments,
 			'CSAF' => $this->csaf,
+			'Hiring' => $this->hiring,
+			'Canonical' => $this->canonical,
+			'Preferred-Languages' => $this->preferredLanguages,
 		];
 
 		return array_filter($fields, fn ($value): bool => $value !== null);
