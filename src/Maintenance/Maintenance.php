@@ -116,7 +116,7 @@ class Maintenance {
 	 */
 	public function addToWhitelist(array $newIps = []) {
 		foreach ($newIps as $ip) {
-				$this->_addToWhitelist($ip);
+			$this->_addToWhitelist($ip);
 		}
 	}
 
