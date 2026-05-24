@@ -13,7 +13,7 @@ use Setup\Utility\Setup;
 use Tools\Mailer\Mailer;
 
 if (!defined('WINDOWS')) {
-	if (substr(PHP_OS, 0, 3) === 'WIN') {
+	if (str_starts_with(PHP_OS, 'WIN')) {
 		define('WINDOWS', true);
 	} else {
 		define('WINDOWS', false);
@@ -94,7 +94,7 @@ class SetupComponent extends Component {
 		if ($this->Controller->getRequest()->getQuery('maintenance') !== null) {
 			$mode = $this->Controller->getRequest()->getQuery('maintenance') ? __d('setup', 'activated') : __d('setup', 'deactivated');
 			$result = $this->setMaintenance((bool)$this->Controller->getRequest()->getQuery('maintenance'));
-			if ($result !== false) {
+			if ($result) {
 				$this->Controller->Flash->success(__d('setup', 'Maintenance mode {0}', $mode));
 			} else {
 				$this->Controller->Flash->error(__d('setup', 'Maintenance mode not {0}', $mode));
@@ -191,7 +191,7 @@ class SetupComponent extends Component {
 			return;
 		}
 		$referer = $this->Controller->referer();
-		if (strlen($referer) > 2 && (int)$this->getController()->getRequest()->getSession()->read('Report.404') < time() - 5 * MINUTE) {
+		if (strlen((string) $referer) > 2 && (int)$this->getController()->getRequest()->getSession()->read('Report.404') < time() - 5 * MINUTE) {
 			$text = '404:' . TB . TB . $this->Controller->getRequest()->getRequestTarget()
 			. NL . 'Referer:' . TB . '' . $referer
 			. NL . NL . 'Browser: ' . env('HTTP_USER_AGENT')
@@ -232,11 +232,7 @@ class SetupComponent extends Component {
 			return true;
 		}
 		$pwd = $this->Controller->getRequest()->getQuery('pwd');
-		if ($pwd && $pwd === Configure::read('Config.pwd')) {
-			return true;
-		}
-
-		return false;
+        return $pwd && $pwd === Configure::read('Config.pwd');
 	}
 
 	/**
@@ -334,10 +330,8 @@ class SetupComponent extends Component {
 			return false;
 		}
 
-		if (!empty($id)) {
-			if (file_put_contents($file, $level)) {
-				return (bool)$level;
-			}
+		if (!empty($id) && file_put_contents($file, $level)) {
+			return (bool)$level;
 		}
 
 		return false;
@@ -391,7 +385,7 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	protected function _notification($title, $text) {
-		if (!isset($this->Mailer)) {
+		if ($this->Mailer === null) {
 			$this->Mailer = new Mailer();
 		} else {
 			$this->Mailer->reset();
@@ -401,7 +395,7 @@ class SetupComponent extends Component {
 		$this->Mailer->setSubject($title);
 		//FIXME
 		//$this->Mailer->setTemplate('simple_email');
-		$this->Mailer->setViewVars(compact('text'));
+		$this->Mailer->setViewVars(['text' => $text]);
 		$this->Mailer->send();
 
 		return true;

@@ -39,7 +39,7 @@ class ExposePhpCheck extends Check {
 		}
 
 		$exposePhp = ini_get('expose_php');
-		$isEnabled = $exposePhp !== false && $exposePhp !== '' && $exposePhp !== '0' && strtolower($exposePhp) !== 'off';
+		$isEnabled = !in_array($exposePhp, [false, '', '0'], true) && strtolower($exposePhp) !== 'off';
 
 		if ($isEnabled) {
 			$this->passed = true;

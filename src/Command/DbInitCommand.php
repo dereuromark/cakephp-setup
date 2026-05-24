@@ -44,7 +44,7 @@ class DbInitCommand extends Command {
 		$dbName = $config['database'];
 
 		// For SQLite
-		$name = substr($config['driver'], strrpos($config['driver'], '\\') + 1);
+		$name = substr((string) $config['driver'], strrpos((string) $config['driver'], '\\') + 1);
 		$config['scheme'] = strtolower($name);
 		if ($config['scheme'] === 'sqlite' && $config['database'] === ':memory:') {
 			$this->io->warning('Using in-memory database, skipping.');

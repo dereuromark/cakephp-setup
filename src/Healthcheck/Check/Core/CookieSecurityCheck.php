@@ -47,7 +47,7 @@ class CookieSecurityCheck extends Check {
 	protected function checkHttpOnly(): void {
 		$httpOnly = ini_get('session.cookie_httponly');
 
-		if ($httpOnly === false || $httpOnly === '' || $httpOnly === '0') {
+		if (in_array($httpOnly, [false, '', '0'], true)) {
 			$this->warningMessage[] = 'session.cookie_httponly is disabled. Enable it to prevent JavaScript access to session cookies (XSS mitigation).';
 			$this->infoMessage[] = 'Set in php.ini: session.cookie_httponly = 1 or in CakePHP config: \'Session\' => [\'ini\' => [\'session.cookie_httponly\' => true]]';
 			$this->passed = false;
@@ -63,7 +63,7 @@ class CookieSecurityCheck extends Check {
 	 */
 	protected function checkSecure(): void {
 		$secure = ini_get('session.cookie_secure');
-		$isEnabled = $secure !== false && $secure !== '' && $secure !== '0';
+		$isEnabled = !in_array($secure, [false, '', '0'], true);
 
 		// In debug mode, secure cookies are optional (local dev often uses HTTP)
 		if ($this->isDebug) {
@@ -128,7 +128,7 @@ class CookieSecurityCheck extends Check {
 	protected function checkStrictMode(): void {
 		$strictMode = ini_get('session.use_strict_mode');
 
-		if ($strictMode === false || $strictMode === '' || $strictMode === '0') {
+		if (in_array($strictMode, [false, '', '0'], true)) {
 			$this->warningMessage[] = 'session.use_strict_mode is disabled. Enable it to reject uninitialized session IDs (session fixation mitigation).';
 			$this->infoMessage[] = 'Set in php.ini: session.use_strict_mode = 1 or in CakePHP config: \'Session\' => [\'ini\' => [\'session.use_strict_mode\' => true]]';
 			$this->passed = false;

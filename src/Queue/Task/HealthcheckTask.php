@@ -33,17 +33,15 @@ class HealthcheckTask extends Task implements AddInterface, AddFromBackendInterf
 			foreach ($checks as $check) {
 				$message .= ' - ' . $check->name() . ': ' . ($check->passed() ? 'OK' : 'FAIL') . PHP_EOL;
 				if (!$check->passed()) {
-					if ($check->failureMessage()) {
+                    if ($check->failureMessage()) {
 						$message .= '   Error: ' . implode(', ', $check->failureMessage()) . PHP_EOL;
 					}
-					if ($check->warningMessage()) {
+                    if ($check->warningMessage()) {
 						$message .= '   Warning: ' . implode(', ', $check->warningMessage()) . PHP_EOL;
 					}
-				} else {
-					if ($check->successMessage()) {
-						$message .= '   Passed: ' . implode(', ', $check->successMessage()) . PHP_EOL;
-					}
-				}
+                } elseif ($check->successMessage()) {
+                    $message .= '   Passed: ' . implode(', ', $check->successMessage()) . PHP_EOL;
+                }
 
 				if ($check->infoMessage()) {
 					$message .= '   Info: ' . implode(', ', $check->infoMessage()) . PHP_EOL;

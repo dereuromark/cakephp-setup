@@ -64,9 +64,7 @@ TXT;
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser(): ConsoleOptionParser {
-		$parser = parent::getOptionParser();
-
-		return $parser;
+		return parent::getOptionParser();
 	}
 
 }

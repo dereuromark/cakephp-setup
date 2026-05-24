@@ -242,10 +242,8 @@ class PhpVersionCheck extends Check {
 		$basePatch = (int)($baseParts[2] ?? 0);
 
 		// Check if version is lower than minimum requirement
-		if ($operator === '>=' || $operator === '>') {
-			if (version_compare($version, $baseVersion, '<')) {
-				return 'lower';
-			}
+		if (($operator === '>=' || $operator === '>') && version_compare($version, $baseVersion, '<')) {
+			return 'lower';
 		}
 
 		// For caret (^) operator: ^8.1 means >=8.1.0 <9.0.0

@@ -50,20 +50,18 @@ class MaintenanceModeWhitelistCommand extends Command {
 	public function execute(Arguments $args, ConsoleIo $io) {
 		$ip = $args->getArgument('ip');
 		if ($ip) {
-			if (!Validation::ipOrSubnet($ip)) {
+            if (!Validation::ipOrSubnet($ip)) {
 				$io->abort($ip . ' is not a valid IP address or subnet.');
 			}
-			if ($args->getOption('remove')) {
+            if ($args->getOption('remove')) {
 				$this->Maintenance->clearWhitelist([$ip]);
 			} else {
 				$this->Maintenance->addToWhitelist([$ip]);
 			}
-			$io->out('Done!', 2);
-		} else {
-			if ($args->getOption('remove')) {
-				$this->Maintenance->clearWhitelist();
-			}
-		}
+            $io->out('Done!', 2);
+        } elseif ($args->getOption('remove')) {
+            $this->Maintenance->clearWhitelist();
+        }
 
 		$io->out('Current whitelist:');
 		/** @var array<string> $ip */

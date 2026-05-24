@@ -62,9 +62,7 @@ class MaintenanceModeStatusCommand extends Command {
 	 * @return \Cake\Console\ConsoleOptionParser The built parser.
 	 */
 	protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser {
-		$parser = parent::buildOptionParser($parser);
-
-		return $parser;
+		return parent::buildOptionParser($parser);
 	}
 
 }

@@ -38,7 +38,7 @@ class ConfigurationController extends AppController {
 		if ($mem) {
 			$memory = '' . $mem['total'] . ' MB total; ' . $mem['free'] . ' MB free';
 		}
-		$this->set(compact('serverLoad', 'memory', 'uptime'));
+		$this->set(['serverLoad' => $serverLoad, 'memory' => $memory, 'uptime' => $uptime]);
 	}
 
 }

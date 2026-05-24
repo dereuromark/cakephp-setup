@@ -74,10 +74,10 @@ class DbIntegrityConstraintsCommand extends Command {
 				$result[] = '$this->table(\'' . $table . '\')';
 
 				foreach ($fields as $field => $relation) {
-					$result[] = "\t" . '->addForeignKey(\'' . $field . '\', \'' . $relation['table'] . '\', [\'' . $relation['field'] . '\'], [\'delete\' => \'SET_NULL\'])';
+					$result[] = '	->addForeignKey(\'' . $field . '\', \'' . $relation['table'] . '\', [\'' . $relation['field'] . '\'], [\'delete\' => \'SET_NULL\'])';
 				}
 
-				$result[] = "\t" . '->update();';
+				$result[] = '	->update();';
 			}
 
 			$io->out($result);

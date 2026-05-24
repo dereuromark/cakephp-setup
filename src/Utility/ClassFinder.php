@@ -49,7 +49,7 @@ class ClassFinder {
 			$folderContent = (new Folder($folder))->read(Folder::SORT_NAME, true);
 
 			foreach ($folderContent[1] as $file) {
-				$name = pathinfo($file, PATHINFO_FILENAME);
+				$name = pathinfo((string) $file, PATHINFO_FILENAME);
 				$names[] = $name;
 			}
 
@@ -57,7 +57,7 @@ class ClassFinder {
 				$folderContent = (new Folder($folder . $subFolder))->read(Folder::SORT_NAME, true);
 
 				foreach ($folderContent[1] as $file) {
-					$name = pathinfo($file, PATHINFO_FILENAME);
+					$name = pathinfo((string) $file, PATHINFO_FILENAME);
 					$names[] = $subFolder . '/' . $name;
 				}
 			}

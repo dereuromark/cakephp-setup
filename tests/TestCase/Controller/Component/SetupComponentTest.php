@@ -61,7 +61,7 @@ class SetupComponentTest extends TestCase {
 			->withQueryParams(['maintenance' => 1]);
 		$this->Controller->setRequest($request);
 
-		$event = new Event('Controller.startup', $this->Controller, compact('request'));
+		$event = new Event('Controller.startup', $this->Controller, ['request' => $request]);
 
 		$this->Setup->beforeFilter($event);
 
@@ -101,7 +101,7 @@ class SetupComponentTest extends TestCase {
 		$this->Controller->loadComponent('Flash');
 		$this->Setup = new SetupComponent(new ComponentRegistry($this->Controller));
 
-		$event = new Event('Controller.startup', $this->Controller, compact('request'));
+		$event = new Event('Controller.startup', $this->Controller, ['request' => $request]);
 
 		$this->Setup->beforeFilter($event);
 

@@ -140,9 +140,7 @@ class DbBackupRestoreCommand extends Command {
 		}
 		$file = $files[$x];
 
-		$file = BACKUPS . $file;
-
-		return $file;
+		return BACKUPS . $file;
 	}
 
 	/**

@@ -158,14 +158,14 @@ class DbIntegrityIntsCommand extends Command {
 				if ($length) {
 					$matches = [];
 					if ($hasComment) {
-						preg_match('/\[schema]\s*length:\s*(\d)/', $field['comment'], $matches);
+						preg_match('/\[schema]\s*length:\s*(\d)/', (string) $field['comment'], $matches);
 					}
 					if (!$matches) {
 						$lengthMeta = '[schema] length: ' . $length;
 						$field['comment'] = $field['comment'] ? $lengthMeta . '; ' . $field['comment'] : $lengthMeta;
 					} elseif ($this->args->getOption('overwrite')) {
 						$lengthMeta = '[schema] length: ' . $length;
-						$field['comment'] = preg_replace('/\[schema]\s*length:\s*\d/', $lengthMeta, $field['comment']);
+						$field['comment'] = preg_replace('/\[schema]\s*length:\s*\d/', $lengthMeta, (string) $field['comment']);
 					}
 					$fields[$column] = $field;
 				}
@@ -234,7 +234,7 @@ class DbIntegrityIntsCommand extends Command {
 			$folderContent = (new Folder($folder))->read(Folder::SORT_NAME, true);
 
 			foreach ($folderContent[1] as $file) {
-				$name = pathinfo($file, PATHINFO_FILENAME);
+				$name = pathinfo((string) $file, PATHINFO_FILENAME);
 
 				preg_match('#^(.+)Table$#', $name, $matches);
 				if (!$matches) {
@@ -260,13 +260,10 @@ class DbIntegrityIntsCommand extends Command {
 	 *
 	 * @return bool
 	 */
-	protected function isBoolField(array $field): bool {
-		if ($field['type'] === 'boolean' && $field['length'] === 1) {
-			return true;
-		}
-
-		return false;
-	}
+	protected function isBoolField(array $field): bool
+    {
+        return $field['type'] === 'boolean' && $field['length'] === 1;
+    }
 
 	/**
 	 * @param array<string, mixed> $field
@@ -275,7 +272,7 @@ class DbIntegrityIntsCommand extends Command {
 	 */
 	protected function isIntField(array $field): bool {
 		// We only care about different int types for now
-		if (!str_contains($field['type'], 'integer')) {
+		if (!str_contains((string) $field['type'], 'integer')) {
 			return false;
 		}
 		// Booleans we can ignore, they are always (1) length.

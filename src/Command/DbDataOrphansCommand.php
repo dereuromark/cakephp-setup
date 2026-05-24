@@ -72,7 +72,7 @@ class DbDataOrphansCommand extends Command {
 		$io->warning('Found orphaned records:');
 		foreach ($issues as $model => $associations) {
 			$io->out(' - ' . $model . ':');
-			foreach ($associations as $assocName => $data) {
+			foreach ($associations as $data) {
 				$io->out('   * ' . $data['foreign_key'] . ' -> ' . $data['target_table'] . ': ' . $data['count'] . ' orphaned records');
 				$totalCount += $data['count'];
 			}
@@ -86,7 +86,7 @@ class DbDataOrphansCommand extends Command {
 			$io->out();
 
 			foreach ($issues as $model => $associations) {
-				foreach ($associations as $assocName => $data) {
+				foreach ($associations as $data) {
 					$io->out("-- {$data['table']}.{$data['foreign_key']} -> {$data['target_table']}");
 					$io->out("SELECT * FROM `{$data['table']}` WHERE `{$data['foreign_key']}` IS NOT NULL AND `{$data['foreign_key']}` NOT IN (SELECT `{$data['binding_key']}` FROM `{$data['target_table']}`);");
 					$io->out();
@@ -96,8 +96,8 @@ class DbDataOrphansCommand extends Command {
 			$io->out('SQL to fix (sets orphaned FKs to NULL):');
 			$io->out();
 
-			foreach ($issues as $model => $associations) {
-				foreach ($associations as $assocName => $data) {
+			foreach ($issues as $associations) {
+				foreach ($associations as $data) {
 					$io->out("UPDATE `{$data['table']}` SET `{$data['foreign_key']}` = NULL WHERE `{$data['foreign_key']}` IS NOT NULL AND `{$data['foreign_key']}` NOT IN (SELECT `{$data['binding_key']}` FROM `{$data['target_table']}`);");
 				}
 			}
@@ -222,8 +222,8 @@ class DbDataOrphansCommand extends Command {
 		$db = $this->_getConnection($connection);
 		$fixed = 0;
 
-		foreach ($issues as $model => $associations) {
-			foreach ($associations as $assocName => $data) {
+		foreach ($issues as $associations) {
+			foreach ($associations as $data) {
 				if ($delete) {
 					$sql = "DELETE FROM `{$data['table']}`
 						WHERE `{$data['foreign_key']}` IS NOT NULL

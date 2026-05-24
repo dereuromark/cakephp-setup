@@ -26,7 +26,7 @@ class AllowUrlIncludeCheck extends Check {
 	 */
 	public function check(): void {
 		$allowUrlInclude = ini_get('allow_url_include');
-		$isEnabled = $allowUrlInclude !== false && $allowUrlInclude !== '' && $allowUrlInclude !== '0' && strtolower($allowUrlInclude) !== 'off';
+		$isEnabled = !in_array($allowUrlInclude, [false, '', '0'], true) && strtolower($allowUrlInclude) !== 'off';
 
 		if ($isEnabled) {
 			$this->passed = false;

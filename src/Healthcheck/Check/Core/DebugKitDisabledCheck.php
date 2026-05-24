@@ -37,11 +37,7 @@ class DebugKitDisabledCheck extends Check {
 
 		if ($this->isDebug) {
 			$this->passed = true;
-			if ($isLoaded) {
-				$this->infoMessage[] = 'DebugKit is loaded (acceptable in development).';
-			} else {
-				$this->infoMessage[] = 'DebugKit is not loaded.';
-			}
+			$this->infoMessage[] = $isLoaded ? 'DebugKit is loaded (acceptable in development).' : 'DebugKit is not loaded.';
 
 			return;
 		}

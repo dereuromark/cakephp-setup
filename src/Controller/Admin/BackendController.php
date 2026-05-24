@@ -56,7 +56,7 @@ class BackendController extends AppController {
 		$postLimit = $Debug->postMaxSize(true);
 		$memoryLimit = $Debug->memoryLimit(true);
 
-		$this->set(compact('uploadLimit', 'postLimit', 'memoryLimit'));
+		$this->set(['uploadLimit' => $uploadLimit, 'postLimit' => $postLimit, 'memoryLimit' => $memoryLimit]);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class BackendController extends AppController {
 			}
 			$time = new DateTime();
 			$result = strftime($dateFormat, (int)$time->toUnixString());
-			$this->set(compact('result'));
+			$this->set(['result' => $result]);
 		} else {
 			//FIXME
 			//$this->request->data['Form']['format'] = '%A, %B %Y - %H:%M';
@@ -96,7 +96,7 @@ class BackendController extends AppController {
 
 		$System = new System();
 		$systemLocales = $System->systemLocales();
-		$this->set(compact('localeSettings', 'systemLocales'));
+		$this->set(['localeSettings' => $localeSettings, 'systemLocales' => $systemLocales]);
 
 		setlocale(LC_ALL, $save);
 	}
@@ -122,9 +122,9 @@ class BackendController extends AppController {
 			];
 		}
 
-		$this->set(compact('sessionData'));
+		$this->set(['sessionData' => $sessionData]);
 
-		$this->set(compact('time', 'sessionConfig'));
+		$this->set(['time' => $time, 'sessionConfig' => $sessionConfig]);
 	}
 
 	/**
@@ -183,10 +183,10 @@ SQL;
 
 			$dateTimeString = $token->created->format('Y-m-d H:i:s');
 
-			$this->set(compact('token', 'tokenRaw'));
+			$this->set(['token' => $token, 'tokenRaw' => $tokenRaw]);
 		}
 
-		$this->set(compact('time', 'timezone', 'dateTimeString'));
+		$this->set(['time' => $time, 'timezone' => $timezone, 'dateTimeString' => $dateTimeString]);
 	}
 
 	/**
@@ -210,7 +210,7 @@ SQL;
 			return $this->redirect([]);
 		}
 
-		$this->set(compact('cookies'));
+		$this->set(['cookies' => $cookies]);
 	}
 
 	/**
@@ -239,7 +239,7 @@ SQL;
 			$data[$name] = Cache::read('_setup_test_string_', $name);
 		}
 
-		$this->set(compact('caches', 'data'));
+		$this->set(['caches' => $caches, 'data' => $data]);
 	}
 
 	/**
@@ -258,7 +258,7 @@ SQL;
 			$results = $bench->run($availableNames);
 		}
 
-		$this->set(compact('availability', 'results'));
+		$this->set(['availability' => $availability, 'results' => $results]);
 	}
 
 	/**
@@ -272,7 +272,7 @@ SQL;
 		$dbTables = (new Collection($dbTables))->toArray();
 		$dbSizes = [];
 		foreach ($dbTables as $key => $dbTable) {
-			if (preg_match('/phinxlog$/', $dbTable['Name'])) {
+			if (preg_match('/phinxlog$/', (string) $dbTable['Name'])) {
 				unset($dbTables[$key]);
 
 				continue;
@@ -283,7 +283,7 @@ SQL;
 		$dbSize = array_sum($dbSizes);
 		$maxSize = $dbSizes ? max($dbSizes) : 0;
 
-		$this->set(compact('dbTables', 'dbSize', 'maxSize'));
+		$this->set(['dbTables' => $dbTables, 'dbSize' => $dbSize, 'maxSize' => $maxSize]);
 	}
 
 	/**
@@ -294,7 +294,7 @@ SQL;
 
 		$localConfig = Config::getLocal();
 
-		$this->set(compact('envVars', 'localConfig'));
+		$this->set(['envVars' => $envVars, 'localConfig' => $localConfig]);
 	}
 
 	/**
@@ -366,18 +366,7 @@ SQL;
 			}
 		}
 
-		$this->set(compact(
-			'ipAddress',
-			'requestClientIp',
-			'host',
-			'serverIp',
-			'serverHost',
-			'serverName',
-			'serverPort',
-			'requestInfo',
-			'proxyHeaders',
-			'networkInterfaces',
-		));
+		$this->set(['ipAddress' => $ipAddress, 'requestClientIp' => $requestClientIp, 'host' => $host, 'serverIp' => $serverIp, 'serverHost' => $serverHost, 'serverName' => $serverName, 'serverPort' => $serverPort, 'requestInfo' => $requestInfo, 'proxyHeaders' => $proxyHeaders, 'networkInterfaces' => $networkInterfaces]);
 	}
 
 	/**
@@ -391,7 +380,7 @@ SQL;
 		$map = OrmTypes::getMap();
 		$classes = OrmTypes::getClasses($plugins, $map);
 
-		$this->set(compact('plugins', 'classes', 'map'));
+		$this->set(['plugins' => $plugins, 'classes' => $classes, 'map' => $map]);
 	}
 
 }

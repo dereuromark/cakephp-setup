@@ -105,12 +105,12 @@ class BakeHealthcheckCommand extends SimpleBakeCommand {
 		}
 		$taskClassNamespace = $namespace . '\Healthcheck\\Check\\' . str_replace(DS, '\\', $name);
 
-		if (strpos($name, '/') !== false) {
+		if (str_contains($name, '/')) {
 			$parts = explode('/', $name);
 			$name = array_pop($parts);
 		}
 
-		$content = <<<TXT
+		return <<<TXT
 <?php
 
 namespace $namespace\Test\TestCase\Healthcheck\Check$subNamespace;
@@ -135,8 +135,6 @@ class $testName extends TestCase {
 }
 
 TXT;
-
-		return $content;
 	}
 
 	/**
@@ -161,7 +159,7 @@ TXT;
 		$namespace .= '\\Healthcheck\\Check';
 
 		$namespacePart = null;
-		if (strpos($name, '/') !== false) {
+		if (str_contains($name, '/')) {
 			$parts = explode('/', $name);
 			$name = array_pop($parts);
 			$namespacePart = implode('\\', $parts);
@@ -206,9 +204,8 @@ TXT;
 			'help' => 'Type/Group',
 			'required' => true,
 		]);
-		$parser = parent::buildOptionParser($parser);
 
-		return $parser;
+		return parent::buildOptionParser($parser);
 	}
 
 }
