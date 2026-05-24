@@ -175,7 +175,7 @@ class DbDataEnumsCommand extends Command {
 
 			foreach ($columns as $column) {
 				$columnType = $schema->getColumnType($column);
-				if (!$columnType || !str_starts_with((string) $columnType, 'enum-')) {
+				if (!$columnType || !str_starts_with((string)$columnType, 'enum-')) {
 					continue;
 				}
 
@@ -445,7 +445,7 @@ class DbDataEnumsCommand extends Command {
 
 			if ($nullable) {
 				// Set to NULL
-				$sql = "UPDATE `{$table}` SET `{$column}` = NULL WHERE `{$column}` = '" . addslashes((string) $invalidValue) . "'";
+				$sql = "UPDATE `{$table}` SET `{$column}` = NULL WHERE `{$column}` = '" . addslashes((string)$invalidValue) . "'";
 				$io->out("Setting {$table}.{$column} = NULL where value = '{$invalidValue}'");
 			} else {
 				// Column is NOT NULL - ask for a valid value or use first valid value
@@ -456,7 +456,7 @@ class DbDataEnumsCommand extends Command {
 					continue;
 				}
 				$io->warning("{$table}.{$column} is NOT NULL - setting to first valid value: '{$defaultValue}'");
-				$sql = "UPDATE `{$table}` SET `{$column}` = '" . addslashes((string)$defaultValue) . "' WHERE `{$column}` = '" . addslashes((string) $invalidValue) . "'";
+				$sql = "UPDATE `{$table}` SET `{$column}` = '" . addslashes((string)$defaultValue) . "' WHERE `{$column}` = '" . addslashes((string)$invalidValue) . "'";
 			}
 
 			$statement = $db->execute($sql);

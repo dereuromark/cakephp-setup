@@ -136,10 +136,10 @@ class DbIntegrityBoolsCommand extends Command {
 		$columns = array_keys($schema);
 		foreach ($columns as $column) {
 			$fieldSchema = $schema[$column];
-			if ($this->isBoolField($fieldSchema) && str_ends_with((string) $fieldSchema['Type'], 'unsigned')) {
-                $fieldSchema['Type'] = trim(substr((string) $fieldSchema['Type'], 0, -8));
-                $fields[$column] = $fieldSchema;
-            }
+			if ($this->isBoolField($fieldSchema) && str_ends_with((string)$fieldSchema['Type'], 'unsigned')) {
+				$fieldSchema['Type'] = trim(substr((string)$fieldSchema['Type'], 0, -8));
+				$fields[$column] = $fieldSchema;
+			}
 		}
 
 		return $fields ? [$table => $fields] : [];
@@ -178,9 +178,8 @@ class DbIntegrityBoolsCommand extends Command {
 	 *
 	 * @return bool
 	 */
-	protected function isBoolField(array $field): bool
-    {
-        return str_starts_with((string) $field['Type'], 'tinyint(1)');
-    }
+	protected function isBoolField(array $field): bool {
+		return str_starts_with((string)$field['Type'], 'tinyint(1)');
+	}
 
 }

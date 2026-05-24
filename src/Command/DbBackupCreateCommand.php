@@ -112,12 +112,12 @@ class DbBackupCreateCommand extends Command {
 			$file .= '_custom';
 		} elseif ($usePrefix) {
 			foreach ($sources as $key => $source) {
-				if (!str_starts_with((string) $source, (string) $usePrefix)) {
+				if (!str_starts_with((string)$source, (string)$usePrefix)) {
 					unset($sources[$key]);
 				}
 			}
 			$optionStrings[] = '--tables ' . implode(' ', array_map('escapeshellarg', $sources));
-			$file .= '_' . rtrim((string) $usePrefix, '_');
+			$file .= '_' . rtrim((string)$usePrefix, '_');
 		}
 		$file .= '.sql';
 		if ($args->getOption('compress')) {

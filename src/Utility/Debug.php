@@ -130,24 +130,24 @@ class Debug {
 	public function getKernelVersion() {
 		$fh = fopen('/proc/version', 'r');
 		if ($fh) {
-            $buffer = (string)fgets($fh, 4096);
-            fclose($fh);
-            // search and grep the kernel-version
-            if (preg_match('/version (.*?) /', $buffer, $matches)) {
-                $result = $matches[1];
-                if (preg_match('/SMP/', $buffer)) {
+			$buffer = (string)fgets($fh, 4096);
+			fclose($fh);
+			// search and grep the kernel-version
+			if (preg_match('/version (.*?) /', $buffer, $matches)) {
+				$result = $matches[1];
+				if (preg_match('/SMP/', $buffer)) {
 					$result .= ' (SMP)';
 				}
-            } elseif ($this->useFillString) {
-                $result = $this->fillString;
-            } else {
+			} elseif ($this->useFillString) {
+				$result = $this->fillString;
+			} else {
 					$result = '';
-				}
-        } elseif ($this->useFillString) {
-            $result = $this->fillString;
-        } else {
-				$result = '';
 			}
+		} elseif ($this->useFillString) {
+			$result = $this->fillString;
+		} else {
+				$result = '';
+		}
 
 		return $result;
 	}
@@ -183,12 +183,13 @@ class Debug {
 			// If you find or miss one, please tell me.
 			switch ($key) {
 				case 'model name':
-                case 'cpu': // for ix86
-                    $results[$processors]['model'] = $value;
+				case 'cpu': // for ix86
+					$results[$processors]['model'] = $value;
 
 					break;
 				case 'cpu MHz':
-				case 'clock': $results[$processors]['mhz'] = sprintf('%.2f', $value);
+				case 'clock':
+					$results[$processors]['mhz'] = sprintf('%.2f', $value);
 
 					break;
 				case 'cpu cores': // for PPC
@@ -314,7 +315,8 @@ class Debug {
 		if (ini_set('memory_limit', $int . 'M') === false) {
 			return false;
 		}
-        return $this->memoryLimit() === $int . 'M';
+
+		return $this->memoryLimit() === $int . 'M';
 	}
 
 	/**
@@ -348,7 +350,7 @@ class Debug {
 		$res = exec($command);
 
 		//$s = system($command);
-		return (bool) $res;
+		return (bool)$res;
 	}
 
 	/**
@@ -425,7 +427,8 @@ class Debug {
 	 */
 	public function extensionLoaded($extensionName) {
 		$e = $this->loadedExtensions();
-        return in_array(strtolower($extensionName), $e);
+
+		return in_array(strtolower($extensionName), $e);
 	}
 
 	/**

@@ -97,7 +97,8 @@ class SetupBakeHelper extends BakeHelper {
 		}
 
 		$fieldData = (array)$schema->getColumn($field);
-        return in_array($field, $paginationOrderReversedFields, true) || in_array($fieldData['type'], $paginationOrderReversedFieldTypes, true);
+
+		return in_array($field, $paginationOrderReversedFields, true) || in_array($fieldData['type'], $paginationOrderReversedFieldTypes, true);
 	}
 
 	/**

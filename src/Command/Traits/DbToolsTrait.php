@@ -58,7 +58,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 		$tables = [];
 		foreach ($res as $table) {
 			$tableName = $table['table_name'] ?? $table['TABLE_NAME'];
-			if (str_starts_with((string) $tableName, '_')) {
+			if (str_starts_with((string)$tableName, '_')) {
 				continue;
 			}
 
@@ -101,7 +101,7 @@ AND table_name LIKE '$prefix%' OR table_name LIKE '\_%';";
 			$folderContent = (new Folder($folder))->read(Folder::SORT_NAME, true);
 
 			foreach ($folderContent[1] as $file) {
-				$name = pathinfo((string) $file, PATHINFO_FILENAME);
+				$name = pathinfo((string)$file, PATHINFO_FILENAME);
 
 				preg_match('#^(.+)Table$#', $name, $matches);
 				if (!$matches) {

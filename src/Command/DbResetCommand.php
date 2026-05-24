@@ -46,7 +46,7 @@ class DbResetCommand extends Command {
 		$schemaCollection = $db->getSchemaCollection();
 		$sources = $schemaCollection->listTables();
 		foreach ($sources as $key => $source) {
-			if ($source === 'phinxlog' || str_contains((string) $source, '_phinxlog')) {
+			if ($source === 'phinxlog' || str_contains((string)$source, '_phinxlog')) {
 				unset($sources[$key]);
 			}
 		}

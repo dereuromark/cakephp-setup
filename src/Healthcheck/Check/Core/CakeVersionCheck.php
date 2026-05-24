@@ -65,7 +65,7 @@ class CakeVersionCheck extends Check {
 			return false;
 		}
 
-		if (str_starts_with((string) $version, 'dev-') || str_ends_with((string) $version, '-dev')) {
+		if (str_starts_with((string)$version, 'dev-') || str_ends_with((string)$version, '-dev')) {
 			$this->infoMessage[] = 'CakePHP is installed as dev version `' . $version . '`, which is not recommended for production.';
 
 			return true;

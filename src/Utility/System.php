@@ -204,11 +204,11 @@ class System {
 			return;
 		}
 
-		$sizeAndPath = explode("\t", (string) $data[$rootKey]);
+		$sizeAndPath = explode("\t", (string)$data[$rootKey]);
 		$urlToRoot = trim($sizeAndPath[1]);
 
 		foreach ($data as $key => $value) {
-			$sizeAndPath = explode("\t", (string) $value);
+			$sizeAndPath = explode("\t", (string)$value);
 			$size = $sizeAndPath[0];
 			$url = str_replace($urlToRoot, '', $sizeAndPath[1]);
 			if (empty($url)) {
@@ -255,7 +255,7 @@ class System {
 	 */
 	public function _generateTree(&$data, $root) {
 		$res = [];
-		$sizeAndPath = explode("\t", (string) $data[$root]);
+		$sizeAndPath = explode("\t", (string)$data[$root]);
 		$urlToRoot = $sizeAndPath[1];
 		$sizeOfRoot = $sizeAndPath[0];
 		// root
@@ -266,7 +266,7 @@ class System {
 		];
 
 		for ($i = $root; $i >= 0; $i--) {
-			$sizeAndPath = explode("\t", (string) $data[$i]);
+			$sizeAndPath = explode("\t", (string)$data[$i]);
 
 			$name = str_replace($urlToRoot, "\t", $sizeAndPath[1]);
 			// split by DS
@@ -288,7 +288,7 @@ class System {
 		$length = 0;
 		$index = null;
 		foreach ($data as $key => $value) {
-			$newLength = mb_strlen((string) $value);
+			$newLength = mb_strlen((string)$value);
 			if (!$length || $newLength < $length) {
 				$length = $newLength;
 				$index = (int)$key;

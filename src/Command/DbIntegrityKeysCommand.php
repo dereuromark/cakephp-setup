@@ -227,7 +227,7 @@ class DbIntegrityKeysCommand extends Command {
 			$folderContent = (new Folder($folder))->read(Folder::SORT_NAME, true);
 
 			foreach ($folderContent[1] as $file) {
-				$name = pathinfo((string) $file, PATHINFO_FILENAME);
+				$name = pathinfo((string)$file, PATHINFO_FILENAME);
 
 				preg_match('#^(.+)Table$#', $name, $matches);
 				if (!$matches) {
@@ -258,7 +258,8 @@ class DbIntegrityKeysCommand extends Command {
 		if ($field['type'] !== 'integer') {
 			return false;
 		}
-        return $field['unsigned'] !== true;
+
+		return $field['unsigned'] !== true;
 	}
 
 }

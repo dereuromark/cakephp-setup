@@ -117,7 +117,7 @@ class Maintenance {
 	public function addToWhitelist(array $newIps = []) {
 		foreach ($newIps as $ip) {
 				$this->_addToWhitelist($ip);
-			}
+		}
 	}
 
 	/**
@@ -184,7 +184,8 @@ class Maintenance {
 		if (!str_contains($content, $ip)) {
 			$content .= PHP_EOL . $ip;
 		}
-        return (bool) file_put_contents($this->whitelistFile, trim($content));
+
+		return (bool)file_put_contents($this->whitelistFile, trim($content));
 	}
 
 }

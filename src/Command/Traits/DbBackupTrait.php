@@ -34,9 +34,9 @@ trait DbBackupTrait {
 	 */
 	protected function _command(string $command): string {
 		$path = match ($command) {
-            'gzip', 'gunzip' => Configure::read('Cli.gitPath'),
-            default => Configure::read('Cli.mysqlPath'),
-        };
+			'gzip', 'gunzip' => Configure::read('Cli.gitPath'),
+			default => Configure::read('Cli.mysqlPath'),
+		};
 
 		/** @var bool $windows */
 		$windows = WINDOWS;

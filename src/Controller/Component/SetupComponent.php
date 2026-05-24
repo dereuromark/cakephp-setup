@@ -191,7 +191,7 @@ class SetupComponent extends Component {
 			return;
 		}
 		$referer = $this->Controller->referer();
-		if (strlen((string) $referer) > 2 && (int)$this->getController()->getRequest()->getSession()->read('Report.404') < time() - 5 * MINUTE) {
+		if (strlen((string)$referer) > 2 && (int)$this->getController()->getRequest()->getSession()->read('Report.404') < time() - 5 * MINUTE) {
 			$text = '404:' . TB . TB . $this->Controller->getRequest()->getRequestTarget()
 			. NL . 'Referer:' . TB . '' . $referer
 			. NL . NL . 'Browser: ' . env('HTTP_USER_AGENT')
@@ -232,7 +232,8 @@ class SetupComponent extends Component {
 			return true;
 		}
 		$pwd = $this->Controller->getRequest()->getQuery('pwd');
-        return $pwd && $pwd === Configure::read('Config.pwd');
+
+		return $pwd && $pwd === Configure::read('Config.pwd');
 	}
 
 	/**
