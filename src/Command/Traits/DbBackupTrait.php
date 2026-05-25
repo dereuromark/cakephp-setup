@@ -15,7 +15,7 @@ if (!defined('CHMOD_PUBLIC')) {
 	define('CHMOD_PUBLIC', 0770);
 }
 if (!defined('WINDOWS')) {
-	if (substr(PHP_OS, 0, 3) === 'WIN') {
+	if (str_starts_with(PHP_OS, 'WIN')) {
 		define('WINDOWS', true);
 	} else {
 		define('WINDOWS', false);
@@ -33,15 +33,10 @@ trait DbBackupTrait {
 	 * @return string
 	 */
 	protected function _command(string $command): string {
-		switch ($command) {
-			case 'gzip':
-			case 'gunzip':
-				$path = Configure::read('Cli.gitPath');
-
-				break;
-			default:
-				$path = Configure::read('Cli.mysqlPath');
-		}
+		$path = match ($command) {
+			'gzip', 'gunzip' => Configure::read('Cli.gitPath'),
+			default => Configure::read('Cli.mysqlPath'),
+		};
 
 		/** @var bool $windows */
 		$windows = WINDOWS;
@@ -53,9 +48,7 @@ trait DbBackupTrait {
 	 * @return string
 	 */
 	protected function _path(): string {
-		$path = BACKUPS;
-
-		return $path;
+		return BACKUPS;
 	}
 
 	/**
@@ -74,9 +67,8 @@ trait DbBackupTrait {
 		foreach ($Regex as $v) {
 			$files[] = $v[0];
 		}
-		$files = array_reverse($files);
 
-		return $files;
+		return array_reverse($files);
 	}
 
 }

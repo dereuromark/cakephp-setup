@@ -157,10 +157,8 @@ class OpcacheEnabledCheck extends Check {
 			}
 		}
 
-		if (isset($directives['opcache.enable_file_override'])) {
-			if (!$directives['opcache.enable_file_override']) {
-				$this->infoMessage[] = 'opcache.enable_file_override is disabled. Enable it for better performance with file_exists(), is_file(), etc.';
-			}
+		if (isset($directives['opcache.enable_file_override']) && !$directives['opcache.enable_file_override']) {
+			$this->infoMessage[] = 'opcache.enable_file_override is disabled. Enable it for better performance with file_exists(), is_file(), etc.';
 		}
 	}
 

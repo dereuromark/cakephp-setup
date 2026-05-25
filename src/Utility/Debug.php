@@ -132,26 +132,21 @@ class Debug {
 		if ($fh) {
 			$buffer = (string)fgets($fh, 4096);
 			fclose($fh);
-
 			// search and grep the kernel-version
 			if (preg_match('/version (.*?) /', $buffer, $matches)) {
 				$result = $matches[1];
 				if (preg_match('/SMP/', $buffer)) {
 					$result .= ' (SMP)';
 				}
-			} else {
-				if ($this->useFillString) {
-					$result = $this->fillString;
-				} else {
-					$result = '';
-				}
-			}
-		} else {
-			if ($this->useFillString) {
+			} elseif ($this->useFillString) {
 				$result = $this->fillString;
 			} else {
-				$result = '';
+					$result = '';
 			}
+		} elseif ($this->useFillString) {
+			$result = $this->fillString;
+		} else {
+				$result = '';
 		}
 
 		return $result;
@@ -187,20 +182,14 @@ class Debug {
 			// Maybe you need some other tags if you run this on another architecture.
 			// If you find or miss one, please tell me.
 			switch ($key) {
-				case 'model name': // for ix86
+				case 'model name':
+				case 'cpu':
 					$results[$processors]['model'] = $value;
 
 					break;
 				case 'cpu MHz':
+				case 'clock':
 					$results[$processors]['mhz'] = sprintf('%.2f', $value);
-
-					break;
-				case 'clock': // for PPC
-					$results[$processors]['mhz'] = sprintf('%.2f', $value);
-
-					break;
-				case 'cpu': // for PPC
-					$results[$processors]['model'] = $value;
 
 					break;
 				case 'cpu cores': // for PPC
@@ -252,7 +241,7 @@ class Debug {
 		];
 
 		while ($buffer = fgets($fh, 4096)) {
-			if (strpos($buffer, ':') === false) {
+			if (!str_contains($buffer, ':')) {
 				continue;
 			}
 			[$key, $value] = explode(':', trim($buffer), 2);
@@ -326,11 +315,8 @@ class Debug {
 		if (ini_set('memory_limit', $int . 'M') === false) {
 			return false;
 		}
-		if ($this->memoryLimit() !== $int . 'M') {
-			return false;
-		}
 
-		return true;
+		return $this->memoryLimit() === $int . 'M';
 	}
 
 	/**
@@ -364,7 +350,7 @@ class Debug {
 		$res = exec($command);
 
 		//$s = system($command);
-		return $res ? true : false;
+		return (bool)$res;
 	}
 
 	/**
@@ -441,11 +427,8 @@ class Debug {
 	 */
 	public function extensionLoaded($extensionName) {
 		$e = $this->loadedExtensions();
-		if (in_array(strtolower($extensionName), $e)) {
-			return true;
-		}
 
-		return false;
+		return in_array(strtolower($extensionName), $e);
 	}
 
 	/**
@@ -483,40 +466,29 @@ class Debug {
 	 */
 	public function openBasedir() {
 		$var = (string)ini_get('open_basedir');
-		if (str_contains($var, ':')) {
-			$paths = explode(':', $var);
-		} else {
-			$paths = [];
-		}
 
-		return $paths;
+		return str_contains($var, ':') ? explode(':', $var) : [];
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function displayErrors() {
-		$res = (bool)ini_get('display_errors');
-
-		return $res;
+		return (bool)ini_get('display_errors');
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function allowUrlFopen() {
-		$res = (bool)ini_get('allow_url_fopen');
-
-		return $res;
+		return (bool)ini_get('allow_url_fopen');
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function fileUpload() {
-		$res = (bool)ini_get('file_uploads');
-
-		return $res;
+		return (bool)ini_get('file_uploads');
 	}
 
 	/**
@@ -551,9 +523,7 @@ class Debug {
 	 * @return bool
 	 */
 	public function registerLongArrays() {
-		$res = (bool)ini_get('register_long_arrays');
-
-		return $res;
+		return (bool)ini_get('register_long_arrays');
 	}
 
 	/**
@@ -562,9 +532,7 @@ class Debug {
 	 * @return bool
 	 */
 	public function registerArgcArgv() {
-		$res = (bool)ini_get('register_argc_argv');
-
-		return $res;
+		return (bool)ini_get('register_argc_argv');
 	}
 
 	/**
@@ -573,9 +541,7 @@ class Debug {
 	 * @return int
 	 */
 	public function maxExecTime() {
-		$res = (int)ini_get('max_execution_time');
-
-		return $res;
+		return (int)ini_get('max_execution_time');
 	}
 
 	/**

@@ -80,7 +80,7 @@ class DbDataDatesCommand extends Command {
 			$io->out();
 
 			foreach ($issues as $table => $columns) {
-				foreach ($columns as $column => $data) {
+				foreach ($columns as $column => $_) {
 					$io->out("UPDATE `{$table}` SET `{$column}` = NULL WHERE CAST(`{$column}` AS CHAR(19)) LIKE '0000-00-00%';");
 				}
 			}

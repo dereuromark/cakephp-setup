@@ -361,7 +361,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 			$paths['app'] = ' ' . $appPath;
 		}
 		if (defined('ROOT')) {
-			$paths['root'] = rtrim(ROOT, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+			$paths['root'] = rtrim((string)ROOT, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 		}
 		if (defined('CORE_PATH')) {
 			$paths['core'] = rtrim(CORE_PATH, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;

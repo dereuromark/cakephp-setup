@@ -100,10 +100,8 @@ class HealthcheckCommand extends Command {
 			$io->out('### ' . $domain);
 			foreach ($checks as $check) {
 				$check->passed() ? $io->success($check->name()) : ($check->level() === $check::LEVEL_ERROR ? $io->error($check->name()) : $io->warning($check->name()));
-				if (!$check->passed()) {
-					if ($check->failureMessage()) {
-						$io->error('└ ' . implode(', ', $check->failureMessage()));
-					}
+				if (!$check->passed() && $check->failureMessage()) {
+					$io->error('└ ' . implode(', ', $check->failureMessage()));
 				}
 
 				// Always show warnings, even when check passes
@@ -111,10 +109,8 @@ class HealthcheckCommand extends Command {
 					$io->warning('└ ' . implode(', ', $check->warningMessage()));
 				}
 
-				if ($check->passed()) {
-					if ($check->successMessage()) {
-						$io->success('└ ' . implode(', ', $check->successMessage()));
-					}
+				if ($check->passed() && $check->successMessage()) {
+					$io->success('└ ' . implode(', ', $check->successMessage()));
 				}
 
 				if ($check->infoMessage()) {

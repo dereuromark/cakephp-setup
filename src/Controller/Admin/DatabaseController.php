@@ -37,7 +37,7 @@ class DatabaseController extends AppController {
 
 		$tables = [];
 		foreach ($dbTables as $dbTable) {
-			if (preg_match('/phinxlog$/', $dbTable['Name'])) {
+			if (preg_match('/phinxlog$/', (string)$dbTable['Name'])) {
 				continue;
 			}
 			$blacklist = Configure::read('Setup.blacklistedTables');

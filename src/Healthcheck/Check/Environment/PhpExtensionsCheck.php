@@ -118,8 +118,8 @@ class PhpExtensionsCheck extends Check {
 
 		$extensions = [];
 		foreach ($composer['require'] as $key => $value) {
-			if (str_starts_with($key, 'ext-')) {
-				$extension = substr($key, 4);
+			if (str_starts_with((string)$key, 'ext-')) {
+				$extension = substr((string)$key, 4);
 				if ($this->satisfiesVersion($value)) {
 					$extensions[] = $extension;
 				}

@@ -33,7 +33,7 @@ class PhpErrorDisplayCheck extends Check {
 	 */
 	public function check(): void {
 		$displayErrors = ini_get('display_errors');
-		$isEnabled = $displayErrors !== false && $displayErrors !== '' && $displayErrors !== '0' && strtolower($displayErrors) !== 'off';
+		$isEnabled = !in_array($displayErrors, [false, '', '0'], true) && strtolower($displayErrors) !== 'off';
 
 		if ($this->isDebug) {
 			$this->passed = true;

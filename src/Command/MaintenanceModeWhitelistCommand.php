@@ -59,10 +59,8 @@ class MaintenanceModeWhitelistCommand extends Command {
 				$this->Maintenance->addToWhitelist([$ip]);
 			}
 			$io->out('Done!', 2);
-		} else {
-			if ($args->getOption('remove')) {
-				$this->Maintenance->clearWhitelist();
-			}
+		} elseif ($args->getOption('remove')) {
+			$this->Maintenance->clearWhitelist();
 		}
 
 		$io->out('Current whitelist:');

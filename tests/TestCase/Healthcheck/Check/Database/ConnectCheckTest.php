@@ -60,7 +60,7 @@ class ConnectCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheckWithNullConnection() {
-		$check = new ConnectCheck(null); // Should default to 'default'
+		$check = new ConnectCheck(); // Should default to 'default'
 
 		$check->check();
 		$this->assertTrue($check->passed());

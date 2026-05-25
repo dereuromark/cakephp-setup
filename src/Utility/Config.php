@@ -101,10 +101,6 @@ class Config {
 			return $value;
 		}
 
-		if (in_array(strtoupper($value), ['0', '1', 'TRUE', 'FALSE'], true)) {
-			return $value;
-		}
-
 		return $value;
 	}
 

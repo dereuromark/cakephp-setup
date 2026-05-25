@@ -272,7 +272,7 @@ SQL;
 		$dbTables = (new Collection($dbTables))->toArray();
 		$dbSizes = [];
 		foreach ($dbTables as $key => $dbTable) {
-			if (preg_match('/phinxlog$/', $dbTable['Name'])) {
+			if (preg_match('/phinxlog$/', (string)$dbTable['Name'])) {
 				unset($dbTables[$key]);
 
 				continue;
@@ -366,18 +366,7 @@ SQL;
 			}
 		}
 
-		$this->set(compact(
-			'ipAddress',
-			'requestClientIp',
-			'host',
-			'serverIp',
-			'serverHost',
-			'serverName',
-			'serverPort',
-			'requestInfo',
-			'proxyHeaders',
-			'networkInterfaces',
-		));
+		$this->set(compact('ipAddress', 'requestClientIp', 'host', 'serverIp', 'serverHost', 'serverName', 'serverPort', 'requestInfo', 'proxyHeaders', 'networkInterfaces'));
 	}
 
 	/**

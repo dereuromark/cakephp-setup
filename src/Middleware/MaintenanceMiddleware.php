@@ -58,9 +58,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 			return $response;
 		}
 
-		$response = $this->build($response);
-
-		return $response;
+		return $this->build($response);
 	}
 
 	/**

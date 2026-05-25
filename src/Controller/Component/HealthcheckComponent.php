@@ -50,7 +50,7 @@ class HealthcheckComponent extends Component {
 		$errors = $healthcheck->errors();
 		$warnings = $healthcheck->warnings();
 
-		return compact('passed', 'result', 'domains', 'errors', 'warnings', 'executionTime', 'healthcheck');
+		return ['passed' => $passed, 'result' => $result, 'domains' => $domains, 'errors' => $errors, 'warnings' => $warnings, 'executionTime' => $executionTime, 'healthcheck' => $healthcheck];
 	}
 
 	/**
