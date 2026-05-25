@@ -43,9 +43,11 @@ class Healthcheck {
 			if ($check->passed() && $check->warningMessage()) {
 				$reflection = new ReflectionClass($check);
 				$passedProperty = $reflection->getProperty('passed');
+				$passedProperty->setAccessible(true);
 				$passedProperty->setValue($check, false);
 
 				$levelProperty = $reflection->getProperty('level');
+				$levelProperty->setAccessible(true);
 				$levelProperty->setValue($check, CheckInterface::LEVEL_WARNING);
 			}
 
