@@ -54,7 +54,7 @@ class DatabaseController extends AppController {
 			];
 		}
 
-		$this->set(['tables' => $tables]);
+		$this->set(compact('tables'));
 	}
 
 }

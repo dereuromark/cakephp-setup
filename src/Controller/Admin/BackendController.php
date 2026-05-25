@@ -72,7 +72,7 @@ class BackendController extends AppController {
 			}
 			$time = new DateTime();
 			$result = strftime($dateFormat, (int)$time->toUnixString());
-			$this->set(['result' => $result]);
+			$this->set(compact('result'));
 		} else {
 			//FIXME
 			//$this->request->data['Form']['format'] = '%A, %B %Y - %H:%M';
@@ -122,7 +122,7 @@ class BackendController extends AppController {
 			];
 		}
 
-		$this->set(['sessionData' => $sessionData]);
+		$this->set(compact('sessionData'));
 
 		$this->set(['time' => $time, 'sessionConfig' => $sessionConfig]);
 	}
@@ -210,7 +210,7 @@ SQL;
 			return $this->redirect([]);
 		}
 
-		$this->set(['cookies' => $cookies]);
+		$this->set(compact('cookies'));
 	}
 
 	/**
