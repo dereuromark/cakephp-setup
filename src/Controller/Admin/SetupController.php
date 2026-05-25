@@ -38,7 +38,7 @@ class SetupController extends AppController {
 		$whitelisted = $maintenance->whitelisted($ip);
 		$whitelist = $maintenance->whitelist();
 
-		$this->set(['ip' => $ip, 'isMaintenanceModeEnabled' => $isMaintenanceModeEnabled, 'whitelisted' => $whitelisted, 'whitelist' => $whitelist]);
+		$this->set(compact('ip', 'isMaintenanceModeEnabled', 'whitelisted', 'whitelist'));
 	}
 
 }
