@@ -183,7 +183,7 @@ class Debug {
 			// If you find or miss one, please tell me.
 			switch ($key) {
 				case 'model name':
-				case 'cpu': // for ix86
+				case 'cpu':
 					$results[$processors]['model'] = $value;
 
 					break;

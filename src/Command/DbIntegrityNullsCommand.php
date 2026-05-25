@@ -199,7 +199,7 @@ class DbIntegrityNullsCommand extends Command {
 			$fields[$field] = $fieldSchema;
 		}
 
-		foreach (array_keys($fields) as $field) {
+		foreach ($fields as $field => $_) {
 			$io->out('- ' . $field, 1, ConsoleIo::VERBOSE);
 		}
 
