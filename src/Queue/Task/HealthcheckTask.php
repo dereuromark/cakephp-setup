@@ -2,6 +2,7 @@
 
 namespace Setup\Queue\Task;
 
+use Cake\Collection\CollectionInterface;
 use Cake\Log\Log;
 use Queue\Queue\AddFromBackendInterface;
 use Queue\Queue\AddInterface;
@@ -90,14 +91,18 @@ class HealthcheckTask extends Task implements AddInterface, AddFromBackendInterf
 	}
 
 	/**
-	 * @param iterable<string, iterable<\Setup\Healthcheck\Check\CheckInterface>> $result
+	 * @param \Cake\Collection\CollectionInterface<\Setup\Healthcheck\Check\CheckInterface> $result
 	 *
 	 * @return list<string>
 	 */
-	protected function relevantChecks(iterable $result): array {
+	protected function relevantChecks(CollectionInterface $result): array {
 		$lines = [];
 
 		foreach ($result as $domain => $checks) {
+			if (!is_iterable($checks)) {
+				continue;
+			}
+
 			foreach ($checks as $check) {
 				if ($check->passed() && !$check->warningMessage()) {
 					continue;
