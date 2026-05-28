@@ -8,12 +8,28 @@
 
 use Cake\I18n\DateTime;
 
+$formatDate = static function ($value): string {
+	if ($value instanceof \DateTimeInterface) {
+		return $value->format('Y-m-d H:i:s');
+	}
+
+	if (is_string($value) && $value !== '') {
+		try {
+			return (new DateTime($value))->format('Y-m-d H:i:s');
+		} catch (\Throwable) {
+			return $value;
+		}
+	}
+
+	return (string)$value;
+};
+
 ?>
 <div class="columns col-md-12">
 
 <h1>Session</h1>
 
-Time: <?php echo $this->Time->niceDate($time); ?>
+Time: <?php echo h($formatDate($time)); ?>
 
 
 <br />
@@ -31,7 +47,7 @@ echo print_r(session_get_cookie_params(), true);
 
 	<p>ID: <code><?php echo h($sessionData['id']); ?></code></p>
 	<?php if (!empty($sessionData['expires'])) { ?>
-		<p>Expires: <?php echo $this->Time->niceDate($sessionData['expires']); ?></p>
+		<p>Expires: <?php echo h($formatDate($sessionData['expires'])); ?></p>
 	<?php } ?>
 	<?php if (!empty($sessionData['data'])) { ?>
 		<p>Data: <?php echo h($sessionData['data']); ?></p>
