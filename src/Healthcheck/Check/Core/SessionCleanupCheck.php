@@ -6,6 +6,10 @@ use Setup\Healthcheck\Check\Check;
 
 class SessionCleanupCheck extends Check {
 
+	protected const DEBIAN_SESSION_CLEAN_CRON = '/etc/cron.d/php';
+
+	protected const DEBIAN_SESSION_CLEAN_BIN = '/usr/lib/php/sessionclean';
+
 	/**
 	 * @var string
 	 */
@@ -31,15 +35,22 @@ class SessionCleanupCheck extends Check {
 	protected function assertGarbageCollection(): void {
 		$gcProbability = (int)ini_get('session.gc_probability');
 		$gcDivisor = (int)ini_get('session.gc_divisor');
+		$saveHandler = (string)ini_get('session.save_handler');
+		$savePath = (string)ini_get('session.save_path');
 
 		$this->passed = true;
 
 		// Check if gc_probability is greater than 0 (GC enabled)
 		if ($gcProbability <= 0) {
-			$this->failureMessage[] = 'Session garbage collection is disabled. The session.gc_probability is set to `' . $gcProbability . '`, but must be greater than 0 for automatic session cleanup to work.';
-			$this->failureMessage[] = 'Without garbage collection, expired sessions will accumulate and never be cleaned up automatically.';
+			if ($this->hasExternalSessionCleanup($saveHandler, $savePath)) {
+				$this->infoMessage[] = 'PHP request-driven session garbage collection is disabled, but external cleanup is configured for file-based sessions.';
+				$this->infoMessage[] = 'Detected Debian-style session cleanup via `' . static::DEBIAN_SESSION_CLEAN_CRON . '` and `' . static::DEBIAN_SESSION_CLEAN_BIN . '`.';
+			} else {
+				$this->failureMessage[] = 'Session garbage collection is disabled. The session.gc_probability is set to `' . $gcProbability . '`, but no external cleanup mechanism was detected.';
+				$this->failureMessage[] = 'Without request-driven garbage collection or OS-level cleanup, expired sessions will accumulate and never be cleaned up automatically.';
 
-			$this->passed = false;
+				$this->passed = false;
+			}
 		}
 
 		// Check if gc_divisor is valid
@@ -53,6 +64,10 @@ class SessionCleanupCheck extends Check {
 		if (!$this->passed) {
 			$this->addFixInstructions($gcProbability, $gcDivisor);
 
+			return;
+		}
+
+		if ($gcProbability <= 0) {
 			return;
 		}
 
@@ -102,6 +117,18 @@ class SessionCleanupCheck extends Check {
 		} else {
 			$this->infoMessage[] = 'PHP configuration file location not found. Run `php --ini` to locate your php.ini file.';
 		}
+	}
+
+	protected function hasExternalSessionCleanup(string $saveHandler, string $savePath): bool {
+		if ($saveHandler !== 'files' || $savePath === '') {
+			return false;
+		}
+
+		if (is_file(static::DEBIAN_SESSION_CLEAN_CRON) && is_file(static::DEBIAN_SESSION_CLEAN_BIN)) {
+			return true;
+		}
+
+		return false;
 	}
 
 }
