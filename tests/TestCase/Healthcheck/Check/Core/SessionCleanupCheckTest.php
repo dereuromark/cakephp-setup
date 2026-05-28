@@ -7,6 +7,19 @@ use Shim\TestSuite\TestCase;
 
 class SessionCleanupCheckTest extends TestCase {
 
+	protected function createCheck(bool $hasExternalSessionCleanup = false): SessionCleanupCheck {
+		return new class ($hasExternalSessionCleanup) extends SessionCleanupCheck {
+
+			public function __construct(protected bool $hasExternalSessionCleanup) {
+			}
+
+			protected function hasExternalSessionCleanup(string $saveHandler, string $savePath): bool {
+				return $this->hasExternalSessionCleanup;
+			}
+
+		};
+	}
+
 	/**
 	 * @return void
 	 */
@@ -27,9 +40,7 @@ class SessionCleanupCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheckPassed(): void {
-		// Most PHP installations have gc_probability=1 and gc_divisor=1000 by default
-		// This test verifies that valid settings pass the check
-		$check = new SessionCleanupCheck();
+		$check = $this->createCheck(false);
 
 		$check->check();
 
@@ -41,7 +52,6 @@ class SessionCleanupCheckTest extends TestCase {
 			$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
 			$this->assertNotEmpty($check->infoMessage());
 		} else {
-			// If the system has GC disabled, the check should fail
 			$this->assertFalse($check->passed(), print_r($check->__debugInfo(), true));
 			$this->assertNotEmpty($check->failureMessage());
 		}
@@ -51,7 +61,7 @@ class SessionCleanupCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheckGcProbabilityGreaterThanZero(): void {
-		$check = new SessionCleanupCheck();
+		$check = $this->createCheck(false);
 		$check->check();
 
 		$gcProbability = (int)ini_get('session.gc_probability');
@@ -60,7 +70,6 @@ class SessionCleanupCheckTest extends TestCase {
 			// Should pass when gc_probability > 0
 			$this->assertTrue($check->passed(), 'Check should pass when gc_probability > 0');
 		} else {
-			// Should fail when gc_probability = 0
 			$this->assertFalse($check->passed(), 'Check should fail when gc_probability = 0');
 			$this->assertNotEmpty($check->failureMessage());
 			$this->assertStringContainsString('garbage collection is disabled', $check->failureMessage()[0]);
@@ -71,7 +80,7 @@ class SessionCleanupCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheckGcProbabilityGreaterThanOne(): void {
-		$check = new SessionCleanupCheck();
+		$check = $this->createCheck(false);
 		$check->check();
 
 		$gcProbability = (int)ini_get('session.gc_probability');
@@ -89,7 +98,6 @@ class SessionCleanupCheckTest extends TestCase {
 				$this->assertStringNotContainsString('set to only `1`', $warningMessages);
 			}
 		} else {
-			// If GC is invalid, check should fail
 			$this->assertFalse($check->passed());
 		}
 	}
@@ -98,7 +106,7 @@ class SessionCleanupCheckTest extends TestCase {
 	 * @return void
 	 */
 	public function testInfoMessageContainsProbability(): void {
-		$check = new SessionCleanupCheck();
+		$check = $this->createCheck(false);
 		$check->check();
 
 		$gcProbability = (int)ini_get('session.gc_probability');
@@ -110,9 +118,25 @@ class SessionCleanupCheckTest extends TestCase {
 			$infoMessages = implode(' ', $check->infoMessage());
 			$this->assertStringContainsString('probability', $infoMessages);
 		} else {
-			// If GC is invalid, check should have failure messages
 			$this->assertNotEmpty($check->failureMessage());
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCheckPassesWithExternalCleanupWhenGcProbabilityIsZero(): void {
+		$gcProbability = (int)ini_get('session.gc_probability');
+		if ($gcProbability > 0) {
+			$this->markTestSkipped('This environment does not have session.gc_probability = 0.');
+		}
+
+		$check = $this->createCheck(true);
+		$check->check();
+
+		$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
+		$this->assertNotEmpty($check->infoMessage());
+		$this->assertStringContainsString('external cleanup', implode(' ', $check->infoMessage()));
 	}
 
 }

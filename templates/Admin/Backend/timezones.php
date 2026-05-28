@@ -59,14 +59,12 @@
 			echo $this->Form->control('created', ['label' => 'DateTime']);
 			?>
 		</fieldset>
-		<?php if (isset($result)) { ?>
-			<fieldset>
-				<legend><?php echo __d('setup', 'Result');?></legend>
-				<?php
-				echo pre($result);
-				?>
-			</fieldset>
-		<?php } ?>
+			<?php if (isset($result)) { ?>
+				<fieldset>
+					<legend><?php echo __d('setup', 'Result');?></legend>
+					<pre><?php echo h(print_r($result, true)); ?></pre>
+				</fieldset>
+			<?php } ?>
 
 		<?php
 		echo $this->Form->submit(__d('setup', 'Submit'));

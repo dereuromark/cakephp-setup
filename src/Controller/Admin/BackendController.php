@@ -192,7 +192,9 @@ SQL;
 
 	protected function tableExists(string $table): bool {
 		try {
-			ConnectionManager::get('default')->getSchemaCollection()->describe($table);
+			/** @var \Cake\Database\Connection $connection */
+			$connection = ConnectionManager::get('default');
+			$connection->getSchemaCollection()->describe($table);
 
 			return true;
 		} catch (DatabaseException) {
