@@ -6,8 +6,14 @@ use Setup\Healthcheck\Check\Check;
 
 class SessionCleanupCheck extends Check {
 
+	/**
+	 * @var string
+	 */
 	protected const DEBIAN_SESSION_CLEAN_CRON = '/etc/cron.d/php';
 
+	/**
+	 * @var string
+	 */
 	protected const DEBIAN_SESSION_CLEAN_BIN = '/usr/lib/php/sessionclean';
 
 	/**
