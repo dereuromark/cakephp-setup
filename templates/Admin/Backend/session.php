@@ -9,14 +9,14 @@
 use Cake\I18n\DateTime;
 
 $formatDate = static function ($value): string {
-	if ($value instanceof \DateTimeInterface) {
+	if ($value instanceof DateTimeInterface) {
 		return $value->format('Y-m-d H:i:s');
 	}
 
 	if (is_string($value) && $value !== '') {
 		try {
 			return (new DateTime($value))->format('Y-m-d H:i:s');
-		} catch (\Throwable) {
+		} catch (Throwable) {
 			return $value;
 		}
 	}
@@ -68,8 +68,7 @@ echo $currentTimeoutInSecs . ' sec = ' . $this->Time->timeAgoInWords((new DateTi
 $currentProbability = ini_get('session.gc_probability');
 $currentDivisor = ini_get('session.gc_divisor');
 
-
-echo 'Probability: '. $currentProbability . ' - Divisor: ' . $currentDivisor;
+echo 'Probability: ' . $currentProbability . ' - Divisor: ' . $currentDivisor;
 ?>
 
 </div>

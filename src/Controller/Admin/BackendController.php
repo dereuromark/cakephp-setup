@@ -7,6 +7,7 @@ use Cake\Cache\Cache;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Database\Exception\DatabaseException;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
@@ -32,7 +33,7 @@ class BackendController extends AppController {
 	public function initialize(): void {
 		parent::initialize();
 
-		$this->viewBuilder()->setHelpers(['Tools.Time', 'Tools.Progress']);
+		$this->viewBuilder()->setHelpers(['Time', 'Number']);
 		if (Plugin::isLoaded('Templating')) {
 			$this->viewBuilder()->addHelper('Templating.IconSnippet');
 		} elseif (Plugin::isLoaded('Tools')) {
@@ -136,7 +137,7 @@ class BackendController extends AppController {
 		$time = class_exists(ToolsDateTime::class) ? new ToolsDateTime() : new DateTime();
 
 		$dateTimeString = '2025-11-06 11:12:13';
-		if (class_exists(TokensTable::class)) {
+		if (Plugin::isLoaded('Tools') && class_exists(TokensTable::class) && $this->tableExists('tokens')) {
 			$tokensTable = $this->fetchTable(TokensTable::class);
 
 			/** @var \Tools\Model\Entity\Token|null $token */
@@ -187,6 +188,16 @@ SQL;
 		}
 
 		$this->set(compact('time', 'timezone', 'dateTimeString'));
+	}
+
+	protected function tableExists(string $table): bool {
+		try {
+			ConnectionManager::get('default')->getSchemaCollection()->describe($table);
+
+			return true;
+		} catch (DatabaseException) {
+			return false;
+		}
 	}
 
 	/**

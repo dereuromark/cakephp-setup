@@ -47,7 +47,7 @@
 				format(): <?php echo $this->Time->format($token->created); ?> (<?php echo h($token->created->timezone->getName()); ?>)
 			</li>
 			<li>
-				Tools.niceDate(): <?php echo $this->Time->niceDate($token->created); ?> (<?php echo h($token->created->timezone->getName()); ?>)
+				Core nice(): <?php echo $this->Time->nice($token->created); ?> (<?php echo h($token->created->timezone->getName()); ?>)
 			</li>
 		</ul>
 
@@ -68,7 +68,10 @@
 			</fieldset>
 		<?php } ?>
 
-		<?php echo $this->Form->submit(__d('setup', 'Submit')); echo $this->Form->end();?>
+		<?php
+		echo $this->Form->submit(__d('setup', 'Submit'));
+		echo $this->Form->end();
+		?>
 
 	<?php } else {
 		echo '<i>Add Tools plugin to see how forms interact with timezone config.</i>';

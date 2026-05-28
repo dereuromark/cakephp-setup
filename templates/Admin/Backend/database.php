@@ -21,11 +21,16 @@ foreach ($dbTables as $table) {
 	$updated = $table['Update_time'];
 	$length = $table['Data_length'] ?? 0;
 	$size = $maxSize ? $length / $maxSize : 0;
+	$percent = max(0, min(100, (int)round($size * 100)));
 
 	echo '<tr>';
 	echo '<td>' . h($table['Name']) . '</td>';
 	echo '<td>' . $table['Rows'] . '</td>';
-	echo '<td>' . $this->Number->toReadableSize($length) . $this->Progress->htmlProgressBar($size) . '</td>';
+	echo '<td>' . $this->Number->toReadableSize($length);
+	echo '<div class="progress mt-1" style="max-width: 180px;">';
+	echo '<div class="progress-bar" role="progressbar" style="width: ' . $percent . '%;" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100"></div>';
+	echo '</div>';
+	echo '</td>';
 	echo '<td>' . $table['Engine'] . ' ' . $table['Collation'] . '</td>';
 	echo '<td>' . $updated . '</td>';
 	echo '<td>' . h($table['Comment']) . '</td>';

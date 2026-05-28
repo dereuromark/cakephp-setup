@@ -87,6 +87,19 @@ class BackendControllerTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testTimezones() {
+		$this->disableErrorHandlerMiddleware();
+
+		$this->session(['Auth' => ['User' => ['id' => 1]]]);
+
+		$this->get(['prefix' => 'Admin', 'plugin' => 'Setup', 'controller' => 'Backend', 'action' => 'timezones']);
+
+		$this->assertResponseCode(200);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testDatabase() {
 		$this->skipIfNotDriver('Mysql', 'Only for Sqlite for now');
 
