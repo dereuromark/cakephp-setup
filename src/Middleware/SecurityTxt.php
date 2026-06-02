@@ -30,14 +30,14 @@ class SecurityTxt {
 	 * @throws \InvalidArgumentException If no non-empty contact is provided.
 	 */
 	public function __construct(
-		public readonly string|array $contact,
-		public readonly string|array|null $canonical = null,
-		public readonly string|array|null $encryption = null,
-		public readonly string|array|null $acknowledgments = null,
-		public readonly string|array|null $preferredLanguages = null,
-		public readonly string|array|null $policy = null,
-		public readonly string|array|null $hiring = null,
-		public readonly string|array|null $csaf = null,
+		public readonly array|string $contact,
+		public readonly array|string|null $canonical = null,
+		public readonly array|string|null $encryption = null,
+		public readonly array|string|null $acknowledgments = null,
+		public readonly array|string|null $preferredLanguages = null,
+		public readonly array|string|null $policy = null,
+		public readonly array|string|null $hiring = null,
+		public readonly array|string|null $csaf = null,
 		public readonly string $expiresInterval = '+1 year',
 	) {
 		if (static::normalize($contact) === []) {
