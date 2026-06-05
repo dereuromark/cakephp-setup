@@ -272,17 +272,104 @@ class SecurityTxtMiddlewareTest extends TestCase {
 	}
 
 	/**
+	 * Root-relative URI values are resolved to absolute URLs using the request host.
+	 *
+	 * @return void
+	 */
+	public function testRelativeUriResolvedToAbsolute(): void {
+		$middleware = new SecurityTxtMiddleware(new SecurityTxt(
+			contact: '/security',
+			canonical: '/.well-known/security.txt',
+			preferredLanguages: 'en',
+		));
+
+		$body = (string)$middleware->process(
+			$this->request('/.well-known/security.txt', host: 'example.org', https: true),
+			$this->handler(),
+		)->getBody();
+
+		$this->assertStringContainsString('Contact: https://example.org/security', $body);
+		$this->assertStringContainsString('Canonical: https://example.org/.well-known/security.txt', $body);
+		// Non-URI fields are left untouched.
+		$this->assertStringContainsString('Preferred-Languages: en', $body);
+	}
+
+	/**
+	 * The resolved scheme follows the request (http on a plain-HTTP host).
+	 *
+	 * @return void
+	 */
+	public function testRelativeUriUsesRequestScheme(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => '/security'],
+		]);
+
+		$body = (string)$middleware->process(
+			$this->request('/.well-known/security.txt', host: 'example.org'),
+			$this->handler(),
+		)->getBody();
+
+		$this->assertStringContainsString('Contact: http://example.org/security', $body);
+	}
+
+	/**
+	 * Already-absolute values (https/mailto/tel) pass through unchanged.
+	 *
+	 * @return void
+	 */
+	public function testAbsoluteUriLeftUnchanged(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => ['mailto:security@example.com', 'https://example.com/report']],
+		]);
+
+		$body = (string)$middleware->process(
+			$this->request('/.well-known/security.txt', host: 'other.example'),
+			$this->handler(),
+		)->getBody();
+
+		$this->assertStringContainsString('Contact: mailto:security@example.com', $body);
+		$this->assertStringContainsString('Contact: https://example.com/report', $body);
+		$this->assertStringNotContainsString('other.example', $body);
+	}
+
+	/**
+	 * With no explicit host the CakePHP request still carries a default authority
+	 * (`localhost`), which is used to resolve the relative value.
+	 *
+	 * @return void
+	 */
+	public function testRelativeUriUsesDefaultHost(): void {
+		$middleware = new SecurityTxtMiddleware([
+			'fields' => ['Contact' => '/security'],
+		]);
+
+		$body = (string)$middleware->process($this->request('/.well-known/security.txt'), $this->handler())->getBody();
+
+		$this->assertStringContainsString('Contact: http://localhost/security', $body);
+	}
+
+	/**
 	 * Build a request for the given path and method.
 	 *
 	 * @param string $path
 	 * @param string $method
+	 * @param string|null $host Optional `HTTP_HOST` so the request has an authority.
+	 * @param bool $https Whether the request is served over HTTPS.
 	 *
 	 * @return \Cake\Http\ServerRequest
 	 */
-	protected function request(string $path, string $method = 'GET'): ServerRequest {
+	protected function request(string $path, string $method = 'GET', ?string $host = null, bool $https = false): ServerRequest {
+		$environment = ['REQUEST_METHOD' => $method];
+		if ($host !== null) {
+			$environment['HTTP_HOST'] = $host;
+		}
+		if ($https) {
+			$environment['HTTPS'] = 'on';
+		}
+
 		return new ServerRequest([
 			'url' => $path,
-			'environment' => ['REQUEST_METHOD' => $method],
+			'environment' => $environment,
 		]);
 	}
 
