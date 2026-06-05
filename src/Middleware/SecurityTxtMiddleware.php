@@ -106,7 +106,7 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 		}
 
 		/** @var array<string, mixed> $fields */
-		$fields = (array)$this->getConfig('fields');
+		$fields = $this->absolutize((array)$this->getConfig('fields'), $request);
 		$contacts = SecurityTxt::normalize($fields['Contact'] ?? null);
 
 		$response = $this->build($fields, $contacts);
@@ -134,6 +134,59 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 		}
 
 		return $path !== '' ? $path : '/';
+	}
+
+	/**
+	 * Resolve any root-relative URI field values (e.g. `/security`) to absolute
+	 * URLs using the current request's scheme and host, so the served file stays
+	 * RFC 9116 compliant (absolute URIs) while the configured values can stay
+	 * host-agnostic and travel across deploys unchanged.
+	 *
+	 * Values that are already absolute (`https:`, `mailto:`, `tel:`, ...) or
+	 * protocol-relative (`//host/...`) are left untouched. `Expires` and
+	 * `Preferred-Languages` are never URIs, so they are skipped.
+	 *
+	 * @param array<string, mixed> $fields
+	 * @param \Psr\Http\Message\ServerRequestInterface $request
+	 * @return array<string, mixed>
+	 */
+	protected function absolutize(array $fields, ServerRequestInterface $request): array {
+		$uri = $request->getUri();
+		$authority = $uri->getAuthority();
+		if ($authority === '') {
+			return $fields;
+		}
+
+		$base = $uri->getScheme() . '://' . $authority;
+		foreach ($fields as $name => $value) {
+			if ($name === 'Expires' || $name === 'Preferred-Languages') {
+				continue;
+			}
+
+			$fields[$name] = $this->absolutizeValue($value, $base);
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Prefix a single root-relative URI value (or each value in a list) with the
+	 * absolute base; pass through anything that is not root-relative.
+	 *
+	 * @param mixed $value
+	 * @param string $base
+	 * @return mixed
+	 */
+	protected function absolutizeValue(mixed $value, string $base): mixed {
+		if (is_array($value)) {
+			return array_map(fn ($item): mixed => $this->absolutizeValue($item, $base), $value);
+		}
+
+		if (is_string($value) && str_starts_with($value, '/') && !str_starts_with($value, '//')) {
+			return $base . $value;
+		}
+
+		return $value;
 	}
 
 	/**
