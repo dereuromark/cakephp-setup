@@ -198,9 +198,9 @@ class System {
 		}
 		if ($root === null) {
 			// shortest string?
-			$root = $this->_findRoot($data);
+			$rootKey = $this->_findRoot($data);
 		}
-		if ($root === null) {
+		if ($rootKey === null) {
 			return;
 		}
 

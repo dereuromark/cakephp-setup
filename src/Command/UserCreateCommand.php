@@ -122,7 +122,7 @@ class UserCreateCommand extends Command {
 		}
 		$data[$displayField] = $displayFieldValue;
 
-		if (!empty($role)) {
+		if ($roleField !== null && !empty($role)) {
 			$data[$roleField] = $role;
 		}
 
