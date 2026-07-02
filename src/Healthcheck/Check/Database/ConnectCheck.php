@@ -60,7 +60,7 @@ class ConnectCheck extends Check {
 			return;
 		}
 
-		$db = $connection?->config()['database'];
+		$db = $connection->config()['database'];
 		$this->infoMessage[] = 'Connected to `' . $db . '`.';
 	}
 
