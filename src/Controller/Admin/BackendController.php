@@ -72,7 +72,7 @@ class BackendController extends AppController {
 				$this->Flash->warning('Locale not supported');
 			}
 			$time = new DateTime();
-			$result = strftime($dateFormat, (int)$time->toUnixString());
+			$result = $time->i18nFormat($dateFormat, locale: $locale);
 			$this->set(compact('result'));
 		} else {
 			//FIXME

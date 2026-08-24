@@ -15,7 +15,7 @@
 	<fieldset>
 		<legend><?php echo __d('setup', 'Chose desired result'); ?></legend>
 	<?php
-		echo $this->Form->control('Form.format');
+		echo $this->Form->control('Form.format', ['placeholder' => 'EEEE, MMMM yyyy - HH:mm']);
 
 		echo $this->Form->control('Form.locale', ['placeholder' => __d('setup', 'e.g. de_DE.utf8')]);
 	?>
