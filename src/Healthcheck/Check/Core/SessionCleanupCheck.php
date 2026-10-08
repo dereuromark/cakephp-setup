@@ -84,7 +84,7 @@ class SessionCleanupCheck extends Check {
 			$gcProbability,
 			$gcDivisor,
 			$effectiveProbability,
-			$gcDivisor > 0 ? (int)ceil($gcDivisor / $gcProbability) : 0,
+			(int)ceil($gcDivisor / $gcProbability),
 		);
 
 		// Provide guidance on probability settings
