@@ -17,6 +17,11 @@ class SecurityHeadersCheck extends Check {
 	protected string $level = self::LEVEL_WARNING;
 
 	/**
+	 * Depends on the current request (HTTPS, sent headers), so a cached result would leak across requests.
+	 */
+	protected ?int $cacheTtl = 0;
+
+	/**
 	 * @var array<string>
 	 */
 	protected array $scope = [

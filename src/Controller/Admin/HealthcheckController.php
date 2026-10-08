@@ -27,7 +27,7 @@ class HealthcheckController extends AppController {
 	 * @return \Cake\Http\Response|null|void
 	 */
 	public function index() {
-		$data = $this->Healthcheck->run($this->request->getQuery('domain'));
+		$data = $this->Healthcheck->run($this->request->getQuery('domain'), true);
 
 		$this->set('optInChecks', $data['healthcheck']->collector()->getOptInChecks());
 

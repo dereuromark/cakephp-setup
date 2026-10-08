@@ -28,6 +28,8 @@ return [
 		// Setting `checks` REPLACES the built-in default set entirely, so leave it unset
 		// to keep all defaults. Uncomment and provide a COMPLETE list only for full control:
 		// 'Healthcheck' => [
+		//     'cache' => null, // CakePHP cache config name; null or empty disables result caching
+		//     'cacheTtl' => 60, // Default result TTL in seconds for each check
 		//     'checks' => [
 		//         \Setup\Healthcheck\Check\Environment\PhpVersionCheck::class,
 		//     ],

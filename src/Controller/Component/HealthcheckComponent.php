@@ -5,6 +5,7 @@ namespace Setup\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Http\Response;
+use Setup\Healthcheck\Check\CachedCheck;
 use Setup\Healthcheck\Healthcheck;
 use Setup\Healthcheck\HealthcheckCollector;
 
@@ -42,7 +43,8 @@ class HealthcheckComponent extends Component {
 	public function run(?string $domain = null, bool $alwaysShowDetails = false): array {
 		$healthcheck = new Healthcheck(new HealthcheckCollector());
 		$startTime = microtime(true);
-		$passed = $healthcheck->run($domain);
+		$refresh = $this->getController()->getRequest()->getQuery('refresh') && ($alwaysShowDetails || Configure::read('debug'));
+		$passed = $healthcheck->run($domain, !$refresh);
 		$executionTime = round((microtime(true) - $startTime) * 1000, 2);
 
 		$result = $healthcheck->result();
@@ -128,12 +130,13 @@ class HealthcheckComponent extends Component {
 		foreach ($result as $domain => $checks) {
 			$formattedChecks = [];
 			foreach ($checks as $check) {
-				$formattedChecks[] = [
+				$formattedCheck = [
 					'name' => $check->name(),
 					'passed' => $check->passed(),
 					'level' => $check->level(),
 					'priority' => $check->priority(),
 					'domain' => $check->domain(),
+					'cached' => $check instanceof CachedCheck,
 					'messages' => [
 						'success' => $check->successMessage(),
 						'warning' => $check->warningMessage(),
@@ -141,6 +144,10 @@ class HealthcheckComponent extends Component {
 						'info' => $check->infoMessage(),
 					],
 				];
+				if ($check instanceof CachedCheck) {
+					$formattedCheck['cached_at'] = date('c', $check->cachedAt());
+				}
+				$formattedChecks[] = $formattedCheck;
 			}
 			$formatted[$domain] = $formattedChecks;
 		}

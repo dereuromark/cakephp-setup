@@ -65,6 +65,10 @@ class HealthcheckCommand extends Command {
 	public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser {
 		return parent::buildOptionParser($parser)
 			->setDescription(static::getDescription())
+			->addOption('no-cache', [
+				'boolean' => true,
+				'help' => 'Run fresh checks and update cached results.',
+			])
 			->addArgument('domain', [
 				'help' => 'The domain to check (' . implode(', ', $this->healthcheck->domains()) . '). If not provided, ALL domains will be checked.',
 				'required' => false,
@@ -79,7 +83,7 @@ class HealthcheckCommand extends Command {
 	 * @return int The exit code
 	 */
 	public function execute(Arguments $args, ConsoleIo $io): int {
-		$passed = $this->healthcheck->run($args->getArgument('domain'));
+		$passed = $this->healthcheck->run($args->getArgument('domain'), !$args->getOption('no-cache'));
 
 		$result = $this->healthcheck->result();
 		$totalCount = $result->unfold()->count();

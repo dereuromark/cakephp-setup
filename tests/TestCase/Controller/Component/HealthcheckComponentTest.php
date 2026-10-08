@@ -2,12 +2,15 @@
 
 namespace Setup\Test\TestCase\Controller\Component;
 
+use Cake\Cache\Cache;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Setup\Controller\Component\HealthcheckComponent;
+use TestApp\Healthcheck\Check\CountingCheck;
 
 class HealthcheckComponentTest extends TestCase {
 
@@ -81,6 +84,37 @@ class HealthcheckComponentTest extends TestCase {
 		// Should return null and set view vars instead
 		$this->assertNull($response);
 		$this->assertNotEmpty($this->controller->viewBuilder()->getVars());
+	}
+
+	public function testRefreshAndCachedJson(): void {
+		Cache::setConfig('healthcheck_test', ['className' => 'Array']);
+		Configure::write('Setup.Healthcheck', ['cache' => 'healthcheck_test', 'checks' => [CountingCheck::class]]);
+		$debug = Configure::read('debug');
+		CountingCheck::$runs = 0;
+		try {
+			Configure::write('debug', false);
+			$this->controller->setRequest($this->controller->getRequest()->withQueryParams(['refresh' => '1'])->withEnv('HTTP_ACCEPT', 'application/json'));
+			$this->component->run();
+			$data = $this->component->run();
+			$this->assertSame(1, CountingCheck::$runs);
+			$response = $this->component->handleResponse($data, true);
+			$json = json_decode((string)$response->getBody(), true);
+			$this->assertTrue($json['result']['Test'][0]['cached']);
+			$this->assertArrayHasKey('cached_at', $json['result']['Test'][0]);
+			$this->component->run(null, true);
+			$this->assertSame(2, CountingCheck::$runs);
+			Configure::write('debug', true);
+			$data = $this->component->run();
+			$this->assertSame(3, CountingCheck::$runs);
+			$response = $this->component->handleResponse($data);
+			$json = json_decode((string)$response->getBody(), true);
+			$this->assertFalse($json['result']['Test'][0]['cached']);
+			$this->assertArrayNotHasKey('cached_at', $json['result']['Test'][0]);
+		} finally {
+			Cache::drop('healthcheck_test');
+			Configure::delete('Setup.Healthcheck');
+			Configure::write('debug', $debug);
+		}
 	}
 
 }
