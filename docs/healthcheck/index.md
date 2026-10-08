@@ -77,6 +77,12 @@ You can set a priority (1...10) for each check to control the execution order:
 
 The higher the priority (towards 1), the earlier the check runs.
 
+### Level
+
+Checks default to `error`. Use `adjustLevel()` to select `error`, `warning`, or
+`info`. A failed warning-level check increases the warning count but does not
+make the healthcheck fail.
+
 ### Scope
 
 If you want to set a specific scope, adjust the property directly or define the
@@ -104,7 +110,9 @@ To adjust an existing check at runtime, instantiate it first:
 $check = new \Setup\Healthcheck\Check\Core\CakeVersionCheck();
 $check
     ->adjustPriority(6)
-    ->adjustScope([...]);
+    ->adjustScope([...])
+    ->adjustLevel(\Setup\Healthcheck\Check\CheckInterface::LEVEL_WARNING)
+    ->adjustCacheTtl(30);
 ```
 
 ## Usage
@@ -125,6 +133,39 @@ results or alerting the admins directly on errors. With the
 [QueueScheduler plugin](https://github.com/dereuromark/cakephp-queue-scheduler)
 you can add a scheduled task for it from the backend, for example every hour.
 :::
+
+## Caching
+
+Caching is disabled by default. Set `Setup.Healthcheck.cache` to the name of a
+configured CakePHP cache. A null or empty value disables caching.
+`Setup.Healthcheck.cacheTtl` defaults to 60 seconds and applies to each check.
+
+```php
+'Setup' => [
+    'Healthcheck' => [
+        'cache' => 'default',
+        'cacheTtl' => 60,
+    ],
+],
+```
+
+For checks extending `Check`, use `adjustCacheTtl(30)` to override the TTL,
+`adjustCacheTtl(0)` to disable caching for that check, or `adjustCacheTtl(null)`
+to inherit the configured default. Other `CheckInterface` implementations are
+never cached. Results are stored as plain arrays, without scope closures.
+CLI and web results use separate cache keys because their PHP settings can differ.
+A key covers the check class and its configuration (constructor options, level,
+priority, TTL), so differently configured instances never share a result.
+`SecurityHeadersCheck` is never cached by default because its result depends on
+the current request (HTTPS, sent headers).
+
+Use `?refresh=1` to run fresh checks in debug mode or on the admin endpoint.
+The public production endpoint ignores this parameter. From the CLI, use
+`bin/cake healthcheck --no-cache`. Both bypasses update the cache with fresh
+results. Call `Healthcheck::clearCache()` to delete results for the current SAPI.
+
+Detailed JSON results include `cached` for each check and `cached_at` as an
+ISO 8601 timestamp when a cached result is used.
 
 ## Default checks
 
@@ -219,36 +260,42 @@ requirements or potential side effects.
 
 ## Creating custom checks
 
-You can create your own checks by implementing
-`Setup\Healthcheck\Check\CheckInterface` (or extending `AbstractCheck`):
+Extend `Setup\Healthcheck\Check\Check` and implement `check(): void`.
+Set `$this->passed` and append messages to `$this->failureMessage`,
+`$this->warningMessage`, `$this->successMessage`, or `$this->infoMessage`.
+A passed check with warning messages is treated as a warning-level failure.
+
+This example checks a database connection:
 
 ```php
-namespace App\Healthcheck\Check;
+namespace App\Healthcheck\Check\Application;
 
-use Setup\Healthcheck\Check\AbstractCheck;
-use Setup\Healthcheck\HealthcheckResult;
+use Cake\Datasource\ConnectionManager;
+use Exception;
+use Setup\Healthcheck\Check\Check;
 
-class MyCustomCheck extends AbstractCheck {
+class MyCustomCheck extends Check {
 
-    public function run(): HealthcheckResult {
-        // Your check logic here
-        if ($everythingOk) {
-            return HealthcheckResult::success('All good!');
+    public const INFO = 'Checks if the default database can be connected to.';
+
+    public function check(): void {
+        try {
+            $connection = ConnectionManager::get('default');
+            $connection->getDriver()->connect();
+            $this->passed = true;
+            $this->successMessage[] = 'Connected to the default database.';
+        } catch (Exception $exception) {
+            $this->passed = false;
+            $this->failureMessage[] = 'Cannot connect to the default database: ' . $exception->getMessage();
         }
-
-        return HealthcheckResult::error('Something is wrong');
-    }
-
-    public function name(): string {
-        return 'My Custom Check';
-    }
-
-    public function domain(): string {
-        return 'Application';
     }
 
 }
 ```
+
+By default, `name()` returns the class name (`MyCustomCheck`) and `domain()`
+returns the last namespace segment (`Application` here). Override either method to
+use a different label. The optional `public const INFO` describes the check.
 
 Then add it to your configuration:
 
@@ -256,7 +303,7 @@ Then add it to your configuration:
 'Setup' => [
     'Healthcheck' => [
         'checks' => [
-            \App\Healthcheck\Check\MyCustomCheck::class,
+            \App\Healthcheck\Check\Application\MyCustomCheck::class,
         ] + \Setup\Healthcheck\HealthcheckCollector::defaultChecks(),
     ],
 ],
