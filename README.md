@@ -5,7 +5,7 @@ This branch targets CakePHP 6 and PHP 8.5 or later. Use the `cake6` branches of 
 Composer applications consuming this development branch must set `minimum-stability` to `dev` and `prefer-stable` to `true`, then require this plugin as `dev-cake6`. Companion plugins also use their `cake6` branches. The published documentation website covers stable CakePHP 5 releases; use this branch's `docs/` directory for the upgrade documentation.
 
 [![CI](https://github.com/dereuromark/cakephp-setup/actions/workflows/ci.yml/badge.svg?branch=cake6)](https://github.com/dereuromark/cakephp-setup/actions/workflows/ci.yml?query=branch%3Acake6)
-[![Coverage](https://img.shields.io/codecov/c/github/dereuromark/cakephp-setup/master.svg)](https://codecov.io/gh/dereuromark/cakephp-setup)
+[![Coverage](https://img.shields.io/codecov/c/github/dereuromark/cakephp-setup/cake6.svg)](https://codecov.io/gh/dereuromark/cakephp-setup)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat)](https://phpstan.org/)
 [![Latest Stable Version](https://poser.pugx.org/dereuromark/cakephp-setup/v/stable.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.5-8892BF.svg)](https://php.net/)

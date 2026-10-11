@@ -3,7 +3,6 @@
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
 use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Database\Driver\Mysql;
@@ -18,10 +17,6 @@ use Setup\Command\Traits\DbToolsTrait;
 class DbResetCommand extends Command {
 
 	use DbToolsTrait;
-
-	protected Arguments $args;
-
-	protected ConsoleIoInterface $io;
 
 	/**
 	 * @return string
@@ -38,8 +33,6 @@ class DbResetCommand extends Command {
 	public function execute() {
 		$args = $this->args;
 		$io = $this->io;
-		$this->args = $args;
-		$this->io = $io;
 
 		$db = $this->_getConnection((string)$args->getOption('connection'));
 

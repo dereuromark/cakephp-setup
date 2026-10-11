@@ -45,3 +45,5 @@ bin/cake plugin load Tools
 The core maintenance middleware needs no Tools dependency. The development dependencies in this repository are not automatically installed in applications consuming the package.
 
 Follow CakePHP's [plugin loading documentation](https://book.cakephp.org/5/en/plugins.html#loading-a-plugin) for registration through `Application::bootstrap()`.
+
+The temporary `cakephp/migrations:dev-fix/6.x-cakephp-compatibility` dependency tracks the upstream CakePHP 6 compatibility work in [Migrations PR 1121](https://github.com/cakephp/migrations/pull/1121). Replace it with the compatible release constraint when that work is released.

@@ -3,7 +3,6 @@
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
 use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
@@ -26,8 +25,6 @@ class DbIntegrityIntsCommand extends Command {
 
 	use DbToolsTrait;
 
-	protected Arguments $args;
-
 	/**
 	 * @return string
 	 */
@@ -41,7 +38,6 @@ class DbIntegrityIntsCommand extends Command {
 	public function execute() {
 		$args = $this->args;
 		$io = $this->io;
-		$this->args = $args;
 
 		$modelName = $args->getArgument('model');
 

@@ -3,8 +3,6 @@
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\I18n\Number;
 use Setup\Command\Traits\DbBackupTrait;
@@ -22,10 +20,6 @@ class DbBackupRestoreCommand extends Command {
 
 	use DbToolsTrait;
 	use DbBackupTrait;
-
-	protected Arguments $args;
-
-	protected ConsoleIoInterface $io;
 
 	/**
 	 * @return string
@@ -53,8 +47,6 @@ class DbBackupRestoreCommand extends Command {
 	public function execute() {
 		$args = $this->args;
 		$io = $this->io;
-		$this->args = $args;
-		$this->io = $io;
 
 		$db = $this->_getConnection();
 		$config = $db->config();

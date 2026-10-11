@@ -167,9 +167,9 @@
 {% endfor %}
 {% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
                             <td class="actions">
-                                <?php echo $this->Html->link($this->Icon->render('view'), ['controller' => '{{ details.controller }}', 'action' => 'view', {{ otherPk|raw }}], ['escapeTitle' => false]); ?>
-                                <?php echo $this->Html->link($this->Icon->render('edit'), ['controller' => '{{ details.controller }}', 'action' => 'edit', {{ otherPk|raw }}], ['escapeTitle' => false]); ?>
-                                <?php echo $this->Form->postLink($this->Icon->render('delete'), ['controller' => '{{ details.controller }}', 'action' => 'delete', {{ otherPk|raw }}], ['escapeTitle' => false, 'confirm' => __('Are you sure you want to delete # {0}?', {{ otherPk|raw }})]); ?>
+                                <?php echo $this->Html->link($this->Icon->render('view'), ['controller' => '{{ details.controller }}', 'action' => 'view', {{ otherPk|raw }}], ['escape' => false, 'escapeAttributes' => true]); ?>
+                                <?php echo $this->Html->link($this->Icon->render('edit'), ['controller' => '{{ details.controller }}', 'action' => 'edit', {{ otherPk|raw }}], ['escape' => false, 'escapeAttributes' => true]); ?>
+                                <?php echo $this->Form->postLink($this->Icon->render('delete'), ['controller' => '{{ details.controller }}', 'action' => 'delete', {{ otherPk|raw }}], ['escape' => false, 'escapeAttributes' => true, 'confirm' => __('Are you sure you want to delete # {0}?', {{ otherPk|raw }})]); ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>
