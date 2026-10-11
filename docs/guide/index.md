@@ -17,13 +17,14 @@ A fresh installation reports that maintenance mode is disabled. This reads the s
 In `src/Application.php`, import the middleware:
 
 ```php
+use Cake\Routing\Middleware\RoutingMiddleware;
 use Setup\Middleware\MaintenanceMiddleware;
 ```
 
 Add this line to your existing `middleware()` method before RoutingMiddleware and authentication. Keep ErrorHandlerMiddleware earlier in the queue:
 
 ```php
-$middlewareQueue->add(new MaintenanceMiddleware());
+$middlewareQueue->insertBefore(RoutingMiddleware::class, new MaintenanceMiddleware());
 ```
 
 Create `templates/Error/maintenance.php` in your application. This template is required; the plugin does not ship a fallback page:
@@ -56,12 +57,14 @@ To keep access for your own IP, whitelist it before activation. Use the IP seen 
 
 ```bash
 bin/cake maintenance_mode whitelist 127.0.0.1
+bin/cake maintenance_mode whitelist ::1
 ```
 
 The whitelist applies to matching clients only. To test the maintenance page from that same client, remove the entry first:
 
 ```bash
 bin/cake maintenance_mode whitelist 127.0.0.1 --remove
+bin/cake maintenance_mode whitelist ::1 --remove
 ```
 
 The status and whitelist files live under `tmp/`. CLI and web processes must see the same directory and have suitable permissions. With several hosts, deploy the state consistently or place it on a shared filesystem; local files do not coordinate the fleet.

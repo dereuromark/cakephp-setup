@@ -73,7 +73,7 @@ bin/cake db init
 
 ### Reset
 
-Remove all content from application tables, preserving `cake_migrations`, `phinxlog`, and plugin `*_phinxlog` tracking tables. Execution currently supports MySQL only; `--dry-run` previews its SQL without changing data:
+Remove all content from application tables, preserving `cake_migrations`, `phinxlog`, and plugin `*_phinxlog` tracking tables. Execution currently supports MySQL only; `--dry-run -v` previews its SQL without changing data:
 
 ```bash
 bin/cake db reset
@@ -123,7 +123,7 @@ Checks for fields that might need to be nullable, or the opposite.
 
 ### Bools
 
-Checks all boolean field types: usually `tinyint(1)`: for a valid schema.
+Checks boolean field types, usually `tinyint(1)`, for a valid schema.
 
 Since MySQL 8+ they can no longer be unsigned, or the length is lost (making them
 normal `tinyint` or enums). To avoid this, run this on a database older than v8 and
@@ -233,7 +233,7 @@ Restore a dumped file into the database, overwriting the previous values there.
 
 ### CliTest
 
-Lets you test certain features: such as routing: and how (or whether) they work
+Lets you test features such as routing and check how they work
 in CLI:
 
 ```bash

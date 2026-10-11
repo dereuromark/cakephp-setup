@@ -31,7 +31,7 @@ class DbResetCommand extends Command {
 	}
 
 	/**
-	 * Creates a new user including a freshly hashed password.
+	 * Truncates application tables while preserving migration tracking.
 	 *
 	 * @param \Cake\Console\Arguments $args The command arguments.
 	 * @param \Cake\Console\ConsoleIo $io The console io
@@ -50,6 +50,12 @@ class DbResetCommand extends Command {
 			if ($source === 'cake_migrations' || $source === 'phinxlog' || str_contains((string)$source, '_phinxlog')) {
 				unset($sources[$key]);
 			}
+		}
+
+		if (!$sources) {
+			$io->out('No application tables to truncate.');
+
+			return static::CODE_SUCCESS;
 		}
 
 		if (!$args->getOption('dry-run') && !$db->getDriver() instanceof Mysql) {

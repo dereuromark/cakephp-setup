@@ -9,7 +9,7 @@
 [![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-setup/d/total.svg)](https://packagist.org/packages/dereuromark/cakephp-setup)
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--2--R-purple.svg?style=flat-square)](https://github.com/php-fig-rectified/fig-rectified-standards)
 
-Provides useful development tools for managing a CakePHP app.
+Provides useful development tools for managing a CakePHP app. See the [version map](https://github.com/dereuromark/cakephp-setup/wiki#cakephp-version-map) for other CakePHP branches.
 
 Maintenance middleware, healthchecks, debugging helpers, administration tools, and bake templates for CakePHP applications. Most features are opt-in. The web administration routes require your application's access control.
 

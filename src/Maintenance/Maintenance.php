@@ -73,7 +73,9 @@ class Maintenance {
 	 */
 	protected function ipInRange(string $ip, string $range): bool {
 		if (!str_contains($range, '/')) {
-			return $ip === $range; // Exact match
+			$address = inet_pton($ip);
+
+			return $address !== false && $address === inet_pton($range);
 		}
 
 		[$subnet, $bits] = explode('/', $range, 2);

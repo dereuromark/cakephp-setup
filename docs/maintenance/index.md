@@ -48,7 +48,7 @@ For example, keep the healthcheck endpoint reachable:
 
 ```php
 $middlewareQueue->add(new \Setup\Middleware\MaintenanceMiddleware([
-    'pathWhitelist' => ['/setup/healthcheck'],
+    'pathWhitelist' => ['/setup/healthcheck', '/setup/healthcheck.json'],
 ]));
 ```
 

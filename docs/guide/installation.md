@@ -6,7 +6,7 @@ Install from your application's root:
 composer require dereuromark/cakephp-setup
 ```
 
-Composer checks the supported PHP and CakePHP versions from the package constraints. Use `--dev` instead if the plugin is needed only during development; maintenance middleware and healthchecks in production require a production dependency.
+Composer checks the supported PHP and CakePHP versions from the package constraints. Maintenance middleware and healthchecks in production require a production dependency. For development-only use, install with `--dev` and load using `bin/cake plugin load Setup --no-routes --only-debug`; do not register a development-only package unconditionally.
 
 ## Load the plugin
 
@@ -25,6 +25,7 @@ If Setup is already registered, edit its existing entry in `config/plugins.php` 
 | Feature | Additional package |
 |---|---|
 | Web administration, Tools helpers, default enhanced bake base classes | `dereuromark/cakephp-tools` |
+| Template customization in the administration backend | `dereuromark/cakephp-templating` |
 | Generate application classes or healthchecks | `cakephp/bake` |
 | Run generated database migrations | `cakephp/migrations` |
 | L10n panel | `cakephp/debug_kit` |

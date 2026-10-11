@@ -119,4 +119,10 @@ class MaintenanceTest extends TestCase {
 		$this->assertTrue($this->Maintenance->whitelisted('192.0.2.1'));
 	}
 
+	public function testExactIpv6WhitelistNormalizesAddress(): void {
+		$this->Maintenance->addToWhitelist(['2001:0DB8:0000:0000:0000:0000:0000:0001']);
+		$this->assertTrue($this->Maintenance->whitelisted('2001:db8::1'));
+		$this->assertFalse($this->Maintenance->whitelisted('2001:db8::2'));
+	}
+
 }
