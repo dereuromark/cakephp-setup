@@ -30,11 +30,7 @@ class HealthcheckController extends AppController {
 	 * @return void
 	 */
 	public function beforeFilter(EventInterface $event): void {
-		$result = parent::beforeFilter($event);
-		if ($result instanceof ResponseInterface) {
-			$event->setResult($result);
-			$event->stopPropagation();
-		}
+		parent::beforeFilter($event);
 		if ($event->getResult() instanceof ResponseInterface || $event->isStopped()) {
 			if ($this->components()->has('Authorization') && method_exists($this->components()->get('Authorization'), 'skipAuthorization')) {
 				$this->components()->get('Authorization')->skipAuthorization();

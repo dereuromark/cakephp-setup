@@ -22,7 +22,7 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 	/**
 	 * @var array<string, mixed>
 	 */
-	protected array $_defaultConfig = [
+	protected array $defaultConfig = [
 		'className' => View::class,
 		'templatePath' => 'Error',
 		'statusCode' => 503,

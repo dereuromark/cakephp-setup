@@ -10,6 +10,6 @@ The public healthcheck controller preserves parent authentication redirects. Whe
 
 Use the current `maintenance_mode` commands. Old `Setup.MaintenanceMode` shell commands and `ShellDispatcher` aliases are not CakePHP 5 APIs. No maintenance timeout or CLI whitelist debug switch is implemented.
 
-CakePHP 6 compatibility is not declared. Update current CakePHP 5 dependencies, run application checks, and resolve deprecations before attempting a major upgrade. Composer remains the source of supported version constraints.
+The `cake6` development branch requires PHP 8.5 and CakePHP 6. Follow the installation guide for development dependencies. Custom commands use `execute(): int` with inherited console and argument properties, and custom framework extensions must follow CakePHP 6 property and callback names. Tests use PHPUnit 13.
 
 `db reset` now preserves Migrations 5's unified `cake_migrations` table as well as legacy tracking tables. It quotes table names and rejects execution on unsupported drivers; the current reset SQL is MySQL-specific.

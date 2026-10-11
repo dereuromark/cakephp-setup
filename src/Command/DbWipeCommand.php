@@ -4,7 +4,7 @@ namespace Setup\Command;
 
 use Cake\Command\Command;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -24,7 +24,7 @@ class DbWipeCommand extends Command {
 
 	protected Arguments $args;
 
-	protected ConsoleIo $io;
+	protected ConsoleIoInterface $io;
 
 	/**
 	 * @return string
@@ -36,11 +36,11 @@ class DbWipeCommand extends Command {
 	/**
 	 * Creates a new user including a freshly hashed password.
 	 *
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		$this->args = $args;
 		$this->io = $io;
 
@@ -70,9 +70,9 @@ class DbWipeCommand extends Command {
 		$tableTruncates = $dropPrefix . implode(';' . PHP_EOL . $dropPrefix, $sources) . ';';
 
 		$sql = trim(implode("\n\n", array_filter([$fkOff, $tableTruncates, $fkOn]))) . "\n";
-		$this->io->out('--------', 1, ConsoleIo::VERBOSE);
-		$this->io->out($sql, 1, ConsoleIo::VERBOSE);
-		$this->io->out('--------', 1, ConsoleIo::VERBOSE);
+		$this->io->out('--------', 1, ConsoleIoInterface::VERBOSE);
+		$this->io->out($sql, 1, ConsoleIoInterface::VERBOSE);
+		$this->io->out('--------', 1, ConsoleIoInterface::VERBOSE);
 
 		$this->io->out('Dropping ' . count($sources) . ' tables');
 		if (!$this->args->getOption('dry-run') && !$this->args->getOption('force')) {

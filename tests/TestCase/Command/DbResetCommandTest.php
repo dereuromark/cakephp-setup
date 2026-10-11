@@ -2,7 +2,6 @@
 
 namespace Setup\Test\TestCase\Command;
 
-use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\Console\TestSuite\StubConsoleOutput;
@@ -43,9 +42,9 @@ class DbResetCommandTest extends TestCase {
 		try {
 			$this->exec('db reset --dry-run -v');
 			$this->assertExitSuccess();
-			$this->assertStringNotContainsString('TRUNCATE TABLE cake_migrations', $this->_out->output());
-			$this->assertStringNotContainsString('TRUNCATE TABLE "cake_migrations"', $this->_out->output());
-			$this->assertStringNotContainsString('TRUNCATE TABLE `cake_migrations`', $this->_out->output());
+			$this->assertStringNotContainsString('TRUNCATE TABLE cake_migrations', $this->out->output());
+			$this->assertStringNotContainsString('TRUNCATE TABLE "cake_migrations"', $this->out->output());
+			$this->assertStringNotContainsString('TRUNCATE TABLE `cake_migrations`', $this->out->output());
 		} finally {
 			$connection->execute('DROP TABLE cake_migrations');
 		}
@@ -61,8 +60,7 @@ class DbResetCommandTest extends TestCase {
 		$command->expects($this->once())->method('_getConnection')->willReturn($connection);
 		$output = new StubConsoleOutput();
 		$io = new ConsoleIo($output);
-		$args = new Arguments([], ['connection' => 'test', 'dry-run' => true], []);
-		$this->assertSame(0, $command->execute($args, $io));
+		$this->assertSame(0, $command->run(['--connection', 'test', '--dry-run'], $io));
 		$this->assertStringContainsString('No application tables', $output->output());
 		$this->assertStringNotContainsString('TRUNCATE', $output->output());
 	}

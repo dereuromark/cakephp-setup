@@ -4,8 +4,7 @@ namespace Setup\Command;
 
 use App\Model\Entity\User;
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Database\Schema\TableSchemaInterface;
@@ -37,11 +36,11 @@ class UserCreateCommand extends Command {
 	/**
 	 * Creates a new user including a freshly hashed password.
 	 *
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		$displayFieldValue = $args->getArgument('login');
 		$password = $args->getArgument('password');
 
@@ -194,7 +193,7 @@ class UserCreateCommand extends Command {
 		}
 
 		$io->out('User inserted! ID: ' . $user['id']);
-		$io->out('Data: ' . print_r($user->toArray(), true), 1, ConsoleIo::VERBOSE);
+		$io->out('Data: ' . print_r($user->toArray(), true), 1, ConsoleIoInterface::VERBOSE);
 		$io->out('Pwd Hash: ' . $user->password);
 	}
 

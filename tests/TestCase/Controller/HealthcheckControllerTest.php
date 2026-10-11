@@ -47,10 +47,10 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index']);
 
 		// 200 = healthy/degraded, 503 = unhealthy
-		$this->assertContains($this->_response->getStatusCode(), [200, 503]);
+		$this->assertContains($this->response->getStatusCode(), [200, 503]);
 		$this->assertContentType('application/json');
 
-		$response = json_decode((string)$this->_response->getBody(), true);
+		$response = json_decode((string)$this->response->getBody(), true);
 		$this->assertNotEmpty($response);
 		$this->assertArrayHasKey('status', $response);
 		$this->assertArrayHasKey('passed', $response);
@@ -86,10 +86,10 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index', '?' => ['domain' => 'Core']]);
 
 		// 200 = healthy/degraded, 503 = unhealthy
-		$this->assertContains($this->_response->getStatusCode(), [200, 503]);
+		$this->assertContains($this->response->getStatusCode(), [200, 503]);
 		$this->assertContentType('application/json');
 
-		$response = json_decode((string)$this->_response->getBody(), true);
+		$response = json_decode((string)$this->response->getBody(), true);
 		$this->assertNotEmpty($response);
 		$this->assertArrayHasKey('metadata', $response);
 		$this->assertSame('Core', $response['metadata']['domain']);
@@ -108,10 +108,10 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index']);
 
 		// 200 = healthy/degraded, 503 = unhealthy
-		$this->assertContains($this->_response->getStatusCode(), [200, 503]);
+		$this->assertContains($this->response->getStatusCode(), [200, 503]);
 		$this->assertContentType('application/json');
 
-		$response = json_decode((string)$this->_response->getBody(), true);
+		$response = json_decode((string)$this->response->getBody(), true);
 		$this->assertNotEmpty($response);
 		$this->assertArrayHasKey('status', $response);
 		$this->assertArrayHasKey('passed', $response);
@@ -132,9 +132,9 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index']);
 
 		// 200 = healthy/degraded, 503 = unhealthy
-		$this->assertContains($this->_response->getStatusCode(), [200, 503]);
+		$this->assertContains($this->response->getStatusCode(), [200, 503]);
 
-		$response = json_decode((string)$this->_response->getBody(), true);
+		$response = json_decode((string)$this->response->getBody(), true);
 		$this->assertArrayHasKey('result', $response);
 
 		// Check that result has proper structure
@@ -167,10 +167,10 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index', '_ext' => 'json']);
 
 		// 200 = healthy/degraded, 503 = unhealthy
-		$this->assertContains($this->_response->getStatusCode(), [200, 503]);
+		$this->assertContains($this->response->getStatusCode(), [200, 503]);
 		$this->assertContentType('application/json');
 
-		$response = json_decode((string)$this->_response->getBody(), true);
+		$response = json_decode((string)$this->response->getBody(), true);
 		$this->assertNotEmpty($response);
 		$this->assertArrayHasKey('status', $response);
 		$this->assertArrayHasKey('passed', $response);
@@ -198,10 +198,10 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index', '_ext' => 'json', '?' => ['domain' => 'Database']]);
 
 		// 200 = healthy/degraded, 503 = unhealthy
-		$this->assertContains($this->_response->getStatusCode(), [200, 503]);
+		$this->assertContains($this->response->getStatusCode(), [200, 503]);
 		$this->assertContentType('application/json');
 
-		$response = json_decode((string)$this->_response->getBody(), true);
+		$response = json_decode((string)$this->response->getBody(), true);
 		$this->assertNotEmpty($response);
 		$this->assertArrayHasKey('metadata', $response);
 		$this->assertSame('Database', $response['metadata']['domain']);
@@ -217,10 +217,10 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index', '_ext' => 'json']);
 
 		// 200 = healthy/degraded, 503 = unhealthy
-		$this->assertContains($this->_response->getStatusCode(), [200, 503]);
+		$this->assertContains($this->response->getStatusCode(), [200, 503]);
 		$this->assertContentType('application/json');
 
-		$response = json_decode((string)$this->_response->getBody(), true);
+		$response = json_decode((string)$this->response->getBody(), true);
 		$this->assertNotEmpty($response);
 		$this->assertArrayHasKey('status', $response);
 		$this->assertArrayHasKey('passed', $response);

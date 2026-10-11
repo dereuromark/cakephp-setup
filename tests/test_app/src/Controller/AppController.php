@@ -10,15 +10,15 @@ class AppController extends Controller {
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-	 * @return mixed
+	 * @return void
 	 */
-	public function beforeFilter(EventInterface $event) {
+	public function beforeFilter(EventInterface $event): void {
 		parent::beforeFilter($event);
 		if (Configure::read('Test.healthcheckRedirect')) {
-			return $this->redirect('/login');
+			$event->setResult($this->redirect('/login'));
+			$event->stopPropagation();
 		}
 
-		return null;
 	}
 
 }

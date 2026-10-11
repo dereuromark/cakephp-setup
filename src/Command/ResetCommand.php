@@ -6,7 +6,7 @@ namespace Setup\Command;
 
 use Cake\Command\Command;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -34,12 +34,12 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 *
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		$field = $args->getArgument('field');
 		if (!in_array($field, ['email', 'pwd'], true)) {
 			$io->abort('Not a valid field type: ' . $field);
@@ -52,11 +52,11 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 	 * Resets all emails - e.g. to your admin email (for local development).
 	 *
 	 * @param \Cake\Console\Arguments $args
-	 * @param \Cake\Console\ConsoleIo $io
+	 * @param \Cake\Console\ConsoleIoInterface $io
 	 *
 	 * @return void
 	 */
-	protected function email(Arguments $args, ConsoleIo $io): void {
+	protected function email(Arguments $args, ConsoleIoInterface $io): void {
 		$email = $args->getArgument('value');
 
 		$io->out('Email:');
@@ -84,11 +84,11 @@ Note that you can define the constant CLASS_USERS in your bootstrap to point to 
 	 * Resets all pwds to a simple pwd (for local development).
 	 *
 	 * @param \Cake\Console\Arguments $args
-	 * @param \Cake\Console\ConsoleIo $io
+	 * @param \Cake\Console\ConsoleIoInterface $io
 	 *
 	 * @return void
 	 */
-	public function pwd(Arguments $args, ConsoleIo $io): void {
+	public function pwd(Arguments $args, ConsoleIoInterface $io): void {
 		$pwd = $args->getArgument('value');
 
 		$pwdToHash = null;

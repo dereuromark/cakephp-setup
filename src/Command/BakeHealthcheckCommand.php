@@ -3,8 +3,6 @@
 namespace Setup\Command;
 
 use Bake\Command\SimpleBakeCommand;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -35,11 +33,11 @@ class BakeHealthcheckCommand extends SimpleBakeCommand {
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args
-	 * @param \Cake\Console\ConsoleIo $io
 	 * @return int|null
 	 */
-	public function execute(Arguments $args, ConsoleIo $io): ?int {
+	public function execute(): ?int {
+		$args = $this->args;
+		$io = $this->io;
 		$this->extractCommonProperties($args);
 
 		$type = $args->getArgument('type');
@@ -50,14 +48,14 @@ class BakeHealthcheckCommand extends SimpleBakeCommand {
 			$this->abort();
 		}
 
-		$name = $this->_getName($name);
+		$name = $this->getNameWithoutPrefix($name);
 
 		$this->_name = $type . '/' . $name . 'Check';
 
 		$name = Inflector::camelize($name);
 		$name = $type . '/' . $name;
-		$this->bake($name, $args, $io);
-		$this->bakeTest($name, $args, $io);
+		$this->bake($name);
+		$this->bakeTest($name);
 
 		return static::CODE_SUCCESS;
 	}
@@ -66,12 +64,12 @@ class BakeHealthcheckCommand extends SimpleBakeCommand {
 	 * Generate a test case.
 	 *
 	 * @param string $name The class to bake a test for.
-	 * @param \Cake\Console\Arguments $args The console arguments
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 *
 	 * @return void
 	 */
-	public function bakeTest(string $name, Arguments $args, ConsoleIo $io): void {
+	public function bakeTest(string $name): void {
+		$args = $this->args;
+		$io = $this->io;
 		if ($args->getOption('no-test')) {
 			return;
 		}
@@ -147,12 +145,12 @@ TXT;
 	/**
 	 * @inheritDoc
 	 */
-	public function templateData(Arguments $arguments): array {
+	public function templateData(): array {
 		$name = $this->_name;
 		$namespace = Configure::read('App.namespace');
 		$pluginPath = '';
 		if ($this->plugin) {
-			$namespace = $this->_pluginNamespace($this->plugin);
+			$namespace = $this->pluginNamespace($this->plugin);
 			$pluginPath = $this->plugin . '.';
 		}
 
@@ -174,7 +172,7 @@ TXT;
 			'namespace' => $namespace,
 			'subNamespace' => $namespacePart ? ($namespacePart . '/') : '',
 			'name' => $name,
-			'add' => $arguments->getOption('add'),
+			'add' => $this->args->getOption('add'),
 		];
 	}
 

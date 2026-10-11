@@ -3,8 +3,7 @@
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use PDO;
 use Setup\Command\Traits\DbToolsTrait;
@@ -32,15 +31,15 @@ class DbDataDatesCommand extends Command {
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		$connection = (string)$args->getOption('connection');
 		$tables = $this->_getTables($connection);
 
-		$io->out('Checking ' . count($tables) . ' tables for invalid dates:', 1, ConsoleIo::VERBOSE);
+		$io->out('Checking ' . count($tables) . ' tables for invalid dates:', 1, ConsoleIoInterface::VERBOSE);
 
 		$issues = [];
 		foreach ($tables as $table) {
@@ -139,11 +138,11 @@ class DbDataDatesCommand extends Command {
 	 * Check a single table for invalid date values.
 	 *
 	 * @param string $table Table name
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @param string $connection Connection name
 	 * @return array<string, array<string, mixed>> Column issues
 	 */
-	protected function checkTable(string $table, ConsoleIo $io, string $connection): array {
+	protected function checkTable(string $table, ConsoleIoInterface $io, string $connection): array {
 		$db = $this->_getConnection($connection);
 		$config = $db->config();
 		$database = $config['database'];

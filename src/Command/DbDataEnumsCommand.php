@@ -4,8 +4,7 @@ namespace Setup\Command;
 
 use BackedEnum;
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Exception\CakeException;
 use Cake\Core\Plugin;
@@ -41,23 +40,23 @@ class DbDataEnumsCommand extends Command {
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		$connection = (string)$args->getOption('connection');
 		$modelName = $args->getArgument('model');
 		$plugin = (string)$args->getOption('plugin') ?: null;
 
-		$io->out('Checking PHP BackedEnum columns...', 1, ConsoleIo::VERBOSE);
+		$io->out('Checking PHP BackedEnum columns...', 1, ConsoleIoInterface::VERBOSE);
 
 		// Check PHP BackedEnum columns
 		$phpEnumIssues = $this->checkPhpEnums($modelName, $plugin, $io, $connection, (bool)$args->getOption('fix'));
 
 		// Check MySQL ENUM columns (with deprecation warning)
 		$io->out();
-		$io->out('Checking MySQL ENUM columns...', 1, ConsoleIo::VERBOSE);
+		$io->out('Checking MySQL ENUM columns...', 1, ConsoleIoInterface::VERBOSE);
 		$mysqlEnumIssues = $this->checkMysqlEnums($connection, $io, $args->getArgument('model'));
 
 		$io->out();
@@ -121,12 +120,12 @@ class DbDataEnumsCommand extends Command {
 	 *
 	 * @param string|null $modelName Specific model to check
 	 * @param string|null $plugin Plugin name
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @param string $connection Connection name
 	 * @param bool $fix Whether to attempt fixing
 	 * @return array<string, array<string, mixed>> Issues found
 	 */
-	protected function checkPhpEnums(?string $modelName, ?string $plugin, ConsoleIo $io, string $connection, bool $fix = false): array {
+	protected function checkPhpEnums(?string $modelName, ?string $plugin, ConsoleIoInterface $io, string $connection, bool $fix = false): array {
 		try {
 			$models = $this->_getModels($modelName, $plugin);
 		} catch (Throwable $e) {
@@ -158,12 +157,12 @@ class DbDataEnumsCommand extends Command {
 	 * Check a single model for invalid enum values.
 	 *
 	 * @param \Cake\ORM\Table $model The model to check
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @param string $connection Connection name
 	 * @param array<string, array<string, mixed>> $issues Existing issues
 	 * @return array<string, array<string, mixed>> Updated issues
 	 */
-	protected function checkModel(Table $model, ConsoleIo $io, string $connection, array $issues): array {
+	protected function checkModel(Table $model, ConsoleIoInterface $io, string $connection, array $issues): array {
 		try {
 			$table = $model->getTable();
 			if (!$table) {
@@ -223,12 +222,12 @@ class DbDataEnumsCommand extends Command {
 	 * Scans all varchar columns in the database to find columns containing the invalid value.
 	 *
 	 * @param \Throwable $e The exception
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @param string $connection Connection name
 	 * @param bool $fix Whether to attempt fixing
 	 * @return void
 	 */
-	protected function tryFixEnumFromError(Throwable $e, ConsoleIo $io, string $connection, bool $fix): void {
+	protected function tryFixEnumFromError(Throwable $e, ConsoleIoInterface $io, string $connection, bool $fix): void {
 		$message = $e->getMessage();
 
 		// Try to extract enum class from error message like:
@@ -287,10 +286,10 @@ class DbDataEnumsCommand extends Command {
 	 * @param array<string|int> $validValues Valid enum values
 	 * @param string|null $invalidValue Specific invalid value to search for
 	 * @param string $enumClass The enum class to search for
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @return array<array<string, mixed>> Found columns with issues
 	 */
-	protected function scanForInvalidEnumColumns(string $connection, array $validValues, ?string $invalidValue, string $enumClass, ConsoleIo $io): array {
+	protected function scanForInvalidEnumColumns(string $connection, array $validValues, ?string $invalidValue, string $enumClass, ConsoleIoInterface $io): array {
 		// Search Table class files for the enum registration
 		$tableLocations = [
 			APP . 'Model' . DS . 'Table',
@@ -380,10 +379,10 @@ class DbDataEnumsCommand extends Command {
 	 * @param string $column Column name
 	 * @param string|null $invalidValue Invalid value to check
 	 * @param array<string|int> $validValues Valid enum values
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @return array<string, mixed>|null Issue data or null
 	 */
-	protected function checkColumnForInvalidValue(string $connection, string $table, string $column, ?string $invalidValue, array $validValues, ConsoleIo $io): ?array {
+	protected function checkColumnForInvalidValue(string $connection, string $table, string $column, ?string $invalidValue, array $validValues, ConsoleIoInterface $io): ?array {
 		$db = $this->_getConnection($connection);
 		$config = $db->config();
 		$database = $config['database'];
@@ -429,10 +428,10 @@ class DbDataEnumsCommand extends Command {
 	 *
 	 * @param array<array<string, mixed>> $found Found issues
 	 * @param string $connection Connection name
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @return void
 	 */
-	protected function fixFoundEnumIssues(array $found, string $connection, ConsoleIo $io): void {
+	protected function fixFoundEnumIssues(array $found, string $connection, ConsoleIoInterface $io): void {
 		$db = $this->_getConnection($connection);
 		$fixed = 0;
 
@@ -472,11 +471,11 @@ class DbDataEnumsCommand extends Command {
 	 * Check MySQL ENUM columns for invalid values and deprecation.
 	 *
 	 * @param string $connection Connection name
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @param string|null $tableFilter Specific table to check
 	 * @return array<string, array<string, mixed>> Issues found
 	 */
-	protected function checkMysqlEnums(string $connection, ConsoleIo $io, ?string $tableFilter): array {
+	protected function checkMysqlEnums(string $connection, ConsoleIoInterface $io, ?string $tableFilter): array {
 		$db = $this->_getConnection($connection);
 		$config = $db->config();
 		$database = $config['database'];
@@ -581,10 +580,10 @@ class DbDataEnumsCommand extends Command {
 	 *
 	 * @param array<string, array<string, mixed>> $phpEnumIssues PHP enum issues
 	 * @param array<string, array<string, mixed>> $mysqlEnumIssues MySQL enum issues
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @return void
 	 */
-	protected function outputFixSql(array $phpEnumIssues, array $mysqlEnumIssues, ConsoleIo $io): void {
+	protected function outputFixSql(array $phpEnumIssues, array $mysqlEnumIssues, ConsoleIoInterface $io): void {
 		if (!$phpEnumIssues && !$mysqlEnumIssues) {
 			return;
 		}
@@ -616,10 +615,10 @@ class DbDataEnumsCommand extends Command {
 	 * @param array<string, array<string, mixed>> $phpEnumIssues PHP enum issues
 	 * @param array<string, array<string, mixed>> $mysqlEnumIssues MySQL enum issues
 	 * @param string $connection Connection name
-	 * @param \Cake\Console\ConsoleIo $io Console IO
+	 * @param \Cake\Console\ConsoleIoInterface $io Console IO
 	 * @return void
 	 */
-	protected function executeFixing(array $phpEnumIssues, array $mysqlEnumIssues, string $connection, ConsoleIo $io): void {
+	protected function executeFixing(array $phpEnumIssues, array $mysqlEnumIssues, string $connection, ConsoleIoInterface $io): void {
 		$allIssues = array_merge_recursive($phpEnumIssues, $mysqlEnumIssues);
 
 		if (!$allIssues) {
