@@ -6,6 +6,9 @@
  * @var array<string, string> $currency
  * @var array<string, mixed> $messages
  */
+
+use Cake\I18n\I18n;
+
 ?>
 
 <section class="section-tile">
@@ -47,7 +50,7 @@
 	</ul>
 
 	<div style="margin-top: 10px;">
-		<p>Test: <code>Error</code> (cake domain) translates currently to: <?php echo __d('cake', 'Error'); ?></p>
+		<p>Test: <code>Error</code> (cake domain) translates currently to: <?php echo h(I18n::getTranslator('cake')->translate('Error')); ?></p>
 	</div>
 
 
