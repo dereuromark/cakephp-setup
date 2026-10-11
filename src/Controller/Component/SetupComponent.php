@@ -228,7 +228,7 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	public function isAuthorized() {
-		if (!Configure::read('Config.productive')) {
+		if (!Configure::read('Config.productive', !Configure::read('debug'))) {
 			return true;
 		}
 		$pwd = $this->Controller->getRequest()->getQuery('pwd');

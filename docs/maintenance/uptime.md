@@ -13,5 +13,5 @@ You can customize this route on the project level.
 
 ## See also
 
-- [Maintenance Mode](/maintenance/) — whitelist uptime and healthcheck endpoints during maintenance.
-- [Healthcheck](/healthcheck/) — a richer status overview for your application.
+- [Maintenance Mode](/maintenance/): whitelist uptime and healthcheck endpoints during maintenance.
+- [Healthcheck](/healthcheck/): a richer status overview for your application.

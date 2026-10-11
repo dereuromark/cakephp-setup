@@ -76,13 +76,27 @@ class Maintenance {
 			return $ip === $range; // Exact match
 		}
 
-		[$subnet, $bits] = explode('/', $range);
-		$ip = ip2long($ip);
-		$subnet = ip2long($subnet);
-		$mask = -1 << (32 - (int)$bits);
-		$subnet &= $mask; // Network part
+		[$subnet, $bits] = explode('/', $range, 2);
+		$address = inet_pton($ip);
+		$network = inet_pton($subnet);
+		if ($address === false || $network === false || strlen($address) !== strlen($network) || !ctype_digit($bits)) {
+			return false;
+		}
+		$prefix = (int)$bits;
+		if ($prefix > strlen($address) * 8) {
+			return false;
+		}
+		$bytes = intdiv($prefix, 8);
+		if (substr($address, 0, $bytes) !== substr($network, 0, $bytes)) {
+			return false;
+		}
+		$remaining = $prefix % 8;
+		if ($remaining === 0) {
+			return true;
+		}
+		$mask = (0xff << (8 - $remaining)) & 0xff;
 
-		return ($ip & $mask) === $subnet;
+		return (ord($address[$bytes]) & $mask) === (ord($network[$bytes]) & $mask);
 	}
 
 	/**
@@ -104,7 +118,7 @@ class Maintenance {
 			return true;
 		}
 
-		return (bool)file_put_contents($this->file, '');
+		return file_put_contents($this->file, '') !== false;
 	}
 
 	/**
@@ -181,7 +195,7 @@ class Maintenance {
 			$content = (string)file_get_contents($this->whitelistFile);
 		}
 
-		if (!str_contains($content, $ip)) {
+		if (!in_array($ip, explode(PHP_EOL, trim($content)), true)) {
 			$content .= PHP_EOL . $ip;
 		}
 

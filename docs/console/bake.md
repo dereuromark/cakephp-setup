@@ -10,7 +10,7 @@ Use these templates with the `--theme`/`-t` option:
 bin/cake bake -t Setup ...
 ```
 
-See the [CakePHP bake docs](https://book.cakephp.org/bake/2/en/development.html)
+See the [CakePHP bake docs](https://book.cakephp.org/bake/3/development.html)
 for how to customize further.
 
 ## Model level
@@ -84,4 +84,4 @@ formatted accordingly:
 
 ## See also
 
-- [Console Commands](/console/) — the broader operational toolbox.
+- [Console Commands](/console/): the broader operational toolbox.

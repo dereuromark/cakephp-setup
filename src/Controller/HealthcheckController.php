@@ -4,6 +4,7 @@ namespace Setup\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @property \Setup\Controller\Component\HealthcheckComponent $Healthcheck
@@ -29,7 +30,18 @@ class HealthcheckController extends AppController {
 	 * @return void
 	 */
 	public function beforeFilter(EventInterface $event): void {
-		parent::beforeFilter($event);
+		$result = parent::beforeFilter($event);
+		if ($result instanceof ResponseInterface) {
+			$event->setResult($result);
+			$event->stopPropagation();
+		}
+		if ($event->getResult() instanceof ResponseInterface || $event->isStopped()) {
+			if ($this->components()->has('Authorization') && method_exists($this->components()->get('Authorization'), 'skipAuthorization')) {
+				$this->components()->get('Authorization')->skipAuthorization();
+			}
+
+			return;
+		}
 
 		if ($this->components()->has('Auth') && method_exists($this->components()->get('Auth'), 'allow')) {
 			$this->components()->get('Auth')->allow();

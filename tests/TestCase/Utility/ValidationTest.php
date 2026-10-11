@@ -66,6 +66,8 @@ class ValidationTest extends TestCase {
 		$this->assertFalse(Validation::ipOrSubnet('192.168.1.0/33'));
 		$this->assertFalse(Validation::ipOrSubnet('192.168.1.0/-1'));
 		$this->assertFalse(Validation::ipOrSubnet('192.168.1.0/abc'));
+		$this->assertFalse(Validation::ipOrSubnet('192.168.1.0/1.5'));
+		$this->assertFalse(Validation::ipOrSubnet('192.168.1.0/1e1'));
 	}
 
 	/**

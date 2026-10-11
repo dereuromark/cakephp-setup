@@ -136,7 +136,7 @@ class SetupComponentTest extends TestCase {
 			->onlyMethods(['getName', 'referer'])
 			->setConstructorArgs([new ServerRequest()])
 			->getMock();
-		$controller->method('getName')->willReturn('CakeError');
+		$controller->expects($this->once())->method('getName')->willReturn('CakeError');
 		$controller->method('referer')->willReturn('https://example.com/previous-page');
 		$controller->loadComponent('Flash');
 
@@ -174,7 +174,7 @@ class SetupComponentTest extends TestCase {
 			->onlyMethods(['getName', 'referer'])
 			->setConstructorArgs([new ServerRequest()])
 			->getMock();
-		$controller->method('getName')->willReturn('CakeError');
+		$controller->expects($this->once())->method('getName')->willReturn('CakeError');
 		$controller->method('referer')->willReturn('https://example.com/previous-page');
 		$controller->loadComponent('Flash');
 
@@ -204,6 +204,32 @@ class SetupComponentTest extends TestCase {
 		$component->issueMailing();
 
 		putenv('REMOTE_ADDR');
+	}
+
+	public function testProductionQuickSwitchRequiresPasswordWithoutLegacyFlag(): void {
+		Configure::delete('Config.productive');
+		Configure::delete('Config.pwd');
+		Configure::write('debug', false);
+		$this->Setup->Controller = $this->Controller;
+		try {
+			$this->assertFalse((bool)$this->Setup->isAuthorized());
+		} finally {
+			Configure::write('debug', true);
+		}
+	}
+
+	public function testProductionQuickSwitchAcceptsConfiguredPassword(): void {
+		Configure::delete('Config.productive');
+		Configure::write('Config.pwd', 'maintenance-password');
+		Configure::write('debug', false);
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams(['pwd' => 'maintenance-password']));
+		$this->Setup->Controller = $this->Controller;
+		try {
+			$this->assertTrue((bool)$this->Setup->isAuthorized());
+		} finally {
+			Configure::delete('Config.pwd');
+			Configure::write('debug', true);
+		}
 	}
 
 }

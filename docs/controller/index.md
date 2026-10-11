@@ -3,9 +3,9 @@
 The plugin offers useful tooling through the `/admin/setup` route.
 
 ::: danger Protect these routes
-Make sure this is properly ACL-protected — for example with
+Make sure this is properly ACL-protected: for example with
 [TinyAuth](https://github.com/dereuromark/cakephp-tinyauth) and a few lines of
-config — if you enable the routing here. These actions should never be exposed to
+config: if you enable the routing here. These actions should never be exposed to
 the public or to non-admins.
 :::
 
@@ -16,7 +16,10 @@ routes manually. Also make sure the optional Tools dependency is available in th
 case.
 
 ```php
-$this->addPlugin('Setup', ['routes' => true]);
+// Update the existing Setup entry in config/plugins.php:
+return [
+    'Setup' => ['routes' => true],
+];
 ```
 
 ## Useful tools
@@ -88,7 +91,7 @@ keys, a list of possible issues, and the checks to run.
 
 Make sure you apply the "nullable" foreign-key part to all existing rows in your
 database. The script contains a check to make sure your database is clean here
-before you apply those changes — otherwise the migration will fail to apply them.
+before you apply those changes: otherwise the migration will fail to apply them.
 
 This is especially important when you want to find all children that no longer
 have a `belongsTo` relation, using `fk IS NULL`. You can only trust the results
@@ -108,5 +111,5 @@ The `module_id` is `DEFAULT NULL`, so deleting the module now auto-sets this to
 
 ## See also
 
-- [Console Commands](/console/) — the same database integrity tooling from the CLI.
-- [Uptime](/maintenance/uptime) — the uptime route also lives under `/admin/setup`.
+- [Console Commands](/console/): the same database integrity tooling from the CLI.
+- [Uptime](/maintenance/uptime): the uptime route also lives under `/admin/setup`.

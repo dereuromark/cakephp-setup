@@ -58,7 +58,7 @@ needed:
 'Setup' => [
     'Healthcheck' => [
         'checks' => [
-            new \Setup\Healthcheck\Check\Core\CakeVersionCheck(
+            new \Setup\Healthcheck\Check\Environment\PhpVersionCheck(
                 overrideComparisonChar: '^',
             ),
             // ...
@@ -69,7 +69,7 @@ needed:
 
 ### Priority
 
-You can set a priority (1...10) for each check to control the execution order:
+You can set a priority (1...9) for each check to control the execution order:
 
 ```php
     protected int $priority = 6;
@@ -110,7 +110,7 @@ To adjust an existing check at runtime, instantiate it first:
 $check = new \Setup\Healthcheck\Check\Core\CakeVersionCheck();
 $check
     ->adjustPriority(6)
-    ->adjustScope([...])
+    ->adjustScope([fn () => \Cake\Core\Configure::read('debug')])
     ->adjustLevel(\Setup\Healthcheck\Check\CheckInterface::LEVEL_WARNING)
     ->adjustCacheTtl(30);
 ```
@@ -128,7 +128,7 @@ bin/cake healthcheck
 ```
 
 ::: tip Scheduled monitoring
-You can write a queue task to run the healthcheck periodically — logging the
+You can write a queue task to run the healthcheck periodically: logging the
 results or alerting the admins directly on errors. With the
 [QueueScheduler plugin](https://github.com/dereuromark/cakephp-queue-scheduler)
 you can add a scheduled task for it from the backend, for example every hour.
@@ -311,5 +311,5 @@ Then add it to your configuration:
 
 ## See also
 
-- [Maintenance Mode](/maintenance/) — whitelist the healthcheck endpoint during maintenance.
-- [Uptime](/maintenance/uptime) — a simpler uptime route.
+- [Maintenance Mode](/maintenance/): whitelist the healthcheck endpoint during maintenance.
+- [Uptime](/maintenance/uptime): a simpler uptime route.

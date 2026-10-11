@@ -228,4 +228,24 @@ class HealthcheckControllerTest extends TestCase {
 		$this->assertArrayNotHasKey('result', $response); // Should not include result when debug is off
 	}
 
+	public function testParentAuthenticationRedirectIsPreserved(): void {
+		Configure::write('Test.healthcheckRedirect', true);
+		try {
+			$this->get('/setup/healthcheck');
+			$this->assertRedirect('/login');
+		} finally {
+			Configure::delete('Test.healthcheckRedirect');
+		}
+	}
+
+	public function testUptimeParentAuthenticationRedirectIsPreserved(): void {
+		Configure::write('Test.healthcheckRedirect', true);
+		try {
+			$this->get(['plugin' => 'Setup', 'prefix' => 'Admin', 'controller' => 'Uptime', 'action' => 'index']);
+			$this->assertRedirect('/login');
+		} finally {
+			Configure::delete('Test.healthcheckRedirect');
+		}
+	}
+
 }

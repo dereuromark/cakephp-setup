@@ -26,10 +26,10 @@ class Validation extends CakeValidation {
 
 		// Validate mask part (IPv4: 0-32, IPv6: 0-128)
 		if (in_array($type, ['both', 'ipv4', true]) && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-			return is_numeric($mask) && $mask >= 0 && $mask <= 32;
+			return ctype_digit($mask) && $mask >= 0 && $mask <= 32;
 		}
 		if (in_array($type, ['both', 'ipv6', true]) && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-			return is_numeric($mask) && $mask >= 0 && $mask <= 128;
+			return ctype_digit($mask) && $mask >= 0 && $mask <= 128;
 		}
 
 		return false;

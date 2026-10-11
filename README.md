@@ -11,17 +11,7 @@
 
 Provides useful development tools for managing a CakePHP app.
 
-Note: This branch is for **CakePHP 5.1+**. See [version map](https://github.com/dereuromark/cakephp-setup/wiki#cakephp-version-map) for details.
-
-## What is this plugin for?
-This plugin aims to be a help for development of CakePHP applications. It extends and leverages
-my Tools Plugin.
-
-Currently, this plugin contains only the parts I managed to migrate yet:
-
-* Maintenance Mode (dynamic activation and deactivation incl. dynamic IP whitelisting)
-* security.txt middleware (RFC 9116, with an always-future `Expires`)
-* Some very useful development tools and debugging shells
+Maintenance middleware, healthchecks, debugging helpers, administration tools, and bake templates for CakePHP applications. Most features are opt-in. The web administration routes require your application's access control.
 
 ## Documentation
 
@@ -29,8 +19,8 @@ Full documentation lives at **[dereuromark.github.io/cakephp-setup](https://dere
 
 A few good entry points:
 
-* [Getting started](https://dereuromark.github.io/cakephp-setup/guide/)
 * [Installation](https://dereuromark.github.io/cakephp-setup/guide/installation)
+* [Getting started](https://dereuromark.github.io/cakephp-setup/guide/)
 * [Maintenance Mode](https://dereuromark.github.io/cakephp-setup/maintenance/)
 * [security.txt Middleware](https://dereuromark.github.io/cakephp-setup/middleware/security-txt)
 * [Healthcheck](https://dereuromark.github.io/cakephp-setup/healthcheck/)
