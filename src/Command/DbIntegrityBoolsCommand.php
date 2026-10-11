@@ -4,8 +4,7 @@ namespace Setup\Command;
 
 use Cake\Collection\Collection;
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Exception\CakeException;
 use Cake\Utility\Hash;
@@ -30,14 +29,14 @@ class DbIntegrityBoolsCommand extends Command {
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		$tables = $this->_getTables((string)$args->getOption('connection'));
 
-		$io->out('Checking ' . count($tables) . ' tables:', 1, ConsoleIo::VERBOSE);
+		$io->out('Checking ' . count($tables) . ' tables:', 1, ConsoleIoInterface::VERBOSE);
 		$modified = [];
 		foreach ($tables as $table) {
 			try {
@@ -113,12 +112,12 @@ class DbIntegrityBoolsCommand extends Command {
 
 	/**
 	 * @param string $table
-	 * @param \Cake\Console\ConsoleIo $io
+	 * @param \Cake\Console\ConsoleIoInterface $io
 	 * @param string $connection
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */
-	protected function checkTable(string $table, ConsoleIo $io, string $connection): array {
+	protected function checkTable(string $table, ConsoleIoInterface $io, string $connection): array {
 		// Structure
 		$sql = 'SHOW FULL COLUMNS from `' . $table . '`;';
 		$io->verbose('- ' . $sql);

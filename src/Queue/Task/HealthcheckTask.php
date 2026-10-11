@@ -89,7 +89,7 @@ class HealthcheckTask extends Task implements AddInterface, AddFromBackendInterf
 	}
 
 	/**
-	 * @param \Cake\Collection\CollectionInterface<\Setup\Healthcheck\Check\CheckInterface> $result
+	 * @param \Cake\Collection\CollectionInterface<array<\Setup\Healthcheck\Check\CheckInterface>> $result
 	 *
 	 * @return list<string>
 	 */
@@ -97,10 +97,6 @@ class HealthcheckTask extends Task implements AddInterface, AddFromBackendInterf
 		$lines = [];
 
 		foreach ($result as $domain => $checks) {
-			if (!is_iterable($checks)) {
-				continue;
-			}
-
 			foreach ($checks as $check) {
 				if ($check->passed() && !$check->warningMessage()) {
 					continue;

@@ -200,7 +200,7 @@ class Healthcheck {
 	}
 
 	/**
-	 * @return \Cake\Collection\CollectionInterface<\Setup\Healthcheck\Check\CheckInterface>
+	 * @return \Cake\Collection\CollectionInterface<array<\Setup\Healthcheck\Check\CheckInterface>>
 	 */
 	public function result(): CollectionInterface {
 		return $this->result->groupBy(function (CheckInterface $result) {

@@ -3,12 +3,11 @@
 namespace Setup\Command;
 
 use ArrayIterator;
-use Cake\Console\Arguments;
 use Cake\Console\BaseCommand;
 use Cake\Console\CommandCollection;
 use Cake\Console\CommandCollectionAwareInterface;
 use Cake\Console\CommandHiddenInterface;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\ConsoleOutput;
 use Cake\Core\Configure;
@@ -41,11 +40,11 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 	/**
 	 * Main function Prints out the list of commands.
 	 *
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null
 	 */
-	public function execute(Arguments $args, ConsoleIo $io): ?int {
+	public function execute(): ?int {
+		$args = $this->args;
+		$io = $this->io;
 		$commands = $this->commands->getIterator();
 		if ($commands instanceof ArrayIterator) {
 			$commands->ksort();
@@ -65,7 +64,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 			return static::CODE_SUCCESS;
 		}
 
-		$verbose = $io->level() >= ConsoleIo::VERBOSE;
+		$verbose = $io->level() >= ConsoleIoInterface::VERBOSE;
 		$this->asText($io, $commands, $verbose);
 
 		return static::CODE_SUCCESS;
@@ -111,12 +110,12 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 	/**
 	 * Output text.
 	 *
-	 * @param \Cake\Console\ConsoleIo $io The console io
+	 * @param \Cake\Console\ConsoleIoInterface $io The console io
 	 * @param iterable<string, string|object> $commands The command collection to output.
 	 * @param bool $verbose Whether to show verbose output with descriptions.
 	 * @return void
 	 */
-	protected function asText(ConsoleIo $io, iterable $commands, bool $verbose = false): void {
+	protected function asText(ConsoleIoInterface $io, iterable $commands, bool $verbose = false): void {
 		$invert = [];
 		foreach ($commands as $name => $class) {
 			if (is_object($class)) {
@@ -166,11 +165,11 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 	/**
 	 * Output commands grouped by plugin/namespace (verbose mode).
 	 *
-	 * @param \Cake\Console\ConsoleIo $io The console io
+	 * @param \Cake\Console\ConsoleIoInterface $io The console io
 	 * @param array<string, array<string>> $invert Inverted command map (class => names).
 	 * @return void
 	 */
-	protected function outputGrouped(ConsoleIo $io, array $invert): void {
+	protected function outputGrouped(ConsoleIoInterface $io, array $invert): void {
 		$grouped = [];
 		$plugins = Plugin::loaded();
 		foreach ($invert as $class => $names) {
@@ -222,11 +221,11 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 	/**
 	 * Output commands in super-compact bracket format.
 	 *
-	 * @param \Cake\Console\ConsoleIo $io The console io
+	 * @param \Cake\Console\ConsoleIoInterface $io The console io
 	 * @param array<array{name: string, description: string}> $commands List of commands.
 	 * @return void
 	 */
-	protected function outputCompactCommands(ConsoleIo $io, array $commands): void {
+	protected function outputCompactCommands(ConsoleIoInterface $io, array $commands): void {
 		$maxWidth = $this->getTerminalWidth();
 
 		// Group commands by their first word (prefix)
@@ -289,14 +288,14 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 	/**
 	 * Output a command with its subcommands in bracket notation.
 	 *
-	 * @param \Cake\Console\ConsoleIo $io The console io
+	 * @param \Cake\Console\ConsoleIoInterface $io The console io
 	 * @param string $prefix The command prefix (e.g., " - bake ")
 	 * @param array<string> $subcommands List of subcommand names
 	 * @param int $maxWidth Maximum line width
 	 * @return void
 	 */
 	protected function outputWrappedCommand(
-		ConsoleIo $io,
+		ConsoleIoInterface $io,
 		string $prefix,
 		array $subcommands,
 		int $maxWidth,
@@ -351,10 +350,10 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 	/**
 	 * Output relevant paths if defined
 	 *
-	 * @param \Cake\Console\ConsoleIo $io IO object.
+	 * @param \Cake\Console\ConsoleIoInterface $io IO object.
 	 * @return void
 	 */
-	protected function outputPaths(ConsoleIo $io): void {
+	protected function outputPaths(ConsoleIoInterface $io): void {
 		$paths = [];
 		if (Configure::check('App.dir')) {
 			$appPath = rtrim(Configure::read('App.dir'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -392,11 +391,11 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
 	/**
 	 * Output as XML
 	 *
-	 * @param \Cake\Console\ConsoleIo $io The console io
+	 * @param \Cake\Console\ConsoleIoInterface $io The console io
 	 * @param iterable<string, string|object> $commands The command collection to output
 	 * @return void
 	 */
-	protected function asXml(ConsoleIo $io, iterable $commands): void {
+	protected function asXml(ConsoleIoInterface $io, iterable $commands): void {
 		$shells = new SimpleXMLElement('<shells></shells>');
 		foreach ($commands as $name => $class) {
 			if (is_object($class)) {

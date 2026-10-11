@@ -3,8 +3,7 @@
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Exception\CakeException;
@@ -26,8 +25,6 @@ class DbIntegrityIntsCommand extends Command {
 
 	use DbToolsTrait;
 
-	protected Arguments $args;
-
 	/**
 	 * @return string
 	 */
@@ -36,12 +33,11 @@ class DbIntegrityIntsCommand extends Command {
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
-		$this->args = $args;
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 
 		$modelName = $args->getArgument('model');
 
@@ -53,7 +49,7 @@ class DbIntegrityIntsCommand extends Command {
 		$io->out('This script is only for Mysql < 8, to ensure the meta data is set.');
 		$io->out();
 
-		$io->out('Checking ' . count($models) . ' models:', 1, ConsoleIo::VERBOSE);
+		$io->out('Checking ' . count($models) . ' models:', 1, ConsoleIoInterface::VERBOSE);
 		$tables = [];
 		foreach ($models as $model) {
 			try {
@@ -127,17 +123,17 @@ class DbIntegrityIntsCommand extends Command {
 
 	/**
 	 * @param \Cake\ORM\Table $model
-	 * @param \Cake\Console\ConsoleIo $io
+	 * @param \Cake\Console\ConsoleIoInterface $io
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */
-	protected function checkModel(Table $model, ConsoleIo $io): array {
+	protected function checkModel(Table $model, ConsoleIoInterface $io): array {
 		$table = $model->getTable();
 		if (!$table) {
 			return [];
 		}
 
-		$io->out('### ' . $table, 1, ConsoleIo::VERBOSE);
+		$io->out('### ' . $table, 1, ConsoleIoInterface::VERBOSE);
 
 		/** @var \Cake\Database\Schema\TableSchema $schema */
 		$schema = $model->getSchema();

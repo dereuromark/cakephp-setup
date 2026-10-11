@@ -3,8 +3,6 @@
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -23,11 +21,11 @@ class MailCheckCommand extends Command {
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		if (!Configure::read('Config.live')) {
 			$io->warning('Configure::read(\'Config.live\') is not enabled. Normal emails wouldn\'t be sent. Overwriting it for this check only.');
 			Configure::write('Config.live', true);

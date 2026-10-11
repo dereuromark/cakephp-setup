@@ -29,7 +29,7 @@ class L10nPanel extends DebugPanel {
 	/**
 	 * @var array<string, mixed>
 	 */
-	protected array $_defaultConfig = [];
+	protected array $defaultConfig = [];
 
 	/**
 	 * Data collection callback.
@@ -70,7 +70,7 @@ class L10nPanel extends DebugPanel {
 			'messages' => $messages,
 		];
 
-		return $this->_data + $data;
+		return $this->data + $data;
 	}
 
 	/**

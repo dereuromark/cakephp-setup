@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
 use Cake\Console\CommandInterface;
-use Cake\Console\ConsoleIo;
 
 /**
  * Outputs the current configuration
@@ -29,11 +27,11 @@ Use the /admin/setup-extra/configuration/phpinfo backend to see phpinfo() for no
 	}
 
 	/**
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 		ob_start();
 		phpinfo();
 		/** @var string $phpinfo */

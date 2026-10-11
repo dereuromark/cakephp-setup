@@ -56,7 +56,7 @@ class SecurityTxtMiddleware implements MiddlewareInterface {
 	/**
 	 * @var array<string, mixed>
 	 */
-	protected array $_defaultConfig = [
+	protected array $defaultConfig = [
 		'path' => '/.well-known/security.txt',
 		'serveRootFallback' => true,
 		'expiresInterval' => '+1 year',

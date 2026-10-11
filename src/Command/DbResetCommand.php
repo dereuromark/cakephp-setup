@@ -3,8 +3,7 @@
 namespace Setup\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Database\Driver\Mysql;
 use Setup\Command\Traits\DbToolsTrait;
@@ -19,10 +18,6 @@ class DbResetCommand extends Command {
 
 	use DbToolsTrait;
 
-	protected Arguments $args;
-
-	protected ConsoleIo $io;
-
 	/**
 	 * @return string
 	 */
@@ -33,13 +28,11 @@ class DbResetCommand extends Command {
 	/**
 	 * Truncates application tables while preserving migration tracking.
 	 *
-	 * @param \Cake\Console\Arguments $args The command arguments.
-	 * @param \Cake\Console\ConsoleIo $io The console io
 	 * @return int|null|void The exit code or null for success
 	 */
-	public function execute(Arguments $args, ConsoleIo $io) {
-		$this->args = $args;
-		$this->io = $io;
+	public function execute() {
+		$args = $this->args;
+		$io = $this->io;
 
 		$db = $this->_getConnection((string)$args->getOption('connection'));
 
@@ -72,9 +65,9 @@ $tableTruncates
 
 SET FOREIGN_KEY_CHECKS = 1;
 SQL;
-		$this->io->out('--------', 1, ConsoleIo::VERBOSE);
-		$this->io->out($sql, 1, ConsoleIo::VERBOSE);
-		$this->io->out('--------', 1, ConsoleIo::VERBOSE);
+		$this->io->out('--------', 1, ConsoleIoInterface::VERBOSE);
+		$this->io->out($sql, 1, ConsoleIoInterface::VERBOSE);
+		$this->io->out('--------', 1, ConsoleIoInterface::VERBOSE);
 
 		$this->io->out('Truncating ' . count($sources) . ' tables');
 		if (!$this->args->getOption('dry-run') && !$this->args->getOption('force')) {

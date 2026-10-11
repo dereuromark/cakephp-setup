@@ -29,7 +29,7 @@ class BakeHealthcheckCommandTest extends TestCase {
 
 		$this->exec('bake healthcheck Group Test');
 
-		$output = $this->_out->output();
+		$output = $this->out->output();
 		$this->assertStringContainsString('Creating file', $output);
 		$this->assertStringContainsString('<success>Wrote</success>', $output);
 	}

@@ -115,7 +115,7 @@ class SetupPlugin extends BasePlugin {
 			});
 		});
 
-		$routes->plugin('Setup', ['path' => '/setup'], function (RouteBuilder $routes) {
+		$routes->plugin('Setup', params: ['path' => '/setup'], callback: function (RouteBuilder $routes) {
 			$routes->setExtensions(['json']);
 			$routes->connect('/healthcheck', ['controller' => 'Healthcheck', 'action' => 'index']);
 		});
