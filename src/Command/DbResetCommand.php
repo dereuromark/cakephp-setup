@@ -6,10 +6,11 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Database\Driver\Mysql;
 use Setup\Command\Traits\DbToolsTrait;
 
 /**
- * Resets DB by truncating all tables (except for phinx migrations tables).
+ * Resets DB by truncating all tables (except for migration tracking tables).
  *
  * @author Mark Scherer
  * @license MIT
@@ -26,11 +27,11 @@ class DbResetCommand extends Command {
 	 * @return string
 	 */
 	public static function getDescription(): string {
-		return 'Resets DB by truncating all tables (except for phinx migrations tables).';
+		return 'Resets DB by truncating all tables (except for migration tracking tables).';
 	}
 
 	/**
-	 * Creates a new user including a freshly hashed password.
+	 * Truncates application tables while preserving migration tracking.
 	 *
 	 * @param \Cake\Console\Arguments $args The command arguments.
 	 * @param \Cake\Console\ConsoleIo $io The console io
@@ -46,11 +47,22 @@ class DbResetCommand extends Command {
 		$schemaCollection = $db->getSchemaCollection();
 		$sources = $schemaCollection->listTables();
 		foreach ($sources as $key => $source) {
-			if ($source === 'phinxlog' || str_contains((string)$source, '_phinxlog')) {
+			if ($source === 'cake_migrations' || $source === 'phinxlog' || str_contains((string)$source, '_phinxlog')) {
 				unset($sources[$key]);
 			}
 		}
 
+		if (!$sources) {
+			$io->out('No application tables to truncate.');
+
+			return static::CODE_SUCCESS;
+		}
+
+		if (!$args->getOption('dry-run') && !$db->getDriver() instanceof Mysql) {
+			$io->abort('db reset currently supports execution on MySQL only. Use --dry-run to inspect the proposed SQL.');
+		}
+
+		$sources = array_map(fn ($source) => $db->getDriver()->quoteIdentifier($source), $sources);
 		$tableTruncates = 'TRUNCATE TABLE ' . implode(';' . PHP_EOL . 'TRUNCATE TABLE ', $sources) . ';';
 
 		$sql = <<<SQL

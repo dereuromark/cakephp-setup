@@ -73,14 +73,14 @@ bin/cake db init
 
 ### Reset
 
-Remove all content from the tables, excluding the phinx migration tables:
+Remove all content from application tables, preserving `cake_migrations`, `phinxlog`, and plugin `*_phinxlog` tracking tables. Execution currently supports MySQL only; `--dry-run -v` previews its SQL without changing data:
 
 ```bash
 bin/cake db reset
 ```
 
 ::: warning
-Be careful — make sure you have a backup before doing this.
+Be careful: make sure you have a backup before doing this.
 :::
 
 ### Wipe
@@ -92,7 +92,7 @@ bin/cake db wipe
 ```
 
 ::: warning
-Be careful — make sure you have a backup before doing this.
+Be careful: make sure you have a backup before doing this.
 :::
 
 ## Database integrity
@@ -123,7 +123,7 @@ Checks for fields that might need to be nullable, or the opposite.
 
 ### Bools
 
-Checks all boolean field types — usually `tinyint(1)` — for a valid schema.
+Checks boolean field types, usually `tinyint(1)`, for a valid schema.
 
 Since MySQL 8+ they can no longer be unsigned, or the length is lost (making them
 normal `tinyint` or enums). To avoid this, run this on a database older than v8 and
@@ -233,7 +233,7 @@ Restore a dumped file into the database, overwriting the previous values there.
 
 ### CliTest
 
-Lets you test certain features — such as routing — and how (or whether) they work
+Lets you test features such as routing and check how they work
 in CLI:
 
 ```bash
@@ -282,7 +282,7 @@ If you need to provide custom defaults, use a callback. Set it in your `app.php`
 
 Lets you reset all emails or passwords. This is very useful when copying live data
 dumps into your local development environment. Afterward you can log in with a
-known password for any user — for example after resetting all passwords to a
+known password for any user: for example after resetting all passwords to a
 shared development value:
 
 ```bash
@@ -297,20 +297,7 @@ bin/cake reset pwd
 
 ## Tooling
 
-### Mailmap
-
-Creates a `.mailmap` file from your current commit history. Requires Git as a
-tool:
-
-```bash
-bin/cake mailmap generate
-```
-
-This is used, for example, in CakePHP to combine multiple accounts of the same
-user for `git shortlog`. Check the results with `git shortlog -sne` — it might
-require some manual adjustments afterward.
-
 ## See also
 
-- [Bake Templates](/console/bake) — enhanced scaffolding via the Setup theme.
-- [Web Backend](/controller/) — the same integrity tooling from the web.
+- [Bake Templates](/console/bake): enhanced scaffolding via the Setup theme.
+- [Web Backend](/controller/): the same integrity tooling from the web.

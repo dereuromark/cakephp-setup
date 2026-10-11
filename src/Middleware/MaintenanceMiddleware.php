@@ -3,6 +3,7 @@
 namespace Setup\Middleware;
 
 use Cake\Core\InstanceConfigTrait;
+use Cake\Http\Response;
 use Cake\Http\ServerRequestFactory;
 use Cake\Utility\Inflector;
 use Cake\View\View;
@@ -46,19 +47,17 @@ class MaintenanceMiddleware implements MiddlewareInterface {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-		$response = $handler->handle($request);
-
 		if ($this->isPathWhitelisted($request->getUri()->getPath())) {
-			return $response;
+			return $handler->handle($request);
 		}
 
 		$ip = $request->clientIp();
 		$maintenance = new Maintenance();
 		if (!$maintenance->isMaintenanceMode($ip)) {
-			return $response;
+			return $handler->handle($request);
 		}
 
-		return $this->build($response);
+		return $this->build(new Response());
 	}
 
 	/**

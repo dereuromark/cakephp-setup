@@ -5,8 +5,9 @@ function guideSidebar() {
     {
       text: 'Guide',
       items: [
-        { text: 'Overview', link: '/guide/' },
         { text: 'Installation', link: '/guide/installation' },
+        { text: 'Getting started', link: '/guide/' },
+        { text: 'Upgrading', link: '/guide/upgrading' },
       ],
     },
     {
@@ -58,7 +59,7 @@ function guideSidebar() {
 
 export default defineConfig({
   title: 'cakephp-setup',
-  description: 'Development and maintenance tooling for CakePHP — maintenance mode, healthcheck stack, debug panels, console tools, and enhanced bake templates.',
+  description: 'Development and maintenance tooling for CakePHP: maintenance mode, healthcheck stack, debug panels, console tools, and enhanced bake templates.',
   base: '/cakephp-setup/',
   lastUpdated: true,
   cleanUrls: true,
@@ -71,7 +72,8 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.svg',
     nav: [
-      { text: 'Guide', link: '/guide/', activeMatch: '/guide/' },
+      { text: 'Installation', link: '/guide/installation' },
+      { text: 'Getting started', link: '/guide/' },
       { text: 'Maintenance', link: '/maintenance/', activeMatch: '/maintenance/' },
       { text: 'Healthcheck', link: '/healthcheck/', activeMatch: '/healthcheck/' },
       { text: 'Console', link: '/console/', activeMatch: '/console/' },

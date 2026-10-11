@@ -10,7 +10,7 @@ class SetupController extends AppController {
 	/**
 	 * @var string|null
 	 */
-	protected ?string $modelClass = '';
+	protected ?string $defaultTable = '';
 
 	/**
 	 * @return \Cake\Http\Response|null|void

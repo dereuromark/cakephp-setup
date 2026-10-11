@@ -4,7 +4,7 @@
 `security.txt` file that tells security researchers how to report vulnerabilities.
 
 The required `Expires` field is **computed on every request**, so it never goes
-stale — no static file to hand-edit and no cron job to keep it fresh.
+stale: no static file to hand-edit and no cron job to keep it fresh.
 
 ## How it works
 
@@ -20,6 +20,7 @@ Describe the document with the `SecurityTxt` value object and register it in you
 `Application::middleware()`:
 
 ```php
+use Cake\Http\MiddlewareQueue;
 use Setup\Middleware\SecurityTxt;
 use Setup\Middleware\SecurityTxtMiddleware;
 
@@ -45,8 +46,8 @@ default, at `/security.txt`).
 ::: warning Contact is required
 RFC 9116 requires a `Contact`. It is the only non-optional parameter of
 `SecurityTxt`, and constructing a document (or the middleware) without a non-empty
-contact throws an `InvalidArgumentException` — so misconfiguration fails at boot
-rather than serving an invalid file.
+contact throws an `InvalidArgumentException`: so misconfiguration fails at boot
+rather than serving a file without contact information. This is not a complete RFC validator; use valid contact URIs and HTTPS for web links.
 :::
 
 ## The `SecurityTxt` document
@@ -70,13 +71,13 @@ of strings (repeated lines, e.g. multiple `Contact`). `null` fields are omitted.
 RFC 9116 does not give field order any meaning, so the value object emits a fixed,
 readable order: actionable fields first (`Contact`, `Encryption`, `Policy`, …),
 then file metadata (`Canonical`, `Preferred-Languages`), then the computed
-`Expires` last. (Multiple values of the same field keep their given order — for
+`Expires` last. (Multiple values of the same field keep their given order: for
 `Contact` that is the RFC's preference order.) The array escape hatch instead
 preserves the order in which you declare the fields.
 :::
 
 ::: info Expires is managed for you
-`Expires` is always computed from `expiresInterval`, so it stays in the future.
+`Expires` is computed from `expiresInterval` on each request. Use a future interval; the default is `+1 year`. An unparseable interval falls back to that default, but a valid past interval produces an expired document.
 :::
 
 ## Behavior options
@@ -99,7 +100,7 @@ new SecurityTxtMiddleware($document, [
 
 ## Array escape hatch
 
-A raw config array is still accepted — useful for fields the value object does not
+A raw config array is still accepted: useful for fields the value object does not
 cover, or fully dynamic config. The same `Contact` requirement applies:
 
 ```php

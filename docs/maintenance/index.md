@@ -1,144 +1,65 @@
-# Maintenance Mode
+# Maintenance mode
 
-Maintenance Mode lets you take your application offline for soft maintenance work
-and bring it back online, with dynamic IP whitelisting so you can keep working
-while everyone else sees a maintenance page.
+The middleware returns a maintenance response before the downstream application handler runs. It supports an IP whitelist and optional path exceptions. It does not execute scheduled database upgrades or supervise your deployment.
 
-You can run shells from the application root as `bin/cake [shell] [command]` (or
-`.\bin\cake [shell] [command]` on Windows).
+## CLI commands
 
-::: warning Soft maintenance only
-This tool should not be used when the database connection or the application goes
-down completely — for example during major upgrades. In that case it would fail
-hard. Use it only for soft maintenance work.
-:::
-
-## MaintenanceMode shell
-
-This is the preferred way of enabling and disabling maintenance mode for your
-website.
-
-Commands:
-
-- `status`
-- `activate`
-- `deactivate`
-- `whitelist [{ip}] [-r]`
-- `reset`
-
-### Example usage
+Run commands from the application's root:
 
 ```bash
-cake Setup.MaintenanceMode activate
-# Optionally whitelist your IP:
-cake Setup.MaintenanceMode whitelist YOURIP
-# Optionally whitelist your IP and activate debug mode for when you access the application:
-cake Setup.MaintenanceMode whitelist YOURIP --debug
-# ... do your work ...
-cake Setup.MaintenanceMode deactivate
+bin/cake maintenance_mode status
+bin/cake maintenance_mode whitelist 192.0.2.10
+bin/cake maintenance_mode activate
+bin/cake maintenance_mode deactivate
 ```
 
-::: tip Deploy scripts
-Your deploy script can wrap these commands — activate at the beginning, deactivate
-at the end.
-:::
+The whitelist accepts exact IPv4/IPv6 addresses and CIDR networks, such as `192.0.2.0/24` or `2001:db8::/32`. Prefix lengths must be whole decimal numbers. Remove one entry or clear the list:
 
-## MaintenanceMiddleware
-
-The middleware is the preferred way of triggering the maintenance-mode display: it
-can short-circuit dispatching much more cleanly.
-
-In your `src/Application.php`:
-
-```php
-use Setup\Middleware\MaintenanceMiddleware;
-
-    /**
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to set up.
-     * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
-     */
-    public function middleware($middlewareQueue) {
-        $middlewareQueue
-            ->add(MaintenanceMiddleware::class)
-            // ...
-    }
+```bash
+bin/cake maintenance_mode whitelist 192.0.2.10 --remove
+bin/cake maintenance_mode whitelist --remove
 ```
 
-### Customizing
+There is no `maintenance_mode reset` command. The legacy `--debug` option is accepted but has no effect; use your application's debug configuration deliberately instead.
 
-Add a template file at `templates/Error/maintenance.php`.
+## Middleware
 
-The following config options control how the maintenance page is rendered:
+Follow [Getting started](/guide/#add-the-middleware) to add `MaintenanceMiddleware` before routing and authentication. Keep an error handler earlier in the queue. Whitelisted paths or IPs continue through the normal application handler; blocked requests return HTTP 503 by default.
 
-| Option | Default |
-|--------|---------|
-| `className` | `View::class` |
-| `templatePath` | `'Error'` |
-| `statusCode` | `503` |
-| `templateLayout` | `false` |
-| `templateFileName` | `'maintenance'` |
-| `templateExtension` | `'.php'` |
-| `contentType` | `'text/html'` |
-| `pathWhitelist` | `[]` |
+The state is stored in `TMP . 'maintenance.txt'`, with the whitelist in `TMP . 'maintenance_whitelist.txt'`. Share or distribute these files deliberately when web and CLI run on different hosts. A maintenance page cannot protect against failures before the middleware queue is built, or when its template rendering fails.
 
-### Path whitelist
+## Custom page and options
 
-You can exclude certain paths from maintenance mode using the `pathWhitelist`
-option. This is useful for healthcheck endpoints that need to remain accessible
-during maintenance, so load balancers do not cycle out healthy servers:
+Create `templates/Error/maintenance.php` before activating maintenance; there is no bundled fallback template. The [beginner guide](/guide/#add-the-middleware) includes a complete page. Constructor options:
+
+| Option | Default | Purpose |
+|---|---|---|
+| `className` | `Cake\View\View` | View class |
+| `templatePath` | `Error` | Template directory |
+| `templateFileName` | `maintenance` | Template name |
+| `templateLayout` | `false` | Disable layout, or select a layout name |
+| `statusCode` | `503` | Response status |
+| `contentType` | `text/html` | Response content type |
+| `pathWhitelist` | `[]` | Paths permitted during maintenance |
+
+The legacy `templateExtension` option is present in the defaults but is not used by the renderer. Templates use CakePHP's normal `.php` extension.
+
+For example, keep the healthcheck endpoint reachable:
 
 ```php
-$middlewareQueue->add(new MaintenanceMiddleware([
-    'pathWhitelist' => ['/setup/healthcheck', '/health'],
+$middlewareQueue->add(new \Setup\Middleware\MaintenanceMiddleware([
+    'pathWhitelist' => ['/setup/healthcheck', '/setup/healthcheck.json'],
 ]));
 ```
 
-Paths are matched exactly or as prefixes, so `/health` also matches
-`/health/detailed`.
+A whitelist path permits that exact path and descendants, not similarly named siblings. The healthcheck still needs its routes enabled and its own access configuration. Behind a proxy, configure CakePHP's trusted proxy handling so `clientIp()` reflects the correct client.
 
-## Maintenance component
+## URL switches
 
-This component adds functionality on top:
+Loading [SetupComponent](/component/) enables a `?maintenance=1` switch, with `?maintenance=0` to deactivate. It whitelists the current client IP. No automatic timeout is implemented; a `duration` query parameter has no effect.
 
-- A flash message tells you when you are currently whitelisted while maintenance
-  mode is active (so you understand why you still see the live site).
+These are legacy emergency controls. Prefer the CLI for normal operations. Production mode requires the configured password; see [SetupComponent](/component/) for its configuration and limits.
 
-## Setup component integration
+## Related tools
 
-The [Setup component](/component/) adds some extra conveniences.
-
-You can switch maintenance mode via URL when you quickly need to jump back into it:
-
-```text
-# append to the URL
-?maintenance=1
-# optionally with a timeout
-?maintenance=1&duration={time}
-```
-
-The duration is in minutes; omit it for an indefinite duration. This automatically
-whitelists the current IP, since you could not deactivate it again otherwise.
-
-::: danger Production safety
-In production mode you additionally need a password: `?pwd={YOURPWD}`.
-
-For security reasons, change the password once it has been used. Also disable URL
-access entirely by removing the configured password when it is not in use, to
-prevent brute-force guessing.
-:::
-
-## Extra sugar
-
-You can alias the maintenance shell for less typing in your `bootstrap_cli.php`:
-
-```php
-use Cake\Console\ShellDispatcher;
-
-// Custom shell aliases
-ShellDispatcher::alias('m', 'Setup.MaintenanceMode'); // Or any other alias
-```
-
-## See also
-
-- [Uptime](/maintenance/uptime) — the uptime route.
-- [Healthcheck](/healthcheck/) — keep healthcheck endpoints whitelisted during maintenance.
+[Uptime](/maintenance/uptime) reports a basic response; [Healthchecks](/healthcheck/) inspect more services. Whitelist only the monitoring endpoints you need.

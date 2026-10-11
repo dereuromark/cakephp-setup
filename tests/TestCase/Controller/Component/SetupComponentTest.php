@@ -11,6 +11,7 @@ use Cake\Http\ServerRequest;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use ReflectionMethod;
 use Setup\Controller\Component\SetupComponent;
 use Shim\TestSuite\TestCase;
 
@@ -136,7 +137,7 @@ class SetupComponentTest extends TestCase {
 			->onlyMethods(['getName', 'referer'])
 			->setConstructorArgs([new ServerRequest()])
 			->getMock();
-		$controller->method('getName')->willReturn('CakeError');
+		$controller->expects($this->once())->method('getName')->willReturn('CakeError');
 		$controller->method('referer')->willReturn('https://example.com/previous-page');
 		$controller->loadComponent('Flash');
 
@@ -174,7 +175,7 @@ class SetupComponentTest extends TestCase {
 			->onlyMethods(['getName', 'referer'])
 			->setConstructorArgs([new ServerRequest()])
 			->getMock();
-		$controller->method('getName')->willReturn('CakeError');
+		$controller->expects($this->once())->method('getName')->willReturn('CakeError');
 		$controller->method('referer')->willReturn('https://example.com/previous-page');
 		$controller->loadComponent('Flash');
 
@@ -204,6 +205,61 @@ class SetupComponentTest extends TestCase {
 		$component->issueMailing();
 
 		putenv('REMOTE_ADDR');
+	}
+
+	public function testProductionQuickSwitchRequiresPasswordWithoutLegacyFlag(): void {
+		Configure::delete('Config.productive');
+		Configure::delete('Config.pwd');
+		Configure::write('debug', false);
+		$this->Setup->Controller = $this->Controller;
+		try {
+			$this->assertFalse((bool)$this->Setup->isAuthorized());
+		} finally {
+			Configure::write('debug', true);
+		}
+	}
+
+	public function testProductionQuickSwitchAcceptsConfiguredPassword(): void {
+		Configure::delete('Config.productive');
+		Configure::write('Config.pwd', 'maintenance-password');
+		Configure::write('debug', false);
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams(['pwd' => 'maintenance-password']));
+		$this->Setup->Controller = $this->Controller;
+		try {
+			$this->assertTrue((bool)$this->Setup->isAuthorized());
+		} finally {
+			Configure::delete('Config.pwd');
+			Configure::write('debug', true);
+		}
+	}
+
+	public function testSessionDebugDoesNotDisableProductionPasswordGate(): void {
+		Configure::delete('Config.productive');
+		Configure::write('debug', false);
+		Configure::write('Config.pwd', 'secret');
+		$this->Controller->getRequest()->getSession()->write('Setup.debug', true);
+		try {
+			$this->Setup->beforeFilter(new Event('Controller.beforeFilter', $this->Controller));
+			$this->assertTrue(Configure::read('debug'));
+			$this->assertFalse((bool)$this->Setup->isAuthorized());
+		} finally {
+			$this->Controller->getRequest()->getSession()->delete('Setup.debug');
+			Configure::delete('Config.pwd');
+			Configure::write('debug', true);
+		}
+	}
+
+	public function testInferredProductionRedirectRemovesPassword(): void {
+		Configure::delete('Config.productive');
+		Configure::write('debug', false);
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams(['pwd' => 'secret', 'debug' => '1']));
+		$this->Setup->Controller = $this->Controller;
+		try {
+			$method = new ReflectionMethod($this->Setup, '_cleanedUrl');
+			$this->assertArrayNotHasKey('pwd', $method->invoke($this->Setup, 'debug')['?'] ?? []);
+		} finally {
+			Configure::write('debug', true);
+		}
 	}
 
 }

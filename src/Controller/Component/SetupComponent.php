@@ -37,6 +37,8 @@ if (!defined('WINDOWS')) {
  */
 class SetupComponent extends Component {
 
+	protected ?bool $productive = null;
+
 	/**
 	 * @var \Cake\Controller\Controller
 	 */
@@ -66,6 +68,8 @@ class SetupComponent extends Component {
 		/** @var \Cake\Controller\Controller $Controller */
 		$Controller = $event->getSubject();
 		$this->Controller = $Controller;
+
+		$this->productive ??= (bool)Configure::read('Config.productive', !Configure::read('debug'));
 
 		// For debug overwrite
 		$debug = $this->getController()->getRequest()->getSession()->read('Setup.debug');
@@ -228,7 +232,7 @@ class SetupComponent extends Component {
 	 * @return bool Success
 	 */
 	public function isAuthorized() {
-		if (!Configure::read('Config.productive')) {
+		if (!$this->isProductive()) {
 			return true;
 		}
 		$pwd = $this->Controller->getRequest()->getQuery('pwd');
@@ -370,7 +374,7 @@ class SetupComponent extends Component {
 	 */
 	protected function _cleanedUrl($type) {
 		$type = (array)$type;
-		if (Configure::read('Config.productive')) {
+		if ($this->isProductive()) {
 			$type[] = 'pwd';
 		}
 
@@ -400,6 +404,10 @@ class SetupComponent extends Component {
 		$this->Mailer->send();
 
 		return true;
+	}
+
+	protected function isProductive(): bool {
+		return $this->productive ?? (bool)Configure::read('Config.productive', !Configure::read('debug'));
 	}
 
 }

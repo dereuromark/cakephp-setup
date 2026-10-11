@@ -1,64 +1,76 @@
-# Overview
+# Getting started
 
-The **Setup** plugin provides a collection of useful development and maintenance
-tools for managing a CakePHP application. It bundles maintenance-mode handling, a
-pluggable healthcheck stack, debugging helpers, console utilities, a small admin
-web backend, and enhanced bake templates.
+Complete [Installation](./installation) first. This walkthrough adds maintenance mode without enabling administration routes or requiring a database.
 
-::: info CakePHP version
-This documentation is for the branch that supports **CakePHP 5.1+**. See the
-[version map](https://github.com/dereuromark/cakephp-setup/wiki#cakephp-version-map)
-for older releases.
-:::
+## Confirm that the commands are loaded
 
-## What is this plugin for?
+Run this from your application's root:
 
-This plugin aims to make developing and operating CakePHP applications easier. It
-extends and leverages the [Tools](https://github.com/dereuromark/cakephp-tools)
-plugin and brings together the pieces that are useful day to day:
+```bash
+bin/cake maintenance_mode status
+```
 
-- **Maintenance Mode** — dynamic activation and deactivation, including dynamic IP
-  whitelisting and a middleware that short-circuits the request early.
-- **Healthcheck** — a pluggable set of environment, application, and database
-  checks, runnable from the web or the CLI.
-- **Console utilities** — config inspection, database management, data-integrity
-  checks, backups, user management, and more.
-- **Web backend** — a small admin area with a configuration dashboard plus cache,
-  session, cookie, database, and foreign-key tooling.
-- **DebugKit panel** — a localization (L10n) panel for quick format inspection.
-- **Bake templates** — refined scaffolding output for models, controllers, and
-  views.
+A fresh installation reports that maintenance mode is disabled. This reads the status; it does not take the application offline.
 
-## The pieces
+## Add the middleware
 
-| Area | What it gives you |
-|------|-------------------|
-| [Maintenance Mode](/maintenance/) | Turn the app on and off for soft maintenance work, with whitelisting and middleware. |
-| [Healthcheck](/healthcheck/) | A status overview of your environment, application, and database, web and CLI. |
-| [Console Commands](/console/) | Day-to-day operations from `bin/cake` — config, DB, backups, users. |
-| [Bake Templates](/console/bake) | Enhanced scaffolding via the `Setup` bake theme. |
-| [Setup Component](/component/) | Quick-switch debugging helpers attached to your controller. |
-| [Web Backend](/controller/) | An admin backend behind your own ACL. |
-| [L10n Panel](/panel/) | A DebugKit panel showing localization status. |
+In `src/Application.php`, import the middleware:
 
-## Debugging helpers
+```php
+use Cake\Routing\Middleware\RoutingMiddleware;
+use Setup\Middleware\MaintenanceMiddleware;
+```
 
-The plugin ships a few convenience wrappers that make debugging safer. They only
-produce output when `debug` is enabled:
+Add this line to your existing `middleware()` method before RoutingMiddleware and authentication. Keep ErrorHandlerMiddleware earlier in the queue:
 
-| Helper | Equivalent |
-|--------|------------|
-| `dd($data)` | `debug()` + `die()` |
-| `prd($data)` | `pr()` + `die()` |
-| `vd($data)` | `var_dump()` |
-| `vdd($data)` | `var_dump()` + `die()` |
+```php
+$middlewareQueue->insertBefore(RoutingMiddleware::class, new MaintenanceMiddleware());
+```
 
-These become available once the plugin's bootstrap is included — for example via
-`bin/cake plugin load Setup`.
+Create `templates/Error/maintenance.php` in your application. This template is required; the plugin does not ship a fallback page:
 
-## Next steps
+```html
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Maintenance</title></head>
+<body><h1>Temporarily unavailable</h1><p>Please try again later.</p></body>
+</html>
+```
 
-- [Installation](/guide/installation) — install the plugin and load it.
-- [Maintenance Mode](/maintenance/) — enable and disable maintenance safely.
-- [Healthcheck](/healthcheck/) — monitor your application's health.
-- [Console Commands](/console/) — the operational toolbox.
+The middleware renders it with HTTP 503 and no layout by default.
+
+## Try it locally
+
+Activate maintenance in a disposable local application:
+
+```bash
+bin/cake maintenance_mode activate
+```
+
+Requests now receive HTTP 503 without reaching the application's downstream handler. Finish by restoring normal service:
+
+```bash
+bin/cake maintenance_mode deactivate
+```
+
+To keep access for your own IP, whitelist it before activation. Use the IP seen by your application, especially behind a reverse proxy:
+
+```bash
+bin/cake maintenance_mode whitelist 127.0.0.1
+bin/cake maintenance_mode whitelist ::1
+```
+
+The whitelist applies to matching clients only. To test the maintenance page from that same client, remove the entry first:
+
+```bash
+bin/cake maintenance_mode whitelist 127.0.0.1 --remove
+bin/cake maintenance_mode whitelist ::1 --remove
+```
+
+The status and whitelist files live under `tmp/`. CLI and web processes must see the same directory and have suitable permissions. With several hosts, deploy the state consistently or place it on a shared filesystem; local files do not coordinate the fleet.
+
+## Choose another feature
+
+[Healthchecks](/healthcheck/) can inspect your environment through CLI or web endpoints. [Console tools](/console/) include database inspection and destructive reset commands; read their scope before using them. The [web backend](/controller/) requires explicit route enablement and your application's access control.
+
+Debugging helpers such as `prd()` and `vd()` load with the plugin bootstrap and print only while debug is enabled. The plugin does not make administration endpoints safe to expose publicly.

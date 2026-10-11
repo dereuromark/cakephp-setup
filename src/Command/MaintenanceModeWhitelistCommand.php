@@ -95,7 +95,7 @@ class MaintenanceModeWhitelistCommand extends Command {
 		]);
 		$parser->addOption('debug', [
 			'short' => 'd',
-			'help' => 'Enable debug mode for whitelisted IPs.',
+			'help' => 'Legacy option; currently has no effect.',
 			'boolean' => true,
 		]);
 

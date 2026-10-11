@@ -44,7 +44,7 @@ class MaintenanceTest extends TestCase {
 		$status = $this->Maintenance->isMaintenanceMode();
 		$this->assertFalse($status);
 
-		$this->Maintenance->setMaintenanceMode(true);
+		$this->assertTrue($this->Maintenance->setMaintenanceMode(true));
 		$status = $this->Maintenance->isMaintenanceMode();
 		$this->assertTrue($status);
 
@@ -97,6 +97,32 @@ class MaintenanceTest extends TestCase {
 		$this->Maintenance->clearWhitelist();
 		$result = $this->Maintenance->whitelist();
 		$this->assertEmpty($result);
+	}
+
+	public function testIpv6SubnetWhitelist(): void {
+		$this->Maintenance->addToWhitelist(['2001:db8:abcd:1200::/56']);
+		$this->assertTrue($this->Maintenance->whitelisted('2001:db8:abcd:12ff::1'));
+		$this->assertFalse($this->Maintenance->whitelisted('2001:db8:abcd:1300::1'));
+		$this->assertFalse($this->Maintenance->whitelisted('192.0.2.1'));
+	}
+
+	public function testInvalidSubnetDoesNotGrantAccess(): void {
+		foreach (['192.0.2.0/33', '192.0.2.0/1.5', '192.0.2.0/1e1', '::/129'] as $range) {
+			$this->Maintenance->addToWhitelist([$range]);
+		}
+		$this->assertFalse($this->Maintenance->whitelisted('192.0.2.1'));
+		$this->assertFalse($this->Maintenance->whitelisted('::1'));
+	}
+
+	public function testWhitelistAddsAddressContainedInAnotherAddress(): void {
+		$this->Maintenance->addToWhitelist(['192.0.2.10', '192.0.2.1']);
+		$this->assertTrue($this->Maintenance->whitelisted('192.0.2.1'));
+	}
+
+	public function testExactIpv6WhitelistNormalizesAddress(): void {
+		$this->Maintenance->addToWhitelist(['2001:0DB8:0000:0000:0000:0000:0000:0001']);
+		$this->assertTrue($this->Maintenance->whitelisted('2001:db8::1'));
+		$this->assertFalse($this->Maintenance->whitelisted('2001:db8::2'));
 	}
 
 }
