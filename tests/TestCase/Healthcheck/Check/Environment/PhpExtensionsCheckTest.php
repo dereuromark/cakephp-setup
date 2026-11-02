@@ -29,6 +29,16 @@ class PhpExtensionsCheckTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testCheckCaseInsensitive(): void {
+		$check = new PhpExtensionsCheck(['spl', 'JSON'], false);
+
+		$check->check();
+		$this->assertTrue($check->passed(), print_r($check->__debugInfo(), true));
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testCheckFail() {
 		$check = new PhpExtensionsCheck(['nonexistent_extension']);
 
