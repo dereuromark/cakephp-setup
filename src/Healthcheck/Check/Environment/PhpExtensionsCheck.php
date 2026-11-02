@@ -60,7 +60,8 @@ class PhpExtensionsCheck extends Check {
 		$loaded = get_loaded_extensions();
 		$missing = [];
 		foreach ($this->extensions as $extension) {
-			if (!in_array($extension, $loaded, true)) {
+			// Extension names are case-insensitive, get_loaded_extensions() reports e.g. SimpleXML or SPL
+			if (!extension_loaded($extension)) {
 				$missing[] = $extension;
 			}
 		}
