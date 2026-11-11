@@ -103,7 +103,8 @@ if (!empty($optInChecks)) {
 	</p>
 <?php } ?>
 
-<style>
+<?php $cspStyleNonce = (string)$this->getRequest()->getAttribute('cspStyleNonce', ''); ?>
+<style<?= $cspStyleNonce !== '' ? ' nonce="' . h($cspStyleNonce) . '"' : '' ?>>
 	li.passed b {
 		background-color: #ddf3e0;
 	}

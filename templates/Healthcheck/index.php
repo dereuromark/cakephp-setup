@@ -91,7 +91,8 @@ foreach ($result as $domain => $checks) {
 	<p class="empty">No checks found.</p>
 <?php } ?>
 
-<style>
+<?php $cspStyleNonce = (string)$this->getRequest()->getAttribute('cspStyleNonce', ''); ?>
+<style<?= $cspStyleNonce !== '' ? ' nonce="' . h($cspStyleNonce) . '"' : '' ?>>
 	li.passed b {
 		background-color: #ddf3e0;
 	}
