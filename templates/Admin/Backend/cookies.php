@@ -38,7 +38,7 @@ foreach ($cookies->getIterator() as $cookie) {
 ?>
 
 </div>
-<?php $cspNonce = (string)$this->getRequest()->getAttribute('cspNonce', ''); ?>
+<?php $cspNonce = (string)($this->getRequest()->getAttribute('cspScriptNonce') ?? $this->getRequest()->getAttribute('cspNonce', '')); ?>
 <script<?= $cspNonce !== '' ? ' nonce="' . h($cspNonce) . '"' : '' ?>>
 document.querySelectorAll('form[data-confirm-message]').forEach(function(form) {
 	form.addEventListener('submit', function(e) {

@@ -3,7 +3,13 @@
 namespace Setup\Test\TestCase\Controller;
 
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use Cake\Event\EventManager;
+use Cake\Http\MiddlewareQueue;
 use Cake\TestSuite\IntegrationTestTrait;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Setup\Controller\Component\HealthcheckComponent;
 use Shim\TestSuite\TestCase;
 
@@ -32,6 +38,22 @@ class HealthcheckControllerTest extends TestCase {
 		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index']);
 
 		$this->assertResponseCode(200);
+	}
+
+	/**
+	 * CakePHP's CspMiddleware stores the style nonce as `cspStyleNonce`.
+	 *
+	 * @return void
+	 */
+	public function testIndexUsesCspStyleNonce(): void {
+		$this->disableErrorHandlerMiddleware();
+		$this->withRequestAttribute('cspStyleNonce', 'style-nonce');
+
+		$this->get(['plugin' => 'Setup', 'controller' => 'Healthcheck', 'action' => 'index']);
+
+		$this->assertResponseCode(200);
+		$this->assertResponseContains('<style nonce="style-nonce">');
+		$this->assertResponseNotRegExp('/<style(?![^>]*nonce=)/');
 	}
 
 	/**
@@ -246,6 +268,22 @@ class HealthcheckControllerTest extends TestCase {
 		} finally {
 			Configure::delete('Test.healthcheckRedirect');
 		}
+	}
+
+	/**
+	 * Adds a middleware that sets a request attribute, like a CSP middleware would.
+	 *
+	 * @param string $name
+	 * @param string $value
+	 *
+	 * @return void
+	 */
+	protected function withRequestAttribute(string $name, string $value): void {
+		EventManager::instance()->on('Server.buildMiddleware', function (EventInterface $event, MiddlewareQueue $queue) use ($name, $value): void {
+			$queue->prepend(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($name, $value): ResponseInterface {
+				return $handler->handle($request->withAttribute($name, $value));
+			});
+		});
 	}
 
 }
