@@ -10,6 +10,7 @@ use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
 use Cake\Database\Driver\Sqlserver;
+use Setup\Command\Traits\ConfirmTrait;
 use Setup\Command\Traits\DbToolsTrait;
 
 /**
@@ -21,6 +22,7 @@ use Setup\Command\Traits\DbToolsTrait;
 class DbWipeCommand extends Command {
 
 	use DbToolsTrait;
+	use ConfirmTrait;
 
 	protected Arguments $args;
 
@@ -75,11 +77,8 @@ class DbWipeCommand extends Command {
 		$this->io->out('--------', 1, ConsoleIo::VERBOSE);
 
 		$this->io->out('Dropping ' . count($sources) . ' tables');
-		if (!$this->args->getOption('dry-run') && !$this->args->getOption('force')) {
-			$looksGood = $this->io->askChoice('Sure?', ['y', 'n'], 'y');
-			if ($looksGood !== 'y') {
-				$this->io->abort('Aborted!');
-			}
+		if (!$this->args->getOption('dry-run')) {
+			$this->confirmOrAbort($args, $io, 'Sure?');
 		}
 
 		if (!$this->args->getOption('dry-run')) {

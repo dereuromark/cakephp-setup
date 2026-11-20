@@ -79,6 +79,8 @@ Remove all content from application tables, preserving `cake_migrations`, `phinx
 bin/cake db reset
 ```
 
+Confirmation defaults to "no". Use `--force` (`-f`) in scripts; with `-q` and without `--force`, the command fails instead of running.
+
 ::: warning
 Be careful: make sure you have a backup before doing this.
 :::
@@ -90,6 +92,8 @@ Hard-reset the database, dropping all tables:
 ```bash
 bin/cake db wipe
 ```
+
+Confirmation defaults to "no". Use `--force` (`-f`) in scripts; with `-q` and without `--force`, the command fails instead of running.
 
 ::: warning
 Be careful: make sure you have a backup before doing this.
@@ -228,6 +232,8 @@ It uses `mysqldump` and is therefore the most performant option here.
 ### Restore
 
 Restore a dumped file into the database, overwriting the previous values there.
+
+Confirmation defaults to "no". Use `--force` (`-f`) in scripts; with `-q` and without `--force`, the command fails instead of running.
 
 ## Other tools
 

@@ -7,6 +7,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\I18n\Number;
+use Setup\Command\Traits\ConfirmTrait;
 use Setup\Command\Traits\DbBackupTrait;
 use Setup\Command\Traits\DbToolsTrait;
 
@@ -21,6 +22,7 @@ use Setup\Command\Traits\DbToolsTrait;
 class DbBackupRestoreCommand extends Command {
 
 	use DbToolsTrait;
+	use ConfirmTrait;
 	use DbBackupTrait;
 
 	protected Arguments $args;
@@ -63,12 +65,7 @@ class DbBackupRestoreCommand extends Command {
 		$this->io->out('');
 		$this->io->out('Restoring: ' . pathinfo($file, PATHINFO_BASENAME));
 
-		if (!$this->args->getOption('force')) {
-			$looksGood = $this->io->askChoice('Look okay?', ['y', 'n'], 'y');
-			if ($looksGood !== 'y') {
-				$this->io->abort('Aborted!');
-			}
-		}
+		$this->confirmOrAbort($args, $io, 'Look okay?');
 
 		$optionStrings = [
 			'--user=' . escapeshellarg((string)($config['username'] ?? '')),

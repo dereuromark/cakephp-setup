@@ -67,4 +67,16 @@ class DbResetCommandTest extends TestCase {
 		$this->assertStringNotContainsString('TRUNCATE', $output->output());
 	}
 
+	public function testQuietWithoutForcePreservesTablesOnSqlite(): void {
+		$connection = ConnectionManager::get('test');
+		$connection->execute('CREATE TABLE reset_confirmation_test (id INTEGER)');
+		try {
+			$this->exec('db reset --connection test -q');
+			$this->assertExitError();
+			$this->assertContains('reset_confirmation_test', $connection->getSchemaCollection()->listTables());
+		} finally {
+			$connection->execute('DROP TABLE reset_confirmation_test');
+		}
+	}
+
 }
