@@ -7,6 +7,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Database\Driver\Mysql;
+use Setup\Command\Traits\ConfirmTrait;
 use Setup\Command\Traits\DbToolsTrait;
 
 /**
@@ -18,6 +19,7 @@ use Setup\Command\Traits\DbToolsTrait;
 class DbResetCommand extends Command {
 
 	use DbToolsTrait;
+	use ConfirmTrait;
 
 	protected Arguments $args;
 
@@ -77,11 +79,8 @@ SQL;
 		$this->io->out('--------', 1, ConsoleIo::VERBOSE);
 
 		$this->io->out('Truncating ' . count($sources) . ' tables');
-		if (!$this->args->getOption('dry-run') && !$this->args->getOption('force')) {
-			$looksGood = $this->io->askChoice('Sure?', ['y', 'n'], 'y');
-			if ($looksGood !== 'y') {
-				$this->io->abort('Aborted!');
-			}
+		if (!$this->args->getOption('dry-run')) {
+			$this->confirmOrAbort($args, $io, 'Sure?');
 		}
 
 		if (!$this->args->getOption('dry-run')) {

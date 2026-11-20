@@ -1,5 +1,7 @@
 # Upgrading
 
+In 3.23, `db reset`, `db wipe`, and `db_backup restore` no longer run unconfirmed under `-q`. Their confirmation now defaults to "no", and `-q` without `--force` exits with an error. Scripts that used `-q` to skip the prompt must pass `--force`.
+
 Maintenance middleware now checks the state before running the downstream handler. Blocked requests no longer execute controller actions before their response is replaced. Place the middleware before routing and authentication, after the error handler. A blocked client cannot reach the component-based URL deactivation switch. If its IP changes or is not whitelisted, recover with `bin/cake maintenance_mode deactivate` from the CLI.
 
 Maintenance activation now reports a successful empty status-file write correctly. IPv6 subnet whitelist entries are matched using their address bytes, and fractional or scientific-notation CIDR prefixes are rejected. Exact whitelist entries are stored without substring collisions.
